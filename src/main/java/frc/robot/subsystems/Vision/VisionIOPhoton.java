@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.Drive.GyroIO.GyroIOInputs;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +29,6 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
 
 
 public class VisionIOPhoton implements VisionIO{  

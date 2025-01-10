@@ -11,6 +11,22 @@ public class SUB_Elevator extends SubsystemBase{
         this.io = io;
     }
 
+    public double getPosition(){
+      return inputs.m_liftPos;
+    }
+
+    public double getCurrent(){
+      return inputs.m_liftCurrent;
+    }
+
+    public double getGoal(){
+     return inputs.m_liftGoal;
+    }
+
+    public void setGoal(double p_goal){
+      io.setGoal(p_goal);
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);

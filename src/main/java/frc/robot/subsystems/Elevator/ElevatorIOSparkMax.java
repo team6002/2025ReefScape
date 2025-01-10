@@ -16,10 +16,8 @@ import frc.robot.Constants.LiftConstants;
 public class ElevatorIOSparkMax implements ElevatorIO{
     private final SparkMax m_leftLift;
     private final SparkMax m_rightLift;
-    private final SparkAbsoluteEncoder m_leftEncoder;
-    private final SparkAbsoluteEncoder m_rightEncoder;
+    private final SparkAbsoluteEncoder m_liftEncoder;
     private final SparkClosedLoopController m_leftController;
-    private final SparkClosedLoopController m_rightController;
     private SparkBaseConfig m_leftLiftConfig;
     private SparkBaseConfig m_rightLiftConfig;
     private double m_liftGoal;
@@ -29,12 +27,10 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         m_rightLift = new SparkMax(LiftConstants.kRightLiftCanId, MotorType.kBrushless);
 
         //encoder init
-        m_leftEncoder = m_leftLift.getAbsoluteEncoder();
-        m_rightEncoder = m_rightLift.getAbsoluteEncoder();
+        m_liftEncoder = m_leftLift.getAbsoluteEncoder();
 
         //ClosedLoop controller init
         m_leftController = m_leftLift.getClosedLoopController();
-        m_rightController = m_rightLift.getClosedLoopController();
         
         //configuration
         m_leftLiftConfig.smartCurrentLimit(40);
@@ -51,6 +47,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         m_leftLiftConfig.closedLoop.outputRange(LiftConstants.kMinOutput,
         LiftConstants.kMaxOutput);
 
+        m_rightLiftConfig.follow(LiftConstants.kLeftLiftCanId);
         m_rightLiftConfig.smartCurrentLimit(40);
         m_rightLiftConfig.idleMode(IdleMode.kBrake);
         m_rightLiftConfig.voltageCompensation(12.0);
@@ -76,26 +73,24 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public void updateInputs(ElevatorIoInputs inputs) {
         inputs.m_liftGoal = m_liftGoal;
-        inputs.m_liftLeftPos = getLeftPosition();
-        inputs.m_liftRightPos = getRightPosition();
+        inputs.m_liftPos = getPosition();
     };
 
     @Override
     public void setGoal(double p_liftGoal){
         m_liftGoal = p_liftGoal;
         m_leftController.setReference(m_liftGoal, ControlType.kPosition);
-        m_rightController.setReference(m_liftGoal, ControlType.kPosition);
     }
 
     public double getGoal(){
         return m_liftGoal;
     }
 
-    public double getLeftPosition(){
-        return m_leftEncoder.getPosition();
+    public double getPosition(){
+        return m_liftEncoder.getPosition();
     }
 
-    public double getRightPosition(){
-        return m_rightEncoder.getPosition();
+    public double getCurrent(){
+        return m_leftLift.getOutputCurrent();
     }
 }

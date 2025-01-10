@@ -5,9 +5,9 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIoInputs {
-    public double m_liftLeftPos;
-    public double m_liftRightPos;
+    public double m_liftPos;
     public double m_liftGoal;
+    public double m_liftCurrent;
   }
 
   public default void updateInputs(ElevatorIoInputs inputs) {}

@@ -181,15 +181,18 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class CoralIntakeConstants{
-    public static final int kArmMotorCanId = 0;
-    public static final int kStageOneCanId = 1;
-    public static final int kstageTwoCanId = 2;
+  public static final class CoralHolderConstants{
+    public static final int kCoralHolderCanId = 9;
+    public static final double kCoralHolderP = 0.01;
+    public static final double kCoralHolderI = 0.01;
+    public static final double kCoralHolderD = 0.01;
+    public static final double kCoralHolderFF = 0.01;
+    public static final boolean kCoralHolderInverted = false;
   }
 
   public static final class LiftConstants{
-    public static final int kLeftLiftCanId = 0;
-    public static final int kRightLiftCanId = 1;
+    public static final int kLeftLiftCanId = 18;
+    public static final int kRightLiftCanId = 19;
     public static final double kP = .001;
     public static final double kI = .001;
     public static final double kD = .001;
