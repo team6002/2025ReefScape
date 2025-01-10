@@ -21,6 +21,8 @@ import frc.robot.subsystems.CoralIntake.SUB_CoralHolder;
 import frc.robot.subsystems.Drive.GyroIONavX;
 import frc.robot.subsystems.Drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
+import frc.robot.subsystems.Vision.SUB_Vision;
+import frc.robot.subsystems.Vision.VisionIOPhoton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -35,12 +37,15 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
+  final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
     ,new ModuleIOSparkFlex(2)
-    ,new ModuleIOSparkFlex(3));
+    ,new ModuleIOSparkFlex(3),
+    m_vision
+    );
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder();
 
   // The driver's controller
