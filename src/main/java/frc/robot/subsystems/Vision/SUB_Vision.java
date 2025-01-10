@@ -43,7 +43,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class Vision {
+public class SUB_Vision {
     private final VisionIO io;
     private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
     
@@ -52,7 +52,7 @@ public class Vision {
 
     private Matrix<N3, N1> curStdDevs;
 
-    public Vision(VisionIO io) {
+    public SUB_Vision(VisionIO io) {
         this.io = io;
 
         // camera = new PhotonCamera(VisionConstants.kFrontCameraName);

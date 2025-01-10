@@ -75,8 +75,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     m_driveConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
     m_driveConfig.smartCurrentLimit(40);
     m_driveConfig.voltageCompensation(12.0);
-    m_driveConfig.encoder.quadratureMeasurementPeriod(10);
-    m_driveConfig.encoder.quadratureAverageDepth(2);
+    m_driveConfig.encoder.uvwMeasurementPeriod(10);
+    m_driveConfig.encoder.uvwAverageDepth(2);
     m_driveConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     m_driveConfig.idleMode(IdleMode.kBrake);
     m_driveConfig.closedLoop.p(ModuleConstants.kDrivingP);
@@ -91,8 +91,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     m_turnConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
     m_turnConfig.smartCurrentLimit(30);
     m_turnConfig.voltageCompensation(12.0);
-    m_turnConfig.encoder.quadratureMeasurementPeriod(10);
-    m_turnConfig.encoder.quadratureAverageDepth(2);
+    m_turnConfig.encoder.uvwMeasurementPeriod(10);
+    m_turnConfig.encoder.uvwAverageDepth(2);
     m_turnConfig.closedLoop.positionWrappingEnabled(true);
     m_turnConfig.closedLoop.positionWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
     m_turnConfig.closedLoop.positionWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
