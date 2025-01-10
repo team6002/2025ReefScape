@@ -1,7 +1,9 @@
 package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,6 +18,8 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     private final SparkMax m_rightLift;
     private final SparkAbsoluteEncoder m_leftEncoder;
     private final SparkAbsoluteEncoder m_rightEncoder;
+    private final SparkClosedLoopController m_leftController;
+    private final SparkClosedLoopController m_rightController;
     private SparkBaseConfig m_leftLiftConfig;
     private SparkBaseConfig m_rightLiftConfig;
     private double m_liftGoal;
@@ -27,6 +31,10 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         //encoder init
         m_leftEncoder = m_leftLift.getAbsoluteEncoder();
         m_rightEncoder = m_rightLift.getAbsoluteEncoder();
+
+        //ClosedLoop controller init
+        m_leftController = m_leftLift.getClosedLoopController();
+        m_rightController = m_rightLift.getClosedLoopController();
         
         //configuration
         m_leftLiftConfig.smartCurrentLimit(40);
@@ -73,11 +81,14 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     };
 
     @Override
-    public void setGoal(){
+    public void setGoal(double p_liftGoal){
+        m_liftGoal = p_liftGoal;
+        m_leftController.setReference(m_liftGoal, ControlType.kPosition);
+        m_rightController.setReference(m_liftGoal, ControlType.kPosition);
     }
 
-    @Override
-    public void getGoal(){
+    public double getGoal(){
+        return m_liftGoal;
     }
 
     public double getLeftPosition(){
