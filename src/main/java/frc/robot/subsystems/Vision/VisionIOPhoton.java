@@ -27,6 +27,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -111,6 +112,7 @@ public class VisionIOPhoton implements VisionIO{
         }
     }
 
+    @Override
     public Matrix<N3, N1> getEstimationStdDevs() {
         return curStdDevs;
     }
@@ -119,7 +121,28 @@ public class VisionIOPhoton implements VisionIO{
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
         inputs.targetYaw = getTargetYaw();
-        inputs.target = camera.getLatestResult().hasTargets();
-        
+        inputs.target = camera.getLatestResult().hasTargets();   
+        inputs.targetDistance = getTargetDistance();
+        inputs.targetXDistance = getTargetXDistance();
+        inputs.targetYDistance = getTargetYDistance();
+    
     }
+
+    @Override
+    public double getTargetDistance(){
+        return PhotonUtils.calculateDistanceToTargetMeters(0, 0, 0, 0);
+    }
+
+    @Override
+    public double getTargetXDistance(){
+        // return PhotonUtils.estimateCameraToTarget(null, null, null).getX();
+        return PhotonUtils.estimateCameraToTargetTranslation(getTargetDistance(), new Rotation2d(getTargetYaw())).getX();
+    }
+
+    @Override
+    public double getTargetYDistance(){
+        // return PhotonUtils.estimateCameraToTarget(null, null, null).getX();
+        return PhotonUtils.estimateCameraToTargetTranslation(getTargetDistance(), new Rotation2d(getTargetYaw())).getY();
+    }
+        
 }

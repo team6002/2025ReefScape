@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
-//This only uses Odometry to align itself
-public class CMD_DriveAlignOdometry extends Command{
+//This primarly uses vision to align itself
+import frc.robot.subsystems.Vision.SUB_Vision;
+public class CMD_DriveAlignVision extends Command{
   private SUB_Drivetrain m_drivetrain;
+  private SUB_Vision m_vision;
 
   private final ProfiledPIDController xController;
   private final ProfiledPIDController yController;
@@ -28,8 +30,9 @@ public class CMD_DriveAlignOdometry extends Command{
 
   private CommandXboxController m_driverController;
 //This only uses Odometry to align itself
-  public CMD_DriveAlignOdometry(SUB_Drivetrain p_drivetrain, CommandXboxController p_driverController) {
+  public CMD_DriveAlignVision(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController) {
     m_drivetrain = p_drivetrain;
+    m_vision = p_vision;
     m_driverController = p_driverController;
 
     xController = new ProfiledPIDController(
@@ -69,16 +72,16 @@ public class CMD_DriveAlignOdometry extends Command{
     end = false;
 
     /* Set the goals as an offset of the robot's current odometry */
-    xController.setGoal(goalPose.getX());
-    yController.setGoal(goalPose.getY());
+    xController.setGoal(0);
+    yController.setGoal(0);
     // turnController.setSetpoint(goalPose.getRotation().getDegrees());
 
     xController.setTolerance(AutoAlignConstants.kXTolerance);
     yController.setTolerance(AutoAlignConstants.kYTolerance);
     turnController.setTolerance(AutoAlignConstants.kTurnTolerance);
 
-    xController.reset(robotOdom.getX());
-    yController.reset(robotOdom.getY());
+    xController.reset(m_vision.getTargetYDistance());
+    yController.reset(m_vision.getTargetYDistance());
     // turnController.reset();
 
     // turnController.enableContinuousInput(-180, 180);
@@ -98,13 +101,21 @@ public class CMD_DriveAlignOdometry extends Command{
     
     
     robotOdom = m_drivetrain.getPose();
-
-    xSpeed = xController.calculate(robotOdom.getX());
+    if (m_vision.getHasTarget()){
+      xController.setGoal(0);
+      yController.setGoal(0);
+      xSpeed = xController.calculate(m_vision.getTargetXDistance());
+      ySpeed = yController.calculate(m_vision.getTargetYDistance());
+    }else{
+      xController.setGoal(goalPose.getX());
+      yController.setGoal(goalPose.getY());
+      xSpeed = xController.calculate(robotOdom.getX());
+      ySpeed = yController.calculate(robotOdom.getY());
+    }
     if (xController.atGoal()) {
       xSpeed = 0.0;
     }
 
-    ySpeed = yController.calculate(robotOdom.getY());
     if (yController.atGoal()) {
       ySpeed = 0.0;
     }

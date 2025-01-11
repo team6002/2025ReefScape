@@ -98,18 +98,31 @@ public class SUB_Vision {
         return inputs.targetYaw;
     }
 
-    public void updateEstimationStdDevs(){
-        updateEstimationStdDevs();
+    public Matrix<N3, N1> getEstimationStdDevs() {
+        return io.getEstimationStdDevs();
     }
     
     public void updateInputs(){
         io.updateInputs(inputs);
         Logger.processInputs("Vision", inputs);
     }
-
-    public Matrix<N3, N1> getEstimationStdDevs() {
-        return curStdDevs;
+    
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+        return io.getEstimatedGlobalPose();
     }
+  
+    public double getTargetDistance(){
+        return inputs.targetDistance;
+    }
+
+    public double getTargetXDistance(){
+        return inputs.targetXDistance;
+    }
+
+    public double getTargetYDistance(){
+        return inputs.targetYDistance;
+    }
+    
     /*
      * 
      */

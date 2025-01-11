@@ -72,6 +72,8 @@ public class SUB_Drivetrain extends SubsystemBase {
       // );
   
   private final SwerveDrivePoseEstimator m_odometry;
+  //Odometry that has nearest april tag as origin for use in autoalignment
+  private final SwerveDrivePoseEstimator m_targetOdometry;
   private final SwerveDriveOdometry m_pureOdometry;
   private SwerveModulePosition[] lastModulePositions = 
   new SwerveModulePosition[] {
@@ -184,6 +186,14 @@ public class SUB_Drivetrain extends SubsystemBase {
 
     // m_vision = p_vision;
     m_odometry =
+      new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        Rotation2d.fromDegrees(getAngle()),
+        getModulePositions(),
+        new Pose2d(),
+        stateStdDevs,
+        visionStdDevs);
+    m_targetOdometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
         Rotation2d.fromDegrees(getAngle()),
@@ -444,26 +454,13 @@ public class SUB_Drivetrain extends SubsystemBase {
   //   SwerveDriveKinematics.desaturateWheelSpeeds(
   //     desireStates, DriveConstants.kMaxSpeedMetersPerSecond);
   // }
+
   public double getXVelocity(){
     return getChasisSpeed().vxMetersPerSecond;
   }
   public double getYVelocity(){
     return getChasisSpeed().vyMetersPerSecond;
   }
-
-  // public void runVelocity(ChassisSpeeds speeds){
-  //   ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-  //   SwerveModuleState[] setpointStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(discreteSpeeds);
-  //   SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, DriveConstants.kMaxSpeedMetersPerSecond);
-  //   SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
-  //   for (int i = 0; i < 4; i++){
-  //     optimizedSetpointStates[i] = swerveModules[i].runSetpoint(setpointStates[i]);
-  //   }
-  // }
-
-  // public void stop(){
-  //   runVelocity(new ChassisSpeeds());
-  // }
   /**
    * Sets the swerve ModuleStates.
    *
@@ -601,5 +598,4 @@ public class SUB_Drivetrain extends SubsystemBase {
       m_odometry.addVisionMeasurement(p_angledPose, timestampSeconds, stdDevs);
   }
 
-  
 } 
