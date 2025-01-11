@@ -11,20 +11,36 @@ public class SUB_Elevator extends SubsystemBase{
         this.io = io;
     }
 
-    public double getPosition(){
+    public double getLiftPosition(){
       return inputs.m_liftPos;
     }
 
-    public double getCurrent(){
+    public double getLiftCurrent(){
       return inputs.m_liftCurrent;
     }
 
-    public double getGoal(){
+    public double getLiftGoal(){
      return inputs.m_liftGoal;
     }
 
-    public void setGoal(double p_goal){
-      io.setGoal(p_goal);
+    public void setLiftGoal(double p_goal){
+      io.setLiftGoal(p_goal);
+    }
+
+    public double getPivotPosition(){
+      return inputs.m_pivotPos;
+    }
+
+    public double getPivotCurrent(){
+      return inputs.m_pivotCurrent;
+    }
+
+    public double getPivotGoal(){
+     return inputs.m_pivotGoal;
+    }
+
+    public void setPivotGoal(double p_goal){
+      io.setPivotGoal(p_goal);
     }
 
     @Override

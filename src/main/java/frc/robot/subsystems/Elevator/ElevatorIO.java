@@ -8,6 +8,9 @@ public interface ElevatorIO {
     public double m_liftPos;
     public double m_liftGoal;
     public double m_liftCurrent;
+    public double m_pivotPos;
+    public double m_pivotGoal;
+    public double m_pivotCurrent;
   }
 
   public default void updateInputs(ElevatorIoInputs inputs) {}

@@ -29,7 +29,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.ModuleConstants;
 
 /**
@@ -107,26 +107,26 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
     switch (index) {
       case 0:
-        driveSparkFlex = new SparkFlex(DriveConstants.kFrontLeftDrivingCanId, MotorType.kBrushless);
-        turnSparkMax = new SparkMax(DriveConstants.kFrontLeftTurningCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkFlex(HardwareConstants.kFrontLeftDrivingCanId, MotorType.kBrushless);
+        turnSparkMax = new SparkMax(HardwareConstants.kFrontLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(4.75); // MUST BE CALIBRATED
         break;
       case 1:
-        driveSparkFlex = new SparkFlex(DriveConstants.kFrontRightDrivingCanId, MotorType.kBrushless);
-        turnSparkMax = new SparkMax(DriveConstants.kFrontRightTurningCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkFlex(HardwareConstants.kFrontRightDrivingCanId, MotorType.kBrushless);
+        turnSparkMax = new SparkMax(HardwareConstants.kFrontRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(0.183); // MUST BE CALIBRATED
         break;
       case 2:
-        driveSparkFlex = new SparkFlex(DriveConstants.kRearLeftDrivingCanId, MotorType.kBrushless);
-        turnSparkMax = new SparkMax(DriveConstants.kRearLeftTurningCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkFlex(HardwareConstants.kRearLeftDrivingCanId, MotorType.kBrushless);
+        turnSparkMax = new SparkMax(HardwareConstants.kRearLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(3.183); // MUST BE CALIBRATED
         break;
       case 3:
-        driveSparkFlex = new SparkFlex(DriveConstants.kRearRightDrivingCanId, MotorType.kBrushless);
-        turnSparkMax = new SparkMax(DriveConstants.kRearRightTurningCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkFlex(HardwareConstants.kRearRightDrivingCanId, MotorType.kBrushless);
+        turnSparkMax = new SparkMax(HardwareConstants.kRearRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(3.0); // MUST BE CALIBRATED
         break;

@@ -63,17 +63,6 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 11;
-    public static final int kRearLeftDrivingCanId = 13;
-    public static final int kFrontRightDrivingCanId = 15;
-    public static final int kRearRightDrivingCanId = 17;
-
-    public static final int kFrontLeftTurningCanId = 10;
-    public static final int kRearLeftTurningCanId = 12;
-    public static final int kFrontRightTurningCanId = 14;
-    public static final int kRearRightTurningCanId = 16;
-
     public static final boolean kGyroReversed = false;
   }
 
@@ -182,7 +171,6 @@ public final class Constants {
   }
 
   public static final class CoralHolderConstants{
-    public static final int kCoralHolderCanId = 9;
     public static final double kCoralHolderP = 0.01;
     public static final double kCoralHolderI = 0.01;
     public static final double kCoralHolderD = 0.01;
@@ -191,16 +179,20 @@ public final class Constants {
   }
 
   public static final class LiftConstants{
-    public static final int kLeftLiftCanId = 18;
-    public static final int kRightLiftCanId = 19;
-    public static final double kP = .001;
-    public static final double kI = .001;
-    public static final double kD = .001;
-    public static final double kFF = .001;
+    public static final double kLiftP = .001;
+    public static final double kLiftI = .001;
+    public static final double kLiftD = .001;
+    public static final double kLiftFF = .001;
+    public static final double kPivotP = .001;
+    public static final double kPivotI = .001;
+    public static final double kPivotD = .001;
+    public static final double kPivotFF = .001;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = false;
     public static final boolean kRightInverted = true;
+    public static final boolean kLeftPivotInverted = false;
+    public static final boolean kRightPivotInverted = true;
   }
 
    public static final class LocationConstants{
@@ -249,6 +241,11 @@ public final class Constants {
     public static final int kRearLeftTurningCanId = 5;
     public static final int kRearRightDrivingCanId = 8;
     public static final int kRearRightTurningCanId = 7;
+    public static final int kCoralHolderCanId = 9;
+    public static final int kLeftLiftCanId = 10;
+    public static final int kRightLiftCanId = 11;
+    public static final int kLeftPivotCanId = 12;
+    public static final int kRightPivotCanId = 13;
   }
 
   public static final class AutoAlignConstants{
