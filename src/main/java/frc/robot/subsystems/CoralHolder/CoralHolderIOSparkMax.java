@@ -42,7 +42,7 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
         m_coralHolderConfig.closedLoop.d(CoralHolderConstants.kCoralHolderD);
         m_coralHolderConfig.closedLoop.velocityFF(CoralHolderConstants.kCoralHolderFF);
         m_coralHolderConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        m_coralHolderConfig.closedLoop.outputRange(-1, 1);
+        m_coralHolderConfig.closedLoop.outputRange(CoralHolderConstants.kMinOutput, CoralHolderConstants.kMaxOutput);
 
         //apply config
         m_coralHolderMotor.configure(m_coralHolderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -176,6 +176,8 @@ public final class Constants {
     public static final double kCoralHolderD = 0.01;
     public static final double kCoralHolderFF = 0.01;
     public static final boolean kCoralHolderInverted = false;
+    public static final double kMinOutput = -1;
+    public static final double kMaxOutput = 1;
   }
 
   public static final class LiftConstants{
@@ -193,6 +195,16 @@ public final class Constants {
     public static final boolean kRightInverted = true;
     public static final boolean kLeftPivotInverted = false;
     public static final boolean kRightPivotInverted = true;
+  }
+
+  public static final class ArmConstants{
+    public static final boolean kArmInverted = false;
+    public static final double kP = 0.01;
+    public static final double kI = 0.01;
+    public static final double kD = 0.01;
+    public static final double kFF = 0.01;
+    public static final double kMinOutput = -1;
+    public static final double kMaxOutput = 1;
   }
 
    public static final class LocationConstants{
