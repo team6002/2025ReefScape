@@ -149,7 +149,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public void setPivotGoal(double p_pivotGoal){
         m_pivotGoal = p_pivotGoal;
-        m_pivotController.setReference(m_liftGoal, ControlType.kPosition);
+        m_pivotController.setReference(m_pivotGoal, ControlType.kPosition);
     }
 
     public double getPivotGoal(){
