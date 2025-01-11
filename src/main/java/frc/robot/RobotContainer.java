@@ -49,7 +49,8 @@ public class RobotContainer {
     ,new ModuleIOSparkFlex(3),
     m_vision
     );
-  final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder();
+  final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
+  final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);

@@ -15,11 +15,9 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIoInputs inputs) {}
 
-  public default void setGoal(){}
+  public default void setLiftGoal(double p_reference){}
 
-  public default void updateInputs(ElevatorIoInputs inputs) {}
-
-  public default void setGoal(){}
+  public default void setPivotGoal(double p_reference){}
 
   public default void getGoal(){}
 }
