@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -17,7 +18,7 @@ import frc.robot.Constants.HardwareConstants;
 public class ArmIOSparkMax implements ArmIO{
     private final SparkMax m_armMotor;
     private final AbsoluteEncoder m_armEncoder;
-    private SparkBaseConfig m_armConfig;
+    private SparkBaseConfig m_armConfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_armController;
 
     private double m_armReference;

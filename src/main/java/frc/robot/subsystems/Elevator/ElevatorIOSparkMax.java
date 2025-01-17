@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -23,10 +24,10 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     private final SparkAbsoluteEncoder m_pivotEncoder;
     private final SparkClosedLoopController m_liftController;
     private final SparkClosedLoopController m_pivotController;
-    private SparkBaseConfig m_leftLiftConfig;
-    private SparkBaseConfig m_rightLiftConfig;
-    private SparkBaseConfig m_leftPivotConfig;
-    private SparkBaseConfig m_rightPivotConfig;
+    private SparkBaseConfig m_leftLiftConfig = new SparkMaxConfig();
+    private SparkBaseConfig m_rightLiftConfig = new SparkMaxConfig();
+    private SparkBaseConfig m_leftPivotConfig = new SparkMaxConfig();
+    private SparkBaseConfig m_rightPivotConfig = new SparkMaxConfig();
     private double m_liftGoal;
     private double m_pivotGoal;
     public ElevatorIOSparkMax(){

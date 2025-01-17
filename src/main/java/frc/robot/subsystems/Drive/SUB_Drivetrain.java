@@ -33,8 +33,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 
 public class SUB_Drivetrain extends SubsystemBase {
+  RobotConfig config;
   // Create MAXSwerveModules
   // SUB_Vision m_vision;
   SwerveModule[] SwerveModules;
@@ -119,13 +125,13 @@ public class SUB_Drivetrain extends SubsystemBase {
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
-    ModuleIO brModuleIO,
-    SUB_Vision p_vision
+    ModuleIO brModuleIO
+    // SUB_Vision p_vision
     ) 
   {
         
     this.gyroIO = gyroIO;
-    m_vision = p_vision;
+    // m_vision = p_vision;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -160,27 +166,37 @@ public class SUB_Drivetrain extends SubsystemBase {
     // SmartDashboard.putNumber("SwerveD", m_SwerveD);
     // SmartDashboard.putNumber("SwerveFF", m_SwerveFF);
     // Configure AutoBuilder last
-      // AutoBuilder.configureHolonomic(
-      //         this::getPose, // Robot pose supplier
-      //         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-      //         this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-      //         this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-      //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-      //                 new PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants
-      //                 new PIDConstants(AutoConstants.kPThetaController, 0.0, 0.0), // Rotation PID constants
-      //                 4, // Max module speed, in m/s
-      //                 Units.inchesToMeters(11), // Drive base radius in meters. Distance from robot center to furthest module.
-      //                 new ReplanningConfig() // Default path replanning config. See the API for the options here
-      //         ),
-      //         () -> {
-      //             // Boolean supplier that controls when the path will be mirrored for the red alliance
-      //             // This will flip the path being followed to the red side of the field.
-      //             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-      //             return false;
-      //         },
-      //         this // Reference to this subsystem to set requirements
-      // );
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false, true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
 
     // m_vision = p_vision;
     m_odometry =
@@ -197,7 +213,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     getModulePositions()
     );
     
-    m_vision.updateInputs();
+    // m_vision.updateInputs();
     
   }
 
