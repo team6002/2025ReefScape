@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -17,7 +18,7 @@ import frc.robot.Constants.HardwareConstants;
 public class CoralHolderIOSparkMax implements CoralIHolderIO{
     private final SparkMax m_coralHolderMotor;
     private final RelativeEncoder m_coralHolderEncoder;
-    private SparkBaseConfig m_coralHolderConfig;
+    private SparkBaseConfig m_coralHolderConfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_coralHolderController;
 
     private double m_coralHolderReference;

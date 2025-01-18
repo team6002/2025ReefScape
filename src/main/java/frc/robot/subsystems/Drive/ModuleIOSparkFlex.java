@@ -19,8 +19,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -31,7 +29,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.ModuleConstants;
-
+import frc.robot.Configs;
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
  * or NEO 550), and analog absolute encoder connected to the RIO
@@ -49,7 +47,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
   private static final double DRIVE_GEAR_RATIO = ModuleConstants.kDrivingMotorReduction;
   private static final double TURN_GEAR_RATIO = 46.42;
 
-  private final SparkFlex driveSparkFlex;
+  private final SparkMax driveSparkFlex;
   private final SparkMax turnSparkMax;
 
   private final RelativeEncoder driveEncoder;
@@ -63,69 +61,34 @@ public class ModuleIOSparkFlex implements ModuleIO {
   private final boolean isTurnMotorInverted = true;
   private final Rotation2d absoluteEncoderOffset;
 
-  private SparkBaseConfig m_turnConfig;
-  private SparkBaseConfig m_driveConfig;
+  private SparkBaseConfig m_turnConfig = Configs.MAXSwerveModule.turningConfig;
+  private SparkBaseConfig m_driveConfig = Configs.MAXSwerveModule.drivingConfig;
 
   private int m_index;
   public ModuleIOSparkFlex(int index) {
     m_index = index;
 
-    m_driveConfig.inverted(isTurnMotorInverted);
-    m_driveConfig.absoluteEncoder.positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
-    m_driveConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
-    m_driveConfig.smartCurrentLimit(40);
-    m_driveConfig.voltageCompensation(12.0);
-    m_driveConfig.encoder.uvwMeasurementPeriod(10);
-    m_driveConfig.encoder.uvwAverageDepth(2);
-    m_driveConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    m_driveConfig.idleMode(IdleMode.kBrake);
-    m_driveConfig.closedLoop.p(ModuleConstants.kDrivingP);
-    m_driveConfig.closedLoop.i(ModuleConstants.kDrivingI);
-    m_driveConfig.closedLoop.d(ModuleConstants.kDrivingD);
-    m_driveConfig.closedLoop.velocityFF(ModuleConstants.kDrivingFF);
-    m_driveConfig.closedLoop.outputRange(ModuleConstants.kDrivingMinOutput,
-    ModuleConstants.kDrivingMaxOutput);
-
-    m_turnConfig.inverted(isTurnMotorInverted);
-    m_turnConfig.absoluteEncoder.positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
-    m_turnConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
-    m_turnConfig.smartCurrentLimit(30);
-    m_turnConfig.voltageCompensation(12.0);
-    m_turnConfig.encoder.uvwMeasurementPeriod(10);
-    m_turnConfig.encoder.uvwAverageDepth(2);
-    m_turnConfig.closedLoop.positionWrappingEnabled(true);
-    m_turnConfig.closedLoop.positionWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-    m_turnConfig.closedLoop.positionWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
-    m_turnConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    m_turnConfig.idleMode(IdleMode.kBrake);
-    m_turnConfig.closedLoop.p(ModuleConstants.kTurningP);
-    m_turnConfig.closedLoop.i(ModuleConstants.kTurningI);
-    m_turnConfig.closedLoop.d(ModuleConstants.kTurningD);
-    m_turnConfig.closedLoop.velocityFF(ModuleConstants.kTurningFF);
-    m_turnConfig.closedLoop.outputRange(ModuleConstants.kTurningMinOutput,
-    ModuleConstants.kTurningMaxOutput);
-
     switch (index) {
       case 0:
-        driveSparkFlex = new SparkFlex(HardwareConstants.kFrontLeftDrivingCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkMax(HardwareConstants.kFrontLeftDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kFrontLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(4.75); // MUST BE CALIBRATED
         break;
       case 1:
-        driveSparkFlex = new SparkFlex(HardwareConstants.kFrontRightDrivingCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkMax(HardwareConstants.kFrontRightDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kFrontRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(0.183); // MUST BE CALIBRATED
         break;
       case 2:
-        driveSparkFlex = new SparkFlex(HardwareConstants.kRearLeftDrivingCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkMax(HardwareConstants.kRearLeftDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kRearLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(3.183); // MUST BE CALIBRATED
         break;
       case 3:
-        driveSparkFlex = new SparkFlex(HardwareConstants.kRearRightDrivingCanId, MotorType.kBrushless);
+        driveSparkFlex = new SparkMax(HardwareConstants.kRearRightDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kRearRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         absoluteEncoderOffset = new Rotation2d(3.0); // MUST BE CALIBRATED
@@ -179,6 +142,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
             / TURN_GEAR_RATIO;
     inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
     inputs.turnCurrentAmps = new double[] {turnSparkMax.getOutputCurrent()};
+
   }
 
   @Override
@@ -193,7 +157,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
   @Override
   public void setDriveReference(double desiredState, ControlType ctrlType, int PIDSlot, double feedForward){
-    m_drivingPIDController.setReference((desiredState), SparkFlex.ControlType.kVelocity, ClosedLoopSlot.kSlot0, feedForward);
+    m_drivingPIDController.setReference((desiredState), ctrlType, ClosedLoopSlot.kSlot0, feedForward);
+    // m_drivingPIDController.setReference(desiredState, ctrlType);
   }
   @Override
   public void setTurnReference(double desiredState, ControlType ctrlType){
