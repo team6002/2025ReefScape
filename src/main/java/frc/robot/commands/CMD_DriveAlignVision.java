@@ -132,7 +132,7 @@ public class CMD_DriveAlignVision extends Command{
       System.out.println("At Goal " + Timer.getFPGATimestamp());
       end = true;
       return;
-    }
+    }         
 
     m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false, false);
   }

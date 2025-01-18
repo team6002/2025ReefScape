@@ -142,7 +142,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
     driveSparkFlex.setCANTimeout(250);
     turnSparkMax.setCANTimeout(250);
-
+  
     driveEncoder = driveSparkFlex.getEncoder();
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
@@ -192,7 +192,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
   }
 
   @Override
-  public void setDriveReference(double desiredState, SparkFlex.ControlType ctrlType, int PIDSlot, double feedForward){
+  public void setDriveReference(double desiredState, ControlType ctrlType, int PIDSlot, double feedForward){
     m_drivingPIDController.setReference((desiredState), SparkFlex.ControlType.kVelocity, ClosedLoopSlot.kSlot0, feedForward);
   }
   @Override
