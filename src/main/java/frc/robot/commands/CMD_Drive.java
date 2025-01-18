@@ -43,12 +43,23 @@ public class CMD_Drive extends Command {
     m_autoSlew = false;
 
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive( xSpeed, ySpeed, rot,true, m_autoSlew);
+    m_drivetrain.drive( xSpeed, ySpeed, rot,true);
   }
 
+  // private static double modifyAxis(double value) {
+  //   double modifedValue;
+  //   // Deadband
+  //   // value = deadband(value, 0.2);
+
+  //   // Square the axis
+  //   modifedValue = value * value;
+  //   modifedValue = Math.copySign(value, value);
+
+  //   return modifedValue;
+  // }
   @Override
   public void end(boolean interrupted) {
-      m_drivetrain.drive(0.0, 0.0, 0.0, true,false);
+      m_drivetrain.drive(0.0, 0.0, 0.0, true);
   }
 
 }

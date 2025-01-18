@@ -122,12 +122,12 @@ public class CMD_DriveAlignOdometry extends Command{
       return;
     }
 
-    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false, false);
+    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.drive(0.0, 0.0, 0.0, true, false);
+    m_drivetrain.drive(0.0, 0.0, 0.0, true);
   }
 
   @Override
