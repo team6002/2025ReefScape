@@ -178,13 +178,16 @@ public final class Constants {
     public static final boolean kCoralHolderInverted = false;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
+    public static final double kIntake = 10;
+    public static final double kOff = 0;
+    public static final double kReverse = -10;
   }
 
-  public static final class LiftConstants{
-    public static final double kLiftP = .001;
-    public static final double kLiftI = .001;
-    public static final double kLiftD = .001;
-    public static final double kLiftFF = .001;
+  public static final class ElevatorConstants{
+    public static final double kElevatorP = .001;
+    public static final double kElevatorI = .001;
+    public static final double kElevatorD = .001;
+    public static final double kElevatorFF = .001;
     public static final double kPivotP = .001;
     public static final double kPivotI = .001;
     public static final double kPivotD = .001;
@@ -195,6 +198,18 @@ public final class Constants {
     public static final boolean kRightInverted = true;
     public static final boolean kLeftPivotInverted = false;
     public static final boolean kRightPivotInverted = true;
+    public static final double kElevatorConversionFactor = 1;
+    public static final double kPivotConversionFactor = 1;
+
+    public static final double kElevatorHome = 0;
+    public static final double kElevatorIntake = 5;
+    public static final double kElevatorDeployL1 = 1;
+    public static final double kElevatorDeployL2 = 7;
+    public static final double kElevatorDeployL3 = 24;
+
+    public static final double kPivotHome = 0;
+    public static final double kPivotIntake = 60;
+    public static final double kPivotDeploy = 110;
   }
 
   public static final class ArmConstants{
@@ -254,8 +269,8 @@ public final class Constants {
     public static final int kRearRightDrivingCanId = 8;
     public static final int kRearRightTurningCanId = 7;
     public static final int kCoralHolderCanId = 9;
-    public static final int kLeftLiftCanId = 10;
-    public static final int kRightLiftCanId = 11;
+    public static final int kLeftElevatorCanId = 10;
+    public static final int kRightElevatorCanId = 11;
     public static final int kLeftPivotCanId = 12;
     public static final int kRightPivotCanId = 13;
   }

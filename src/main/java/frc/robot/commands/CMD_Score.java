@@ -24,9 +24,9 @@ public class CMD_Score extends Command{
     public void initialize(){
         switch(m_variables.getRobotState()){
            case HOME:
-                //TODO: schedule command
+                new CMD_ReadyToIntake(m_elevator, m_coralHolder, m_variables).schedule();
                 m_variables.setRobotState(RobotState.READY_TO_INTAKE);
-            break;
+                break;
             case READY_TO_INTAKE:
                 //TODO: schedule command
                 m_variables.setRobotState(RobotState.STOW);
