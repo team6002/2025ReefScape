@@ -120,7 +120,7 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
-        inputs.targetYaw = getTargetYaw();
+        // inputs.targetYaw = getTargetYaw();
         inputs.target = camera.getLatestResult().hasTargets();   
         inputs.targetDistance = getTargetDistance();
         inputs.targetXDistance = getTargetXDistance();
