@@ -191,9 +191,9 @@ public class SUB_Drivetrain extends SubsystemBase {
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            (speeds) -> driveAutoBuilder(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(0, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
@@ -202,10 +202,10 @@ public class SUB_Drivetrain extends SubsystemBase {
               // This will flip the path being followed to the red side of the field.
               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
+              // var alliance = DriverStation.getAlliance();
+              // if (alliance.isPresent()) {
+              //   return alliance.get() == DriverStation.Alliance.Red;
+              // }
               return false;
             },
             this // Reference to this subsystem to set requirements
@@ -237,8 +237,6 @@ public class SUB_Drivetrain extends SubsystemBase {
     // m_vision.updateInputs();
     
   }
-
-
   
   // private double m_SwerveP = m_frontLeft.getSwerveP();
   // private double m_SwerveI = m_frontLeft.getSwerveI();
