@@ -148,6 +148,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
@@ -220,6 +221,10 @@ public final class Constants {
     public static final double kFF = 0.01;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
+
+    public static final double kHome = 0;
+    public static final double kIntake = 90;
+    public static final double kDeploy = 135;
   }
 
    public static final class LocationConstants{

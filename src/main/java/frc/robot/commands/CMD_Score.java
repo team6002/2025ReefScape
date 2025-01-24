@@ -24,23 +24,23 @@ public class CMD_Score extends Command{
     public void initialize(){
         switch(m_variables.getRobotState()){
            case HOME:
-                new CMD_ReadyToIntake(m_elevator, m_coralHolder, m_variables).schedule();
+                new CMD_ReadyToIntake(m_elevator, m_coralHolder, m_arm).schedule();
                 m_variables.setRobotState(RobotState.READY_TO_INTAKE);
                 break;
             case READY_TO_INTAKE:
-                //TODO: schedule command
+                new CMD_Stow(m_elevator, m_coralHolder, m_arm).schedule();
                 m_variables.setRobotState(RobotState.STOW);
                 break;
            case STOW:
-                //TODO: schedule command
+                new CMD_ReadyToDeploy(m_elevator, m_coralHolder, m_arm).schedule();
                 m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
                 break;
             case READY_TO_DEPLOY:
-                //TODO: schedule command
-                m_variables.setRobotState(RobotState.HOME);
+                new CMD_Deploy(m_coralHolder).schedule();
+                m_variables.setRobotState(RobotState.DEPLOY);
                 break;
             case DEPLOY:
-                //TODO: schedule command
+                new CMD_Home(m_elevator, m_coralHolder, m_arm).schedule();
                 m_variables.setRobotState(RobotState.HOME);
                 break;
             default:

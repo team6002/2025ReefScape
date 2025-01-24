@@ -13,6 +13,7 @@ import frc.robot.subsystems.Vision.*;
 import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Arm.*;
 import frc.robot.subsystems.Elevator.*;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -40,6 +41,7 @@ public class RobotContainer {
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,7 +53,6 @@ public class RobotContainer {
     // Configure default commands
     // m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
     m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_variables));
   }
 
   /**
@@ -64,5 +65,12 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    //driver
+    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_variables));
+
+    //operator
+    m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
+    m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
+    m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
   }
 }

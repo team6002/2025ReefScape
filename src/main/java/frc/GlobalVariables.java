@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GlobalVariables extends SubsystemBase{
     public GlobalVariables(){}
 
+    public static int m_targetLevel = 3;
+
     public enum RobotState{
         HOME
         ,READY_TO_INTAKE
