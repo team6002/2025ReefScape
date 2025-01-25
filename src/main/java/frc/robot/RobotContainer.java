@@ -13,6 +13,7 @@ import frc.robot.subsystems.Vision.*;
 import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Arm.*;
 import frc.robot.subsystems.Elevator.*;
+import frc.robot.subsystems.ElevatorPivot.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -38,6 +39,7 @@ public class RobotContainer {
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
   final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
   final SUB_Arm m_arm = new SUB_Arm(new ArmIOSparkMax());
+  final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -66,7 +68,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_variables));
+    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
 
     //operator
     m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));

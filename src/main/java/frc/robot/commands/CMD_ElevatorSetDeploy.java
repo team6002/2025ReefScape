@@ -15,13 +15,13 @@ public class CMD_ElevatorSetDeploy extends Command{
     public void initialize(){
         switch (GlobalVariables.m_targetLevel) {
             case 1:
-                m_elevator.setElevatorGoal(ElevatorConstants.kElevatorDeployL1);
+                m_elevator.setGoal(ElevatorConstants.kDeployL1);
                 break;
             case 2:
-                m_elevator.setElevatorGoal(ElevatorConstants.kElevatorDeployL2);
+                m_elevator.setGoal(ElevatorConstants.kDeployL2);
                 break;
             case 3:
-                m_elevator.setElevatorGoal(ElevatorConstants.kElevatorDeployL3);
+                m_elevator.setGoal(ElevatorConstants.kDeployL3);
                 break;
             default:
                 break;
