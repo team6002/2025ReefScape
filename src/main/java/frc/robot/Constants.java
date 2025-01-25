@@ -184,55 +184,66 @@ public final class Constants {
     public static final double kReverse = -10;
   }
 
-  public static final class ElevatorConstants{
-    public static final double kElevatorP = .001;
-    public static final double kElevatorI = .001;
-    public static final double kElevatorD = .001;
-    public static final double kElevatorFF = .001;
-    public static final double kPivotP = .001;
-    public static final double kPivotI = .001;
-    public static final double kPivotD = .001;
-    public static final double kPivotFF = .001;
-    public static final double kPivotS = 0.02;
-    public static final double kPivotV = .05;
-    public static final double kPivotMaxVel = 30;
-    public static final double kPivotMaxAccel = 10;
+  public static final class ElevatorPivotConstants{
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = .0;
+    public static final double kFF = .0;
+    public static final double kS = 0.0;
+    public static final double kG = 0.01;
+    public static final double kV = 0.0;
+    public static final double kMaxVel = 30;
+    public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = false;
     public static final boolean kRightInverted = true;
-    public static final boolean kLeftPivotInverted = false;
-    public static final boolean kRightPivotInverted = true;
-    public static final double kElevatorConversionFactor = 1;
-    public static final double kPivotConversionFactor = 1;
+    public static final double kConversionFactor = 360/(Math.PI*2);
+    
+    public static final double kHome = 0;
+    public static final double kIntake = 60;
+    public static final double kDeploy = 110;
+  }
 
-    public static final double kElevatorHome = 0;
-    public static final double kElevatorIntake = 5;
-    public static final double kElevatorDeployL1 = 1;
-    public static final double kElevatorDeployL2 = 7;
-    public static final double kElevatorDeployL3 = 24;
+  public static final class ElevatorConstants{
+    public static final double kP = .001;
+    public static final double kI = .001;
+    public static final double kD = .001;
+    public static final double kFF = .001;
+    public static final double kS = 0.02;
+    public static final double kV = .05;
+    public static final double kMaxVel = 30;
+    public static final double kMaxAccel = 10;
+    public static final double kMinOutput = -1;
+    public static final double kMaxOutput = 1;
+    public static final boolean kLeftInverted = false;
+    public static final boolean kRightInverted = true;
+    public static final double kConversionFactor = 1;
 
-    public static final double kPivotHome = 0;
-    public static final double kPivotIntake = 60;
-    public static final double kPivotDeploy = 110;
+    public static final double kHome = 0;
+    public static final double kIntake = 5;
+    public static final double kDeployL1 = 1;
+    public static final double kDeployL2 = 7;
+    public static final double kDeployL3 = 24;
   }
 
   public static final class ArmConstants{
     public static final boolean kArmInverted = false;
-    public static final double kP = 0.01;
-    public static final double kI = 0.01;
-    public static final double kD = 0.01;
-    public static final double kFF = 0.01;
-    public static final double kS = 0.002;
-    public static final double kV = 0.05;
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kFF = 0.0;
+    public static final double kS = 0.0;
+    public static final double kG = 0.0;
+    public static final double kV = 0.0;
     public static final double kMaxVel = 10;
     public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kHome = 0;
-    public static final double kIntake = 90;
-    public static final double kDeploy = 135;
+    public static final double kHome = 115;
+    public static final double kIntake = 30;
+    public static final double kDeploy = 90;
   }
 
    public static final class LocationConstants{
@@ -273,20 +284,20 @@ public final class Constants {
 
   public static final class HardwareConstants{
     // SPARK MAX CAN IDs 
-    public static final int kFrontLeftDrivingCanId = 2;
-    public static final int kFrontLeftTurningCanId = 1;
-    public static final int kFrontRightDrivingCanId =  4;
-    public static final int kFrontRightTurningCanId = 3;
-    public static final int kRearLeftDrivingCanId = 6;
-    public static final int kRearLeftTurningCanId = 5;
-    public static final int kRearRightDrivingCanId = 8;
-    public static final int kRearRightTurningCanId = 7;
-    public static final int kCoralHolderCanId = 9;
-    public static final int kLeftElevatorCanId = 10;
-    public static final int kRightElevatorCanId = 11;
-    public static final int kLeftPivotCanId = 12;
-    public static final int kRightPivotCanId = 13;
-    public static final int kArmCanId = 14;
+    public static final int kFrontLeftDrivingCanId = 8;
+    public static final int kFrontLeftTurningCanId = 9;
+    public static final int kFrontRightDrivingCanId =  2;
+    public static final int kFrontRightTurningCanId = 1;
+    public static final int kRearLeftDrivingCanId = 10;
+    public static final int kRearLeftTurningCanId = 7;
+    public static final int kRearRightDrivingCanId = 18;
+    public static final int kRearRightTurningCanId = 3;
+    public static final int kCoralHolderCanId = 11;
+    public static final int kLeftElevatorCanId = 5;
+    public static final int kRightElevatorCanId = 12;
+    public static final int kLeftPivotCanId = 6;
+    public static final int kRightPivotCanId = 4;
+    public static final int kArmCanId = 13;
   }
 
   public static final class AutoAlignConstants{

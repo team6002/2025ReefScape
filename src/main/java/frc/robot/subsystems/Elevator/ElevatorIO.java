@@ -5,21 +5,20 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIoInputs {
-    public double m_ElevatorPos;
-    public double m_ElevatorGoal;
-    public double m_ElevatorCurrent;
-    public double m_pivotPos;
-    public double m_pivotGoal;
-    public double m_pivotCurrent;
+    public double m_elevatorPos;
+    public double m_elevatorGoal;
+    public double m_elevatorCurrent;
   }
 
   public default void updateInputs(ElevatorIoInputs inputs) {}
 
-  public default void setElevatorGoal(double p_reference){}
+  public default void setGoal(double p_reference){}
 
-  public default void setPivotGoal(double p_reference){}
+  public default double getGoal(){return 0;}
 
-  public default void getGoal(){}
+  public default double getPosition(){return 0;}
+
+  public default double getCurrent(){return 0;}
 
   public default void PID(){}
 }

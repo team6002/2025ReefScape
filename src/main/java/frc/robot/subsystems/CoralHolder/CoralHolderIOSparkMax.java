@@ -62,7 +62,8 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
     @Override
     public void setReference(double p_rpm){
         m_coralHolderReference = p_rpm;
-        m_coralHolderController.setReference(m_coralHolderReference, ControlType.kVelocity);
+        // m_coralHolderController.setReference(m_coralHolderReference, ControlType.kVelocity);
+        m_coralHolderMotor.set(p_rpm);
     }
 
     public double getVelocity(){
