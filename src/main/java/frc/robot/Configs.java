@@ -4,6 +4,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -137,4 +138,27 @@ public final class Configs {
                         .reverseLimitSwitchEnabled(false);
         }
     }
+
+        public static final class ArmConfigs{
+                public static final SparkMaxConfig m_armConfig = new SparkMaxConfig();
+                static {
+                        m_armConfig
+                                .idleMode(IdleMode.kBrake)
+                                .inverted(ArmConstants.kArmInverted)
+                                .smartCurrentLimit(50)
+                                .voltageCompensation(12.0);
+                        m_armConfig.absoluteEncoder
+                                .inverted(false)
+                                .positionConversionFactor(360)
+                                .velocityConversionFactor(6)
+                                .averageDepth(2);
+                        m_armConfig.closedLoop
+                                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                                .outputRange(ArmConstants.kMinOutput, ArmConstants.kMaxOutput)
+                                .pidf(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD, ArmConstants.kFF);
+                        m_armConfig.limitSwitch
+                                .forwardLimitSwitchEnabled(false)
+                                .reverseLimitSwitchEnabled(false);
+                }
+        }
 }

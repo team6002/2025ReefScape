@@ -31,5 +31,6 @@ public class SUB_Arm extends SubsystemBase{
     public void periodic(){
       io.updateInputs(inputs);
       Logger.processInputs("Arm", inputs);
+      io.PID();
     }
 }

@@ -219,6 +219,10 @@ public final class Constants {
     public static final double kI = 0.01;
     public static final double kD = 0.01;
     public static final double kFF = 0.01;
+    public static final double kS = 0.002;
+    public static final double kV = 0.05;
+    public static final double kMaxVel = 10;
+    public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
