@@ -47,5 +47,6 @@ public class SUB_Elevator extends SubsystemBase{
     public void periodic(){
       io.updateInputs(inputs);
       Logger.processInputs("Elevator", inputs);
+      io.PID();
     }
 }

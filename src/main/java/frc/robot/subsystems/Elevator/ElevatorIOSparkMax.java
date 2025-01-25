@@ -1,14 +1,21 @@
 package frc.robot.subsystems.Elevator;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Configs;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.HardwareConstants;
 
 public class ElevatorIOSparkMax implements ElevatorIO{
@@ -21,7 +28,10 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     private final SparkClosedLoopController m_ElevatorController;
     private final SparkClosedLoopController m_pivotController;
     private double m_elevatorGoal;
-    private double m_pivotGoal;
+    private final SimpleMotorFeedforward m_pivotFeedforward = new SimpleMotorFeedforward(ElevatorConstants.kPivotS, ElevatorConstants.kPivotV);
+    private final Constraints m_pivotConstraints = new Constraints(ElevatorConstants.kPivotMaxVel, ElevatorConstants.kPivotMaxAccel);
+    private TrapezoidProfile.State m_pivotGoal;
+    private TrapezoidProfile.State m_pivotSetpoint;
     public ElevatorIOSparkMax(){
         //motor init
         m_leftElevator = new SparkMax(HardwareConstants.kLeftElevatorCanId, MotorType.kBrushless);
@@ -49,7 +59,8 @@ public class ElevatorIOSparkMax implements ElevatorIO{
 
         //reset goal to 0 on init
         m_elevatorGoal = 0;
-        m_pivotGoal = 0;
+        m_pivotSetpoint = new TrapezoidProfile.State(getPivotPosition(), 0);
+        m_pivotGoal = m_pivotSetpoint;
     }
 
     @Override
@@ -58,7 +69,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         inputs.m_ElevatorPos = getElevatorPosition();
         inputs.m_ElevatorCurrent = getElevatorCurrent();
 
-        inputs.m_pivotGoal = m_pivotGoal;
+        inputs.m_pivotGoal = m_pivotGoal.position;
         inputs.m_pivotPos = getPivotPosition();
         inputs.m_pivotCurrent = getPivotCurrent();
     };
@@ -83,12 +94,12 @@ public class ElevatorIOSparkMax implements ElevatorIO{
 
     @Override
     public void setPivotGoal(double p_pivotGoal){
-        m_pivotGoal = p_pivotGoal;
-        m_pivotController.setReference(m_pivotGoal, ControlType.kPosition);
+        m_pivotSetpoint = new TrapezoidProfile.State(getPivotPosition(), 0);
+        m_pivotGoal = new TrapezoidProfile.State(p_pivotGoal, 0);
     }
 
     public double getPivotGoal(){
-        return m_pivotGoal;
+        return m_pivotGoal.position;
     }
 
     public double getPivotPosition(){
@@ -97,5 +108,12 @@ public class ElevatorIOSparkMax implements ElevatorIO{
 
     public double getPivotCurrent(){
         return m_leftPivotMotor.getOutputCurrent();
+    }
+
+    @Override
+    public void PID(){
+        var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_pivotSetpoint, m_pivotGoal);
+        m_pivotController.setReference(m_pivotSetpoint.position, ControlType.kPosition, 
+            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_pivotSetpoint.velocity));
     }
 }

@@ -27,7 +27,7 @@ public class ArmIOSparkMax implements ArmIO{
 
     public ArmIOSparkMax(){
         //initialize motor
-        m_armMotor = new SparkMax(HardwareConstants.kCoralHolderCanId, MotorType.kBrushless);
+        m_armMotor = new SparkMax(HardwareConstants.kArmCanId, MotorType.kBrushless);
 
         //initialize PID controller
         m_armController = m_armMotor.getClosedLoopController();

@@ -20,4 +20,6 @@ public interface ElevatorIO {
   public default void setPivotGoal(double p_reference){}
 
   public default void getGoal(){}
+
+  public default void PID(){}
 }
