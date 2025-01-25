@@ -14,4 +14,6 @@ public interface ArmIO {
   public default void updateInputs(ArmIOInputs inputs) {}
 
   public default void setReference(double p_reference){}
+
+  public default void PID(){}
 }

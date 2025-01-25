@@ -193,6 +193,10 @@ public final class Constants {
     public static final double kPivotI = .001;
     public static final double kPivotD = .001;
     public static final double kPivotFF = .001;
+    public static final double kPivotS = 0.02;
+    public static final double kPivotV = .05;
+    public static final double kPivotMaxVel = 30;
+    public static final double kPivotMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = false;
@@ -219,6 +223,10 @@ public final class Constants {
     public static final double kI = 0.01;
     public static final double kD = 0.01;
     public static final double kFF = 0.01;
+    public static final double kS = 0.002;
+    public static final double kV = 0.05;
+    public static final double kMaxVel = 10;
+    public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
@@ -278,6 +286,7 @@ public final class Constants {
     public static final int kRightElevatorCanId = 11;
     public static final int kLeftPivotCanId = 12;
     public static final int kRightPivotCanId = 13;
+    public static final int kArmCanId = 14;
   }
 
   public static final class AutoAlignConstants{
