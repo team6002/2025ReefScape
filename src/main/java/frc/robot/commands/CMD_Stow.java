@@ -11,7 +11,7 @@ import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
 public class CMD_Stow extends SequentialCommandGroup{
     public CMD_Stow(SUB_Elevator p_elevator, SUB_CoralHolder p_coralHolder, SUB_Arm p_arm, SUB_ElevatorPivot p_elevatorPivot){
         addCommands(
-            new InstantCommand(()-> p_arm.setReference(ArmConstants.kHome))
+            new InstantCommand(()-> p_arm.setGoal(ArmConstants.kHome))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kHome))
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kOff))
             ,new CMD_ElevatorInPosition(p_elevator)

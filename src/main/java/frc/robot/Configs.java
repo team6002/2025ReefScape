@@ -3,6 +3,7 @@ package frc.robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -12,7 +13,7 @@ import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
     public static final class MAXSwerveModule {
-        public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
+        public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
@@ -25,7 +26,7 @@ public final class Configs {
             drivingConfig
                     .idleMode(IdleMode.kBrake)
                     .voltageCompensation(12)
-                    .smartCurrentLimit(50);
+                    .smartCurrentLimit(40);
             drivingConfig.encoder
                     .positionConversionFactor(drivingFactor) // meters
                     .velocityConversionFactor(drivingFactor / 60.0)// meters per second
@@ -77,7 +78,7 @@ public final class Configs {
                         .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorConstants.kLeftInverted)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(40);
                 m_leftElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -93,7 +94,7 @@ public final class Configs {
                         .inverted(ElevatorConstants.kRightInverted)
                         .follow(HardwareConstants.kLeftElevatorCanId)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(40);
                 m_rightElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -112,12 +113,12 @@ public final class Configs {
                         m_armConfig
                                 .idleMode(IdleMode.kBrake)
                                 .inverted(ArmConstants.kArmInverted)
-                                .smartCurrentLimit(50)
+                                .smartCurrentLimit(40)
                                 .voltageCompensation(12.0);
                         m_armConfig.absoluteEncoder
                                 .inverted(false)
-                                .positionConversionFactor(360)
-                                .velocityConversionFactor(6)
+                                .positionConversionFactor(360/(Math.PI*2))
+                                .velocityConversionFactor((360/(Math.PI*2))/60)
                                 .averageDepth(2);
                         m_armConfig.closedLoop
                                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
@@ -137,7 +138,8 @@ public final class Configs {
                         .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorPivotConstants.kLeftInverted)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .follow(HardwareConstants.kRightPivotCanId)
+                        .smartCurrentLimit(40);
                 m_leftPivotConfig.closedLoop
                         .pidf(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD, ElevatorPivotConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -151,9 +153,8 @@ public final class Configs {
                 m_rightPivotConfig
                         .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorPivotConstants.kRightInverted)
-                        .follow(HardwareConstants.kLeftPivotCanId)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(40);
                 m_rightPivotConfig.closedLoop
                         .pidf(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD, ElevatorPivotConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)

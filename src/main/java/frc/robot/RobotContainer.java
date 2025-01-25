@@ -37,9 +37,10 @@ public class RobotContainer {
     );
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
-  final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
-  final SUB_Arm m_arm = new SUB_Arm(new ArmIOSparkMax());
+  // final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
   final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
+  // final SUB_Arm m_arm = new SUB_Arm(new ArmIOSparkMax());
+
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -68,9 +69,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
+    // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
+    // m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    // m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
 
-    //operator
+    // m_driverController.x().whileTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));*
+    // m_driverController.y().whileTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    // //operator
     m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
     m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
     m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));

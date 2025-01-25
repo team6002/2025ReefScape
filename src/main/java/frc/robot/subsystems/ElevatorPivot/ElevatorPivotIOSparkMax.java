@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Configs;
@@ -21,7 +21,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     private final SparkMax m_rightPivotMotor;
     private final SparkAbsoluteEncoder m_pivotEncoder;
     private final SparkClosedLoopController m_pivotController;
-    private final SimpleMotorFeedforward m_pivotFeedforward = new SimpleMotorFeedforward(ElevatorPivotConstants.kS, 
+    private ArmFeedforward m_pivotFeedforward = new ArmFeedforward(ElevatorPivotConstants.kS, ElevatorPivotConstants.kG,
         ElevatorPivotConstants.kV);
     private final Constraints m_pivotConstraints = new Constraints(ElevatorPivotConstants.kMaxVel, ElevatorPivotConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
@@ -31,12 +31,15 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         m_leftPivotMotor = new SparkMax(HardwareConstants.kLeftPivotCanId, MotorType.kBrushless);
         m_rightPivotMotor = new SparkMax(HardwareConstants.kRightPivotCanId, MotorType.kBrushless);
 
-        m_pivotEncoder = m_leftPivotMotor.getAbsoluteEncoder();
+        m_pivotEncoder = m_rightPivotMotor.getAbsoluteEncoder();
 
-        m_pivotController = m_leftPivotMotor.getClosedLoopController();
+        m_pivotController = m_rightPivotMotor.getClosedLoopController();
 
         m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+        m_goal = m_setpoint;
     }
 
     @Override
@@ -57,6 +60,10 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         return m_goal.position;
     }
 
+    public void setSpeed(){
+        m_rightPivotMotor.set(.001);
+    }
+    
     @Override
     public double getPosition(){
         return m_pivotEncoder.getPosition();
@@ -64,13 +71,27 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
 
     @Override
     public double getCurrent(){
-        return m_leftPivotMotor.getOutputCurrent();
+        return m_rightPivotMotor.getOutputCurrent();
+    }
+
+    @Override
+    public void setPid(double kP, double kI, double kD, double kFF){
+        Configs.ElevatorPivotConfig.m_leftPivotConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
+        Configs.ElevatorPivotConfig.m_rightPivotConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
+
+        m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    }
+
+    @Override
+    public void setFeedforward(double kS, double kG, double kV){
+        m_pivotFeedforward = new ArmFeedforward(kS, kG, kV);
     }
 
     @Override
     public void PID(){
         var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_setpoint, m_goal);
-        m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity));
+        m_pivotController.setReference(profile.position, ControlType.kPosition, 
+            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity, getPosition()));
     }
 }

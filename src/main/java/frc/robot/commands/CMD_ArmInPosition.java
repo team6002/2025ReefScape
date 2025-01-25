@@ -11,6 +11,6 @@ public class CMD_ArmInPosition extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_arm.getReference() - m_arm.getPosition()) < 1;
+        return Math.abs(m_arm.getGoal() - m_arm.getPosition()) < 1;
     }
 }

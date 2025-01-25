@@ -12,7 +12,7 @@ public class CMD_Home extends SequentialCommandGroup{
     public CMD_Home(SUB_Elevator p_elevator, SUB_CoralHolder p_coralHolder, SUB_Arm p_arm, SUB_ElevatorPivot p_elevatorPivot){
         addCommands(
             new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kOff))
-            ,new InstantCommand(()->p_arm.setReference(ArmConstants.kHome))
+            ,new InstantCommand(()->p_arm.setGoal(ArmConstants.kHome))
             ,new CMD_ArmInPosition(p_arm)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kHome))
             ,new CMD_ElevatorInPosition(p_elevator)

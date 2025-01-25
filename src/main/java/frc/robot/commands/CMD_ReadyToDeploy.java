@@ -13,7 +13,7 @@ public class CMD_ReadyToDeploy extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kDeploy))
             ,new CMD_PivotInPosition(p_elevatorPivot)
-            ,new InstantCommand(()-> p_arm.setReference(ArmConstants.kDeploy))
+            ,new InstantCommand(()-> p_arm.setGoal(ArmConstants.kDeploy))
             ,new CMD_ElevatorSetDeploy(p_elevator)
         );
     }

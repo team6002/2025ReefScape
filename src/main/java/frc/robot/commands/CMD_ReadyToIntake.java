@@ -13,7 +13,7 @@ public class CMD_ReadyToIntake extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kIntake))
             ,new CMD_PivotInPosition(p_elevatorPivot)
-            ,new InstantCommand(()-> p_arm.setReference(ArmConstants.kIntake))
+            ,new InstantCommand(()-> p_arm.setGoal(ArmConstants.kIntake))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
