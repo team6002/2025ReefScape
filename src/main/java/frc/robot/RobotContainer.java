@@ -70,11 +70,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driver
     // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
-    // m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-    // m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-
-    // m_driverController.x().whileTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));*
-    // m_driverController.y().whileTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+  
+    m_driverController.x().onTrue(m_elevatorPivot.incrementGoal(5));
+    m_driverController.y().onTrue(m_elevatorPivot.incrementGoal(-5));
     // //operator
     m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
     m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));

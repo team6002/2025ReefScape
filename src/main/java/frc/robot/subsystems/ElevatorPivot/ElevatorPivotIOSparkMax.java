@@ -30,13 +30,13 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     public ElevatorPivotIOSparkMax(){
         m_leftPivotMotor = new SparkMax(HardwareConstants.kLeftPivotCanId, MotorType.kBrushless);
         m_rightPivotMotor = new SparkMax(HardwareConstants.kRightPivotCanId, MotorType.kBrushless);
-
         m_pivotEncoder = m_rightPivotMotor.getAbsoluteEncoder();
 
         m_pivotController = m_rightPivotMotor.getClosedLoopController();
 
+        
         m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_rightPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
         m_goal = m_setpoint;
@@ -60,8 +60,10 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         return m_goal.position;
     }
 
-    public void setSpeed(){
-        m_rightPivotMotor.set(.001);
+    @Override
+    public void setSpeed(double p_speed){
+        m_rightPivotMotor.set(.1);
+        m_leftPivotMotor.set(.1);
     }
     
     @Override
@@ -80,7 +82,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         Configs.ElevatorPivotConfig.m_rightPivotConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
 
         m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_rightPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
@@ -91,7 +93,8 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     @Override
     public void PID(){
         var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_setpoint, m_goal);
-        m_pivotController.setReference(profile.position, ControlType.kPosition, 
+        m_setpoint = profile;
+        m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
             ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity, getPosition()));
     }
 }

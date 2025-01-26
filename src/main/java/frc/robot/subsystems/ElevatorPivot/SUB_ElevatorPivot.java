@@ -2,16 +2,22 @@ package frc.robot.subsystems.ElevatorPivot;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorPivotConstants;
 
 public class SUB_ElevatorPivot extends SubsystemBase{
     private final ElevatorPivotIO io;
     private final ElevatorPivotIoInputsAutoLogged inputs = new ElevatorPivotIoInputsAutoLogged();
+    // priv/ate final SparkMax m_arm;
     public SUB_ElevatorPivot(ElevatorPivotIO io){
         this.io = io;
-
+        // m_arm = new SparkMax(4, MotorType.kBrushless);
         //tuning
         SmartDashboard.putNumber("elevatorPivotP", ElevatorPivotConstants.kP);
         SmartDashboard.putNumber("elevatorPivotI", ElevatorPivotConstants.kI);
@@ -41,12 +47,16 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       io.setGoal(p_goal);
     }
 
+    public Command incrementGoal(double increment){
+      return Commands.runOnce(() -> io.setGoal(increment + getGoal()));
+    }
     @Override
     public void periodic(){
       io.updateInputs(inputs);
       Logger.processInputs("ElevatorPivot", inputs);
       io.PID();
-      io.setSpeed(0.001);
+      // io.setSpeed(0.1);
+      // m_arm.set(.1);
       //tuning
       // io.setPid(
       //   SmartDashboard.getNumber("elevatorPivotP", 0.0),
@@ -63,7 +73,8 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       
       SmartDashboard.putNumber("elevatorPivotPos", getPosition());
       SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());
+      SmartDashboard.putNumber("elevatorPivotGoal", getGoal());
 
-      io.setGoal(SmartDashboard.getNumber("elevatorPivotGoal", getGoal()));
+      // io.setGoal(SmartDashboard.getNumber("elevatorPivotGoal", getGoal()));
     }
 }

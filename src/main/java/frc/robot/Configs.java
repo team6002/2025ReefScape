@@ -138,14 +138,17 @@ public final class Configs {
                         .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorPivotConstants.kLeftInverted)
                         .voltageCompensation(12.0)
-                        .follow(HardwareConstants.kRightPivotCanId)
+                        .follow(HardwareConstants.kRightPivotCanId,true)
                         .smartCurrentLimit(40);
                 m_leftPivotConfig.closedLoop
-                        .pidf(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD, ElevatorPivotConstants.kFF)
+                        .pid(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
                 m_leftPivotConfig.encoder
-                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor);
+                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor)
+                        .uvwMeasurementPeriod(10)
+                        .uvwAverageDepth(2); 
+                
                 m_rightPivotConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
@@ -154,13 +157,17 @@ public final class Configs {
                         .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorPivotConstants.kRightInverted)
                         .voltageCompensation(12.0)
+                        .disableFollowerMode()
                         .smartCurrentLimit(40);
                 m_rightPivotConfig.closedLoop
-                        .pidf(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD, ElevatorPivotConstants.kFF)
+                        .pid(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
                 m_rightPivotConfig.encoder
-                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor);
+                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor)
+                        .uvwMeasurementPeriod(10)
+                        .uvwAverageDepth(2); 
+                
                 m_rightPivotConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);

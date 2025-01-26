@@ -185,20 +185,20 @@ public final class Constants {
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 0.0;
+    public static final double kP = 0.04;
     public static final double kI = 0.0;
     public static final double kD = .0;
     public static final double kFF = .0;
-    public static final double kS = 0.0;
-    public static final double kG = 0.01;
+    public static final double kS = 0.01;
+    public static final double kG = .2;
     public static final double kV = 0.0;
     public static final double kMaxVel = 30;
-    public static final double kMaxAccel = 10;
+    public static final double kMaxAccel = 30;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final boolean kLeftInverted = false;
-    public static final boolean kRightInverted = true;
-    public static final double kConversionFactor = 360/(Math.PI*2);
+    public static final boolean kLeftInverted = true;
+    public static final boolean kRightInverted = false;
+    public static final double kConversionFactor = 180/(Math.PI);
     
     public static final double kHome = 0;
     public static final double kIntake = 60;
