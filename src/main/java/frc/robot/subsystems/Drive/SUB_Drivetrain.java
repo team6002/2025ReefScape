@@ -53,7 +53,7 @@ import frc.robot.Constants.AutoConstants;
 public class SUB_Drivetrain extends SubsystemBase {
   RobotConfig config;
   // Create MAXSwerveModules
-  // SUB_Vision m_vision;
+  SUB_Vision m_vision;
   SwerveModule[] SwerveModules;
   // Module[] swerveModules = new Module[4];
   private final SwerveModule m_frontLeft;
@@ -132,14 +132,14 @@ public class SUB_Drivetrain extends SubsystemBase {
   Field2d field;
   Field2d fieldEst;
   /** Creates a new DriveSubsystem. */
-  SUB_Vision m_vision;
+  // SUB_Vision m_vision;
   public SUB_Drivetrain(
     GyroIO gyroIO,
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
-    ModuleIO brModuleIO
-    // SUB_Vision p_vision
+    ModuleIO brModuleIO,
+    SUB_Vision p_vision
     ) 
   {
         

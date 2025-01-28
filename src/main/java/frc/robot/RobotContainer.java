@@ -27,18 +27,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
+  final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
     ,new ModuleIOSparkFlex(2)
     ,new ModuleIOSparkFlex(3)
-    // m_vision
+    ,m_vision
     );
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
   // final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
-  final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
+  // final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
   // final SUB_Arm m_arm = new SUB_Arm(new ArmIOSparkMax());
 
 
@@ -69,15 +70,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
+    m_driverController.a().onTrue(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController));
     // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-    m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    // m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    // m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
   
-    m_driverController.x().onTrue(m_elevatorPivot.incrementGoal(5));
-    m_driverController.y().onTrue(m_elevatorPivot.incrementGoal(-5));
-    // //operator
-    m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
-    m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
+ 
+    // m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
+    // m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
+    // m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
   }
 }

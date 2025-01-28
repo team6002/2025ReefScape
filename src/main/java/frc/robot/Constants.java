@@ -284,19 +284,19 @@ public final class Constants {
 
   public static final class HardwareConstants{
     // SPARK MAX CAN IDs 
-    public static final int kFrontLeftDrivingCanId = 8;
-    public static final int kFrontLeftTurningCanId = 9;
-    public static final int kFrontRightDrivingCanId =  2;
-    public static final int kFrontRightTurningCanId = 1;
-    public static final int kRearLeftDrivingCanId = 10;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kRearRightDrivingCanId = 18;
-    public static final int kRearRightTurningCanId = 3;
+    public static final int kFrontLeftDrivingCanId = 2;
+    public static final int kFrontLeftTurningCanId = 1;
+    public static final int kFrontRightDrivingCanId =  4;
+    public static final int kFrontRightTurningCanId = 3;
+    public static final int kRearLeftDrivingCanId = 6;
+    public static final int kRearLeftTurningCanId = 5;
+    public static final int kRearRightDrivingCanId = 8;
+    public static final int kRearRightTurningCanId = 7;
     public static final int kCoralHolderCanId = 11;
-    public static final int kLeftElevatorCanId = 5;
+    public static final int kLeftElevatorCanId = 50;
     public static final int kRightElevatorCanId = 12;
-    public static final int kLeftPivotCanId = 6;
-    public static final int kRightPivotCanId = 4;
+    public static final int kLeftPivotCanId = 60;
+    public static final int kRightPivotCanId = 40;
     public static final int kArmCanId = 13;
   }
 
