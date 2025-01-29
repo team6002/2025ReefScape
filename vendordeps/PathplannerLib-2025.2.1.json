@@ -30,8 +30,8 @@
                 "linuxx86-64",
                 "osxuniversal",
                 "linuxathena",
-                "linuxarm32",
-                "linuxarm64"
+                "linuxwrist32",
+                "linuxwrist64"
             ]
         }
     ]

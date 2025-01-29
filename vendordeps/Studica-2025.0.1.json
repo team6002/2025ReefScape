@@ -13,8 +13,8 @@
             "artifactId": "Studica-cpp",
             "binaryPlatforms": [
                 "linuxathena",
-                "linuxarm32",
-                "linuxarm64",
+                "linuxwrist32",
+                "linuxwrist64",
                 "linuxx86-64",
                 "osxuniversal",
                 "windowsx86-64"
@@ -30,8 +30,8 @@
             "artifactId": "Studica-driver",
             "binaryPlatforms": [
                 "linuxathena",
-                "linuxarm32",
-                "linuxarm64",
+                "linuxwrist32",
+                "linuxwrist64",
                 "linuxx86-64",
                 "osxuniversal",
                 "windowsx86-64"
@@ -59,8 +59,8 @@
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "linuxathena",
-                "linuxarm32",
-                "linuxarm64",
+                "linuxwrist32",
+                "linuxwrist64",
                 "linuxx86-64",
                 "osxuniversal",
                 "windowsx86-64"

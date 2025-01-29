@@ -24,10 +24,10 @@
             "isJar": false,
             "validPlatforms": [
                 "windowsx86-64",
-                "linuxarm64",
+                "linuxwrist64",
                 "linuxx86-64",
                 "linuxathena",
-                "linuxarm32",
+                "linuxwrist32",
                 "osxuniversal"
             ]
         }
@@ -43,10 +43,10 @@
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
                 "windowsx86-64",
-                "linuxarm64",
+                "linuxwrist64",
                 "linuxx86-64",
                 "linuxathena",
-                "linuxarm32",
+                "linuxwrist32",
                 "osxuniversal"
             ]
         },
@@ -60,10 +60,10 @@
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
                 "windowsx86-64",
-                "linuxarm64",
+                "linuxwrist64",
                 "linuxx86-64",
                 "linuxathena",
-                "linuxarm32",
+                "linuxwrist32",
                 "osxuniversal"
             ]
         }

@@ -1,17 +1,17 @@
-package frc.robot.subsystems.Arm;
+package frc.robot.subsystems.Wrist;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ArmIO {
+public interface WristIO {
   @AutoLog
-  public static class ArmIOInputs {
-    public double m_armCurrent;
-    public double m_armPosition;
-    public double m_armGoal;
+  public static class WristIOInputs {
+    public double m_wristCurrent;
+    public double m_wristPosition;
+    public double m_wristGoal;
   }
 
   /** Updates the set of loggable inputs. */
-  public default void updateInputs(ArmIOInputs inputs) {}
+  public default void updateInputs(WristIOInputs inputs) {}
 
   public default void setGoal(double p_goal){}
 

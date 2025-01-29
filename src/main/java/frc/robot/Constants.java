@@ -185,12 +185,12 @@ public final class Constants {
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 0.04;
+    public static final double kP = 0.03;
     public static final double kI = 0.0;
-    public static final double kD = .0;
-    public static final double kFF = .0;
-    public static final double kS = 0.01;
-    public static final double kG = .2;
+    public static final double kD = 0.0;
+    public static final double kFF = 0.0;
+    public static final double kS = 0.03;
+    public static final double kG = 0.145;
     public static final double kV = 0.0;
     public static final double kMaxVel = 30;
     public static final double kMaxAccel = 30;
@@ -206,12 +206,12 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = .001;
-    public static final double kI = .001;
-    public static final double kD = .001;
-    public static final double kFF = .001;
-    public static final double kS = 0.02;
-    public static final double kV = .05;
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = .0;
+    public static final double kFF = 0.0;
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
     public static final double kMaxVel = 30;
     public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
@@ -227,17 +227,18 @@ public final class Constants {
     public static final double kDeployL3 = 24;
   }
 
-  public static final class ArmConstants{
-    public static final boolean kArmInverted = false;
-    public static final double kP = 0.0;
+  public static final class WristConstants{
+    public static final boolean kWristInverted = false;
+    public static final double kWristOffset = -122.56;
+    public static final double kP = 0.02;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
+    public static final double kS = 0.015;
+    public static final double kG = 0.133;
     public static final double kV = 0.0;
-    public static final double kMaxVel = 10;
-    public static final double kMaxAccel = 10;
+    public static final double kMaxVel = 30;
+    public static final double kMaxAccel = 30;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
@@ -297,7 +298,7 @@ public final class Constants {
     public static final int kRightElevatorCanId = 12;
     public static final int kLeftPivotCanId = 6;
     public static final int kRightPivotCanId = 4;
-    public static final int kArmCanId = 13;
+    public static final int kWristCanId = 13;
   }
 
   public static final class AutoAlignConstants{

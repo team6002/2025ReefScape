@@ -25,7 +25,7 @@
             "validPlatforms": [
                 "linuxathena",
                 "linuxx86-64",
-                "linuxarm64",
+                "linuxwrist64",
                 "osxuniversal",
                 "windowsx86-64"
             ]

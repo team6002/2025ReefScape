@@ -11,7 +11,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.*;
 import frc.robot.subsystems.Vision.*;
 import frc.robot.subsystems.CoralHolder.*;
-import frc.robot.subsystems.Arm.*;
+import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -36,10 +36,10 @@ public class RobotContainer {
     // m_vision
     );
   final GlobalVariables m_variables = new GlobalVariables();
-  final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
+  // final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
   // final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
   final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
-  // final SUB_Arm m_arm = new SUB_Arm(new ArmIOSparkMax());
+  final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
 
 
   // The driver's controller
@@ -69,10 +69,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-    m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-  
+    // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
+    // m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    // m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    
     m_driverController.x().onTrue(m_elevatorPivot.incrementGoal(5));
     m_driverController.y().onTrue(m_elevatorPivot.incrementGoal(-5));
     // //operator
