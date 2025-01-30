@@ -44,7 +44,7 @@ public interface VisionIO {
     public default void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets){}
     public default Optional<EstimatedRobotPose> getEstimatedGlobalPose() {return null;}
     public default double getTargetYaw(){return 0;}
-    public default Matrix<N3, N1> getEstimationStdDevs() {return null;}
+    public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default double getTargetYDistance(){return 0;}
     public default double getTargetXDistance(){return 0;}
     public default double getTargetDistance(){return 0;}

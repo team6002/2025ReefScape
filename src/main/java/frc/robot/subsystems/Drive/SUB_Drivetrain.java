@@ -144,7 +144,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   {
         
     this.gyroIO = gyroIO;
-    // m_vision = p_vision;
+    m_vision = p_vision;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -220,6 +220,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         new Pose2d(),
         stateStdDevs,
         visionStdDevs);
+
     m_targetOdometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
@@ -228,6 +229,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         new Pose2d(),
         stateStdDevs,
         visionStdDevs);
+
     m_pureOdometry = new SwerveDriveOdometry(
     DriveConstants.kDriveKinematics,
     Rotation2d.fromDegrees(getAngle()),
@@ -245,7 +247,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // var visionEst = m_vision.getEstimatedGlobalPose();
+    var visionEst = m_vision.getEstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -273,18 +275,19 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     
+    m_vision.updateInputs();
 
-    // visionEst.ifPresent(
-    //   est -> {
-    //       var estPose = est.estimatedPose.toPose2d();
-    //       Logger.recordOutput("CameraPose", estPose);
+    visionEst.ifPresent(
+      est -> {
+          var estPose = est.estimatedPose.toPose2d();
+          Logger.recordOutput("CameraPose", estPose);
     //       // Change our trust in the measurement based on the tags we can see
-    //       var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+          var estStdDevs = m_vision.getEstimationStdDevs(estPose);
 
-    //       addVisionMeasurement(
-    //         est.estimatedPose.toPose2d(), est.timestampSeconds);
-    //   }  
-    // );
+          addVisionMeasurement(
+            est.estimatedPose.toPose2d(), est.timestampSeconds);
+      }  
+    );
 
     // if (visionEst.isPresent()){
       

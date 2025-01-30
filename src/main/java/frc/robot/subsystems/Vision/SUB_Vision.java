@@ -98,8 +98,8 @@ public class SUB_Vision {
         return inputs.targetYaw;
     }
 
-    public Matrix<N3, N1> getEstimationStdDevs() {
-        return io.getEstimationStdDevs();
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+        return io.getEstimationStdDevs(estimatedPose);
     }
     
     public void updateInputs(){
