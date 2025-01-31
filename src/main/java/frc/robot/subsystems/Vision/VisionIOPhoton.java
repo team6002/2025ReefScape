@@ -18,6 +18,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -63,20 +64,19 @@ public class VisionIOPhoton implements VisionIO{
         return visionEst;
     }
 
+
     public PhotonPipelineResult getLatestResult() {
         if (camera.getLatestResult().hasTargets()){
             return camera.getLatestResult();
         }else return null;
-    }
+    } 
+    
     @Override
-    public double getTargetYaw(){
+    public Transform3d getTargetPose(){
         if (camera.getLatestResult().hasTargets()){
-            return 
-            new Rotation2d(Math.toRadians(180)).plus(getLatestResult().getBestTarget().getBestCameraToTarget().getRotation().toRotation2d()).getDegrees();
-        }else return 0;
-    
-    }   
-    
+            return camera.getLatestResult().getBestTarget().getBestCameraToTarget();
+        }else return null;
+    }
     @Override
     public void updateEstimationStdDevs(
         Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
@@ -158,42 +158,11 @@ public class VisionIOPhoton implements VisionIO{
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
         if (camera.getLatestResult().hasTargets()){
-            inputs.targetDistance = getTargetDistance();
-            inputs.targetXDistance = getTargetXDistance();
-            inputs.targetYDistance = getTargetYDistance();    
-            inputs.targetYaw = getTargetYaw();
-        
+            inputs.targetPose = getTargetPose();
         }
         inputs.target = camera.getLatestResult().hasTargets();   
         
     }
 
-    @Override
-    public double getTargetDistance(){
-        if (camera.getLatestResult().hasTargets()){
-            return PhotonUtils.calculateDistanceToTargetMeters(Units.inchesToMeters(21), Units.inchesToMeters(15.25), Units.degreesToRadians(10), 0);
-            // photonEstimator.getFieldTags().getTagPose(camera.getLatestResult().getBestTarget().getFiducialId()).get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation())
-        }else{
-            return 0;   
-        }
-    }
-
-    @Override
-    public double getTargetXDistance(){
-        // return PhotonUtils.estimateCameraToTarget(null, null, null).getX();
-        // PhotonUtils.calculateDistanceToTargetMeters(getTargetYaw(), getTargetYDistance(), getTargetXDistance(), getTargetDistance())
-        if (camera.getLatestResult().hasTargets()){ 
-            return PhotonUtils.estimateCameraToTargetTranslation(getTargetDistance(), Rotation2d.fromDegrees(-getTargetYaw())).getX();
-        
-        }else return 0;
-    }
-
-    @Override
-    public double getTargetYDistance(){
-        // return PhotonUtils.estimateCameraToTarget(null, null, null).getX();
-        if (camera.getLatestResult().hasTargets()){
-            return PhotonUtils.estimateCameraToTargetTranslation(getTargetDistance(), new Rotation2d(getTargetYaw())).getY();
-        }else return 0;
-    }
-        
+       
 }

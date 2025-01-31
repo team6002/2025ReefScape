@@ -8,6 +8,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -163,7 +164,9 @@ public class SUB_Drivetrain extends SubsystemBase {
       3,
       DriveConstants.kBackRightChassisAngularOffset);
     var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-    var visionStdDevs = VecBuilder.fill(1, 1, 1);    
+    var visionStdDevs = VecBuilder.fill(1, 1, 1);
+    var targetStdDevs = VecBuilder.fill(0, 0, 0);
+        
     
     SwerveModules = new SwerveModule[]{
       m_frontLeft,
@@ -271,15 +274,23 @@ public class SUB_Drivetrain extends SubsystemBase {
       // getModulePositions()
       modulePositions
     );
+
+    m_targetOdometry.update(
+      Rotation2d.fromDegrees(getAngle()),
+      getTargetModulePositions()
+    );
+
     m_pureOdometry.update(getOdoRotation(), modulePositions);
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
+    Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition());
     
     m_vision.updateInputs();
 
     visionEst.ifPresent(
       est -> {
           var estPose = est.estimatedPose.toPose2d();
+          // estPose = m_vision.getEstimatedGlobalPose(estPose);
           Logger.recordOutput("CameraPose", estPose);
     //       // Change our trust in the measurement based on the tags we can see
           var estStdDevs = m_vision.getEstimationStdDevs(estPose);
@@ -289,6 +300,13 @@ public class SUB_Drivetrain extends SubsystemBase {
       }  
     );
 
+    visionEst.ifPresent(
+      est -> {
+          var estPose = est.estimatedPose.toPose2d();
+          addTargetVisionMeasurement(
+            m_vision.getTargetPose(), est.timestampSeconds);
+      }  
+    );
     // if (visionEst.isPresent()){
       
     //   SmartDashboard.putNumber("targetYaw", m_vision.getTargetYaw());
@@ -327,6 +345,10 @@ public class SUB_Drivetrain extends SubsystemBase {
     return m_odometry.getEstimatedPosition();
   }
 
+  public Pose2d getTargetOdo(){
+    return m_targetOdometry.getEstimatedPosition();
+  }
+
   /**
    * Resets the odometry to the specified pose.
    *
@@ -340,6 +362,13 @@ public class SUB_Drivetrain extends SubsystemBase {
         pose);
   }
 
+  public void resetTargetOdometry(Pose2d pose) {
+    setHeading(pose.getRotation().getDegrees());
+    m_odometry.resetPosition(
+        Rotation2d.fromDegrees(getAngle()),
+        getModulePositions(),
+        pose);
+  }
   /**
    * Method to drive the robot using joystick info.
    *
@@ -548,7 +577,16 @@ public class SUB_Drivetrain extends SubsystemBase {
         m_rearRight.getPosition()
     };
   }
-
+  //reverses the odometry for the targeting
+  public SwerveModulePosition[] getTargetModulePositions() {
+    return new SwerveModulePosition[] {
+        new SwerveModulePosition (-m_frontLeft.getPosition().distanceMeters, m_frontLeft.getPosition().angle),
+        new SwerveModulePosition (-m_frontRight.getPosition().distanceMeters, m_frontRight.getPosition().angle),
+        new SwerveModulePosition (-m_rearLeft.getPosition().distanceMeters, m_rearLeft.getPosition().angle),
+        new SwerveModulePosition (-m_rearRight.getPosition().distanceMeters, m_rearRight.getPosition().angle),
+      };
+  }
+  
   /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)}. */
   public void addVisionMeasurement(Pose2d visionMeasurement, double timestampSeconds) {
       m_odometry.addVisionMeasurement(visionMeasurement, timestampSeconds);
@@ -562,6 +600,9 @@ public class SUB_Drivetrain extends SubsystemBase {
       m_odometry.addVisionMeasurement(p_angledPose, timestampSeconds, stdDevs);
   }
 
+  public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
+    m_targetOdometry.addVisionMeasurement( new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), Rotation2d.fromDegrees(0)), timestampSeconds);
+}
     // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
   List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(

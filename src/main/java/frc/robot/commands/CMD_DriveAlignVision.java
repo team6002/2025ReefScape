@@ -4,8 +4,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -54,13 +57,16 @@ public class CMD_DriveAlignVision extends Command{
       
     turnController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(m_drivetrain);
+    if (!m_vision.getHasTarget()){
+      return;
+    }
   }
 
   @Override
   public void initialize() {
     // double GridAdjustment = (-(CurrentGrid - WantedGrid)*1.8);
     // Transform2d GridTransformation = new Transform2d(new Translation2d(0, GridAdjustment),new Rotation2d(0));
-
+    goalPose = new Pose2d(0,0, new Rotation2d(0));
     // add back in when u have a variable that store this condition
     // if (m_variables.getHasCoral() == true){
       // goalPose = Constants.AutoAlignConstants.goalPose.get(m_variables.getAlignPosition());
@@ -74,17 +80,17 @@ public class CMD_DriveAlignVision extends Command{
     /* Set the goals as an offset of the robot's current odometry */
     xController.setGoal(0);
     yController.setGoal(0);
-    // turnController.setSetpoint(goalPose.getRotation().getDegrees());
+    turnController.setSetpoint(0);
 
     xController.setTolerance(AutoAlignConstants.kXTolerance);
     yController.setTolerance(AutoAlignConstants.kYTolerance);
     turnController.setTolerance(AutoAlignConstants.kTurnTolerance);
 
-    xController.reset(m_vision.getTargetYDistance());
-    yController.reset(m_vision.getTargetYDistance());
-    // turnController.reset();
+    xController.reset(m_drivetrain.getTargetOdo().getX());
+    yController.reset(m_drivetrain.getTargetOdo().getY());
+    turnController.reset();
 
-    // turnController.enableContinuousInput(-180, 180);
+    turnController.enableContinuousInput(-180, 180);
   }
 
   @Override
@@ -102,16 +108,21 @@ public class CMD_DriveAlignVision extends Command{
     
     robotOdom = m_drivetrain.getPose();
     if (m_vision.getHasTarget()){
-      xController.setGoal(0);
-      yController.setGoal(0);
-      xSpeed = xController.calculate(m_vision.getTargetXDistance());
-      ySpeed = yController.calculate(m_vision.getTargetYDistance());
+      // do error - navx = offset until its 0 camera  
+      turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTargetPose().getRotation().getAngle()), -0.1, 0.1);
     }else{
-      xController.setGoal(goalPose.getX());
-      yController.setGoal(goalPose.getY());
-      xSpeed = xController.calculate(robotOdom.getX());
-      ySpeed = yController.calculate(robotOdom.getY());
+      turnSpeed = 0;
     }
+      xController.setGoal(0+Units.inchesToMeters(7.25));
+      yController.setGoal(0+Units.inchesToMeters(9));
+      xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -0.1, 0.1);
+      ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.1, 0.1);
+    // }else{
+    //   xController.setGoal(goalPose.getX()+2);
+    //   yController.setGoal(goalPose.getY());
+    //   xSpeed = xController.calculate(robotOdom.getX());
+    //   ySpeed = yController.calculate(robotOdom.getY());
+    // }
     if (xController.atGoal()) {
       xSpeed = 0.0;
     }
@@ -120,7 +131,7 @@ public class CMD_DriveAlignVision extends Command{
       ySpeed = 0.0;
     }
 
-    turnSpeed = 0;  
+    // turnSpeed = 0;  
     // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -0.5, 0.5);
 
     SmartDashboard.putNumber("AutoAlignXSpeed: ", xSpeed);
@@ -134,7 +145,7 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }         
 
-    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
+    m_drivetrain.drive(-xSpeed, -ySpeed, turnSpeed, false);
   }
 
   @Override
