@@ -33,6 +33,10 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       io.setGoal(p_goal);
     }
 
+    public void reset(){
+      io.reset();
+    }
+
     public Command incrementGoal(double increment){
       return Commands.runOnce(() -> io.setGoal(increment + getGoal()));
     }

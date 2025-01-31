@@ -28,6 +28,10 @@ public class SUB_Wrist extends SubsystemBase{
       return inputs.m_wristCurrent;
     }
 
+    public void reset(){
+      io.reset();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);

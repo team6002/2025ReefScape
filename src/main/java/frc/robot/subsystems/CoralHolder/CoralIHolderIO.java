@@ -14,4 +14,12 @@ public interface CoralIHolderIO {
   public default void updateInputs(CoralHolderIOInputs inputs) {}
 
   public default void setReference(double p_rpm){}
+
+  public default double getCurrent(){return 0;}
+
+  public default double getReference(){return 0;}
+
+  public default double getVelocity(){return 0;}
+
+  public default void PID(){}
 }

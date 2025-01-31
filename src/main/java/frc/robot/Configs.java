@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorPivotConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -75,7 +76,7 @@ public final class Configs {
 
         static {
                 m_leftElevatorConfig
-                        .idleMode(IdleMode.kBrake)
+                        .idleMode(IdleMode.kCoast)
                         .inverted(ElevatorConstants.kLeftInverted)
                         .follow(HardwareConstants.kRightPivotCanId, true)
                         .voltageCompensation(12.0)
@@ -85,22 +86,26 @@ public final class Configs {
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(ElevatorConstants.kMinOutput, ElevatorConstants.kMaxOutput);
                 m_leftElevatorConfig.encoder
+                        .uvwAverageDepth(2)
+                        .uvwMeasurementPeriod(10)
                         .positionConversionFactor(ElevatorConstants.kConversionFactor);
                 m_leftElevatorConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
 
                 m_rightElevatorConfig
-                        .idleMode(IdleMode.kBrake)
+                        .idleMode(IdleMode.kCoast)
                         .inverted(ElevatorConstants.kRightInverted)
                         .disableFollowerMode()
                         .voltageCompensation(12.0)
                         .smartCurrentLimit(40);
                 m_rightElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
-                        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(ElevatorConstants.kMinOutput, ElevatorConstants.kMaxOutput);
                 m_rightElevatorConfig.encoder
+                        .uvwAverageDepth(2)
+                        .uvwMeasurementPeriod(10)
                         .positionConversionFactor(ElevatorConstants.kConversionFactor);
                 m_rightElevatorConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
@@ -112,7 +117,7 @@ public final class Configs {
                 public static final SparkMaxConfig m_wristConfig = new SparkMaxConfig();
                 static {
                         m_wristConfig
-                                .idleMode(IdleMode.kCoast)
+                                .idleMode(IdleMode.kBrake)
                                 .inverted(WristConstants.kWristInverted)
                                 .smartCurrentLimit(40)
                                 .disableFollowerMode()
@@ -177,5 +182,28 @@ public final class Configs {
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
         }
-    }    
+    }   
+    
+    public static final class CoralHolderConfig{
+        public static final SparkMaxConfig m_coralHolderConfig = new SparkMaxConfig();
+
+        static{
+                m_coralHolderConfig
+                        .disableFollowerMode()
+                        .idleMode(IdleMode.kCoast)
+                        .inverted(CoralHolderConstants.kCoralHolderInverted)
+                        .smartCurrentLimit(40)
+                        .voltageCompensation(12.0);
+                m_coralHolderConfig.encoder
+                        .quadratureAverageDepth(2)
+                        .quadratureMeasurementPeriod(10);
+                m_coralHolderConfig.closedLoop
+                        .pidf(CoralHolderConstants.kP, CoralHolderConstants.kI, CoralHolderConstants.kD, CoralHolderConstants.kFF)
+                        .outputRange(CoralHolderConstants.kMinOutput, CoralHolderConstants.kMaxOutput)
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+                m_coralHolderConfig.limitSwitch
+                        .forwardLimitSwitchEnabled(false)
+                        .reverseLimitSwitchEnabled(false);
+        }
+    }
 }

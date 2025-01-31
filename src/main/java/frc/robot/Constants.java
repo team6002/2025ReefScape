@@ -172,28 +172,32 @@ public final class Constants {
   }
 
   public static final class CoralHolderConstants{
-    public static final double kCoralHolderP = 0.01;
-    public static final double kCoralHolderI = 0.01;
-    public static final double kCoralHolderD = 0.01;
-    public static final double kCoralHolderFF = 0.01;
-    public static final boolean kCoralHolderInverted = false;
+    public static final double kP = 0.00001;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kFF = 0.000175;
+    public static final double kV = 0.0;
+    public static final double kS = 0.0;
+    public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 10;
+    public static final double kIntake = 3000;
     public static final double kOff = 0;
-    public static final double kReverse = -10;
+    public static final double kReverse = -1000;
+    public static final double kHolding = 50;
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 0.03;
+    public static final double kP = 0.025;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.03;
     public static final double kG = 0.145;
     public static final double kV = 0.0;
-    public static final double kMaxVel = 30;
-    public static final double kMaxAccel = 30;
+    public static final double kPivotOffset = -90;
+    public static final double kMaxVel = 120;
+    public static final double kMaxAccel = 90;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -201,7 +205,7 @@ public final class Constants {
     public static final double kConversionFactor = 180/(Math.PI);
     
     public static final double kHome = 0;
-    public static final double kIntake = 60;
+    public static final double kIntake = 64;
     public static final double kDeploy = 110;
   }
 
@@ -216,8 +220,8 @@ public final class Constants {
     public static final double kMaxAccel = 10;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final boolean kLeftInverted = false;
-    public static final boolean kRightInverted = true;
+    public static final boolean kLeftInverted = true;
+    public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 1;
 
     public static final double kHome = 0;
@@ -237,13 +241,14 @@ public final class Constants {
     public static final double kS = 0.015;
     public static final double kG = 0.133;
     public static final double kV = 0.0;
-    public static final double kMaxVel = 30;
-    public static final double kMaxAccel = 30;
+    public static final double kMaxVel = 120;
+    public static final double kMaxAccel = 90;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kHome = 115;
-    public static final double kIntake = 30;
+    public static final double kHome = 120;
+    public static final double kStowing = 0;
+    public static final double kIntake = -112;
     public static final double kDeploy = 90;
   }
 
@@ -294,8 +299,8 @@ public final class Constants {
     public static final int kRearRightDrivingCanId = 18;
     public static final int kRearRightTurningCanId = 3;
     public static final int kCoralHolderCanId = 11;
-    public static final int kLeftElevatorCanId = 5;
-    public static final int kRightElevatorCanId = 12;
+    public static final int kLeftElevatorCanId = 14;
+    public static final int kRightElevatorCanId = 15;
     public static final int kLeftPivotCanId = 6;
     public static final int kRightPivotCanId = 4;
     public static final int kWristCanId = 13;

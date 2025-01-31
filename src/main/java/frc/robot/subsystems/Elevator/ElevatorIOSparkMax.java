@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Elevator;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -21,7 +22,7 @@ import frc.robot.Constants.HardwareConstants;
 public class ElevatorIOSparkMax implements ElevatorIO{
     private final SparkMax m_leftElevator;
     private final SparkMax m_rightElevator;
-    private final SparkAbsoluteEncoder m_elevatorEncoder;
+    private final RelativeEncoder m_elevatorEncoder;
     private final SparkClosedLoopController m_elevatorController;
     private final SimpleMotorFeedforward m_pivotFeedforward = new SimpleMotorFeedforward(ElevatorConstants.kS, ElevatorConstants.kV);
     private final Constraints m_pivotConstraints = new Constraints(ElevatorConstants.kMaxVel, ElevatorConstants.kMaxAccel);
@@ -31,9 +32,9 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         m_leftElevator = new SparkMax(HardwareConstants.kLeftElevatorCanId, MotorType.kBrushless);
         m_rightElevator = new SparkMax(HardwareConstants.kRightElevatorCanId, MotorType.kBrushless);
 
-        m_elevatorEncoder = m_leftElevator.getAbsoluteEncoder();
+        m_elevatorEncoder = m_rightElevator.getEncoder();
 
-        m_elevatorController = m_leftElevator.getClosedLoopController();
+        m_elevatorController = m_rightElevator.getClosedLoopController();
 
         m_leftElevator.configure(Configs.ElevatorConfig.m_leftElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_rightElevator.configure(Configs.ElevatorConfig.m_rightElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -68,13 +69,13 @@ public class ElevatorIOSparkMax implements ElevatorIO{
 
     @Override
     public double getCurrent(){
-        return m_leftElevator.getOutputCurrent();
+        return m_rightElevator.getOutputCurrent();
     }
 
     @Override
     public void PID(){
-        var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_setpoint, m_goal);
-        m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity));
+        // var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_setpoint, m_goal);
+        // m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition, 
+        //     ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity));
     }
 }

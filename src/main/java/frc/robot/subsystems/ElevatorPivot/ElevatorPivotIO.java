@@ -27,4 +27,6 @@ public interface ElevatorPivotIO {
   public default void setPid(double kP, double kI, double kD, double kFF){}
 
   public default void setFeedforward(double kS, double kG, double kV){}
+
+  public default void reset(){}
 }

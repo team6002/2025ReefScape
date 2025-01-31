@@ -45,7 +45,7 @@ public class WristIOSparkMax implements WristIO{
 
     @Override
     public void updateInputs(WristIOInputs inputs){
-        inputs.m_wristGoal = m_goal.position;
+        inputs.m_wristGoal = m_goal.position + WristConstants.kWristOffset;
         inputs.m_wristCurrent = getCurrent();
         inputs.m_wristPosition = getPosition();
     }
@@ -53,7 +53,7 @@ public class WristIOSparkMax implements WristIO{
     @Override
     public void setGoal(double p_Goal){
         m_setpoint = new TrapezoidProfile.State(getPosition() - WristConstants.kWristOffset, 0);
-        m_goal = new TrapezoidProfile.State(p_Goal+WristConstants.kWristOffset, 0);
+        m_goal = new TrapezoidProfile.State(p_Goal - WristConstants.kWristOffset, 0);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class WristIOSparkMax implements WristIO{
 
     @Override
     public double getGoal(){
-        return m_goal.position;
+        return m_goal.position + WristConstants.kWristOffset;
     }
 
     @Override
@@ -89,5 +89,11 @@ public class WristIOSparkMax implements WristIO{
         m_setpoint = profile;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
             ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(m_setpoint.velocity, getPosition()));
+    }
+
+    @Override
+    public void reset(){
+        m_setpoint = new TrapezoidProfile.State(getPosition() - WristConstants.kWristOffset, 0);
+        m_goal = m_setpoint;
     }
 }

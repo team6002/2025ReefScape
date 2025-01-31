@@ -60,6 +60,9 @@ public class Robot extends LoggedRobot {
         m_robotContainer = new RobotContainer();
         m_autonomousChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData(m_autonomousChooser);
+
+    m_robotContainer.m_elevatorPivot.reset();
+    m_robotContainer.m_wrist.reset();
   }
 
   /**
@@ -88,6 +91,8 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_elevatorPivot.reset();
+    m_robotContainer.m_wrist.reset();
     m_autonomousCommand = m_autonomousChooser.getSelected();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -105,7 +110,8 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.m_wrist.setGoal(120);
+    m_robotContainer.m_elevatorPivot.reset();
+    m_robotContainer.m_wrist.reset();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

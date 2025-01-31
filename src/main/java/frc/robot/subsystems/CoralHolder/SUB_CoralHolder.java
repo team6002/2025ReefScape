@@ -2,6 +2,7 @@ package frc.robot.subsystems.CoralHolder;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_CoralHolder extends SubsystemBase{
@@ -30,6 +31,11 @@ public class SUB_CoralHolder extends SubsystemBase{
     @Override
     public void periodic(){
       io.updateInputs(inputs);
+      io.PID();
       Logger.processInputs("CoralHolder", inputs);
+
+      SmartDashboard.putNumber("intake speed", getVelocity());
+      SmartDashboard.putNumber("intake goal", getReference());
+      SmartDashboard.putNumber("intake current", getCurrent());
     }
 }
