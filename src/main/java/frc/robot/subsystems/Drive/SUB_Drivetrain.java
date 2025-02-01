@@ -284,7 +284,8 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition());
-    
+    SmartDashboard.putBoolean("HasTarget", m_vision.getHasTarget());    
+    SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
     m_vision.updateInputs();
 
     visionEst.ifPresent(
@@ -308,7 +309,8 @@ public class SUB_Drivetrain extends SubsystemBase {
       }  
     );
     // if (visionEst.isPresent()){
-      
+    //   SmartDashboard.putNumber("TargetYaw",Math.toDegrees(m_vision.getTargetPose().getRotation().getAngle()));
+     
     //   SmartDashboard.putNumber("targetYaw", m_vision.getTargetYaw());
     //   SmartDashboard.putNumber("EstX", Units.metersToInches(visionEst.get().estimatedPose.getX()));
     //   SmartDashboard.putNumber("EstY", Units.metersToInches(visionEst.get().estimatedPose.getY()));
@@ -365,7 +367,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   public void resetTargetOdometry(Pose2d pose) {
     setHeading(pose.getRotation().getDegrees());
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(getAngle()),
+        Rotation2d.fromDegrees(-getAngle()),
         getModulePositions(),
         pose);
   }
@@ -580,10 +582,10 @@ public class SUB_Drivetrain extends SubsystemBase {
   //reverses the odometry for the targeting
   public SwerveModulePosition[] getTargetModulePositions() {
     return new SwerveModulePosition[] {
-        new SwerveModulePosition (-m_frontLeft.getPosition().distanceMeters, m_frontLeft.getPosition().angle),
-        new SwerveModulePosition (-m_frontRight.getPosition().distanceMeters, m_frontRight.getPosition().angle),
-        new SwerveModulePosition (-m_rearLeft.getPosition().distanceMeters, m_rearLeft.getPosition().angle),
-        new SwerveModulePosition (-m_rearRight.getPosition().distanceMeters, m_rearRight.getPosition().angle),
+        new SwerveModulePosition (m_frontLeft.getPosition().distanceMeters, m_frontLeft.getPosition().angle),
+        new SwerveModulePosition (m_frontRight.getPosition().distanceMeters, m_frontRight.getPosition().angle),
+        new SwerveModulePosition (m_rearLeft.getPosition().distanceMeters, m_rearLeft.getPosition().angle),
+        new SwerveModulePosition (m_rearRight.getPosition().distanceMeters, m_rearRight.getPosition().angle),
       };
   }
   
@@ -601,7 +603,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
-    m_targetOdometry.addVisionMeasurement( new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), Rotation2d.fromDegrees(0)), timestampSeconds);
+    m_targetOdometry.addVisionMeasurement( new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds);
 }
     // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
@@ -624,4 +626,3 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   // Prevent the path from being flipped if the coordinates are already correct
   // path.preventFlipping = true;
-} 

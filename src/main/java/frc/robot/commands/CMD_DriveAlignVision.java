@@ -4,6 +4,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,7 +30,8 @@ public class CMD_DriveAlignVision extends Command{
   private boolean end;
 
   private double xSpeed, ySpeed, turnSpeed;
-
+  private double positionRatio;// its like a inverse cnc machine, the farther y the slower the x
+  private double turnRatio;// its like a inverse cnc machine, the farther y the slower the turn
   private Pose2d goalPose;
   private Pose2d robotOdom;
 
@@ -64,6 +68,7 @@ public class CMD_DriveAlignVision extends Command{
 
   @Override
   public void initialize() {
+    System.out.println("Started Autoalign");
     // double GridAdjustment = (-(CurrentGrid - WantedGrid)*1.8);
     // Transform2d GridTransformation = new Transform2d(new Translation2d(0, GridAdjustment),new Rotation2d(0));
     goalPose = new Pose2d(0,0, new Rotation2d(0));
@@ -78,6 +83,7 @@ public class CMD_DriveAlignVision extends Command{
     end = false;
 
     /* Set the goals as an offset of the robot's current odometry */
+    
     xController.setGoal(0);
     yController.setGoal(0);
     turnController.setSetpoint(0);
@@ -99,6 +105,11 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }
 
+    positionRatio = m_drivetrain.getTargetOdo().getX() / m_drivetrain.getTargetOdo().getY();
+    // if (m_vision.getHasTarget()){
+    // turnRatio = m_vision.getTargetPose().getRotation().getAngle()/ m_drivetrain.getTargetOdo().getY();
+    // }
+
     if (Math.abs(m_driverController.getLeftY()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getLeftX()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getRightX()) > AutoAlignConstants.kAbortThreshold) {
       end = true;
       System.out.println("Aborted by driver");
@@ -108,15 +119,38 @@ public class CMD_DriveAlignVision extends Command{
     
     robotOdom = m_drivetrain.getPose();
     if (m_vision.getHasTarget()){
-      // do error - navx = offset until its 0 camera  
-      turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTargetPose().getRotation().getAngle()), -0.1, 0.1);
+      // do error - navx = offset until its 0 camera 
+      
+    goalPose = new Pose2d(0,0, new Rotation2d(m_drivetrain.getAngle()));
+    // goalPose = new Pose2d(goalPose.getX(), goalPose.getY(), new Rotation2d(goalPose.getRotation().getDegrees() - m_drivetrain.getTargetOdo().getRotation().getDegrees())); 
+      // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), MathUtil.clamp(-0.1 * Math.abs(turnRatio), -.2, .2), MathUtil.clamp(-0.1 * Math.abs(turnRatio), -.2, .2));
+      // if (Math.abs(m_drivetrain.getTargetOdo().getY()) <= .5){
+        // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -.2 , .2);
+        turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees()), -.2 , .2);
+      // }else{
+      //   turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -.3 , .3);  
+      // }
+    
     }else{
       turnSpeed = 0;
     }
       xController.setGoal(0+Units.inchesToMeters(7.25));
-      yController.setGoal(0+Units.inchesToMeters(9));
-      xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -0.1, 0.1);
-      ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.1, 0.1);
+      yController.setGoal(0+Units.inchesToMeters(0));
+    // if (m_vision.getHasTarget()){
+      // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  
+        xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -0.1, 0.1);
+        ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.1, 0.1);  
+    
+        // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.3, .3), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.1, .1));
+        // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.3, 0.3);  
+    //   }else{
+    //     xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -0.1, 0.1);
+    //     ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.3, 0.3);  
+    //   }
+    // }else{
+    //   xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -0.2, 0.2);
+    //   ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.4, 0.4);  
+    // }
     // }else{
     //   xController.setGoal(goalPose.getX()+2);
     //   yController.setGoal(goalPose.getY());
@@ -137,7 +171,9 @@ public class CMD_DriveAlignVision extends Command{
     SmartDashboard.putNumber("AutoAlignXSpeed: ", xSpeed);
     SmartDashboard.putNumber("AutoAlignYSpeed: ", ySpeed);
     SmartDashboard.putNumber("AutoAlignTurnSpeed: ", turnSpeed);
-    SmartDashboard.putNumber("AutoAlignTurnGoal", turnController.getSetpoint());
+    SmartDashboard.putNumber("AutoAlignTurnGoal", m_drivetrain.getTargetOdo().getRotation().unaryMinus().getDegrees());
+
+    Logger.recordOutput("Autoalign turn Goal", goalPose.getRotation());
 
     if (xController.atGoal() && yController.atGoal()) {
       System.out.println("At Goal " + Timer.getFPGATimestamp());
@@ -145,7 +181,7 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }         
 
-    m_drivetrain.drive(-xSpeed, -ySpeed, turnSpeed, false);
+    m_drivetrain.drive(-xSpeed, -ySpeed, -turnSpeed, false);
   }
 
   @Override
