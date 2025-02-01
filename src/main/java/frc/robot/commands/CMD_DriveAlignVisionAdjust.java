@@ -21,7 +21,7 @@ import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
-public class CMD_DriveAlignVision extends Command{
+public class CMD_DriveAlignVisionAdjust extends Command{
   private SUB_Drivetrain m_drivetrain;
   private SUB_Vision m_vision;
 
@@ -39,10 +39,14 @@ public class CMD_DriveAlignVision extends Command{
   private TrapezoidProfile.State m_goal;
   private TrapezoidProfile.State m_setpoint;
 
+  private double xAdjustment = 0;
+  private double yAdjustment = 0;
+  private double turnAdjustment = 0;
 
   private CommandXboxController m_driverController;
 //This only uses Odometry to align itself
-  public CMD_DriveAlignVision(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController) {
+  public CMD_DriveAlignVisionAdjust(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController,
+  double xAdjustment, double yAdjustment, double turnAdjustment) {
     m_drivetrain = p_drivetrain;
     m_vision = p_vision;
     m_driverController = p_driverController;
@@ -66,10 +70,9 @@ public class CMD_DriveAlignVision extends Command{
       
     turnController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(m_drivetrain);
-    if (!m_vision.getHasTarget()){
-      System.out.println("NOTHING SEEN DAWG");
-      return;
-    }
+    // if (!m_vision.getHasTarget()){
+    //   return;
+    // }
   
     m_setpoint = new TrapezoidProfile.State(0, 0);
     m_goal = m_setpoint;
@@ -93,9 +96,9 @@ public class CMD_DriveAlignVision extends Command{
     end = false;
 
     /* Set the goals as an offset of the robot's current odometry */
-    
-    xController.setGoal(0);
-    yController.setGoal(0);
+    xController.setGoal(0+Units.inchesToMeters(7.25)+xAdjustment);
+    yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
+  
     turnController.setSetpoint(0);
 
     xController.setTolerance(AutoAlignConstants.kXTolerance);
@@ -144,8 +147,8 @@ public class CMD_DriveAlignVision extends Command{
     }else{
       turnSpeed = 0;
     }
-      xController.setGoal(0+Units.inchesToMeters(7.25));
-      yController.setGoal(0+Units.inchesToMeters(0));
+      xController.setGoal(0+Units.inchesToMeters(7.25)+xAdjustment);
+      yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
     // if (m_vision.getHasTarget()){
       // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  
         xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);

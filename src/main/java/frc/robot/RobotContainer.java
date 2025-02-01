@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
 import frc.robot.Constants.*;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.Arm.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -71,6 +73,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driver
     m_driverController.a().onTrue(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController));
+    m_driverController.x().onTrue(new SequentialCommandGroup(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController)
+    , new CMD_DriveAdjustOdometery(m_robotDrive, m_vision, m_driverController, Units.inchesToMeters(2), Units.inchesToMeters(-7), 0)));
+    m_driverController.y().onTrue(new SequentialCommandGroup(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController)
+    , new CMD_DriveAdjustOdometery(m_robotDrive, m_vision, m_driverController, Units.inchesToMeters(2), Units.inchesToMeters(7), 0)));
+    
     // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_arm, m_coralIntake, m_elevatorPivot, m_variables));
     // m_driverController.a().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
     // m_driverController.b().whileTrue(new InstantCommand(()-> m_coralIntake.setReference(-.2))).whileFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
