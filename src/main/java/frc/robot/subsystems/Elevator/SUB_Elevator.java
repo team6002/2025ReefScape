@@ -28,11 +28,15 @@ public class SUB_Elevator extends SubsystemBase{
       io.setGoal(p_goal);
     }
 
+    public void reset(){
+      io.reset();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);
       Logger.processInputs("Elevator", inputs);
-      // io.PID();
+      io.PID();
 
       SmartDashboard.putNumber("elevator pos", getElevatorPosition());
       SmartDashboard.putNumber("elevator target", getElevatorGoal());

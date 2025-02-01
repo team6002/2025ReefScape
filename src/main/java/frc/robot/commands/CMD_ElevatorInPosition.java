@@ -11,6 +11,6 @@ public class CMD_ElevatorInPosition extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_elevator.getElevatorGoal() - m_elevator.getElevatorPosition()) < .1;
+        return Math.abs(m_elevator.getElevatorGoal() - m_elevator.getElevatorPosition()) < .67;
     }
 }

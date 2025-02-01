@@ -35,9 +35,9 @@ public class CMD_Drive extends Command {
  
   @Override
   public void execute() {
-    var ySpeed = MathUtil.applyDeadband(-m_controller.getLeftX(),deadzone)*sideMod;
+    var ySpeed = MathUtil.applyDeadband(m_controller.getLeftX(),deadzone)*sideMod;
 
-    var xSpeed = MathUtil.applyDeadband(-m_controller.getLeftY(),deadzone)*sideMod;
+    var xSpeed = MathUtil.applyDeadband(m_controller.getLeftY(),deadzone)*sideMod;
 
     rot = MathUtil.applyDeadband(m_controller.getRightX(), deadzone);
     m_autoSlew = false;

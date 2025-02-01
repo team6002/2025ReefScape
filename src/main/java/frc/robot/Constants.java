@@ -183,7 +183,7 @@ public final class Constants {
     public static final double kMaxOutput = 1;
     public static final double kIntake = 3000;
     public static final double kOff = 0;
-    public static final double kReverse = -1000;
+    public static final double kReverse = -2500;//-3000
     public static final double kHolding = 50;
   }
 
@@ -205,51 +205,59 @@ public final class Constants {
     public static final double kConversionFactor = 180/(Math.PI);
     
     public static final double kHome = 0;
-    public static final double kIntake = 64;
-    public static final double kDeploy = 110;
+    public static final double kReady = 30;
+    public static final double kReadyToScore = 82;
+    public static final double kIntake = 65;
+    public static final double kDeployl1 = 82.75;
+    public static final double kDeployl2 = 86;
+    public static final double kDeployl3 = 88.5;//85.5
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.0;
+    public static final double kP = 0.075;//.2
     public static final double kI = 0.0;
-    public static final double kD = .0;
+    public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.0;
-    public static final double kV = 0.0;
-    public static final double kMaxVel = 30;
-    public static final double kMaxAccel = 10;
+    public static final double kS = 0.6;//.2
+    public static final double kV = 0.05;//.33
+    public static final double kG = 0;//.5
+    public static final double kMaxVel = 60;
+    public static final double kMaxAccel = 60;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
-    public static final double kConversionFactor = 1;
+    public static final double kConversionFactor = 3.135;//1.9006
 
     public static final double kHome = 0;
-    public static final double kIntake = 5;
-    public static final double kDeployL1 = 1;
-    public static final double kDeployL2 = 7;
-    public static final double kDeployL3 = 24;
+    public static final double kIntake = 14.5;
+    public static final double kDeployL1 = 0;
+    public static final double kDeployL2 = 28;
+    public static final double kDeployL3 = 68;
   }
 
   public static final class WristConstants{
     public static final boolean kWristInverted = false;
     public static final double kWristOffset = -122.56;
-    public static final double kP = 0.02;
+    public static final double kP = 0.033;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.015;
     public static final double kG = 0.133;
     public static final double kV = 0.0;
-    public static final double kMaxVel = 120;
-    public static final double kMaxAccel = 90;
+    public static final double kMaxVel = 270;
+    public static final double kMaxAccel = 270;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kHome = 120;
+    public static final double kHome = 110;
     public static final double kStowing = 0;
-    public static final double kIntake = -112;
-    public static final double kDeploy = 90;
+    public static final double kIntake = -110;
+    public static final double kReadyToScore = 0;
+    public static final double kDeployl1 = 30;//35
+    public static final double kDeployl2 = 22.5;//20
+    public static final double kDeployl3 = 30;//13
   }
 
    public static final class LocationConstants{
@@ -290,20 +298,22 @@ public final class Constants {
 
   public static final class HardwareConstants{
     // SPARK MAX CAN IDs 
-    public static final int kFrontLeftDrivingCanId = 8;
-    public static final int kFrontLeftTurningCanId = 9;
-    public static final int kFrontRightDrivingCanId =  2;
-    public static final int kFrontRightTurningCanId = 1;
-    public static final int kRearLeftDrivingCanId = 10;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kRearRightDrivingCanId = 18;
-    public static final int kRearRightTurningCanId = 3;
-    public static final int kCoralHolderCanId = 11;
-    public static final int kLeftElevatorCanId = 14;
-    public static final int kRightElevatorCanId = 15;
-    public static final int kLeftPivotCanId = 6;
-    public static final int kRightPivotCanId = 4;
-    public static final int kWristCanId = 13;
+    public static final int kFrontLeftDrivingCanId = 2;//8
+    public static final int kFrontLeftTurningCanId = 1;//9
+    public static final int kFrontRightDrivingCanId =  8;//2
+    public static final int kFrontRightTurningCanId = 9;//1
+    public static final int kRearLeftDrivingCanId = 19;//10
+    public static final int kRearLeftTurningCanId = 5;//7
+    public static final int kRearRightDrivingCanId = 10;//18
+    public static final int kRearRightTurningCanId = 7;//3
+    public static final int kCoralHolderCanId = 16;//11
+    public static final int kLeftElevatorCanId = 18;//14
+    public static final int kRightElevatorCanId = 17;//15
+    public static final int kLeftPivotCanId = 3;//6
+    public static final int kRightPivotCanId = 6;//4
+    public static final int kWristCanId = 14;//13
+    public static final int kClimbCanId = 4;
+    public static final int kAlgaeCanId = 15;
   }
 
   public static final class AutoAlignConstants{

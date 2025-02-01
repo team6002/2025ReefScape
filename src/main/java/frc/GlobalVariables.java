@@ -8,6 +8,8 @@ public class GlobalVariables extends SubsystemBase{
 
     public static int m_targetLevel = 3;
 
+    public static double m_pivotAngle = 0;
+
     public enum RobotState{
         HOME
         ,TRANSITIONING_TO_INTAKE
@@ -60,5 +62,6 @@ public class GlobalVariables extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putString("robotState", getRobotState().toString());
         SmartDashboard.putString("intakeState", getIntakeState().toString());
+        SmartDashboard.putNumber("score level", m_targetLevel);
     }
 }

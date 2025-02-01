@@ -28,7 +28,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.HardwareConstants;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Configs;
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -44,7 +43,6 @@ import frc.robot.Configs;
  */
 public class ModuleIOSparkFlex implements ModuleIO {
  // Gear ratios for SDS MK4i L2, adjust as necessary
-  private static final double DRIVE_GEAR_RATIO = ModuleConstants.kDrivingMotorReduction;
   private static final double TURN_GEAR_RATIO = 46.42;
 
   private final SparkFlex driveSparkFlex;
@@ -57,9 +55,6 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
   private final SparkClosedLoopController m_drivingPIDController;
   private final SparkClosedLoopController m_turningPIDController;
-  
-  private final boolean isTurnMotorInverted = true;
-  private final Rotation2d absoluteEncoderOffset;
 
   private SparkBaseConfig m_turnConfig = Configs.MAXSwerveModule.turningConfig;
   private SparkBaseConfig m_driveConfig = Configs.MAXSwerveModule.drivingConfig;
@@ -73,25 +68,26 @@ public class ModuleIOSparkFlex implements ModuleIO {
         driveSparkFlex = new SparkFlex(HardwareConstants.kFrontLeftDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kFrontLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
-        absoluteEncoderOffset = new Rotation2d(4.75); // MUST BE CALIBRATED
+        driveSparkFlex.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         break;
       case 1:
         driveSparkFlex = new SparkFlex(HardwareConstants.kFrontRightDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kFrontRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
-        absoluteEncoderOffset = new Rotation2d(0.183); // MUST BE CALIBRATED
+        driveSparkFlex.configure(Configs.MAXSwerveModule.RightDrivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         break;
       case 2:
         driveSparkFlex = new SparkFlex(HardwareConstants.kRearLeftDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kRearLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
-        absoluteEncoderOffset = new Rotation2d(3.183); // MUST BE CALIBRATED
+        driveSparkFlex.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         break;
       case 3:
         driveSparkFlex = new SparkFlex(HardwareConstants.kRearRightDrivingCanId, MotorType.kBrushless);
         turnSparkMax = new SparkMax(HardwareConstants.kRearRightTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
-        absoluteEncoderOffset = new Rotation2d(3.0); // MUST BE CALIBRATED
+        driveSparkFlex.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -100,7 +96,6 @@ public class ModuleIOSparkFlex implements ModuleIO {
     m_drivingPIDController = driveSparkFlex.getClosedLoopController();
     m_turningPIDController = turnSparkMax.getClosedLoopController();
     
-    driveSparkFlex.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     turnSparkMax.configure(m_turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     driveSparkFlex.setCANTimeout(250);

@@ -15,6 +15,7 @@ import frc.robot.Constants.ModuleConstants;
 public final class Configs {
     public static final class MAXSwerveModule {
         public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
+        public static final SparkFlexConfig RightDrivingConfig = new SparkFlexConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
@@ -27,7 +28,8 @@ public final class Configs {
             drivingConfig
                     .idleMode(IdleMode.kBrake)
                     .voltageCompensation(12)
-                    .smartCurrentLimit(40);
+                    .smartCurrentLimit(40)
+                    .inverted(false);
             drivingConfig.encoder
                     .positionConversionFactor(drivingFactor) // meters
                     .velocityConversionFactor(drivingFactor / 60.0)// meters per second
@@ -43,6 +45,26 @@ public final class Configs {
                 .forwardLimitSwitchEnabled(false)
                 .reverseLimitSwitchEnabled(false);
 
+                RightDrivingConfig
+                        .idleMode(IdleMode.kBrake)
+                        .voltageCompensation(12)
+                        .smartCurrentLimit(40)
+                        .inverted(true);
+                RightDrivingConfig.encoder
+                        .positionConversionFactor(drivingFactor) // meters
+                        .velocityConversionFactor(drivingFactor / 60.0)// meters per second
+                        .uvwMeasurementPeriod(10)
+                        .uvwAverageDepth(2); 
+                RightDrivingConfig.closedLoop
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        // These are example gains you may need to them for your own robot!
+                        .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD)
+                        .velocityFF(drivingVelocityFeedForward)
+                        .outputRange(-1, 1);
+                drivingConfig.limitSwitch
+                        .forwardLimitSwitchEnabled(false)
+                        .reverseLimitSwitchEnabled(false);
+                
             turningConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(30);
@@ -76,9 +98,9 @@ public final class Configs {
 
         static {
                 m_leftElevatorConfig
-                        .idleMode(IdleMode.kCoast)
+                        .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorConstants.kLeftInverted)
-                        .follow(HardwareConstants.kRightPivotCanId, true)
+                        .follow(HardwareConstants.kRightElevatorCanId, true)
                         .voltageCompensation(12.0)
                         .smartCurrentLimit(40);
                 m_leftElevatorConfig.closedLoop
@@ -94,7 +116,7 @@ public final class Configs {
                         .reverseLimitSwitchEnabled(false);
 
                 m_rightElevatorConfig
-                        .idleMode(IdleMode.kCoast)
+                        .idleMode(IdleMode.kBrake)
                         .inverted(ElevatorConstants.kRightInverted)
                         .disableFollowerMode()
                         .voltageCompensation(12.0)

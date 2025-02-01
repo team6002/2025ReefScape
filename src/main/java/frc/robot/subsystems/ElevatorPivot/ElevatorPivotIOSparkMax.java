@@ -96,7 +96,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         var profile = new TrapezoidProfile(m_pivotConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
         m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(m_setpoint.velocity, getPosition()));
+            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
     }
 
     @Override
