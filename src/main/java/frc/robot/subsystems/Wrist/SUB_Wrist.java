@@ -39,7 +39,7 @@ public class SUB_Wrist extends SubsystemBase{
       io.PID();
 
       SmartDashboard.putNumber("wristVoltage", getCurrent());
-      SmartDashboard.putNumber("wristPos", getPosition());
-      SmartDashboard.putNumber("wristGoal", getGoal());
+      SmartDashboard.putNumber("wristPos", Math.toDegrees(getPosition()));
+      SmartDashboard.putNumber("wristGoal", Math.toDegrees(getGoal()));
     }
 }

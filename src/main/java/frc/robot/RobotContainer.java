@@ -70,10 +70,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driver
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.leftBumper().onTrue(new InstantCommand(()-> m_coralIntake.setReference(-100))).onFalse(new InstantCommand(()-> m_coralIntake.setReference(0)));
-    m_driverController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
-    m_driverController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
+    // m_driverController.leftBumper().onTrue(new InstantCommand(()-> m_elevator.setGoal(50)));
+    // m_driverController.povDown().onTrue(new InstantCommand(()-> m_elevator.setGoal(0)));
+    m_driverController.povDown().onTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(0)));
+    m_driverController.povUp().onTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(Math.PI/2)));
+    // m_driverController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
+    // m_driverController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
+    // m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
     // //operator
     m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
     m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));

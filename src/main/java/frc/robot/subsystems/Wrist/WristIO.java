@@ -15,10 +15,6 @@ public interface WristIO {
 
   public default void setGoal(double p_goal){}
 
-  public default void setPid(double kP, double kI, double kD, double kFF){}
-
-  public default void setFeedforward(double kS, double kG, double kV){}
-
   public default void setGoal(){}
 
   public default double getGoal(){return 0;}

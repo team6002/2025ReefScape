@@ -20,13 +20,9 @@ public interface ElevatorPivotIO {
 
   public default double getCurrent(){return 0;}
 
-  public default void setSpeed(double p_speed){}
+  public default double getSetpoint(){return 0;}
   
   public default void PID(){}
-
-  public default void setPid(double kP, double kI, double kD, double kFF){}
-
-  public default void setFeedforward(double kS, double kG, double kV){}
 
   public default void reset(){}
 }

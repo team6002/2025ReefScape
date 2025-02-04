@@ -72,23 +72,11 @@ public class WristIOSparkMax implements WristIO{
     }
 
     @Override
-    public void setPid(double kP, double kI, double kD, double kFF){
-        Configs.WristConfigs.m_wristConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
-
-        m_wristMotor.configure(Configs.WristConfigs.m_wristConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    }
-
-    @Override
-    public void setFeedforward(double kS, double kG, double kV){
-        m_wristFeedforward = new ArmFeedforward(kS, kG, kV);
-    }
-
-    @Override
     public void PID(){
         var profile = new TrapezoidProfile(m_wristConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(m_setpoint.velocity, getPosition()));
+            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(m_setpoint.position, m_setpoint.velocity));
     }
 
     @Override

@@ -145,19 +145,19 @@ public final class Configs {
                                 .disableFollowerMode()
                                 .voltageCompensation(12.0);
                         m_wristConfig.encoder
-                                .positionConversionFactor(360)
+                                .positionConversionFactor(WristConstants.kConverstionFactor)
                                 .uvwAverageDepth(2)
                                 .uvwMeasurementPeriod(10);
                         m_wristConfig.absoluteEncoder
                                 .inverted(true)
-                                .positionConversionFactor(360)
-                                .velocityConversionFactor(6)
+                                .positionConversionFactor(WristConstants.kConverstionFactor)
+                                .velocityConversionFactor(WristConstants.kConverstionFactor/60)
                                 .averageDepth(2);
                         m_wristConfig.closedLoop
                                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                                 .outputRange(WristConstants.kMinOutput, WristConstants.kMaxOutput)
                                 .pidf(WristConstants.kP, WristConstants.kI, WristConstants.kD, WristConstants.kFF)
-                                .positionWrappingInputRange(0, 360)
+                                .positionWrappingInputRange(Math.toRadians(0), WristConstants.kConverstionFactor)
                                 .positionWrappingEnabled(true);
                         m_wristConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)
@@ -180,7 +180,7 @@ public final class Configs {
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
                 m_leftPivotConfig.encoder
-                        .positionConversionFactor(360)
+                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor)
                         .uvwMeasurementPeriod(10)
                         .uvwAverageDepth(2); 
                 m_leftPivotConfig.limitSwitch
@@ -199,7 +199,7 @@ public final class Configs {
                         .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
                 m_rightPivotConfig.absoluteEncoder
                         .averageDepth(2)
-                        .positionConversionFactor(360);
+                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor);
                 m_rightPivotConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);

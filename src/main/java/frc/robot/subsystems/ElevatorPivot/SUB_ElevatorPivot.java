@@ -38,6 +38,10 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       io.reset();
     }
 
+    public double getSetpoint(){
+      return io.getSetpoint();
+    }
+
     public Command incrementGoal(double increment){
       return Commands.runOnce(() -> io.setGoal(increment + getGoal()));
     }
@@ -48,9 +52,10 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       Logger.processInputs("ElevatorPivot", inputs);
       io.PID();
  
-      SmartDashboard.putNumber("elevatorPivotPos", getPosition());
+      SmartDashboard.putNumber("elevatorPivotPos", Math.toDegrees(getPosition()));
       SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());
-      SmartDashboard.putNumber("elevatorPivotGoal", getGoal());
+      SmartDashboard.putNumber("elevatorPivotGoal", Math.toDegrees(getGoal()));
+      SmartDashboard.putNumber("pivot setpoint", Math.toDegrees(getSetpoint()));
 
       GlobalVariables.m_pivotAngle = getPosition();
     }

@@ -12,7 +12,6 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.GlobalVariables;
 import frc.robot.Configs;
 import frc.robot.Constants.ElevatorPivotConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -60,12 +59,6 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     public double getGoal(){
         return m_goal.position + ElevatorPivotConstants.kPivotOffset;
     }
-
-    @Override
-    public void setSpeed(double p_speed){
-        m_rightPivotMotor.set(.1);
-        m_leftPivotMotor.set(.1);
-    }
     
     @Override
     public double getPosition(){
@@ -78,17 +71,8 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     }
 
     @Override
-    public void setPid(double kP, double kI, double kD, double kFF){
-        Configs.ElevatorPivotConfig.m_leftPivotConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
-        Configs.ElevatorPivotConfig.m_rightPivotConfig.closedLoop.pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0);
-
-        m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_rightPivotConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    }
-
-    @Override
-    public void setFeedforward(double kS, double kG, double kV){
-        m_pivotFeedforward = new ArmFeedforward(kS, kG, kV);
+    public double getSetpoint(){
+        return m_setpoint.position + ElevatorPivotConstants.kPivotOffset;
     }
 
     @Override
