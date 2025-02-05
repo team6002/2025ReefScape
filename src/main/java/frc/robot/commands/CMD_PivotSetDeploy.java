@@ -30,6 +30,6 @@ public class CMD_PivotSetDeploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_elevatorPivot.getGoal() - m_elevatorPivot.getPosition()) < 1;
+        return Math.abs(m_elevatorPivot.getGoal() - m_elevatorPivot.getPosition()) < Math.toRadians(1);
     }
 }

@@ -31,6 +31,6 @@ public class CMD_WristSetDeploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_wrist.getGoal() - m_wrist.getPosition()) < 1;
+        return Math.abs(m_wrist.getGoal() - m_wrist.getPosition()) < Math.toRadians(1);
     }
 }

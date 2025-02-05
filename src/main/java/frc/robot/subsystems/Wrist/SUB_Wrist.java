@@ -32,6 +32,10 @@ public class SUB_Wrist extends SubsystemBase{
       io.reset();
     }
 
+    public double getSetpoint(){
+      return io.getSetpoint();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);
@@ -41,5 +45,6 @@ public class SUB_Wrist extends SubsystemBase{
       SmartDashboard.putNumber("wristVoltage", getCurrent());
       SmartDashboard.putNumber("wristPos", Math.toDegrees(getPosition()));
       SmartDashboard.putNumber("wristGoal", Math.toDegrees(getGoal()));
+      SmartDashboard.putNumber("wrist setpoint", Math.toDegrees(getSetpoint()));
     }
 }

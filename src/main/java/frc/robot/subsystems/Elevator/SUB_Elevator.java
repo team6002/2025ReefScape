@@ -12,15 +12,15 @@ public class SUB_Elevator extends SubsystemBase{
         this.io = io;
     }
 
-    public double getElevatorPosition(){
+    public double getPosition(){
       return inputs.m_elevatorPos;
     }
 
-    public double getElevatorCurrent(){
+    public double getCurrent(){
       return inputs.m_elevatorCurrent;
     }
 
-    public double getElevatorGoal(){
+    public double getGoal(){
      return inputs.m_elevatorGoal;
     }
 
@@ -32,14 +32,19 @@ public class SUB_Elevator extends SubsystemBase{
       io.reset();
     }
 
+    public double getSetpoint(){
+      return io.getSetpoint();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);
       Logger.processInputs("Elevator", inputs);
       io.PID();
 
-      SmartDashboard.putNumber("elevator pos", getElevatorPosition());
-      SmartDashboard.putNumber("elevator target", getElevatorGoal());
-      SmartDashboard.putNumber("elevator current", getElevatorCurrent());
+      SmartDashboard.putNumber("elevator pos", getPosition());
+      SmartDashboard.putNumber("elevator target", getGoal());
+      SmartDashboard.putNumber("elevator current", getCurrent());
+      SmartDashboard.putNumber("elevator setpoint", getSetpoint());
     }
 }

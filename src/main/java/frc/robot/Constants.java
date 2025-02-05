@@ -188,16 +188,16 @@ public final class Constants {
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 0.0;//0.425
+    public static final double kP = 2.5;//3.2
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.08;//.03
-    public static final double kG = 0.0;//.145
-    public static final double kV = 0;//0.0785, 5.95
+    public static final double kS = 0.03;
+    public static final double kG = 0.025;//.1
+    public static final double kV = 4.45;//4.35
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(80);
-    public static final double kMaxAccel = Math.toRadians(80);
+    public static final double kMaxVel = Math.toRadians(720);
+    public static final double kMaxAccel = Math.toRadians(720);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -214,15 +214,17 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.0;//.075
+    public static final double kP = 0.02;//.075
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.233;//.233
-    public static final double kV = 0.0;//.052
-    public static final double kG = 0.0;//.01
-    public static final double kMaxVel = 60;
-    public static final double kMaxAccel = 60;
+    public static final double kV = 0.04;//.052
+    public static final double kG = 0.45;//.01
+    public static final double kMaxVel = 325;
+    public static final double kMaxAccel = 325;
+    public static final double kMaxVelDown = 100;
+    public static final double kMaxAccelDown = 100;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -238,16 +240,16 @@ public final class Constants {
 
   public static final class WristConstants{
     public static final boolean kWristInverted = false;
-    public static final double kWristOffset = Math.toRadians(-122.56);
-    public static final double kP = 0.0;
+    public static final double kWristOffset = -Math.PI;
+    public static final double kP = 0.2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;//.133
-    public static final double kV = 0.0;
-    public static final double kMaxVel = Math.toRadians(90);
-    public static final double kMaxAccel = Math.toRadians(90);
+    public static final double kS = 0.1;
+    public static final double kG = 0.2;
+    public static final double kV = 1.15;
+    public static final double kMaxVel = Math.toRadians(1080);
+    public static final double kMaxAccel = Math.toRadians(1080);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;

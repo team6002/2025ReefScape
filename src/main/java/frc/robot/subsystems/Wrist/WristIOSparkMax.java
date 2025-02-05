@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.GlobalVariables;
 import frc.robot.Configs;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -45,7 +46,7 @@ public class WristIOSparkMax implements WristIO{
 
     @Override
     public void updateInputs(WristIOInputs inputs){
-        inputs.m_wristGoal = m_goal.position + WristConstants.kWristOffset;
+        inputs.m_wristGoal = getGoal();
         inputs.m_wristCurrent = getCurrent();
         inputs.m_wristPosition = getPosition();
     }
@@ -71,12 +72,16 @@ public class WristIOSparkMax implements WristIO{
         return m_goal.position + WristConstants.kWristOffset;
     }
 
+    @Override public double getSetpoint(){
+        return m_setpoint.position + WristConstants.kWristOffset;
+    }
+
     @Override
     public void PID(){
         var profile = new TrapezoidProfile(m_wristConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(m_setpoint.position, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() - WristConstants.kWristOffset- GlobalVariables.m_pivotAngle, m_setpoint.velocity));
     }
 
     @Override
