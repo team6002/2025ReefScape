@@ -11,6 +11,6 @@ public class CMD_WristInPosition extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_wrist.getGoal() - m_wrist.getPosition()) < Math.toRadians(1);
+        return Math.abs(m_wrist.getGoal() - m_wrist.getPosition()) < Math.toRadians(3);
     }
 }

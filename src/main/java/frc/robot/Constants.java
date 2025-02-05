@@ -188,7 +188,7 @@ public final class Constants {
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 2.5;//3.2
+    public static final double kP = 2;//3.2
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
@@ -210,7 +210,7 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(65);
     public static final double kDeployl1 = Math.toRadians(82.75);
     public static final double kDeployl2 = Math.toRadians(86);
-    public static final double kDeployl3 = Math.toRadians(88.5);//85.5
+    public static final double kDeployl3 = Math.toRadians(85);//85.5
   }
 
   public static final class ElevatorConstants{
