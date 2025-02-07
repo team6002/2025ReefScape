@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
@@ -29,23 +30,52 @@ public class CMD_Score extends Command{
     public void initialize(){
         switch(m_variables.getRobotState()){
            case HOME:
-                new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder, m_variables).schedule();
+                //ready, no object
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
+                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+                ).schedule();
                 break;
             case READY:
-                new CMD_ReadyToIntake(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder, m_variables).schedule();
+                //ready to intake
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
+                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                ).schedule();
                 break;
             case READY_TO_INTAKE:
-                new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder, m_variables).andThen(
-                    new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))).schedule();
+                //ready with an object to score
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
+                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                ).schedule();
                 break;
            case READY_STOWED:
-                new CMD_ReadyToDeploy(m_elevator, m_coralHolder, m_wrist, m_elevatorPivot, m_variables).schedule();
+                //ready to deploy
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
+                    ,new CMD_ReadyToDeploy(m_elevator, m_coralHolder, m_wrist, m_elevatorPivot)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+                ).schedule();
                 break;
             case READY_TO_DEPLOY:
-                new CMD_Deploy(m_coralHolder, m_wrist, m_elevatorPivot, m_variables).schedule();
+                //deploy/score
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
+                    ,new CMD_Deploy(m_coralHolder, m_wrist, m_elevatorPivot)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
+                ).schedule();
                 break;
             case DEPLOY:
-                new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder, m_variables).schedule();
+                //ready, no object
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
+                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+                ).schedule();
                 break;
             default:
                 break;
