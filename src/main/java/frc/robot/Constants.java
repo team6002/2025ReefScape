@@ -10,8 +10,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -152,6 +150,26 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
   }
 
+  public static final class HardwareConstants{
+    // SPARK MAX CAN IDs 
+    public static final int kFrontLeftDrivingCanId = 2;//8
+    public static final int kFrontLeftTurningCanId = 1;//9
+    public static final int kFrontRightDrivingCanId =  8;//2
+    public static final int kFrontRightTurningCanId = 9;//1
+    public static final int kRearLeftDrivingCanId = 19;//10
+    public static final int kRearLeftTurningCanId = 5;//7
+    public static final int kRearRightDrivingCanId = 10;//18
+    public static final int kRearRightTurningCanId = 7;//3
+    public static final int kCoralHolderCanId = 16;//11
+    public static final int kLeftElevatorCanId = 18;//14
+    public static final int kRightElevatorCanId = 17;//15
+    public static final int kLeftPivotCanId = 3;//6
+    public static final int kRightPivotCanId = 6;//4
+    public static final int kWristCanId = 14;//13
+    public static final int kClimbCanId = 4;
+    public static final int kAlgaeCanId = 15;
+  }
+
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -273,25 +291,7 @@ public final class Constants {
     public static final double kDeployl3 = Math.toRadians(37.5);//30
   }
 
-   public static final class LocationConstants{
-    public static final Translation2d SpeakerBlue = new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(218));
-    public static final Translation2d SpeakerRed = new Translation2d(16.54, Units.inchesToMeters(218));
-  
-    public static final Translation2d SpeakerShootingBlue = new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(218));
-    public static final Translation2d SpeakerShootingRed = new Translation2d(16.54 - Units.inchesToMeters(0), Units.inchesToMeters(218));
-    // the location in which we shoot at to stage it.
-    public static final Pose2d StageBlue = new Pose2d( 0.9,6.5, Rotation2d.fromDegrees(-90));
-    public static final Pose2d StageRed = new Pose2d( 15.8,6.5, Rotation2d.fromDegrees(-90));
-    
-    public static final Pose2d SubwooferBlue = new Pose2d( 1.2,5.4, Rotation2d.fromDegrees(0));
-    public static final Pose2d AmpBlue = new Pose2d( 1.9,7.8, Rotation2d.fromDegrees(-90));
-    public static final Pose2d LSourceBlue = new Pose2d( 15,.5, Rotation2d.fromDegrees(125));// the source closest to blue side
-    
-    public static final Pose2d SubwooferRed = new Pose2d( 15.4,5.4, Rotation2d.fromDegrees(-180));
-    public static final Pose2d AmpRed = new Pose2d( 14.8,7.8, Rotation2d.fromDegrees(-90));
-    public static final Pose2d LSourceRed = new Pose2d( 1.6,.5, Rotation2d.fromDegrees(60));// the source closest to blue side
-    
-  }
+  public static final class LocationConstants{}
 
   public static final class VisionConstants{
     public static final String kFrontCameraName = "FrontCamera";
@@ -308,26 +308,6 @@ public final class Constants {
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-  }
-
-  public static final class HardwareConstants{
-    // SPARK MAX CAN IDs 
-    public static final int kFrontLeftDrivingCanId = 2;//8
-    public static final int kFrontLeftTurningCanId = 1;//9
-    public static final int kFrontRightDrivingCanId =  8;//2
-    public static final int kFrontRightTurningCanId = 9;//1
-    public static final int kRearLeftDrivingCanId = 19;//10
-    public static final int kRearLeftTurningCanId = 5;//7
-    public static final int kRearRightDrivingCanId = 10;//18
-    public static final int kRearRightTurningCanId = 7;//3
-    public static final int kCoralHolderCanId = 16;//11
-    public static final int kLeftElevatorCanId = 18;//14
-    public static final int kRightElevatorCanId = 17;//15
-    public static final int kLeftPivotCanId = 3;//6
-    public static final int kRightPivotCanId = 6;//4
-    public static final int kWristCanId = 14;//13
-    public static final int kClimbCanId = 4;
-    public static final int kAlgaeCanId = 15;
   }
 
   public static final class AutoAlignConstants{
@@ -353,6 +333,5 @@ public final class Constants {
   
       /* Absolute joystick threshold for driver abort */
       public static final double kAbortThreshold = 0.2;
-   
   }
 }
