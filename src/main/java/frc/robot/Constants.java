@@ -294,14 +294,15 @@ public final class Constants {
   }
 
   public static final class VisionConstants{
-    public static final String kFrontCameraName = "FrontCam";
+    public static final String kFrontCameraName = "FrontCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToCam =
             new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
-            AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+      
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
@@ -331,18 +332,22 @@ public final class Constants {
 
   public static final class AutoAlignConstants{
       /* X and Y drive constraints. Output ranges [-1, 1] */
-      public static final double kXTolerance = 0.05;
-      public static final double kYTolerance = 0.05;
+      public static final double kXTolerance = 0.02;
+      public static final double kYTolerance = 0.02;
+
+      public static final double kXAutoClamp = .3;
+      public static final double kYAutoClamp = .6;
+      public static final double kTurnAutoClamp = .3;
   
-      public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(1.25, 1.25);
-      public static final double driveKp = 1.5;
+      public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(2, 1.5);
+      public static final double driveKp = 1;
       public static final double driveKi = 0.;
       public static final double driveKd = 0.;
   
       /* Turn constraints. Output ranges [-1, 1] */
-      public static final double kTurnTolerance = 5;
-      public static final TrapezoidProfile.Constraints turnConstraints = new TrapezoidProfile.Constraints(1, 1);
-      public static final double turnKp = 0.01;
+      public static final double kTurnTolerance = .5;
+      public static final TrapezoidProfile.Constraints turnConstraints = new TrapezoidProfile.Constraints(1, .75);
+      public static final double turnKp = 0.011;
       public static final double turnKi = 0.;
       public static final double turnKd = 0.;
   

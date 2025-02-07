@@ -28,6 +28,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
@@ -94,12 +95,8 @@ public class SUB_Vision {
         return inputs.target;
     }
 
-    public double getTargetYaw(){
-        return inputs.targetYaw;
-    }
-
-    public Matrix<N3, N1> getEstimationStdDevs() {
-        return io.getEstimationStdDevs();
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+        return io.getEstimationStdDevs(estimatedPose);
     }
     
     public void updateInputs(){
@@ -111,17 +108,10 @@ public class SUB_Vision {
         return io.getEstimatedGlobalPose();
     }
   
-    public double getTargetDistance(){
-        return inputs.targetDistance;
+    public Transform3d getTargetPose(){
+        return io.getTargetPose();
     }
 
-    public double getTargetXDistance(){
-        return inputs.targetXDistance;
-    }
-
-    public double getTargetYDistance(){
-        return inputs.targetYDistance;
-    }
     
     /*
      * 
