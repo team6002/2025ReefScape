@@ -21,7 +21,9 @@ public class CMD_ReadyToIntake extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
-            ,new CMD_IntakeStow(p_coralHolder, p_wrist, p_elevatorPivot, p_elevator, p_variables)
+            ,new CMD_IntakeStow(p_coralHolder, p_wrist, p_elevatorPivot, p_elevator, p_coralHolder, p_variables)
+            ,new CMD_Ready(p_elevator, p_wrist, p_elevatorPivot, p_coralHolder, p_variables)
+            ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_STOWED))
         );
     }
 }

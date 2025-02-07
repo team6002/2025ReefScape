@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.GlobalVariables;
 
 public class SUB_Elevator extends SubsystemBase{
     private final ElevatorIO io;
@@ -36,6 +37,10 @@ public class SUB_Elevator extends SubsystemBase{
       return io.getSetpoint();
     }
 
+    public boolean inPosition(){
+      return io.inPosition();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);
@@ -46,5 +51,7 @@ public class SUB_Elevator extends SubsystemBase{
       SmartDashboard.putNumber("elevator target", getGoal());
       SmartDashboard.putNumber("elevator current", getCurrent());
       SmartDashboard.putNumber("elevator setpoint", getSetpoint());
+
+      GlobalVariables.m_elevatorExtension = getPosition();
     }
 }

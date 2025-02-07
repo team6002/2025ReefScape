@@ -30,6 +30,6 @@ public class CMD_ElevatorSetDeploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(m_elevator.getGoal() - m_elevator.getPosition()) < .67;
+        return m_elevator.inPosition();
     }
 }

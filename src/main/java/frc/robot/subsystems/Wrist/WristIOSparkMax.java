@@ -49,6 +49,7 @@ public class WristIOSparkMax implements WristIO{
         inputs.m_wristGoal = getGoal();
         inputs.m_wristCurrent = getCurrent();
         inputs.m_wristPosition = getPosition();
+        inputs.m_inPosition = inPosition();
     }
 
     @Override
@@ -74,6 +75,11 @@ public class WristIOSparkMax implements WristIO{
 
     @Override public double getSetpoint(){
         return m_setpoint.position + WristConstants.kWristOffset;
+    }
+
+    @Override
+    public boolean inPosition(){
+        return Math.abs(getPosition() - getGoal()) < WristConstants.kTolerance;
     }
 
     @Override

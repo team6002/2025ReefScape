@@ -42,6 +42,10 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       return io.getSetpoint();
     }
 
+    public boolean inPosition(){
+      return io.inPosition();
+    }
+
     public Command incrementGoal(double increment){
       return Commands.runOnce(() -> io.setGoal(increment + getGoal()));
     }

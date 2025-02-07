@@ -173,9 +173,13 @@ public final class Constants {
 
   public static final class CoralHolderConstants{
     public static final double kP = 0.00001;
+    public static final double kPLoaded = 0.0001;
     public static final double kI = 0.0;
+    public static final double kILoaded = 0.0;
     public static final double kD = 0.0;
+    public static final double kDLoaded = 0.0;
     public static final double kFF = 0.000175;
+    public static final double kFFLoaded = 0.0025;
     public static final double kV = 0.0;
     public static final double kS = 0.0;
     public static final boolean kCoralHolderInverted = true;
@@ -188,39 +192,42 @@ public final class Constants {
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 2.5;//3.2
+    public static final double kP = 3.5;//2.0
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.03;
-    public static final double kG = 0.025;//.1
-    public static final double kV = 4.45;//4.35
+    public static final double kS = 0.03;//.03
+    public static final double kG = 0.025;//.025, .18
+    public static final double kV = 4.45;//4.45
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(720);
-    public static final double kMaxAccel = Math.toRadians(720);
+    public static final double kMaxVel = Math.toRadians(700);//720
+    public static final double kMaxAccel = Math.toRadians(700);//720
+    public static final double kMaxVelExtended = Math.toRadians(540);
+    public static final double kMaxAccelExtended = Math.toRadians(90);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 2*Math.PI;
+    public static final double kTolerance = Math.toRadians(2);
     
     public static final double kHome = Math.toRadians(5);
-    public static final double kReady = Math.toRadians(30);
+    public static final double kReady = Math.toRadians(65);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kIntake = Math.toRadians(65);
     public static final double kDeployl1 = Math.toRadians(82.75);
     public static final double kDeployl2 = Math.toRadians(86);
-    public static final double kDeployl3 = Math.toRadians(88.5);//85.5
+    public static final double kDeployl3 = Math.toRadians(88);//85.5
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.02;//.075
+    public static final double kP = 0.02;//.075, .02
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.233;//.233
-    public static final double kV = 0.04;//.052
-    public static final double kG = 0.45;//.01
+    public static final double kS = 0.2;//.233
+    public static final double kV = 0.045;//.052
+    public static final double kG = 0.3;//.01
     public static final double kMaxVel = 325;
     public static final double kMaxAccel = 325;
     public static final double kMaxVelDown = 100;
@@ -230,8 +237,9 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//1.9006
-
+    public static final double kTolerance = 2;
     public static final double kHome = 0;
+    public static final double kReady = 14.5;
     public static final double kIntake = 14.5;
     public static final double kDeployL1 = 0;
     public static final double kDeployL2 = 28;
@@ -241,26 +249,28 @@ public final class Constants {
   public static final class WristConstants{
     public static final boolean kWristInverted = false;
     public static final double kWristOffset = -Math.PI;
-    public static final double kP = 0.2;
+    public static final double kP = 0.4;//.2
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.1;
-    public static final double kG = 0.2;
-    public static final double kV = 1.15;
-    public static final double kMaxVel = Math.toRadians(1080);
-    public static final double kMaxAccel = Math.toRadians(1080);
+    public static final double kS = 0.0;//.1
+    public static final double kG = 0.17;//.2
+    public static final double kV = 1.15;//2.7, 1.15
+    public static final double kMaxVel = Math.toRadians(540);//1080
+    public static final double kMaxAccel = Math.toRadians(360);//1080
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
+    public static final double kTolerance = Math.toRadians(3);
 
     public static final double kHome = Math.toRadians(110);
+    public static final double kReady = Math.toRadians(-30);
     public static final double kStowing = Math.toRadians(0);
     public static final double kIntake = -Math.toRadians(110);
-    public static final double kReadyToScore = Math.toRadians(0);
+    public static final double kReadyToScore = Math.toRadians(-15);
     public static final double kDeployl1 = Math.toRadians(30);//35
     public static final double kDeployl2 = Math.toRadians(22.5);//20
-    public static final double kDeployl3 = Math.toRadians(30);//13
+    public static final double kDeployl3 = Math.toRadians(37.5);//30
   }
 
    public static final class LocationConstants{

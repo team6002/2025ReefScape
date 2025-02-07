@@ -71,7 +71,10 @@ public class RobotContainer {
     //driver
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
     m_driverController.leftBumper().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_elevatorPivot, m_variables));
-    // //operator
+    m_driverController.povUp().onTrue(new InstantCommand(()-> m_wrist.setGoal(Math.PI/2)));
+    m_driverController.povDown().onTrue(new InstantCommand(()-> m_wrist.setGoal(Math.toRadians(0))));
+    m_driverController.back().onTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(Math.PI/2)));
+    //operator
     m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
     m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
     m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));

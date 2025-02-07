@@ -9,14 +9,17 @@ public class GlobalVariables extends SubsystemBase{
     public static int m_targetLevel = 3;
 
     public static double m_pivotAngle = 0;
+    public static double m_elevatorExtension = 0;
 
     public enum RobotState{
         HOME
         ,TRANSITIONING_TO_INTAKE
+        ,TRANSITIONING_TO_READY
         ,READY
         ,READY_TO_INTAKE
         ,TRANSITONING_TO_STOW
         ,STOW
+        ,READY_STOWED
         ,TRANSITIONING_TO_DEPLOY
         ,READY_TO_DEPLOY
         ,DEPLOY

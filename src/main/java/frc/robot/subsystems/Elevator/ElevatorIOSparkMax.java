@@ -50,6 +50,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         inputs.m_elevatorGoal = m_goal.position;
         inputs.m_elevatorPos = getPosition();
         inputs.m_elevatorCurrent = getCurrent();
+        inputs.m_inPosition = inPosition();
     };
 
     @Override
@@ -88,6 +89,11 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public double getSetpoint(){
         return m_setpoint.position;
+    }
+
+    @Override
+    public boolean inPosition(){
+        return Math.abs(getGoal() - getPosition()) < ElevatorConstants.kTolerance;
     }
 
     @Override

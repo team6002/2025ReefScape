@@ -14,14 +14,16 @@ public class CMD_IntakeStow extends Command{
     SUB_ElevatorPivot m_pivot;
     SUB_Elevator m_elevator;
     GlobalVariables m_variables;
+    SUB_CoralHolder m_coralHolder;
     boolean isFinished = false;
     Timer m_intakeTimer = new Timer();
     public CMD_IntakeStow(SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_ElevatorPivot p_pivot, SUB_Elevator p_elevator, 
-                          GlobalVariables p_variables){
+                          SUB_CoralHolder p_coralHolder, GlobalVariables p_variables){
         m_intake = p_intake;
         m_wrist = p_wrist;
         m_pivot = p_pivot;
         m_elevator = p_elevator;
+        m_coralHolder = p_coralHolder;
         m_variables = p_variables;
     }
 
@@ -48,8 +50,8 @@ public class CMD_IntakeStow extends Command{
         return isFinished;
     }
 
-    @Override
-    public void end(boolean interrupted){
-        new CMD_Stow(m_elevator, m_intake, m_wrist, m_pivot, m_variables).schedule();
-    }
+    // @Override
+    // public void end(boolean interrupted){
+    //     new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder, m_variables).schedule();
+    // }
 }

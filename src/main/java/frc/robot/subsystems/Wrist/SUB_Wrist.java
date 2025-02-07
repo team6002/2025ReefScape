@@ -36,6 +36,10 @@ public class SUB_Wrist extends SubsystemBase{
       return io.getSetpoint();
     }
 
+    public boolean inPosition(){
+      return io.inPosition();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);

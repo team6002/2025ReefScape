@@ -8,9 +8,9 @@ public interface WristIO {
     public double m_wristCurrent;
     public double m_wristPosition;
     public double m_wristGoal;
+    public boolean m_inPosition;
   }
 
-  /** Updates the set of loggable inputs. */
   public default void updateInputs(WristIOInputs inputs) {}
 
   public default void setGoal(double p_goal){}
@@ -24,6 +24,8 @@ public interface WristIO {
   public default double getCurrent(){return 0;}
 
   public default double getSetpoint(){return 0;}
+
+  public default boolean inPosition(){return false;}
 
   public default void PID(){}
 

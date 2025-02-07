@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
+import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -15,12 +16,15 @@ public class CMD_ReadyToDeploy extends SequentialCommandGroup{
                              , GlobalVariables p_variables){
         addCommands(
             new InstantCommand(()-> p_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyToScore))
+            // ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyToScore))
             ,new CMD_PivotSetDeploy(p_elevatorPivot)
-            ,new CMD_WristInPosition(p_wrist)
+            // ,new CMD_WristInPosition(p_wrist)
             ,new CMD_ElevatorSetDeploy(p_elevator).withTimeout(2)
             ,new CMD_WristSetDeploy(p_wrist)
             ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+            ,new InstantCommand(()-> p_wrist.setGoal(p_wrist.getPosition() - Math.toRadians(30)))
+            ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kReverse))
+            ,new InstantCommand(()-> p_variables.setRobotState(RobotState.DEPLOY))
         );
     }
 }
