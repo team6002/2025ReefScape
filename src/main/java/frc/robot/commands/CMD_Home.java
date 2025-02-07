@@ -19,10 +19,10 @@ public class CMD_Home extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kHome))
             ,new CMD_ElevatorInPosition(p_elevator)
-            ,new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kHome))
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
-            ,new CMD_PivotInPosition(p_elevatorPivot)
-            ,new CMD_WristInPosition(p_wrist)
+            // ,new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kHome))
+            // ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
+            // ,new CMD_PivotInPosition(p_elevatorPivot)
+            // ,new CMD_WristInPosition(p_wrist)
             ,new InstantCommand(()-> p_variables.setRobotState(RobotState.HOME))
         );
     }

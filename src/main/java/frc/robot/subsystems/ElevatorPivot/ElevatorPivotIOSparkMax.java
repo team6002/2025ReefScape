@@ -32,9 +32,8 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         m_leftPivotMotor = new SparkMax(HardwareConstants.kLeftPivotCanId, MotorType.kBrushless);
         m_rightPivotMotor = new SparkMax(HardwareConstants.kRightPivotCanId, MotorType.kBrushless);
         m_pivotEncoder = m_rightPivotMotor.getAbsoluteEncoder();
-
+        
         m_pivotController = m_rightPivotMotor.getClosedLoopController();
-
         
         m_leftPivotMotor.configure(Configs.ElevatorPivotConfig.m_leftPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_rightPivotMotor.configure(Configs.ElevatorPivotConfig.m_rightPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
