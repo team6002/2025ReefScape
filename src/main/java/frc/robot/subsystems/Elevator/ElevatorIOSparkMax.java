@@ -28,6 +28,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     private Constraints m_constraints = new Constraints(ElevatorConstants.kMaxVel, ElevatorConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
+    private boolean m_resetMode = false;
     public ElevatorIOSparkMax(){
         m_leftElevator = new SparkMax(HardwareConstants.kLeftElevatorCanId, MotorType.kBrushless);
         m_rightElevator = new SparkMax(HardwareConstants.kRightElevatorCanId, MotorType.kBrushless);
@@ -80,10 +81,17 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     }
 
     @Override
-    public void reset(){
+    public void resetEncoder(){
         m_elevatorEncoder.setPosition(0);
-        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+        m_rightElevator.set(0);
+        m_resetMode = false;
+        m_setpoint = new TrapezoidProfile.State(0, 0);
         m_goal = m_setpoint;
+    }
+
+    @Override
+    public void reset(boolean p_reset){
+        m_resetMode = p_reset;
     }
 
     @Override
@@ -97,10 +105,20 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     }
 
     @Override
+    public boolean isResetMode(){
+        return m_resetMode;
+    }
+
+    @Override
     public void PID(){
-        var profile = new TrapezoidProfile(m_constraints).calculate(0.02, m_setpoint, m_goal);
-        m_setpoint = profile;
-        m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition,
-            ClosedLoopSlot.kSlot0, m_feedforward.calculate(GlobalVariables.m_pivotAngle - Math.toRadians(90), m_setpoint.velocity));
+        if(m_resetMode){
+            m_rightElevator.set(-.2);
+            m_elevatorController.setReference(getPosition() - 10, ControlType.kPosition);
+        }else{
+            var profile = new TrapezoidProfile(m_constraints).calculate(0.02, m_setpoint, m_goal);
+            m_setpoint = profile;
+            m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition,
+                ClosedLoopSlot.kSlot0, m_feedforward.calculate(GlobalVariables.m_pivotAngle - Math.toRadians(90), m_setpoint.velocity));
+        }
     }
 }

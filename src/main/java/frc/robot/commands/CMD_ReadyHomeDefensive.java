@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -13,7 +14,7 @@ public class CMD_ReadyHomeDefensive extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyHome))            
-            ,new CMD_WristInPosition(p_wrist)
+            ,new WaitCommand(.25)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReadyDefensive))
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kReadyDefensive))

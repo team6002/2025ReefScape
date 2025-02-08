@@ -190,23 +190,20 @@ public final class Constants {
   }
 
   public static final class CoralHolderConstants{
-    public static final double kP = 0.00001;
-    public static final double kPLoaded = 0.0001;
+    public static final double kP = 0.0;
+    public static final double kPReverse = 0.0002;
     public static final double kI = 0.0;
-    public static final double kILoaded = 0.0;
     public static final double kD = 0.0;
-    public static final double kDLoaded = 0.0;
-    public static final double kFF = 0.000175;
-    public static final double kFFLoaded = 0.0025;
-    public static final double kV = 0.0;
-    public static final double kS = 0.0;
+    public static final double kFF = 0.0;
+    public static final double kV = 0.00205;
+    public static final double kS = .12;
     public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kIntake = 3000;
     public static final double kOff = 0;
-    public static final double kReverse = -2500;
-    public static final double kReverseSlow = -175;
+    public static final double kReverse = -1000;//-2500
+    public static final double kReverseSlow = -1000;
     public static final double kHolding = 50;
   }
 
@@ -220,7 +217,7 @@ public final class Constants {
     public static final double kV = 4.45;//4.45
     public static final double kPivotOffset = Math.toRadians(-90);
     public static final double kMaxVel = Math.toRadians(700);//720
-    public static final double kMaxAccel = Math.toRadians(700);//720
+    public static final double kMaxAccel = Math.toRadians(600);//720
     public static final double kMaxVelExtended = Math.toRadians(540);
     public static final double kMaxAccelExtended = Math.toRadians(90);
     public static final double kMinOutput = -1;
@@ -235,9 +232,9 @@ public final class Constants {
     public static final double kReadyDefensive = Math.toRadians(15);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kIntake = Math.toRadians(63);
-    public static final double kDeployl1 = Math.toRadians(30);//82.75
+    public static final double kDeployl1 = Math.toRadians(37.5);//82.75
     public static final double kDeployl2 = Math.toRadians(85);//82.75
-    public static final double kDeployl3 = Math.toRadians(88);//86
+    public static final double kDeployl3 = Math.toRadians(83);//86
     public static final double kDeployl4 = Math.toRadians(88);//85.5
   }
 
@@ -265,7 +262,7 @@ public final class Constants {
     public static final double kIntake = 14.5;
     public static final double kDeployL1 = 14.5;
     public static final double kDeployL2 = 0;
-    public static final double kDeployL3 = 14.5;//28
+    public static final double kDeployL3 = 19;//28
     public static final double kDeployL4 = 68;//68
   }
 
@@ -279,8 +276,8 @@ public final class Constants {
     public static final double kS = 0.0;//.1
     public static final double kG = 0.19;//.2
     public static final double kV = 1.15;//2.7, 1.15
-    public static final double kMaxVel = Math.toRadians(540);//1080
-    public static final double kMaxAccel = Math.toRadians(360);//1080
+    public static final double kMaxVel = Math.toRadians(1080);//1080
+    public static final double kMaxAccel = Math.toRadians(1080);//1080, 360
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
@@ -293,9 +290,9 @@ public final class Constants {
     public static final double kStowing = Math.toRadians(0);
     public static final double kIntake = Math.toRadians(-110);
     public static final double kReadyToScore = Math.toRadians(-15);
-    public static final double kDeployl1 = Math.toRadians(-100);
+    public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(50);//30
-    public static final double kDeployl3 = Math.toRadians(20);//22.5
+    public static final double kDeployl3 = Math.toRadians(30);//22.5
     public static final double kDeployl4 = Math.toRadians(39);//37.5
   }
 

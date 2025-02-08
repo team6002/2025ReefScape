@@ -29,8 +29,12 @@ public class SUB_Elevator extends SubsystemBase{
       io.setGoal(p_goal);
     }
 
-    public void reset(){
-      io.reset();
+    public void reset(boolean p_reset){
+      io.reset(p_reset);
+    }
+
+    public void resetEncoder(){
+      io.resetEncoder();
     }
 
     public double getSetpoint(){
@@ -39,6 +43,10 @@ public class SUB_Elevator extends SubsystemBase{
 
     public boolean inPosition(){
       return io.inPosition();
+    }
+
+    public boolean isResetMode(){
+      return io.isResetMode();
     }
 
     @Override
@@ -51,6 +59,7 @@ public class SUB_Elevator extends SubsystemBase{
       SmartDashboard.putNumber("elevator target", getGoal());
       SmartDashboard.putNumber("elevator current", getCurrent());
       SmartDashboard.putNumber("elevator setpoint", getSetpoint());
+      SmartDashboard.putBoolean("resetMode", isResetMode());
 
       GlobalVariables.m_elevatorExtension = getPosition();
     }

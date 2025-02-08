@@ -49,10 +49,9 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
     @Override
     public void setReference(double p_rpm){
         if(p_rpm < 0){
-            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.pidf(CoralHolderConstants.kPLoaded, CoralHolderConstants.kILoaded, CoralHolderConstants.kDLoaded, CoralHolderConstants.kFFLoaded);
-
+            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.p(CoralHolderConstants.kPReverse);
         }else{
-            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.pidf(CoralHolderConstants.kP, CoralHolderConstants.kI, CoralHolderConstants.kD, CoralHolderConstants.kFF);
+            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.p(CoralHolderConstants.kP);
         }
         m_coralHolderMotor.configure(Configs.CoralHolderConfig.m_coralHolderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         m_coralHolderReference = p_rpm;
@@ -75,6 +74,7 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
 
     @Override
     public void PID(){
-        m_coralHolderController.setReference(m_coralHolderReference, ControlType.kVelocity);
+        m_coralHolderController.setReference(m_coralHolderReference, ControlType.kVelocity, 
+            ClosedLoopSlot.kSlot0, m_coralHolderFeedforward.calculate(getReference()));
     }
 }

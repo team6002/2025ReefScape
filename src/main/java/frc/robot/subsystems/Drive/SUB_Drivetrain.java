@@ -131,13 +131,13 @@ public class SUB_Drivetrain extends SubsystemBase {
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
-    ModuleIO brModuleIO,
-    SUB_Vision p_vision
+    ModuleIO brModuleIO
+    // SUB_Vision p_vision
     ) 
   {
         
     this.gyroIO = gyroIO;
-    m_vision = p_vision;
+    // m_vision = p_vision;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -242,7 +242,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    var visionEst = m_vision.getEstimatedGlobalPose();
+    // var visionEst = m_vision.getEstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -277,32 +277,33 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
-    SmartDashboard.putBoolean("HasTarget", m_vision.getHasTarget());    
+    // SmartDashboard.putBoolean("HasTarget", m_vision.getHasTarget());    
     SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    m_vision.updateInputs();
+    SmartDashboard.putNumber("gyroHeading", getAngle());
+    // m_vision.updateInputs();
 
-    visionEst.ifPresent(
-      est -> {
-          var estPose = est.estimatedPose.toPose2d();
-          // estPose = m_vision.getEstimatedGlobalPose(estPose);
-          Logger.recordOutput("CameraPose", estPose);
-    //       // Change our trust in the measurement based on the tags we can see
-          var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+    // visionEst.ifPresent(
+    //   est -> {
+    //       var estPose = est.estimatedPose.toPose2d();
+    //       // estPose = m_vision.getEstimatedGlobalPose(estPose);
+    //       Logger.recordOutput("CameraPose", estPose);
+    // //       // Change our trust in the measurement based on the tags we can see
+    //       var estStdDevs = m_vision.getEstimationStdDevs(estPose);
 
-          addVisionMeasurement(
-            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-      }  
-    );
+    //       addVisionMeasurement(
+    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+    //   }  
+    // );
 
-    visionEst.ifPresent(
-      est -> {
-          var estPose = est.estimatedPose.toPose2d();
-        if (TargetOdoEnable){
-          addTargetVisionMeasurement(
-            m_vision.getTargetPose(), est.timestampSeconds);
-        }
-      }  
-    );
+    // visionEst.ifPresent(
+    //   est -> {
+    //       var estPose = est.estimatedPose.toPose2d();
+    //     if (TargetOdoEnable){
+    //       addTargetVisionMeasurement(
+    //         m_vision.getTargetPose(), est.timestampSeconds);
+    //     }
+    //   }  
+    // );
     // if (visionEst.isPresent()){
     //   SmartDashboard.putNumber("TargetYaw",Math.toDegrees(m_vision.getTargetPose().getRotation().getAngle()));
      
@@ -500,6 +501,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   /** Zeroes the heading of the robot. LOL*/
   public void zeroHeading() {
+    gyroIO.reset();
     // m_gyro.resetDisplacement();
     //*TODO fix */
   }

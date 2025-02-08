@@ -27,5 +27,9 @@ public interface ElevatorIO {
 
   public default void PID(){}
 
-  public default void reset(){}
+  public default void resetEncoder(){}
+
+  public default boolean isResetMode(){return false;}
+
+  public default void reset(boolean m_reset){}
 }
