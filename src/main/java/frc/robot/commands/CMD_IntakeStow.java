@@ -46,9 +46,4 @@ public class CMD_IntakeStow extends Command{
     public boolean isFinished(){
         return isFinished;
     }
-
-    // @Override
-    // public void end(boolean interrupted){
-    //     new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder, m_variables).schedule();
-    // }
 }

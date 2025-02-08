@@ -61,10 +61,30 @@ public class GlobalVariables extends SubsystemBase{
         return m_intakeState;
     }
 
+    public enum Mode{
+        OFFENSIVE
+        ,DEFENSIVE
+    }
+
+    Mode m_mode = Mode.OFFENSIVE;
+    
+    public void setMode(Mode p_mode){
+        m_mode = p_mode;
+    }
+
+    public boolean isMode(Mode p_mode){
+        return m_mode == p_mode;
+    }
+
+    public Mode getMode(){
+        return m_mode;
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putString("robotState", getRobotState().toString());
         SmartDashboard.putString("intakeState", getIntakeState().toString());
+        SmartDashboard.putString("mode", getMode().toString());
         SmartDashboard.putNumber("score level", m_targetLevel);
     }
 }

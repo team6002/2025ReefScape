@@ -16,8 +16,6 @@ public class CMD_ReadyToIntake extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kIntake))
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
-            ,new CMD_IntakeStow(p_coralHolder, p_wrist, p_elevatorPivot, p_elevator, p_coralHolder)
-            ,new CMD_Ready(p_elevator, p_wrist, p_elevatorPivot, p_coralHolder)       
         );
     }
 }

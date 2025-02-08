@@ -23,6 +23,9 @@ public class CMD_PivotSetDeploy extends Command{
             case 3:
                 m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl3);
                 break;
+            case 4:
+                m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl4);
+                break;
             default:
                 break;
         }

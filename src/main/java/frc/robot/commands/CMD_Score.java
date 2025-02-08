@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
+import frc.GlobalVariables.Mode;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -33,7 +35,7 @@ public class CMD_Score extends Command{
                 //ready, no object
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,Ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
@@ -43,13 +45,16 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                    ,new CMD_IntakeStow(m_coralHolder, m_wrist, m_elevatorPivot, m_elevator, m_coralHolder)
+                    ,Ready()
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
             case READY_TO_INTAKE:
                 //ready with an object to score
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,Ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
@@ -73,13 +78,29 @@ public class CMD_Score extends Command{
                 //ready, no object
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,ReadyHome()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
             default:
                 break;
         }
+    }
+
+    private ConditionalCommand ReadyHome(){
+        return new ConditionalCommand(
+            new CMD_ReadyHome(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            ,()-> m_variables.isMode(Mode.OFFENSIVE)
+        );
+    }
+
+    private ConditionalCommand Ready(){
+        return new ConditionalCommand(
+            new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            ,()-> m_variables.isMode(Mode.OFFENSIVE)
+        );
     }
 
     @Override

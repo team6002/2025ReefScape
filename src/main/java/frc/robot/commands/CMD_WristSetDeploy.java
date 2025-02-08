@@ -24,6 +24,9 @@ public class CMD_WristSetDeploy extends Command{
             case 3:
                 m_wrist.setGoal(WristConstants.kDeployl3);
                 break;
+            case 4:
+                m_wrist.setGoal(WristConstants.kDeployl4);
+                break;
             default:
                 break;
         }

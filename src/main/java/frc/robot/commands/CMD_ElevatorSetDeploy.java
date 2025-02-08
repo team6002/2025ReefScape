@@ -23,6 +23,8 @@ public class CMD_ElevatorSetDeploy extends Command{
             case 3:
                 m_elevator.setGoal(ElevatorConstants.kDeployL3);
                 break;
+            case 4:
+                m_elevator.setGoal(ElevatorConstants.kDeployL4);
             default:
                 break;
         }

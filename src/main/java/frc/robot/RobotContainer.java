@@ -4,9 +4,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
+import frc.GlobalVariables.Mode;
+import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.*;
@@ -15,8 +16,8 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -73,13 +74,21 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driver
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.leftBumper().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_elevatorPivot));
-    m_driverController.povUp().onTrue(new InstantCommand(()-> m_wrist.setGoal(Math.PI/2)));
-    m_driverController.povDown().onTrue(new InstantCommand(()-> m_wrist.setGoal(Math.toRadians(0))));
-    m_driverController.back().onTrue(new InstantCommand(()-> m_elevatorPivot.setGoal(Math.PI/2)));
+    m_driverController.leftBumper().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_elevatorPivot)
+      .andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
+      
+    m_driverController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
+    m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
+    m_driverController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
+    m_driverController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
+    m_driverController.back().onTrue(new ConditionalCommand(
+      new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE))
+      ,new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE))
+      ,()-> m_variables.isMode(Mode.OFFENSIVE)
+    ));
     //operator
-    m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
-    m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
+    m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
+    m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
+    m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
   }
 }

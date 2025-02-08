@@ -206,11 +206,12 @@ public final class Constants {
     public static final double kIntake = 3000;
     public static final double kOff = 0;
     public static final double kReverse = -2500;
+    public static final double kReverseSlow = -175;
     public static final double kHolding = 50;
   }
 
   public static final class ElevatorPivotConstants{
-    public static final double kP = 3.5;//2.0
+    public static final double kP = 3.2;//2.0
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
@@ -230,12 +231,14 @@ public final class Constants {
     public static final double kTolerance = Math.toRadians(2);
     
     public static final double kHome = Math.toRadians(5);
-    public static final double kReady = Math.toRadians(65);
+    public static final double kReady = Math.toRadians(85);
+    public static final double kReadyDefensive = Math.toRadians(15);
     public static final double kReadyToScore = Math.toRadians(82);
-    public static final double kIntake = Math.toRadians(65);
-    public static final double kDeployl1 = Math.toRadians(82.75);
-    public static final double kDeployl2 = Math.toRadians(86);
-    public static final double kDeployl3 = Math.toRadians(88);//85.5
+    public static final double kIntake = Math.toRadians(63);
+    public static final double kDeployl1 = Math.toRadians(30);//82.75
+    public static final double kDeployl2 = Math.toRadians(85);//82.75
+    public static final double kDeployl3 = Math.toRadians(88);//86
+    public static final double kDeployl4 = Math.toRadians(88);//85.5
   }
 
   public static final class ElevatorConstants{
@@ -258,21 +261,23 @@ public final class Constants {
     public static final double kTolerance = 2;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
+    public static final double kReadyDefensive = 1;
     public static final double kIntake = 14.5;
-    public static final double kDeployL1 = 0;
-    public static final double kDeployL2 = 28;
-    public static final double kDeployL3 = 68;
+    public static final double kDeployL1 = 14.5;
+    public static final double kDeployL2 = 0;
+    public static final double kDeployL3 = 14.5;//28
+    public static final double kDeployL4 = 68;//68
   }
 
   public static final class WristConstants{
     public static final boolean kWristInverted = false;
     public static final double kWristOffset = -Math.PI;
-    public static final double kP = 0.4;//.2
+    public static final double kP = 0.585;//.2
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.0;//.1
-    public static final double kG = 0.17;//.2
+    public static final double kG = 0.19;//.2
     public static final double kV = 1.15;//2.7, 1.15
     public static final double kMaxVel = Math.toRadians(540);//1080
     public static final double kMaxAccel = Math.toRadians(360);//1080
@@ -282,13 +287,16 @@ public final class Constants {
     public static final double kTolerance = Math.toRadians(3);
 
     public static final double kHome = Math.toRadians(110);
-    public static final double kReady = Math.toRadians(-30);
+    public static final double kReady = Math.toRadians(-110);
+    public static final double kReadyHome = Math.toRadians(0);
+    public static final double kReadyDefensive = Math.toRadians(110);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = -Math.toRadians(110);
+    public static final double kIntake = Math.toRadians(-110);
     public static final double kReadyToScore = Math.toRadians(-15);
-    public static final double kDeployl1 = Math.toRadians(30);//35
-    public static final double kDeployl2 = Math.toRadians(22.5);//20
-    public static final double kDeployl3 = Math.toRadians(37.5);//30
+    public static final double kDeployl1 = Math.toRadians(-100);
+    public static final double kDeployl2 = Math.toRadians(50);//30
+    public static final double kDeployl3 = Math.toRadians(20);//22.5
+    public static final double kDeployl4 = Math.toRadians(39);//37.5
   }
 
   public static final class LocationConstants{}
