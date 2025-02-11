@@ -19,7 +19,7 @@ import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
 public class GyroIONavX implements GyroIO{  
-    private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);  
+    private final AHRS m_gyro = new AHRS(NavXComType.kI2C.kMXP_SPI);  
 
   @Override
   public void updateInputs(GyroIOInputs inputs){

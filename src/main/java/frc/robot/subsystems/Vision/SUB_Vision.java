@@ -91,14 +91,22 @@ public class SUB_Vision {
     * edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should
     * only be used when there are targets visible.
     */
-    public boolean getHasTarget(){
-        return inputs.target;
+    public boolean getHasLTarget(){
+        return inputs.LTarget;
     }
 
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-        return io.getEstimationStdDevs(estimatedPose);
+    public boolean getHasRTarget(){
+        return inputs.RTarget;
     }
-    
+
+    public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
+        return io.getREstimationStdDevs(estimatedPose);
+    }
+
+    public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
+        return io.getLEstimationStdDevs(estimatedPose);
+    }
+
     public void updateInputs(){
         io.updateInputs(inputs);
         Logger.processInputs("Vision", inputs);
@@ -108,8 +116,12 @@ public class SUB_Vision {
         return io.getEstimatedGlobalPose();
     }
   
-    public Transform3d getTargetPose(){
-        return io.getTargetPose();
+    public Transform3d getTargetLPose(){
+        return io.getTargetLPose();
+    }
+
+    public Transform3d getTargetRPose(){
+        return io.getTargetRPose();
     }
 
     
