@@ -49,7 +49,7 @@ public class WristIOSparkMax implements WristIO{
         inputs.m_wristGoal = getGoal();
         inputs.m_wristCurrent = getCurrent();
         inputs.m_wristPosition = getPosition();
-        inputs.m_inPosition = inPosition();
+        inputs.m_wristInPosition = inPosition();
     }
 
     @Override

@@ -6,12 +6,17 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
+import frc.GlobalVariables.IntakeState;
 import frc.GlobalVariables.Mode;
 import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.*;
 import frc.robot.subsystems.Vision.*;
+import frc.robot.subsystems.Winch.SUB_Winch;
+import frc.robot.subsystems.Winch.WinchIOSparkMax;
+import frc.robot.subsystems.Algae.AlgaeIOSparkMax;
+import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
@@ -59,7 +64,7 @@ public class RobotContainer {
 
     // Configure default commands
     // m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
-    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
+    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController).withTimeout(1));
   }
 
   /**

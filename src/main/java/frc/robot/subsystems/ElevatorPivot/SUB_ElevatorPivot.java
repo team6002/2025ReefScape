@@ -55,12 +55,10 @@ public class SUB_ElevatorPivot extends SubsystemBase{
       io.updateInputs(inputs);
       Logger.processInputs("ElevatorPivot", inputs);
       io.PID();
- 
-      SmartDashboard.putNumber("elevatorPivotPos", Math.toDegrees(getPosition()));
-      SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());
-      SmartDashboard.putNumber("elevatorPivotGoal", Math.toDegrees(getGoal()));
-      SmartDashboard.putNumber("pivot setpoint", Math.toDegrees(getSetpoint()));
-
+      // SmartDashboard.putNumber("elevatorPivotPos", Math.toDegrees(getPosition()));
+      // SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());
+      // SmartDashboard.putNumber("elevatorPivotGoal", Math.toDegrees(getGoal()));
+      // SmartDashboard.putNumber("pivot setpoint", Math.toDegrees(getSetpoint()));
       GlobalVariables.m_pivotAngle = getPosition();
     }
 }

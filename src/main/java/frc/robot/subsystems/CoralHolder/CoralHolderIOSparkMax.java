@@ -14,11 +14,11 @@ import frc.robot.Configs;
 import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.HardwareConstants;
 
-public class CoralHolderIOSparkMax implements CoralIHolderIO{
+public class CoralHolderIOSparkMax implements CoralHolderIO{
     private final SparkMax m_coralHolderMotor;
     private final RelativeEncoder m_coralHolderEncoder;
     private final SparkClosedLoopController m_coralHolderController;
-    private final SimpleMotorFeedforward m_coralHolderFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
+    private SimpleMotorFeedforward m_coralHolderFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
 
     private double m_coralHolderReference;
 
@@ -48,6 +48,7 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
 
     @Override
     public void setReference(double p_rpm){
+        m_coralHolderFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
         if(p_rpm < 0){
             Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.p(CoralHolderConstants.kPReverse);
         }else{
@@ -55,6 +56,12 @@ public class CoralHolderIOSparkMax implements CoralIHolderIO{
         }
         m_coralHolderMotor.configure(Configs.CoralHolderConfig.m_coralHolderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         m_coralHolderReference = p_rpm;
+    }
+
+    @Override
+    public void setVoltage(double p_voltage){
+        m_coralHolderFeedforward = new SimpleMotorFeedforward(0, 0);
+        m_coralHolderController.setReference(p_voltage, ControlType.kVoltage);
     }
 
     @Override

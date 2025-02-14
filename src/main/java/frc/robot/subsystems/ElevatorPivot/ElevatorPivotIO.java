@@ -8,7 +8,7 @@ public interface ElevatorPivotIO {
     public double m_pivotPos;
     public double m_pivotGoal;
     public double m_pivotCurrent;
-    public boolean m_inPosition;
+    public boolean m_pivotInPosition;
   }
 
   public default void updateInputs(ElevatorPivotIoInputs inputs) {}
