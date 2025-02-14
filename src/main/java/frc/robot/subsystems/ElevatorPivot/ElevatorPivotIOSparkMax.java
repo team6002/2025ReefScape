@@ -47,7 +47,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
         inputs.m_pivotGoal = m_goal.position + ElevatorPivotConstants.kPivotOffset;
         inputs.m_pivotPos = getPosition();
         inputs.m_pivotCurrent = getCurrent();
-        inputs.m_inPosition = inPosition();
+        inputs.m_pivotInPosition = inPosition();
     };
     
     @Override

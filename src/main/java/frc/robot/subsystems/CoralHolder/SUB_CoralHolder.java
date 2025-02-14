@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_CoralHolder extends SubsystemBase{
-    private final CoralIHolderIO io;
+    private final CoralHolderIO io;
     private final CoralHolderIOInputsAutoLogged inputs = new CoralHolderIOInputsAutoLogged();
-    public SUB_CoralHolder(CoralIHolderIO io){
+    public SUB_CoralHolder(CoralHolderIO io){
         this.io = io;
     }
 
@@ -26,6 +26,10 @@ public class SUB_CoralHolder extends SubsystemBase{
 
     public double getCurrent(){
       return inputs.m_intakeCurrent;
+    }
+
+    public void setVoltage(double p_voltage){
+      io.setVoltage(p_voltage);
     }
 
     @Override

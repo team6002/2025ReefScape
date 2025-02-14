@@ -8,7 +8,7 @@ public interface ElevatorIO {
     public double m_elevatorPos;
     public double m_elevatorGoal;
     public double m_elevatorCurrent;
-    public boolean m_inPosition;
+    public boolean m_elevatorInPosition;
   }
 
   public default void updateInputs(ElevatorIoInputs inputs) {}

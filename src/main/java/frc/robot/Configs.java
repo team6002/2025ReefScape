@@ -6,6 +6,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.WinchConstants;
+import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorPivotConstants;
@@ -188,7 +190,7 @@ public final class Configs {
                         .reverseLimitSwitchEnabled(false);
 
                 m_rightPivotConfig
-                        .idleMode(IdleMode.kBrake)
+                        .idleMode(IdleMode.kBrake)//Brake
                         .inverted(ElevatorPivotConstants.kRightInverted)
                         .voltageCompensation(12.0)
                         .disableFollowerMode()
@@ -224,6 +226,53 @@ public final class Configs {
                         .outputRange(CoralHolderConstants.kMinOutput, CoralHolderConstants.kMaxOutput)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                 m_coralHolderConfig.limitSwitch
+                        .forwardLimitSwitchEnabled(false)
+                        .reverseLimitSwitchEnabled(false);
+        }
+    }
+
+    public static final class WinchConfig{
+        public static final SparkMaxConfig m_WinchConfig = new SparkMaxConfig();
+
+        static{
+                m_WinchConfig
+                        .idleMode(IdleMode.kBrake)
+                        .inverted(false)
+                        .disableFollowerMode()
+                        .voltageCompensation(12.0)
+                        .smartCurrentLimit(40);
+                m_WinchConfig.closedLoop
+                        .pidf(WinchConstants.kP, WinchConstants.kI, WinchConstants.kD, WinchConstants.kFF)
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .outputRange(AlgaeConstants.kMinOutput, AlgaeConstants.kMaxOutput);
+                m_WinchConfig.encoder
+                        .uvwAverageDepth(2)
+                        .uvwMeasurementPeriod(10)
+                        .positionConversionFactor(1);
+                m_WinchConfig.limitSwitch
+                        .forwardLimitSwitchEnabled(false)
+                        .reverseLimitSwitchEnabled(false);
+        }
+    }
+
+    public static final class AlgaeConfig{
+        public static final SparkMaxConfig m_AlgaeConfig = new SparkMaxConfig();
+
+        static{
+                m_AlgaeConfig
+                        .idleMode(IdleMode.kBrake)
+                        .inverted(false)
+                        .disableFollowerMode()
+                        .voltageCompensation(12.0)
+                        .smartCurrentLimit(40);
+                m_AlgaeConfig.closedLoop
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .outputRange(WinchConstants.kMinOutput, WinchConstants.kMaxOutput);
+                m_AlgaeConfig.encoder
+                        .uvwAverageDepth(2)
+                        .uvwMeasurementPeriod(10)
+                        .velocityConversionFactor(1);
+                m_AlgaeConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
         }

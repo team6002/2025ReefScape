@@ -2,7 +2,6 @@ package frc.robot.subsystems.Wrist;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_Wrist extends SubsystemBase{
@@ -45,10 +44,5 @@ public class SUB_Wrist extends SubsystemBase{
       io.updateInputs(inputs);
       Logger.processInputs("Wrist", inputs);
       io.PID();
-
-      SmartDashboard.putNumber("wristVoltage", getCurrent());
-      SmartDashboard.putNumber("wristPos", Math.toDegrees(getPosition()));
-      SmartDashboard.putNumber("wristGoal", Math.toDegrees(getGoal()));
-      SmartDashboard.putNumber("wrist setpoint", Math.toDegrees(getSetpoint()));
     }
 }

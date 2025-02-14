@@ -8,7 +8,7 @@ public interface WristIO {
     public double m_wristCurrent;
     public double m_wristPosition;
     public double m_wristGoal;
-    public boolean m_inPosition;
+    public boolean m_wristInPosition;
   }
 
   public default void updateInputs(WristIOInputs inputs) {}

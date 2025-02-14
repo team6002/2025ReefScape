@@ -35,7 +35,7 @@ public class CMD_Score extends Command{
                 //ready, no object
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,Ready()
+                    ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
@@ -46,7 +46,7 @@ public class CMD_Score extends Command{
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_coralHolder, m_wrist, m_elevatorPivot, m_elevator, m_coralHolder)
-                    ,Ready()
+                    ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
@@ -54,7 +54,7 @@ public class CMD_Score extends Command{
                 //ready with an object to score
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,Ready()
+                    ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
@@ -62,7 +62,7 @@ public class CMD_Score extends Command{
                 //ready to deploy
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                    ,new CMD_ReadyToDeploy(m_elevator, m_coralHolder, m_wrist, m_elevatorPivot)
+                    ,readyToDeploy()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
                 ).schedule();
                 break;
@@ -70,7 +70,7 @@ public class CMD_Score extends Command{
                 //deploy/score
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                    ,new CMD_Deploy(m_coralHolder, m_wrist, m_elevatorPivot)
+                    ,deployCommand()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
                 ).schedule();
                 break;
@@ -78,7 +78,7 @@ public class CMD_Score extends Command{
                 //ready, no object
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,ReadyHome()
+                    ,readyHome()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
@@ -87,7 +87,7 @@ public class CMD_Score extends Command{
         }
     }
 
-    private ConditionalCommand ReadyHome(){
+    private ConditionalCommand readyHome(){
         return new ConditionalCommand(
             new CMD_ReadyHome(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
             ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
@@ -95,12 +95,56 @@ public class CMD_Score extends Command{
         );
     }
 
-    private ConditionalCommand Ready(){
+    private ConditionalCommand ready(){
         return new ConditionalCommand(
             new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
             ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
+    }
+
+    private SequentialCommandGroup readyToDeploy(){
+        SequentialCommandGroup m_readyDeployCommand = new SequentialCommandGroup();
+        switch (GlobalVariables.m_targetLevel) {
+            case 1:
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelOne(m_elevator, m_wrist, m_elevatorPivot);
+                break;
+            case 2:
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_elevatorPivot);
+                break;
+            case 3:
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_elevatorPivot);
+                break;
+            case 4:
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_elevatorPivot);
+                break;
+            default:
+                break;
+        }
+        return m_readyDeployCommand; 
+    }
+
+    private SequentialCommandGroup deployCommand(){
+        SequentialCommandGroup m_deployCommand = new SequentialCommandGroup();
+
+        switch(GlobalVariables.m_targetLevel){
+            case 1:
+                m_deployCommand = new CMD_DeployLevelOne(m_coralHolder);
+                break;
+            case 2:
+                m_deployCommand = new CMD_DeployLevelTwo(m_coralHolder, m_wrist);
+                break;
+            case 3:
+                m_deployCommand = new CMD_DeployLevelThree(m_coralHolder, m_wrist);
+                break;
+            case 4:
+                m_deployCommand = new CMD_DeployLevelFour(m_coralHolder, m_wrist);
+                break;
+            default:
+                break;
+        }
+
+        return m_deployCommand;
     }
 
     @Override

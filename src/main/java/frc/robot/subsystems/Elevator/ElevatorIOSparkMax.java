@@ -51,7 +51,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         inputs.m_elevatorGoal = m_goal.position;
         inputs.m_elevatorPos = getPosition();
         inputs.m_elevatorCurrent = getCurrent();
-        inputs.m_inPosition = inPosition();
+        inputs.m_elevatorInPosition = inPosition();
     };
 
     @Override
@@ -112,8 +112,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public void PID(){
         if(m_resetMode){
-            m_rightElevator.set(-.2);
-            m_elevatorController.setReference(getPosition() - 10, ControlType.kPosition);
+            m_elevatorController.setReference(-1, ControlType.kVoltage);
         }else{
             var profile = new TrapezoidProfile(m_constraints).calculate(0.02, m_setpoint, m_goal);
             m_setpoint = profile;
