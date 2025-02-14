@@ -30,20 +30,20 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
-  // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
+  final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
     ,new ModuleIOSparkFlex(2)
     ,new ModuleIOSparkFlex(3)
-    // ,m_vision
+    ,m_vision
     );
   final GlobalVariables m_variables = new GlobalVariables();
-  final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
-  final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
-  final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
-  final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
+  // final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
+  // final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
+  // final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
+  // final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
 
 
   // The driver's controller
@@ -73,22 +73,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.leftBumper().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_elevatorPivot)
-      .andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
-      
-    m_driverController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
-    m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    m_driverController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
-    m_driverController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
-    m_driverController.back().onTrue(new ConditionalCommand(
-      new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE))
-      ,new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE))
-      ,()-> m_variables.isMode(Mode.OFFENSIVE)
-    ));
-    m_driverController.start().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
-    m_driverController.a().onTrue(new CMD_ElevatorReset(m_elevator));
-
+    
+    m_driverController.a().onTrue(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(()-> m_coralIntake.setReference(-2000)));
     // m_driverController.back().onTrue(new InstantCommand(()-> m_coralIntake.setReference(0)));
     //operator

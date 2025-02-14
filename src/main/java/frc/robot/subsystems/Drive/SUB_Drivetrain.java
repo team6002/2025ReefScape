@@ -22,7 +22,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.Vision.*;
+import frc.robot.Constants.LocationConstants;
+import frc.robot.subsystems.Vision.SUB_Vision;
+import frc.robot.subsystems.Vision.VisionIO;
+// import frc.robot.subsystems.SUB_Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,10 +40,16 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
 
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import frc.robot.Constants.AutoConstants;
 
 public class SUB_Drivetrain extends SubsystemBase {
   RobotConfig config;
@@ -131,13 +140,13 @@ public class SUB_Drivetrain extends SubsystemBase {
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
-    ModuleIO brModuleIO
-    // SUB_Vision p_vision
+    ModuleIO brModuleIO,
+    SUB_Vision p_vision
     ) 
   {
         
     this.gyroIO = gyroIO;
-    // m_vision = p_vision;
+    m_vision = p_vision;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -242,7 +251,8 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // var visionEst = m_vision.getEstimatedGlobalPose();
+    var visionEst = m_vision.getEstimatedGlobalPose();
+    var targetEst = m_vision.getEstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -277,33 +287,39 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
-    // SmartDashboard.putBoolean("HasTarget", m_vision.getHasTarget());    
+    SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
     SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    SmartDashboard.putNumber("gyroHeading", getAngle());
-    // m_vision.updateInputs();
+    m_vision.updateInputs();
 
-    // visionEst.ifPresent(
-    //   est -> {
-    //       var estPose = est.estimatedPose.toPose2d();
-    //       // estPose = m_vision.getEstimatedGlobalPose(estPose);
-    //       Logger.recordOutput("CameraPose", estPose);
-    // //       // Change our trust in the measurement based on the tags we can see
-    //       var estStdDevs = m_vision.getEstimationStdDevs(estPose);
-
-    //       addVisionMeasurement(
-    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-    //   }  
-    // );
-
-    // visionEst.ifPresent(
-    //   est -> {
-    //       var estPose = est.estimatedPose.toPose2d();
-    //     if (TargetOdoEnable){
-    //       addTargetVisionMeasurement(
-    //         m_vision.getTargetPose(), est.timestampSeconds);
-    //     }
-    //   }  
-    // );
+    if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
+      visionEst.ifPresent(
+        est -> {
+            var estPose = est.estimatedPose.toPose2d();
+            // estPose = m_vision.getEstimatedGlobalPose(estPose);
+            Logger.recordOutput("CameraPose", estPose);
+      //       // Change our trust in the measurement based on the tags we can see
+          var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+        
+            addVisionMeasurement(
+              est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        }  
+      );
+    }
+    visionEst.ifPresent(
+      est -> {
+          var estPose = est.estimatedPose.toPose2d();
+        if (TargetOdoEnable){
+          if (m_vision.getHasLTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetLPose(), est.timestampSeconds);
+          }
+          if (m_vision.getHasRTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetRPose(), est.timestampSeconds);
+            }
+          }
+      }  
+    );
     // if (visionEst.isPresent()){
     //   SmartDashboard.putNumber("TargetYaw",Math.toDegrees(m_vision.getTargetPose().getRotation().getAngle()));
      
@@ -501,7 +517,6 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   /** Zeroes the heading of the robot. LOL*/
   public void zeroHeading() {
-    gyroIO.reset();
     // m_gyro.resetDisplacement();
     //*TODO fix */
   }
@@ -579,10 +594,10 @@ public class SUB_Drivetrain extends SubsystemBase {
   //reverses the odometry for the targeting
   public SwerveModulePosition[] getTargetModulePositions() {
     return new SwerveModulePosition[] {
-        new SwerveModulePosition (m_frontLeft.getPosition().distanceMeters, m_frontLeft.getPosition().angle),
-        new SwerveModulePosition (m_frontRight.getPosition().distanceMeters, m_frontRight.getPosition().angle),
-        new SwerveModulePosition (m_rearLeft.getPosition().distanceMeters, m_rearLeft.getPosition().angle),
-        new SwerveModulePosition (m_rearRight.getPosition().distanceMeters, m_rearRight.getPosition().angle),
+        new SwerveModulePosition (-m_frontLeft.getPosition().distanceMeters, m_frontLeft.getPosition().angle),
+        new SwerveModulePosition (-m_frontRight.getPosition().distanceMeters, m_frontRight.getPosition().angle),
+        new SwerveModulePosition (-m_rearLeft.getPosition().distanceMeters, m_rearLeft.getPosition().angle),
+        new SwerveModulePosition (-m_rearRight.getPosition().distanceMeters, m_rearRight.getPosition().angle),
       };
   }
   

@@ -33,17 +33,22 @@ public interface VisionIO {
   // Modified to add pitch and 
   @AutoLog
   public static class VisionIOInputs {
-    public Pose2d CameraPose = new Pose2d();
-    public boolean target = false;
-    public Transform3d targetPose = new Transform3d();
+    // public Pose2d CameraPose = new Pose2d();
+    public boolean LTarget = false;
+    public Transform3d LTargetPose = new Transform3d();
+    public boolean RTarget = false;
+    public Transform3d RTargetPose = new Transform3d();
   }
 
     public default void updateInputs(VisionIOInputs inputs) {}
     public default void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets){}
     public default Optional<EstimatedRobotPose> getEstimatedGlobalPose() {return null;}
     public default Optional<EstimatedRobotPose> getEstimatedGlobalPosenew(Pose2d prevEstimatePose) {return null;}
+    public default Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {return null;}
+    public default Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
-    public default Transform3d getTargetPose(){return null;}
+    public default Transform3d getTargetLPose(){return null;}
+    public default Transform3d getTargetRPose(){return null;}
     
   
 }

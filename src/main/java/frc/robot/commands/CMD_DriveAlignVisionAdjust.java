@@ -131,7 +131,7 @@ public class CMD_DriveAlignVisionAdjust extends Command{
     
     
     robotOdom = m_drivetrain.getPose();
-    if (m_vision.getHasTarget()){
+    if (m_vision.getHasLTarget()&& m_vision.getHasRTarget()){
       // do error - navx = offset until its 0 camera 
       
     goalPose = new Pose2d(0,0, new Rotation2d(0));
