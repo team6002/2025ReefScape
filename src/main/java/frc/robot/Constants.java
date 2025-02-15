@@ -207,7 +207,7 @@ public final class Constants {
     public static final double kHolding = 50;
   }
 
-  public static final class ElevatorPivotConstants{
+  public static final class PivotConstants{
     public static final double kP = 2.0;//2.0
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -229,9 +229,12 @@ public final class Constants {
     
     public static final double kHome = Math.toRadians(5);
     public static final double kReady = Math.toRadians(85);
+    public static final double kReadyAlgae = Math.toRadians(60);
+    public static final double kReadyIntakeAlgae = Math.toRadians(63);
     public static final double kReadyDefensive = Math.toRadians(15);
     public static final double kReadyToScore = Math.toRadians(82);
-    public static final double kIntake = Math.toRadians(63);
+    public static final double kAlgaeProcessor = Math.toRadians(55);
+    public static final double kIntake = Math.toRadians(60);
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
     public static final double kDeployl2 = Math.toRadians(84.5);//82.75
     public static final double kDeployl3 = Math.toRadians(86.5);//86
@@ -255,11 +258,14 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//1.9006
-    public static final double kTolerance = 2;
+    public static final double kTolerance = 3;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
     public static final double kIntake = 14.5;
+    public static final double kReadyIntakeAlgael2 = 0;
+    public static final double kReadyIntakeAlgael3 = 30;
+    public static final double kAlgaeProcessor = 14.5;
     public static final double kDeployL1 = 14.5;
     public static final double kDeployL2 = 0;
     public static final double kDeployL3 = 19;//28
@@ -281,15 +287,18 @@ public final class Constants {
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
-    public static final double kTolerance = Math.toRadians(3);
+    public static final double kTolerance = Math.toRadians(4);
 
     public static final double kHome = Math.toRadians(110);
     public static final double kReady = Math.toRadians(-110);
+    public static final double kReadyAlgae = Math.toRadians(0);
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kReadyDefensive = Math.toRadians(110);
     public static final double kStowing = Math.toRadians(0);
     public static final double kIntake = Math.toRadians(-110);
+    public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(-15);
+    public static final double kAlgaeProcessor = Math.toRadians(-100);
     public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(50);//30
     public static final double kDeployl3 = Math.toRadians(25);//22.5
@@ -312,8 +321,12 @@ public final class Constants {
 
     public static final double kIntake = 10;
     public static final double kOff = 0;
-    public static final double kHolding = 2;
+    public static final double kHolding = 1;
     public static final double kReverse = -10;
+
+    //l2, l3, barge, off coral, ground, processor
+    //l2 wrist: 1.9 pivot: 1.05
+    //l3 same, elevator 30
   }
 
   public static final class LocationConstants{}

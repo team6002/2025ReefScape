@@ -13,7 +13,7 @@ public class CMD_ElevatorSetDeploy extends Command{
 
     @Override
     public void initialize(){
-        switch (GlobalVariables.m_targetLevel) {
+        switch (GlobalVariables.m_targetCoralLevel) {
             case 1:
                 m_elevator.setGoal(ElevatorConstants.kDeployL1);
                 break;

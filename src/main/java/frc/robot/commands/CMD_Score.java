@@ -8,6 +8,7 @@ import frc.GlobalVariables;
 import frc.GlobalVariables.Mode;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
+import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
@@ -16,15 +17,17 @@ public class CMD_Score extends Command{
     SUB_Elevator m_elevator;
     SUB_Wrist m_wrist;
     SUB_CoralHolder m_coralHolder;
-    SUB_ElevatorPivot m_elevatorPivot;
+    SUB_ElevatorPivot m_pivot;
+    SUB_Algae m_algae;
     GlobalVariables m_variables;
-    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_coralHolder, SUB_ElevatorPivot p_elevatorPivot, 
-                     GlobalVariables p_variables){
+    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_coralHolder, SUB_ElevatorPivot p_pivot, 
+                     SUB_Algae p_algae, GlobalVariables p_variables){
         
         m_elevator = p_elevator;
         m_wrist = p_wrist;
         m_coralHolder = p_coralHolder;
-        m_elevatorPivot = p_elevatorPivot;
+        m_pivot = p_pivot;
+        m_algae = p_algae;
         m_variables = p_variables;
     }
 
@@ -43,11 +46,12 @@ public class CMD_Score extends Command{
                 //ready to intake
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralHolder)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_IntakeStow(m_coralHolder, m_wrist, m_elevatorPivot, m_elevator, m_coralHolder)
+                    ,new CMD_IntakeStow(m_coralHolder, m_wrist, m_pivot, m_elevator, m_coralHolder)
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                 ).schedule();
                 break;
             case READY_TO_INTAKE:
@@ -56,6 +60,7 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                 ).schedule();
                 break;
            case READY_STOWED:
@@ -72,6 +77,7 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
                     ,deployCommand()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
+                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                 ).schedule();
                 break;
             case DEPLOY:
@@ -89,34 +95,34 @@ public class CMD_Score extends Command{
 
     private ConditionalCommand readyHome(){
         return new ConditionalCommand(
-            new CMD_ReadyHome(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
-            ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            new CMD_ReadyHome(m_elevator, m_wrist, m_pivot, m_coralHolder)
+            ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
     }
 
     private ConditionalCommand ready(){
         return new ConditionalCommand(
-            new CMD_Ready(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
-            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_elevatorPivot, m_coralHolder)
+            new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder, m_algae)
+            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder, m_algae)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
     }
 
     private SequentialCommandGroup readyToDeploy(){
         SequentialCommandGroup m_readyDeployCommand = new SequentialCommandGroup();
-        switch (GlobalVariables.m_targetLevel) {
+        switch (GlobalVariables.m_targetCoralLevel) {
             case 1:
-                m_readyDeployCommand = new CMD_ReadyToDeployLevelOne(m_elevator, m_wrist, m_elevatorPivot);
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelOne(m_elevator, m_wrist, m_pivot);
                 break;
             case 2:
-                m_readyDeployCommand = new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_elevatorPivot);
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_pivot);
                 break;
             case 3:
-                m_readyDeployCommand = new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_elevatorPivot);
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_pivot);
                 break;
             case 4:
-                m_readyDeployCommand = new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_elevatorPivot);
+                m_readyDeployCommand = new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot);
                 break;
             default:
                 break;
@@ -127,7 +133,7 @@ public class CMD_Score extends Command{
     private SequentialCommandGroup deployCommand(){
         SequentialCommandGroup m_deployCommand = new SequentialCommandGroup();
 
-        switch(GlobalVariables.m_targetLevel){
+        switch(GlobalVariables.m_targetCoralLevel){
             case 1:
                 m_deployCommand = new CMD_DeployLevelOne(m_coralHolder);
                 break;

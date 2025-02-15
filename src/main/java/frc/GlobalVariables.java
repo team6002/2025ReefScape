@@ -6,10 +6,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GlobalVariables extends SubsystemBase{
     public GlobalVariables(){}
 
-    public static int m_targetLevel = 3;
+    public static int m_targetCoralLevel = 4;
 
     public static double m_pivotAngle = 0;
     public static double m_elevatorExtension = 0;
+    public static boolean m_haveAlgae = false;
+    public static boolean m_haveCoral = false;
+    public static boolean m_readyAdvanceAlgae = false;
 
     public enum RobotState{
         HOME
@@ -42,25 +45,6 @@ public class GlobalVariables extends SubsystemBase{
         return m_robotState;
     }
 
-    public enum IntakeState{
-        ALGAE
-        ,CORAL
-    }
-
-    IntakeState m_intakeState = IntakeState.CORAL;
-    
-    public void setIntakeState(IntakeState p_intakeState){
-        m_intakeState = p_intakeState;
-    }
-
-    public boolean isIntakeState(IntakeState p_intakeState){
-        return m_intakeState == p_intakeState;
-    }
-
-    public IntakeState getIntakeState(){
-        return m_intakeState;
-    }
-
     public enum Mode{
         OFFENSIVE
         ,DEFENSIVE
@@ -80,11 +64,30 @@ public class GlobalVariables extends SubsystemBase{
         return m_mode;
     }
 
+    public enum AlgaeTarget{
+        LEVEL_2
+        ,LEVEL_3
+        ,PROCESSOR
+        ,BARGE
+        ,GROUND
+    }
+
+    AlgaeTarget m_algaeTarget = AlgaeTarget.LEVEL_2;
+
+    public AlgaeTarget getAlgaeTarget(){
+        return m_algaeTarget;
+    }
+
+    public void setAlgaeTarget(AlgaeTarget p_algaeTarget){
+        m_algaeTarget = p_algaeTarget;
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putString("robotState", getRobotState().toString());
-        SmartDashboard.putString("intakeState", getIntakeState().toString());
+        SmartDashboard.putString("algae target", getAlgaeTarget().toString());
         SmartDashboard.putString("mode", getMode().toString());
-        SmartDashboard.putNumber("score level", m_targetLevel);
+        SmartDashboard.putNumber("score level", m_targetCoralLevel);
+        SmartDashboard.putBoolean("has algae", m_haveAlgae);
     }
 }

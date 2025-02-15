@@ -12,9 +12,9 @@ public class CMD_DeployLevelFour extends SequentialCommandGroup{
     public CMD_DeployLevelFour(SUB_CoralHolder p_coralHolder, SUB_Wrist p_wrist){
         addCommands(
             new ParallelCommandGroup(
-                new CMD_IntakeJackhammer(p_coralHolder).withTimeout(1)
+                new CMD_IntakeJackhammer(p_coralHolder).withTimeout(.8)
                 ,new SequentialCommandGroup(
-                    new WaitCommand(.1)
+                    new WaitCommand(.15)
                     ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))   
                 )
             )

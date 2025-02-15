@@ -10,7 +10,7 @@ import frc.robot.Constants.WinchConstants;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.ElevatorPivotConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -173,16 +173,16 @@ public final class Configs {
         static{
                 m_leftPivotConfig
                         .idleMode(IdleMode.kBrake)
-                        .inverted(ElevatorPivotConstants.kLeftInverted)
+                        .inverted(PivotConstants.kLeftInverted)
                         .voltageCompensation(12.0)
                         .follow(HardwareConstants.kRightPivotCanId,true)
                         .smartCurrentLimit(40);
                 m_leftPivotConfig.closedLoop
-                        .pid(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD)
+                        .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                        .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
+                        .outputRange(PivotConstants.kMinOutput, PivotConstants.kMaxOutput);
                 m_leftPivotConfig.encoder
-                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor)
+                        .positionConversionFactor(PivotConstants.kConversionFactor)
                         .uvwMeasurementPeriod(10)
                         .uvwAverageDepth(2); 
                 m_leftPivotConfig.limitSwitch
@@ -191,17 +191,17 @@ public final class Configs {
 
                 m_rightPivotConfig
                         .idleMode(IdleMode.kBrake)//Brake
-                        .inverted(ElevatorPivotConstants.kRightInverted)
+                        .inverted(PivotConstants.kRightInverted)
                         .voltageCompensation(12.0)
                         .disableFollowerMode()
                         .smartCurrentLimit(40);
                 m_rightPivotConfig.closedLoop
-                        .pid(ElevatorPivotConstants.kP, ElevatorPivotConstants.kI, ElevatorPivotConstants.kD)
+                        .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                        .outputRange(ElevatorPivotConstants.kMinOutput, ElevatorPivotConstants.kMaxOutput);
+                        .outputRange(PivotConstants.kMinOutput, PivotConstants.kMaxOutput);
                 m_rightPivotConfig.absoluteEncoder
                         .averageDepth(2)
-                        .positionConversionFactor(ElevatorPivotConstants.kConversionFactor);
+                        .positionConversionFactor(PivotConstants.kConversionFactor);
                 m_rightPivotConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
@@ -214,7 +214,7 @@ public final class Configs {
         static{
                 m_coralHolderConfig
                         .disableFollowerMode()
-                        .idleMode(IdleMode.kCoast)
+                        .idleMode(IdleMode.kBrake)
                         .inverted(CoralHolderConstants.kCoralHolderInverted)
                         .smartCurrentLimit(40)
                         .voltageCompensation(12.0);

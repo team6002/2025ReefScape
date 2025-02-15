@@ -14,7 +14,7 @@ public class CMD_WristSetDeploy extends Command{
 
     @Override
     public void initialize(){
-        switch (GlobalVariables.m_targetLevel) {
+        switch (GlobalVariables.m_targetCoralLevel) {
             case 1:
                 m_wrist.setGoal(WristConstants.kDeployl1);
                 break;

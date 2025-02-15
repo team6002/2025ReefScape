@@ -24,7 +24,7 @@ public class CMD_IntakeJackhammer extends Command{
         if(m_timer.hasElapsed(.025)){
             m_timer.reset();
             if(outake){
-                m_intake.setVoltage(-10);
+                m_intake.setVoltage(-12);
             }else{
                 m_intake.setVoltage(0);
             }

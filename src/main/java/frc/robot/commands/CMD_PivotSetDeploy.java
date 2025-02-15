@@ -2,29 +2,29 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
-import frc.robot.Constants.ElevatorPivotConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
 
 public class CMD_PivotSetDeploy extends Command{
-    private final SUB_ElevatorPivot m_elevatorPivot;
-    public CMD_PivotSetDeploy(SUB_ElevatorPivot p_elevatorPivot){
-        m_elevatorPivot = p_elevatorPivot;
+    private final SUB_ElevatorPivot m_pivot;
+    public CMD_PivotSetDeploy(SUB_ElevatorPivot p_pivot){
+        m_pivot = p_pivot;
     }
 
     @Override
     public void initialize(){
-        switch (GlobalVariables.m_targetLevel) {
+        switch (GlobalVariables.m_targetCoralLevel) {
             case 1:
-                m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl1);
+                m_pivot.setGoal(PivotConstants.kDeployl1);
                 break;
             case 2:
-                m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl2);
+                m_pivot.setGoal(PivotConstants.kDeployl2);
                 break;
             case 3:
-                m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl3);
+                m_pivot.setGoal(PivotConstants.kDeployl3);
                 break;
             case 4:
-                m_elevatorPivot.setGoal(ElevatorPivotConstants.kDeployl4);
+                m_pivot.setGoal(PivotConstants.kDeployl4);
                 break;
             default:
                 break;
@@ -33,6 +33,6 @@ public class CMD_PivotSetDeploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return m_elevatorPivot.inPosition();
+        return m_pivot.inPosition();
     }
 }

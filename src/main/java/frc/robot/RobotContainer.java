@@ -6,9 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
-import frc.GlobalVariables.IntakeState;
-import frc.GlobalVariables.Mode;
-import frc.GlobalVariables.RobotState;
+import frc.GlobalVariables.*;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.*;
@@ -21,8 +19,8 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -36,7 +34,7 @@ public class RobotContainer {
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
-  final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(
+  final SUB_Drivetrain m_drivetrain = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
@@ -47,13 +45,13 @@ public class RobotContainer {
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
   final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
-  final SUB_ElevatorPivot m_elevatorPivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
+  final SUB_ElevatorPivot m_pivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
   final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
   final SUB_Winch m_winch = new SUB_Winch(new WinchIOSparkMax());
   final SUB_Algae m_algae = new SUB_Algae(new AlgaeIOSparkMax());
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  // CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -63,8 +61,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    // m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
-    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController).withTimeout(1));
+    // m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
+    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController).withTimeout(1));
   }
 
   /**
@@ -78,32 +76,39 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_elevatorPivot, m_variables));
-    m_driverController.leftBumper().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_elevatorPivot)
-      .andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
-    m_driverController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 1));
-    m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    m_driverController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
-    m_driverController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
-    m_driverController.back().onTrue(new ConditionalCommand(
-      new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE))
-      ,new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE))
-      ,()-> m_variables.isMode(Mode.OFFENSIVE)
-    ));
-    m_driverController.start().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
-    m_driverController.a().onTrue(new InstantCommand(()->m_algae.setReference(8)));
-    m_driverController.b().onTrue(new InstantCommand(()-> m_algae.setReference(2)));
-    m_driverController.x().onTrue(new InstantCommand(()-> m_algae.setReference(-5)));
-    // m_driverController.x().onTrue(new InstantCommand(()-> m_variables.setIntakeState(IntakeState.ALGAE)));
-    // m_driverController.y().onTrue(new InstantCommand(()-> m_variables.setIntakeState(IntakeState.CORAL)));
-    // m_driverController.a().onTrue(new CMD_ElevatorReset(m_elevator));
-    // m_driverController.b().onTrue(new CMD_AutoDeploy(m_wrist, m_coralIntake, m_variables, m_driverController));
-
-    // m_driverController.start().onTrue(new InstantCommand(()-> m_coralIntake.setReference(-2000)));
-    // m_driverController.back().onTrue(new InstantCommand(()-> m_coralIntake.setReference(0)));
+    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    m_driverController.start().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
+    m_driverController.x().onTrue(new InstantCommand(()-> m_winch.setPower(1)))
+      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(-1)))
+      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_driverController.back().onTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReady))
+        ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kHome))
+        ,new CMD_PivotInPosition(m_pivot)
+        ,new CMD_WristInPosition(m_wrist)
+        ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
+      )
+    );
     //operator
-    // m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    // m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
-    // m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
+    m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
+    m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
+    m_operatorController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 4));
+    m_operatorController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3));
+    m_operatorController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2));
+    m_operatorController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
+    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
+    m_operatorController.leftStick().onFalse(new InstantCommand(()-> m_drivetrain.zeroHeading()));
+    m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));
+    m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));    
+    m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2)));
+    m_operatorController.x().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_3)));
+    m_operatorController.y().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> m_winch.setPower(1)))
+      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(()-> m_winch.setPower(-1)))
+      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
   }
 }

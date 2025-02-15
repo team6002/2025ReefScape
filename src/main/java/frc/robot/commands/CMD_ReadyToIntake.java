@@ -9,9 +9,9 @@ import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_ReadyToIntake extends SequentialCommandGroup{
-    public CMD_ReadyToIntake(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_ElevatorPivot p_elevatorPivot, SUB_CoralHolder p_coralHolder){
+    public CMD_ReadyToIntake(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_ElevatorPivot p_pivot, SUB_CoralHolder p_coralHolder){
         addCommands(
-            new InstantCommand(()-> p_elevatorPivot.setGoal(ElevatorPivotConstants.kIntake))
+            new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kIntake))
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kIntake))
