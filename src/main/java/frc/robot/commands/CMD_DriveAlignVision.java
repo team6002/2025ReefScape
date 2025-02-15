@@ -66,7 +66,7 @@ public class CMD_DriveAlignVision extends Command{
       
     turnController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(m_drivetrain);
-    if (!m_vision.getHasTarget()){
+    if (!m_vision.getHasLTarget() && !m_vision.getHasRTarget()){
       System.out.println("NOTHING SEEN DAWG");
       return;
     }
@@ -128,7 +128,7 @@ public class CMD_DriveAlignVision extends Command{
     
     
     robotOdom = m_drivetrain.getPose();
-    if (m_vision.getHasTarget()){
+    if (m_vision.getHasLTarget() || m_vision.getHasRTarget()){
       // do error - navx = offset until its 0 camera 
       
     goalPose = new Pose2d(0,0, new Rotation2d(0));
@@ -148,8 +148,8 @@ public class CMD_DriveAlignVision extends Command{
       yController.setGoal(0+Units.inchesToMeters(0));
     // if (m_vision.getHasTarget()){
       // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  
-        xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
-        ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
+        // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
+        // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
     
         // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.3, .3), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.1, .1));
         // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.3, 0.3);  
@@ -175,7 +175,7 @@ public class CMD_DriveAlignVision extends Command{
       ySpeed = 0.0;
     }
 
-    if (m_drivetrain.getTargetOdo().getX() <= Units.inchesToMeters(20)){
+    if (m_drivetrain.getTargetOdo().getX() <= Units.inchesToMeters(30)){
       m_drivetrain.setTargetOdoEnable(false);
     }else{
       m_drivetrain.setTargetOdoEnable(true);
@@ -198,7 +198,7 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }         
 
-    m_drivetrain.drive(-xSpeed, -ySpeed, -turnSpeed, false);
+    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
   }
 
   @Override
