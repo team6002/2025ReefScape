@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
 import frc.GlobalVariables.IntakeState;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -36,7 +38,7 @@ public class RobotContainer {
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
-  final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(
+  final SUB_Drivetrain m_drivetrain = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
@@ -64,7 +66,7 @@ public class RobotContainer {
 
     // Configure default commands
     // m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController));
-    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_driverController).withTimeout(1));
+    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController).withTimeout(1));
   }
 
   /**
@@ -79,7 +81,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //driver
     
-    m_driverController.a().onTrue(new CMD_DriveAlignVision(m_robotDrive, m_vision, m_driverController));
+    m_driverController.a().onTrue(new SequentialCommandGroup(
+      new CMD_DriveAlignVision(m_drivetrain, m_vision, m_driverController),
+      new CMD_DriveAlignVisionAdjust(m_drivetrain, m_vision, m_driverController, Units.inchesToMeters(0), Units.inchesToMeters(7), 0) 
+      ));
     // m_driverController.start().onTrue(new InstantCommand(()-> m_coralIntake.setReference(-2000)));
     // m_driverController.back().onTrue(new InstantCommand(()-> m_coralIntake.setReference(0)));
     //operator

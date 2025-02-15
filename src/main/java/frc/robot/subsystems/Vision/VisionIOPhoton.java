@@ -88,7 +88,10 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public Transform3d getTargetLPose(){
         if (LCamera.getLatestResult().hasTargets()){
-            return LCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+            if (LCamera.getLatestResult().getBestTarget().getBestCameraToTarget()== null){
+                return null;
+            }
+            return LCamera.getLatestResult().getBestTarget().getBestCameraToTarget().plus(VisionConstants.kRobotToLCam.inverse());
         
         }else return null;
     }
@@ -96,7 +99,7 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public Transform3d getTargetRPose(){
         if (RCamera.getLatestResult().hasTargets()){
-            return RCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+            return RCamera.getLatestResult().getBestTarget().getBestCameraToTarget().plus(VisionConstants.kRobotToRCam.inverse());
         
         }else return null;
     }

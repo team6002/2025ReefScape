@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -184,6 +185,9 @@ public final class Constants {
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    public static final String BlueLeft1 = "BlueLeft1";
+
   }
 
   public static final class NeoMotorConstants {
@@ -324,9 +328,9 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, 0));
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(15)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, 0));
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-15)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -344,9 +348,9 @@ public final class Constants {
       public static final double kXTolerance = 0.02;
       public static final double kYTolerance = 0.02;
 
-      public static final double kXAutoClamp = .3;
-      public static final double kYAutoClamp = .6;
-      public static final double kTurnAutoClamp = .3;
+      public static final double kXAutoClamp = .4;
+      public static final double kYAutoClamp = .8;
+      public static final double kTurnAutoClamp = .4;
   
       public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(2, 1.5);
       public static final double driveKp = 1;
@@ -363,4 +367,5 @@ public final class Constants {
       /* Absolute joystick threshold for driver abort */
       public static final double kAbortThreshold = 0.2;
   }
+
 }

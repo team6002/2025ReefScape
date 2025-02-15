@@ -36,4 +36,11 @@ public class GyroIONavX implements GyroIO{
   public void reset(){
     m_gyro.reset();
   }
+  
+  @Override
+  public void set(Rotation2d rotation2d){
+    m_gyro.reset();
+    m_gyro.resetDisplacement();
+    m_gyro.setAngleAdjustment(rotation2d.getDegrees());
+  }
 }

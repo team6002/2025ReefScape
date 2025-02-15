@@ -39,7 +39,7 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
-
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -278,7 +278,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     );
 
     m_targetOdometry.update(
-      Rotation2d.fromDegrees(getAngle()),
+      Rotation2d.fromDegrees(-getAngle()),
       // m_targetOdometry.getEstimatedPosition().getRotation(),
       getTargetModulePositions()
     );
@@ -307,7 +307,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     }
     visionEst.ifPresent(
       est -> {
-          var estPose = est.estimatedPose.toPose2d();
+        var estPose = est.estimatedPose.toPose2d();
         if (TargetOdoEnable){
           if (m_vision.getHasLTarget()){
             addTargetVisionMeasurement(
@@ -615,7 +615,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
-    m_targetOdometry.addVisionMeasurement( new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds);
+    m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds);
   }
   // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
@@ -639,7 +639,37 @@ public class SUB_Drivetrain extends SubsystemBase {
   public void setTargetOdoEnable(boolean state){
     TargetOdoEnable = state;
   }
-
+  /**
+   * Resets the odometery to start of path
+   * @return
+   */
+  public Command resetOdoToStartPosition(String pathName){
+    try{
+      // Load the path you want to follow using its name in the GUI
+      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+      Pose2d intialPose = path.getStartingDifferentialPose();
+      gyroIO.set(intialPose.getRotation());
+  
+      // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
+      // Create a path following command using AutoBuilder. This will also trigger event markers.
+      return Commands.runOnce(()->resetOdometry(intialPose),this);
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      return Commands.none();
+  }
+  }
+  public Command FollowPath(String pathName) {
+    try{
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path);
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
   // Prevent the path from being flipped if the coordinates are already correct
   // path.preventFlipping = true;
 }
