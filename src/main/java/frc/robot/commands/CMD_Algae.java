@@ -43,7 +43,8 @@ public class CMD_Algae extends Command{
                 ,new CMD_AlgaeTrigger(m_algae)
                 ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_algae)
+                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
                 ,new InstantCommand(()-> setReady())
             ).schedule();
             return;
@@ -51,7 +52,8 @@ public class CMD_Algae extends Command{
        if(GlobalVariables.m_haveAlgae == false && m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
             new SequentialCommandGroup(
                 new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_algae)
+                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
                 ,new InstantCommand(()-> setReady())
             ).schedule();
@@ -68,7 +70,7 @@ public class CMD_Algae extends Command{
        if(GlobalVariables.m_haveAlgae && m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
             new SequentialCommandGroup(
                 new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                ,deployAlgae()
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
                 ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))   
             ).schedule();
@@ -78,10 +80,11 @@ public class CMD_Algae extends Command{
         new SequentialCommandGroup(
             new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
             ,new ConditionalCommand(
-                new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake, m_algae), 
-                new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_intake, m_algae),
+                new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake), 
+                new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_intake),
                 ()-> m_variables.isMode(Mode.OFFENSIVE))
             ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+            ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
             ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
         ).schedule();
         return;
@@ -116,30 +119,13 @@ public class CMD_Algae extends Command{
                 m_readyToDeployCommand = new CMD_ReadyDeployProcessor(m_elevator, m_wrist, m_pivot);
                 break;
             case BARGE:
-
+                m_readyToDeployCommand = new CMD_ReadyToDeployBarge(m_wrist, m_pivot, m_elevator);
                 break;
             default:
                 break;
         }
         
         return m_readyToDeployCommand;
-    }
-
-    private SequentialCommandGroup deployAlgae(){
-        SequentialCommandGroup m_deployCommand = new SequentialCommandGroup();
-
-        switch (m_variables.getAlgaeTarget()) {
-            case PROCESSOR:
-                m_deployCommand = new SequentialCommandGroup(new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse)));
-                break;
-            case BARGE:
-
-                break;
-            default:
-                break;
-        }
-        
-        return m_deployCommand;
     }
 
     private void setReady(){

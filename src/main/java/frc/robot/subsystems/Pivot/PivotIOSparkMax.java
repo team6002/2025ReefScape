@@ -48,6 +48,7 @@ public class PivotIOSparkMax implements PivotIO{
         inputs.m_pivotPos = getPosition();
         inputs.m_pivotCurrent = getCurrent();
         inputs.m_pivotInPosition = inPosition();
+        inputs.m_pivotSetpoint = m_setpoint.position;
     };
     
     @Override

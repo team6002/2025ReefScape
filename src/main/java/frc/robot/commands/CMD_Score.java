@@ -103,8 +103,8 @@ public class CMD_Score extends Command{
 
     private ConditionalCommand ready(){
         return new ConditionalCommand(
-            new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder, m_algae)
-            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder, m_algae)
+            new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder)
+            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
     }

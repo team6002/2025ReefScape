@@ -9,6 +9,7 @@ public interface PivotIO {
     public double m_pivotGoal;
     public double m_pivotCurrent;
     public boolean m_pivotInPosition;
+    public double m_pivotSetpoint;
   }
 
   public default void updateInputs(PivotIoInputs inputs) {}

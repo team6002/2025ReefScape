@@ -13,9 +13,9 @@ public class SUB_Pivot extends SubsystemBase{
     private final PivotIoInputsAutoLogged inputs = new PivotIoInputsAutoLogged();
     public SUB_Pivot(PivotIO io){
         this.io = io;
-        SmartDashboard.putNumber("elevatorPivotGoal", getPosition());
-        SmartDashboard.putNumber("elevatorPivotPos", getPosition());
-        SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());
+        SmartDashboard.putNumber("pivotGoal", Math.toRadians(getPosition()));
+        SmartDashboard.putNumber("pivotPos", Math.toRadians(getPosition()));
+        SmartDashboard.putNumber("pivotCurrent", getCurrent());
     }
 
     public double getPosition(){
@@ -53,7 +53,7 @@ public class SUB_Pivot extends SubsystemBase{
     @Override
     public void periodic(){
       io.updateInputs(inputs);
-      Logger.processInputs("ElevatorPivot", inputs);
+      Logger.processInputs("Pivot", inputs);
       io.PID();
       // SmartDashboard.putNumber("elevatorPivotPos", Math.toDegrees(getPosition()));
       // SmartDashboard.putNumber("elevatorPivotCurrent", getCurrent());

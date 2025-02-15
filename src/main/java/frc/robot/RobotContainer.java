@@ -91,6 +91,7 @@ public class RobotContainer {
         ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
       )
     );
+    m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
     //operator
     m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
     m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));

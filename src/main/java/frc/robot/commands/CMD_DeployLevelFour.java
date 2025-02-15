@@ -14,7 +14,7 @@ public class CMD_DeployLevelFour extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new CMD_IntakeJackhammer(p_coralHolder).withTimeout(.8)
                 ,new SequentialCommandGroup(
-                    new WaitCommand(.15)
+                    new WaitCommand(.075)
                     ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))   
                 )
             )
