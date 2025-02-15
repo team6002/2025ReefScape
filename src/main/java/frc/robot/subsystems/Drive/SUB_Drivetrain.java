@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -39,7 +40,7 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
-
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -196,8 +197,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds) -> driveAutoBuilder(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(AutoConstants.kPThetaController, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -205,11 +206,12 @@ public class SUB_Drivetrain extends SubsystemBase {
               // This will flip the path being followed to the red side of the field.
               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              // var alliance = DriverStation.getAlliance();
-              // if (alliance.isPresent()) {
-              //   return alliance.get() == DriverStation.Alliance.Red;
-              // }
-              return false;
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }else{
+                return false;
+              }
             },
             this // Reference to this subsystem to set requirements
     );
@@ -278,7 +280,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     );
 
     m_targetOdometry.update(
-      Rotation2d.fromDegrees(getAngle()),
+      Rotation2d.fromDegrees(-getAngle()),
       // m_targetOdometry.getEstimatedPosition().getRotation(),
       getTargetModulePositions()
     );
@@ -413,12 +415,10 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
   
   public void driveAutoBuilder(ChassisSpeeds p_ChassisSpeed){
-    // ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(p_ChassisSpeed, 0.02);
-    
-    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(new ChassisSpeeds(p_ChassisSpeed.vxMetersPerSecond, p_ChassisSpeed.vyMetersPerSecond, -p_ChassisSpeed.omegaRadiansPerSecond), 0.02);
-    SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
-    
-    setModuleStates(targetStates);
+      ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(p_ChassisSpeed, 0.02);
+  
+      SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+      setModuleStates(targetStates);
   }
 
 
@@ -515,26 +515,24 @@ public class SUB_Drivetrain extends SubsystemBase {
     m_odometry.resetPosition(getRotation2d(), getModulePositions(), pose);
   }
 
-  /** Zeroes the heading of the robot. LOL*/
+  // /** Zeroes the heading of the robot. LOL*/
   public void zeroHeading() {
     gyroIO.reset();
-    // m_gyro.resetDisplacement();
-    //*TODO fix */
   }
 
-  public Command CMDzeroHeading() {
-    return Commands.runOnce(()->zeroHeading(),this);
-  }
+  // public Command CMDzeroHeading() {
+  //   return Commands.runOnce(()->zeroHeading(),this);
+  // }
 
   public void setHeading(double p_DegAngle){
-    //* TODO FIX */
-    // m_gyro.reset();
-    // m_angleOffset = p_DegAngle;
+    // gyroIO.reset();
+    gyroIO.set(Rotation2d.fromDegrees(p_DegAngle));
   }
 
   public void zeroOdometry(){
     resetOdometry(new Pose2d(0,0, Rotation2d.fromDegrees(0)));
-    zeroHeading();
+    // zeroHeading();
+  
     // resetEncoders();
   }
   /**
@@ -616,7 +614,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
-    m_targetOdometry.addVisionMeasurement( new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds);
+    Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
+    m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds, stdDevs);
   }
   // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
@@ -641,6 +640,47 @@ public class SUB_Drivetrain extends SubsystemBase {
     TargetOdoEnable = state;
   }
 
+  
+  /**
+   * Resets the odometery to start of path
+   * @return
+   */
+  public void resetOdoToStartPosition(String pathName){
+    try{
+      // Load the path you want to follow using its name in the GUI
+      PathPlannerPath path;
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+        path = PathPlannerPath.fromPathFile(pathName).flipPath();
+      }else{
+        path = PathPlannerPath.fromPathFile(pathName);
+      }
+      Optional<Pose2d> intialPose = path.getStartingHolonomicPose();
+      intialPose.ifPresent(
+        pose -> {
+          System.out.println(pose.getRotation());
+          gyroIO.set(pose.getRotation());
+          resetOdometry(pose);
+        }
+        
+      );
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+  }
+
+  public Command FollowPath(String pathName) {
+    try{
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path);
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
   // Prevent the path from being flipped if the coordinates are already correct
   // path.preventFlipping = true;
 }

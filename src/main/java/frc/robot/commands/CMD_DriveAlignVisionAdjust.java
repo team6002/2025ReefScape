@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
@@ -69,14 +70,10 @@ public class CMD_DriveAlignVisionAdjust extends Command{
       Constants.AutoAlignConstants.turnKd);
       
     turnController.enableContinuousInput(-Math.PI, Math.PI);
+    this.xAdjustment = xAdjustment;
+    this.yAdjustment = yAdjustment;
+    this.turnAdjustment = turnAdjustment;
     addRequirements(m_drivetrain);
-    // if (!m_vision.getHasTarget()){
-    //   return;
-    // }
-  
-    m_setpoint = new TrapezoidProfile.State(0, 0);
-    m_goal = m_setpoint;
-
   }
 
   @Override
@@ -110,14 +107,15 @@ public class CMD_DriveAlignVisionAdjust extends Command{
     turnController.reset();
 
     turnController.enableContinuousInput(-180, 180);
+    xController.setGoal(VisionConstants.kRobotToLCam.getX()+Units.inchesToMeters(7.25)+xAdjustment);
+    yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
   }
 
   @Override
   public void execute() {
-    if (end) {
-      return;
-    }
-
+    xController.setGoal(VisionConstants.kRobotToLCam.getX()+Units.inchesToMeters(7.25)+xAdjustment);
+    yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
+  
     
     // if (m_vision.getHasTarget()){
     // turnRatio = m_vision.getTargetPose().getRotation().getAngle()/ m_drivetrain.getTargetOdo().getY();
@@ -197,16 +195,19 @@ public class CMD_DriveAlignVisionAdjust extends Command{
 
     if (xController.atGoal() && yController.atGoal()) {
       System.out.println("At Goal " + Timer.getFPGATimestamp());
+      System.out.println("Goals" + "X=" + xController.getGoal().position + "Y=" + yController.getGoal().position);
       end = true;
       return;
     }         
 
-    m_drivetrain.drive(-xSpeed, -ySpeed, -turnSpeed, false);
+    m_drivetrain.drive(xSpeed, ySpeed, -turnSpeed, false);
   }
 
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.drive(0.0, 0.0, 0.0, true);
+    m_drivetrain.setTargetOdoEnable(true);
+      
   }
 
   @Override

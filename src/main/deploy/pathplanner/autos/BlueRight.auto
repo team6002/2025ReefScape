@@ -7,7 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "BlueRight1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRight7"
           }
         }
       ]

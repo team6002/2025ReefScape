@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -97,14 +98,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.14;//0.004;
+    public static final double kDrivingP = 0.08;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.21;
 
-    public static final double kDrivingA = 0.0;
+    public static final double kDrivingA = 0.02;
     public static final double kDrivingS = 0.125;
-    public static final double kDrivingV = 2.4           ;
+    public static final double kDrivingV = 2.0;
     
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
@@ -177,13 +178,22 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
+    public static final double kPXController = 1.5;
+    public static final double kPYController = 1.5;
     public static final double kPThetaController = 1;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    public static final String BlueLeft1 = "BlueLeft1";
+    public static final String BlueLeft2 = "BlueLeft2";
+    public static final String BlueLeft3 = "BlueLeft3";
+    public static final String BlueLeft4 = "BlueLeft4";
+    public static final String BlueLeft5 = "BlueLeft5";
+    public static final String BlueLeft6 = "BlueLeft6";
+    public static final String BlueLeft7 = "BlueLeft7";
+
   }
 
   public static final class NeoMotorConstants {
@@ -348,9 +358,9 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, 0));
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(15)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, 0));
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-15)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -368,9 +378,9 @@ public final class Constants {
       public static final double kXTolerance = 0.02;
       public static final double kYTolerance = 0.02;
 
-      public static final double kXAutoClamp = .3;
-      public static final double kYAutoClamp = .6;
-      public static final double kTurnAutoClamp = .3;
+      public static final double kXAutoClamp = .4;
+      public static final double kYAutoClamp = .8;
+      public static final double kTurnAutoClamp = .4;
   
       public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(2, 1.5);
       public static final double driveKp = 1;
@@ -387,4 +397,5 @@ public final class Constants {
       /* Absolute joystick threshold for driver abort */
       public static final double kAbortThreshold = 0.2;
   }
+
 }

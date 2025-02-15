@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
@@ -128,7 +129,7 @@ public class CMD_DriveAlignVision extends Command{
     
     
     robotOdom = m_drivetrain.getPose();
-    if (m_vision.getHasLTarget() || m_vision.getHasRTarget()){
+    if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
       // do error - navx = offset until its 0 camera 
       
     goalPose = new Pose2d(0,0, new Rotation2d(0));
@@ -144,12 +145,12 @@ public class CMD_DriveAlignVision extends Command{
     }else{
       turnSpeed = 0;
     }
-      xController.setGoal(0+Units.inchesToMeters(7.25));
+      xController.setGoal(0+Units.inchesToMeters(7.25) + VisionConstants.kRobotToLCam.getX());
       yController.setGoal(0+Units.inchesToMeters(0));
     // if (m_vision.getHasTarget()){
       // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  
-        // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
-        // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
+        xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
+        ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
     
         // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.3, .3), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.1, .1));
         // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.3, 0.3);  
@@ -198,12 +199,13 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }         
 
-    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
+    m_drivetrain.drive(xSpeed, ySpeed, -turnSpeed, false);
   }
 
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.drive(0.0, 0.0, 0.0, true);
+    m_drivetrain.setTargetOdoEnable(true);
   }
 
   @Override

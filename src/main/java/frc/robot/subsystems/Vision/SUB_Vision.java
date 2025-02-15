@@ -61,6 +61,7 @@ public class SUB_Vision {
         // photonEstimator =
         //         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToCam);
         // photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        // io.setMultiTagFallbackStrategy(PoseStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE));
     }
     
     /**

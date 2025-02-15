@@ -20,20 +20,30 @@ import com.studica.frc.AHRS.NavXComType;
 
 public class GyroIONavX implements GyroIO{  
   private final AHRS m_gyro = new AHRS(NavXComType.kI2C.kMXP_SPI);
-
+  private double angleAdjustment;
   @Override
   public void updateInputs(GyroIOInputs inputs){
     inputs.connected = m_gyro.isConnected();
     inputs.calib = m_gyro.isCalibrating();
-    inputs.yawPosition = Rotation2d.fromDegrees(-m_gyro.getYaw());
+    inputs.yawVelocity = m_gyro.getRate();
+    inputs.angleAdjustment = angleAdjustment;
+    inputs.yawPosition = m_gyro.getRotation2d().plus(Rotation2d.fromDegrees(inputs.angleAdjustment));
     inputs.pitchPosition = Rotation2d.fromDegrees(m_gyro.getPitch());
     inputs.rollPosition = Rotation2d.fromDegrees(m_gyro.getRoll());
-    inputs.yawVelocity = m_gyro.getRate();
     // inputs.yawVelocityRadPerSec = m_gyro.getYawve()
   }
 
   @Override
   public void reset(){
     m_gyro.reset();
+    m_gyro.zeroYaw();
+    angleAdjustment = 0;
+  }
+  
+  @Override
+  public void set(Rotation2d rotation2d){
+    m_gyro.reset();
+    m_gyro.zeroYaw();
+    angleAdjustment = rotation2d.getDegrees();
   }
 }
