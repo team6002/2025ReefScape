@@ -21,8 +21,8 @@ public class CMD_AlgaeTrigger extends Command{
 
     @Override
     public void execute(){
-        if(m_algae.getCurrent() < .2){
-            if(m_triggerTimer.get() > .1){
+        if(m_algae.getCurrent() < .15){
+            if(m_triggerTimer.get() > .2){
                 isFinished = true;
             }
         }else{

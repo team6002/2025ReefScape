@@ -18,7 +18,7 @@ import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
-import frc.robot.subsystems.ElevatorPivot.*;
+import frc.robot.subsystems.Pivot.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -45,7 +45,7 @@ public class RobotContainer {
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
   final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
-  final SUB_ElevatorPivot m_pivot = new SUB_ElevatorPivot(new ElevatorPivotIOSparkMax());
+  final SUB_Pivot m_pivot = new SUB_Pivot(new PivotIOSparkMax());
   final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
   final SUB_Winch m_winch = new SUB_Winch(new WinchIOSparkMax());
   final SUB_Algae m_algae = new SUB_Algae(new AlgaeIOSparkMax());
@@ -98,7 +98,7 @@ public class RobotContainer {
     m_operatorController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3));
     m_operatorController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2));
     m_operatorController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
-    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    m_operatorController.rightBumper().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));
     m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
     m_operatorController.leftStick().onFalse(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));

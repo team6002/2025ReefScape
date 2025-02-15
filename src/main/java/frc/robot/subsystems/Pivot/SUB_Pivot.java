@@ -1,4 +1,4 @@
-package frc.robot.subsystems.ElevatorPivot;
+package frc.robot.subsystems.Pivot;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.GlobalVariables;
 
-public class SUB_ElevatorPivot extends SubsystemBase{
-    private final ElevatorPivotIO io;
-    private final ElevatorPivotIoInputsAutoLogged inputs = new ElevatorPivotIoInputsAutoLogged();
-    public SUB_ElevatorPivot(ElevatorPivotIO io){
+public class SUB_Pivot extends SubsystemBase{
+    private final PivotIO io;
+    private final PivotIoInputsAutoLogged inputs = new PivotIoInputsAutoLogged();
+    public SUB_Pivot(PivotIO io){
         this.io = io;
         SmartDashboard.putNumber("elevatorPivotGoal", getPosition());
         SmartDashboard.putNumber("elevatorPivotPos", getPosition());

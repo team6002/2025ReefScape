@@ -1,17 +1,17 @@
-package frc.robot.subsystems.ElevatorPivot;
+package frc.robot.subsystems.Pivot;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ElevatorPivotIO {
+public interface PivotIO {
   @AutoLog
-  public static class ElevatorPivotIoInputs {
+  public static class PivotIoInputs {
     public double m_pivotPos;
     public double m_pivotGoal;
     public double m_pivotCurrent;
     public boolean m_pivotInPosition;
   }
 
-  public default void updateInputs(ElevatorPivotIoInputs inputs) {}
+  public default void updateInputs(PivotIoInputs inputs) {}
 
   public default void setGoal(double p_reference){}
 

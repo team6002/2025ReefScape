@@ -7,10 +7,10 @@ import frc.robot.Constants.*;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
-import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_Stow extends SequentialCommandGroup{
-    public CMD_Stow(SUB_Elevator p_elevator, SUB_CoralHolder p_coralHolder, SUB_Wrist p_wrist, SUB_ElevatorPivot p_pivot){
+    public CMD_Stow(SUB_Elevator p_elevator, SUB_CoralHolder p_coralHolder, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
             new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))

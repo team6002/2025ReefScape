@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_PivotInPosition extends Command{
-    SUB_ElevatorPivot m_pivot;
-    public CMD_PivotInPosition(SUB_ElevatorPivot p_pivot){
+    SUB_Pivot m_pivot;
+    public CMD_PivotInPosition(SUB_Pivot p_pivot){
         m_pivot = p_pivot;
     }
 

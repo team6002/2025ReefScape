@@ -17,7 +17,7 @@ import frc.robot.Constants.ModuleConstants;
 public final class Configs {
     public static final class MAXSwerveModule {
         public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
-        public static final SparkFlexConfig RightDrivingConfig = new SparkFlexConfig();
+        public static final SparkFlexConfig invertedDrivingConfig = new SparkFlexConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
@@ -47,17 +47,17 @@ public final class Configs {
                 .forwardLimitSwitchEnabled(false)
                 .reverseLimitSwitchEnabled(false);
 
-                RightDrivingConfig
+                invertedDrivingConfig
                         .idleMode(IdleMode.kBrake)
                         .voltageCompensation(12)
                         .smartCurrentLimit(40)
                         .inverted(true);
-                RightDrivingConfig.encoder
+                invertedDrivingConfig.encoder
                         .positionConversionFactor(drivingFactor) // meters
                         .velocityConversionFactor(drivingFactor / 60.0)// meters per second
                         .uvwMeasurementPeriod(10)
                         .uvwAverageDepth(2); 
-                RightDrivingConfig.closedLoop
+                invertedDrivingConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         // These are example gains you may need to them for your own robot!
                         .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD)

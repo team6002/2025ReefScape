@@ -105,8 +105,8 @@ public class CMD_DriveAlignVisionAdjust extends Command{
     yController.setTolerance(AutoAlignConstants.kYTolerance);
     turnController.setTolerance(AutoAlignConstants.kTurnTolerance);
 
-    xController.reset(m_drivetrain.getTargetOdo().getX());
-    yController.reset(m_drivetrain.getTargetOdo().getY());
+    // xController.reset(m_drivetrain.getTargetOdo().getX());
+    // yController.reset(m_drivetrain.getTargetOdo().getY());
     turnController.reset();
 
     turnController.enableContinuousInput(-180, 180);
@@ -139,7 +139,7 @@ public class CMD_DriveAlignVisionAdjust extends Command{
       // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), MathUtil.clamp(-0.1 * Math.abs(turnRatio), -.2, .2), MathUtil.clamp(-0.1 * Math.abs(turnRatio), -.2, .2));
       // if (Math.abs(m_drivetrain.getTargetOdo().getY()) <= .5){
         // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -.2 , .2);
-        turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees()), -.2 , .2);
+        // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees()), -.2 , .2);
       // }else{
       //   turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -.3 , .3);  
       // }
@@ -151,8 +151,8 @@ public class CMD_DriveAlignVisionAdjust extends Command{
       yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
     // if (m_vision.getHasTarget()){
       // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  
-        xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
-        ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
+        // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
+        // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
     
         // xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.3, .3), MathUtil.clamp(-0.1 * Math.abs(positionRatio), -.1, .1));
         // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -0.3, 0.3);  
@@ -178,21 +178,21 @@ public class CMD_DriveAlignVisionAdjust extends Command{
       ySpeed = 0.0;
     }
 
-    if (m_drivetrain.getTargetOdo().getX() <= Units.inchesToMeters(20)){
-      m_drivetrain.setTargetOdoEnable(false);
-    }else{
-      m_drivetrain.setTargetOdoEnable(true);
-    }
+    // if (m_drivetrain.getTargetOdo().getX() <= Units.inchesToMeters(20)){
+    //   m_drivetrain.setTargetOdoEnable(false);
+    // }else{
+      // m_drivetrain.setTargetOdoEnable(true);
+    // }
     // turnSpeed = 0;  
     // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -0.5, 0.5);
-    Logger.recordOutput("XError", m_drivetrain.getTargetOdo().getX());
-    Logger.recordOutput("YError", m_drivetrain.getTargetOdo().getY());
-    Logger.recordOutput("TurnError", m_drivetrain.getTargetOdo().getRotation().getDegrees());
+    // Logger.recordOutput("XError", m_drivetrain.getTargetOdo().getX());
+    // Logger.recordOutput("YError", m_drivetrain.getTargetOdo().getY());
+    // Logger.recordOutput("TurnError", m_drivetrain.getTargetOdo().getRotation().getDegrees());
     Logger.recordOutput("AutoAlignXSpeed", xSpeed);
     Logger.recordOutput("AutoAlignySpeed", ySpeed);
     Logger.recordOutput("AutoAlignTurnSpeed", turnSpeed);
     Logger.recordOutput("Autoalign turn Goal", goalPose.getRotation());
-    Logger.recordOutput("XCtrlOutput", yController.calculate(m_drivetrain.getTargetOdo().getY()));
+    // Logger.recordOutput("XCtrlOutput", yController.calculate(m_drivetrain.getTargetOdo().getY()));
     Logger.recordOutput("YsetPoint", yController.getSetpoint().position);
 
     if (xController.atGoal() && yController.atGoal()) {

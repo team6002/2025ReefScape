@@ -11,16 +11,16 @@ import frc.robot.subsystems.Wrist.SUB_Wrist;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
-import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_Score extends Command{
     SUB_Elevator m_elevator;
     SUB_Wrist m_wrist;
     SUB_CoralHolder m_coralHolder;
-    SUB_ElevatorPivot m_pivot;
+    SUB_Pivot m_pivot;
     SUB_Algae m_algae;
     GlobalVariables m_variables;
-    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_coralHolder, SUB_ElevatorPivot p_pivot, 
+    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_coralHolder, SUB_Pivot p_pivot, 
                      SUB_Algae p_algae, GlobalVariables p_variables){
         
         m_elevator = p_elevator;

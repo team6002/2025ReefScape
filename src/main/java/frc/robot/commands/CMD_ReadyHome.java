@@ -6,10 +6,10 @@ import frc.robot.Constants.*;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
-import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_ReadyHome extends SequentialCommandGroup{
-    public CMD_ReadyHome(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_ElevatorPivot p_pivot, SUB_CoralHolder p_coralHolder){
+    public CMD_ReadyHome(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_coralHolder){
         addCommands(
             new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReady))

@@ -70,6 +70,7 @@ public class GlobalVariables extends SubsystemBase{
         ,PROCESSOR
         ,BARGE
         ,GROUND
+        ,CORAL
     }
 
     AlgaeTarget m_algaeTarget = AlgaeTarget.LEVEL_2;

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.ElevatorPivot;
+package frc.robot.subsystems.Pivot;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -17,7 +17,7 @@ import frc.robot.Configs;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.HardwareConstants;
 
-public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
+public class PivotIOSparkMax implements PivotIO{
     private final SparkMax m_leftPivotMotor;
     private final SparkMax m_rightPivotMotor;
     private final SparkAbsoluteEncoder m_pivotEncoder;
@@ -28,7 +28,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
 
-    public ElevatorPivotIOSparkMax(){
+    public PivotIOSparkMax(){
         m_leftPivotMotor = new SparkMax(HardwareConstants.kLeftPivotCanId, MotorType.kBrushless);
         m_rightPivotMotor = new SparkMax(HardwareConstants.kRightPivotCanId, MotorType.kBrushless);
         m_pivotEncoder = m_rightPivotMotor.getAbsoluteEncoder();
@@ -43,7 +43,7 @@ public class ElevatorPivotIOSparkMax implements ElevatorPivotIO{
     }
 
     @Override
-    public void updateInputs(ElevatorPivotIoInputs inputs) {
+    public void updateInputs(PivotIoInputs inputs) {
         inputs.m_pivotGoal = m_goal.position + PivotConstants.kPivotOffset;
         inputs.m_pivotPos = getPosition();
         inputs.m_pivotCurrent = getCurrent();

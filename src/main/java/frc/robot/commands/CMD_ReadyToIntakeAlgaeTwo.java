@@ -8,11 +8,11 @@ import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
-import frc.robot.subsystems.ElevatorPivot.SUB_ElevatorPivot;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_ReadyToIntakeAlgaeTwo extends SequentialCommandGroup{
-    public CMD_ReadyToIntakeAlgaeTwo(SUB_Wrist p_wrist, SUB_ElevatorPivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae){
+    public CMD_ReadyToIntakeAlgaeTwo(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae){
         addCommands(
             new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae))
             ,new CMD_PivotInPosition(p_pivot)

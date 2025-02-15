@@ -54,7 +54,7 @@ import frc.robot.Constants.AutoConstants;
 public class SUB_Drivetrain extends SubsystemBase {
   RobotConfig config;
   // Create MAXSwerveModules
-  SUB_Vision m_vision;
+  // SUB_Vision m_vision;
   SwerveModule[] SwerveModules;
   // Module[] swerveModules = new Module[4];
   private final SwerveModule m_frontLeft;
@@ -146,7 +146,6 @@ public class SUB_Drivetrain extends SubsystemBase {
   {
         
     this.gyroIO = gyroIO;
-    // m_vision = p_vision;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -251,6 +250,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("gyroHeading", getAngle());
     // var visionEst = m_vision.getEstimatedGlobalPose();
     // var targetEst = m_vision.getEstimatedGlobalPose();
   
@@ -287,9 +287,9 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
-    SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
-    SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    m_vision.updateInputs();
+    // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
+    // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
+    // m_vision.updateInputs();
 
     // if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
     //   visionEst.ifPresent(
@@ -517,6 +517,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   /** Zeroes the heading of the robot. LOL*/
   public void zeroHeading() {
+    gyroIO.reset();
     // m_gyro.resetDisplacement();
     //*TODO fix */
   }
