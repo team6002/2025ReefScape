@@ -26,6 +26,7 @@ public interface GyroIO {
     public Rotation2d pitchPosition = new Rotation2d();
     public Rotation2d rollPosition = new Rotation2d();
     public boolean calib = false;
+    public double angleAdjustment;
   }
 
   public default void updateInputs(GyroIOInputs inputs) {}

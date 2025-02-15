@@ -98,14 +98,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.14;//0.004;
+    public static final double kDrivingP = 0.08;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.21;
 
-    public static final double kDrivingA = 0.0;
+    public static final double kDrivingA = 0.02;
     public static final double kDrivingS = 0.125;
-    public static final double kDrivingV = 2.4           ;
+    public static final double kDrivingV = 2.0;
     
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
@@ -178,8 +178,8 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
+    public static final double kPXController = 1.5;
+    public static final double kPYController = 1.5;
     public static final double kPThetaController = 1;
 
     // Constraint for the motion profiled robot angle controller
@@ -187,6 +187,12 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
     public static final String BlueLeft1 = "BlueLeft1";
+    public static final String BlueLeft2 = "BlueLeft2";
+    public static final String BlueLeft3 = "BlueLeft3";
+    public static final String BlueLeft4 = "BlueLeft4";
+    public static final String BlueLeft5 = "BlueLeft5";
+    public static final String BlueLeft6 = "BlueLeft6";
+    public static final String BlueLeft7 = "BlueLeft7";
 
   }
 

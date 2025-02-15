@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -49,6 +50,6 @@ public interface VisionIO {
     public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Transform3d getTargetLPose(){return null;}
     public default Transform3d getTargetRPose(){return null;}
-    
+    public default void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){}
   
 }

@@ -22,6 +22,7 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.ElevatorPivot.*;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -85,11 +86,5 @@ public class RobotContainer {
       new CMD_DriveAlignVision(m_drivetrain, m_vision, m_driverController),
       new CMD_DriveAlignVisionAdjust(m_drivetrain, m_vision, m_driverController, Units.inchesToMeters(0), Units.inchesToMeters(7), 0) 
       ));
-    // m_driverController.start().onTrue(new InstantCommand(()-> m_coralIntake.setReference(-2000)));
-    // m_driverController.back().onTrue(new InstantCommand(()-> m_coralIntake.setReference(0)));
-    //operator
-    // m_operatorController.a().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 2));
-    // m_operatorController.b().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 3));
-    // m_operatorController.x().onTrue(new InstantCommand(()-> GlobalVariables.m_targetLevel = 4));
   }
 }

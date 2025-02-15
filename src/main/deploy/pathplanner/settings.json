@@ -1,8 +1,12 @@
 {
-  "robotWidth": 0.775,
-  "robotLength": 0.775,
+  "robotWidth": 0.6604,
+  "robotLength": 0.66,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "BOX",
+    "BlueLeft",
+    "BlueRight"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 1.0,
   "defaultMaxAccel": 1.0,
@@ -28,5 +32,7 @@
   "brModuleY": -0.241,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Droppoint\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.32,\"y\":0.0},\"size\":{\"width\":0.1,\"length\":0.3},\"borderRadius\":0.01,\"strokeWidth\":0.1,\"filled\":true}}"
+  ]
 }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 
@@ -99,8 +100,18 @@ public class Robot extends LoggedRobot {
     // m_robotContainer.m_elevator.resetEncoder();
     // m_autonomousCommand = m_autonomousChooser.getSelected();
     m_autonomousCommand = new SequentialCommandGroup(
-      m_robotContainer.m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1)
+      // Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain)
+      // ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain),
+      // m_robotContainer.m_drivetrain.FollowPath("Box1")
+      Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_robotContainer.m_drivetrain)
+      ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_robotContainer.m_drivetrain)
       ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft1)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft2)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft3)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft4)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft5)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft6)
+      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft7)
     );
         // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
