@@ -76,22 +76,13 @@ public class VisionIOPhoton implements VisionIO{
 
     public PhotonPipelineResult getLatestLResult() {
         if (LCamera.getLatestResult().hasTargets()){
-            if (angFilter(LCamera.getLatestResult().getTargets(),LCamera.getLatestResult().getBestTarget().getFiducialId())){
-                return LCamera.getLatestResult();
-            }else{
-                return null;
-            }
+            return LCamera.getLatestResult();
         }else return null;
     } 
 
     public PhotonPipelineResult getLatestRResult() {
         if (RCamera.getLatestResult().hasTargets()){
-            if (angFilter(RCamera.getLatestResult().getTargets(),RCamera.getLatestResult().getBestTarget().getFiducialId())){
-                return RCamera.getLatestResult();
-            }else{
-                return null;
-            }
-            // return RCamera.getLatestResult();
+            return RCamera.getLatestResult();
         }else return null;
     }
 
@@ -160,7 +151,7 @@ public class VisionIOPhoton implements VisionIO{
         for (var tgt : targets) {
             var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue; 
-            if (angFilter(targets, tgt.getFiducialId())) continue;
+            // if (angFilter(totalTags)) continue;
             numTags++;
             // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
             avgDist +=
