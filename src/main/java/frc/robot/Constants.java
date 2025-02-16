@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -165,7 +164,7 @@ public final class Constants {
     public static final int kCoralHolderCanId = 16;//11
     public static final int kLeftElevatorCanId = 18;//14
     public static final int kRightElevatorCanId = 17;//15
-    public static final int kLeftPivotCanId = 3;//6
+    public static final int kLeftPivotCanId = 3;//6+
     public static final int kRightPivotCanId = 6;//4
     public static final int kWristCanId = 14;//13
     public static final int kWinchCanId = 4;

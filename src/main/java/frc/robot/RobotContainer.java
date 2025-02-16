@@ -64,7 +64,7 @@ public class RobotContainer {
 
     // Configure default commands
     // m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
-    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController).withTimeout(1));
+    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
   }
 
   /**
@@ -94,6 +94,7 @@ public class RobotContainer {
       )
     );
     m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
+    m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     //operator
     m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
     m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
