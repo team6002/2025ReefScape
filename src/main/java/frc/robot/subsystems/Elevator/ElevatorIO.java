@@ -8,6 +8,9 @@ public interface ElevatorIO {
     public double m_elevatorPos;
     public double m_elevatorGoal;
     public double m_elevatorCurrent;
+    public double m_elevatorSetpoint;
+    public double m_voltage;
+    public double m_speed;
     public boolean m_elevatorInPosition;
   }
 

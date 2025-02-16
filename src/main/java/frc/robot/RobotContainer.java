@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
 import frc.GlobalVariables.*;
@@ -22,7 +21,9 @@ import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.Pivot.*;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -98,21 +99,64 @@ public class RobotContainer {
     //operator
     m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
     m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
-    m_operatorController.povUp().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 4));
-    m_operatorController.povRight().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3));
-    m_operatorController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2));
-    m_operatorController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
-    m_operatorController.rightBumper().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));
+
+    m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 4));
+    m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 3));
+    m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 2));
+    m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
+
     m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
-    m_operatorController.leftStick().onFalse(new InstantCommand(()-> m_drivetrain.zeroHeading()));
+    m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));    
+    m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));
+    m_operatorController.x().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 2));
+    m_operatorController.y().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 3));
+    m_operatorController.rightBumper().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
     m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));
-    m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));    
-    m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2)));
-    m_operatorController.x().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_3)));
-    m_operatorController.y().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
+
     m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> m_winch.setPower(1)))
       .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
     m_operatorController.leftTrigger().onTrue(new InstantCommand(()-> m_winch.setPower(-1)))
       .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+  }
+
+  public SequentialCommandGroup getAutonomousCommand(){
+    return new SequentialCommandGroup(Commands.runOnce(()->m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_drivetrain)
+    ,Commands.runOnce(()->m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_drivetrain)
+    ,new ParallelCommandGroup(
+      m_drivetrain.FollowPath(AutoConstants.BlueLeft1)
+      ,new CMD_ReadyLevelFourAuto(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    )
+    ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
+    ,new WaitCommand(.2)
+    ,new ParallelCommandGroup(
+      m_drivetrain.FollowPath(AutoConstants.BlueLeft2)
+      ,new SequentialCommandGroup(
+        new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
+        ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake)
+      )
+    )
+    ,new ParallelCommandGroup(
+      m_drivetrain.FollowPath(AutoConstants.BlueLeft3)
+      ,new CMD_ReadyLevelFourAuto(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    )
+    ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
+    ,new WaitCommand(.2)
+    // ,new CMD_IntakeStow(m_coralIntake).withTimeout(1)
+    // ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    // ,m_drivetrain.FollowPath(AutoConstants.BlueLeft5)
+    // ,new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot)
+    // ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
+    // ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    // ,new ParallelCommandGroup( 
+    //   m_drivetrain.FollowPath(AutoConstants.BlueLeft6)
+    //   ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    // )
+    // ,new CMD_IntakeStow(m_coralIntake).withTimeout(1)
+    // ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    // ,m_drivetrain.FollowPath(AutoConstants.BlueLeft7)
+    // ,new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot)
+    // ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
+    // ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
+    );
   }
 }

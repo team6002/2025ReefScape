@@ -48,7 +48,7 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralHolder)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_IntakeStow(m_coralHolder, m_wrist, m_pivot, m_elevator, m_coralHolder)
+                    ,new CMD_IntakeStow(m_coralHolder)
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)

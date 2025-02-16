@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0517979452054795,
-        "y": 1.0424015410958907
+        "x": 1.6575,
+        "y": 0.670999999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3440068493150683,
-        "y": 1.8387628424657532
+        "x": 3.0087245328528844,
+        "y": 1.4377868712199091
       },
       "isLocked": false,
-      "linkedName": "BluePickUp"
+      "linkedName": "BlueLeftPickup"
     },
     {
       "anchor": {
-        "x": 3.981806506849315,
-        "y": 2.8905607876712325
+        "x": 3.928434950369921,
+        "y": 2.785568475365501
       },
       "prevControl": {
-        "x": 3.035188356164384,
-        "y": 2.1543022260273967
+        "x": 2.9211702914750277,
+        "y": 2.2277481823543415
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 30.0,
-    "maxAngularAcceleration": 30.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -123.6900675259798
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "BlueLeft",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -129.17365797044422
+    "rotation": -125.00000000000001
   },
   "useDefaultConstraints": true
 }

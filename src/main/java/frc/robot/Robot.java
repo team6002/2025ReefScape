@@ -22,7 +22,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.commands.CMD_DeployLevelFour;
+import frc.robot.commands.CMD_Ready;
+import frc.robot.commands.CMD_ReadyToDeployLevelFour;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -99,21 +103,14 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
     // m_autonomousCommand = m_autonomousChooser.getSelected();
-    m_autonomousCommand = new SequentialCommandGroup(
-      // Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain)
-      // ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain),
-      // m_robotContainer.m_drivetrain.FollowPath("Box1")
-      Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_robotContainer.m_drivetrain)
-      ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_robotContainer.m_drivetrain)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft1)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft2)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft3)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft4)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft5)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft6)
-      ,m_robotContainer.m_drivetrain.FollowPath(AutoConstants.BlueLeft7)
-    );
+    // m_autonomousCommand = new SequentialCommandGroup(
+    //   // Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain)
+    //   // ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain),
+    //   // m_robotContainer.m_drivetrain.FollowPath("Box1")
+      
+    // );
         // schedule the autonomous command (example)
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

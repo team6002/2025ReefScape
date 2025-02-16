@@ -7,12 +7,12 @@ public class GlobalVariables extends SubsystemBase{
     public GlobalVariables(){}
 
     public static int m_targetCoralLevel = 4;
+    public static int m_targetAlgaeLevel = 2;
 
     public static double m_pivotAngle = 0;
     public static double m_elevatorExtension = 0;
     public static boolean m_haveAlgae = false;
     public static boolean m_haveCoral = false;
-    public static boolean m_readyAdvanceAlgae = false;
 
     public enum RobotState{
         HOME

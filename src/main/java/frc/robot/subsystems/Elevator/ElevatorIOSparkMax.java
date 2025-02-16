@@ -52,6 +52,9 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         inputs.m_elevatorPos = getPosition();
         inputs.m_elevatorCurrent = getCurrent();
         inputs.m_elevatorInPosition = inPosition();
+        inputs.m_elevatorSetpoint = m_setpoint.position;
+        inputs.m_speed = m_rightElevator.get();
+        inputs.m_voltage = m_rightElevator.getBusVoltage();
     };
 
     @Override

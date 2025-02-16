@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -14,13 +12,7 @@ public class CMD_DeployLevelFour extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
             ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kReverse))
-            // new ParallelCommandGroup(
-            //     new CMD_IntakeJackhammer(p_coralHolder).withTimeout(.8)
-            //     ,new SequentialCommandGroup(
-            //         new WaitCommand(.075)
-            //         ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))   
-            //     )
-            // )
+            ,new CMD_WristInPosition(p_wrist)
         );
     }
 }

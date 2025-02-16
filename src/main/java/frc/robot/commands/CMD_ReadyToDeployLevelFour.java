@@ -15,8 +15,8 @@ public class CMD_ReadyToDeployLevelFour extends SequentialCommandGroup{
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyToScore))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kDeployl4))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL4)).withTimeout(2)
-            ,new CMD_ElevatorInPosition(p_elevator)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL4))
+            ,new CMD_ElevatorInPosition(p_elevator).withTimeout(2)
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kDeployl4))
             ,new CMD_WristInPosition(p_wrist)
         );

@@ -15,10 +15,10 @@ public class CMD_ReadyToDeployLevelOne extends SequentialCommandGroup{
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyToScore))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kDeployl1))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL1)).withTimeout(2)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL1))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kDeployl1))
             ,new CMD_WristInPosition(p_wrist)
-            ,new CMD_ElevatorInPosition(p_elevator)
+            ,new CMD_ElevatorInPosition(p_elevator).withTimeout(2)
         );
     }
 }

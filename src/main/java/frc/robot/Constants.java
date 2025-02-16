@@ -97,13 +97,13 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.08;//0.004;
+    public static final double kDrivingP = 0.16;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.21;
 
-    public static final double kDrivingA = 0.02;
-    public static final double kDrivingS = 0.125;
+    public static final double kDrivingA = 0.4;
+    public static final double kDrivingS = 0.15;
     public static final double kDrivingV = 2.0;
     
     // public static final double kDrivingA = 0.44218;
@@ -237,13 +237,13 @@ public final class Constants {
     public static final double kConversionFactor = 2*Math.PI;
     public static final double kTolerance = Math.toRadians(2);
     
-    public static final double kHome = Math.toRadians(5);
+    public static final double kHome = Math.toRadians(25);
     public static final double kReady = Math.toRadians(85);
     public static final double kReadyAlgae = Math.toRadians(60);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
     public static final double kReadyAlgael3 = Math.toRadians(72);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(75);
-    public static final double kReadyDefensive = Math.toRadians(15);
+    public static final double kReadyDefensive = Math.toRadians(25);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(55);
     public static final double kAlgaeCoral = Math.toRadians(55);
@@ -257,15 +257,15 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.025;//.075, .02
+    public static final double kP = 0.15;//.075, .02
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.25;//.233
     public static final double kV = 0.045;//.045
     public static final double kG = 0.35;//.01
-    public static final double kMaxVel = 300;
-    public static final double kMaxAccel = 300;
+    public static final double kMaxVel = 200;//300
+    public static final double kMaxAccel = 200;//300
     public static final double kMaxVelDown = 100;
     public static final double kMaxAccelDown = 100;
     public static final double kMinOutput = -1;
@@ -273,7 +273,7 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//1.9006
-    public static final double kTolerance = 3;
+    public static final double kTolerance = 1;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
@@ -305,9 +305,9 @@ public final class Constants {
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
-    public static final double kTolerance = Math.toRadians(4);
+    public static final double kTolerance = Math.toRadians(5);
 
-    public static final double kHome = Math.toRadians(110);
+    public static final double kHome = Math.toRadians(100);
     public static final double kReady = Math.toRadians(-110);
     public static final double kReadyAlgae = Math.toRadians(0);
     public static final double kReadyHome = Math.toRadians(0);
@@ -322,7 +322,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(50);//30
     public static final double kDeployl3 = Math.toRadians(25);//22.5
-    public static final double kDeployl4 = Math.toRadians(43);//37.5
+    public static final double kDeployl4 = Math.toRadians(41);//43
     public static final double kDeployBarge = Math.toRadians(30);
   }
 
