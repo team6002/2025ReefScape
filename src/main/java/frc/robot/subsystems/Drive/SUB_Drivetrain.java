@@ -29,6 +29,7 @@ import frc.robot.subsystems.Vision.VisionIO;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.List;
 import java.util.Optional;
@@ -135,14 +136,14 @@ public class SUB_Drivetrain extends SubsystemBase {
   Field2d field;
   Field2d fieldEst;
   /** Creates a new DriveSubsystem. */
-  // SUB_Vision m_vision;
+  SUB_Vision m_vision;
   public SUB_Drivetrain(
     GyroIO gyroIO,
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
     ModuleIO brModuleIO
-    // SUB_Vision p_vision
+    ,SUB_Vision p_vision
     ) 
   {
         
@@ -216,7 +217,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             this // Reference to this subsystem to set requirements
     );
 
-    // m_vision = p_vision;
+    m_vision = p_vision;
     m_odometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
@@ -253,8 +254,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("gyroHeading", getAngle());
-    // var visionEst = m_vision.getEstimatedGlobalPose();
-    // var targetEst = m_vision.getEstimatedGlobalPose();
+    var visionEst = m_vision.getEstimatedGlobalPose();
+    var targetEst = m_vision.getEstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -289,49 +290,44 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
-    // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
-    // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    // m_vision.updateInputs();
+    SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
+    SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
+    m_vision.updateInputs();
 
-    // if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
-    //   visionEst.ifPresent(
-    //     est -> {
-    //         var estPose = est.estimatedPose.toPose2d();
-    //         // estPose = m_vision.getEstimatedGlobalPose(estPose);
-    //         Logger.recordOutput("CameraPose", estPose);
-    //   //       // Change our trust in the measurement based on the tags we can see
-    //       var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+    if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
+      visionEst.ifPresent(
+        est -> {
+          var estPose = est.estimatedPose.toPose2d();
+          // estPose = m_vision.getEstimatedGlobalPose(estPose);
+          Logger.recordOutput("CameraPose", estPose);
+          // Change our trust in the measurement based on the tags we can see
+          var estStdDevs = m_vision.getEstimationStdDevs(estPose);
         
-    //         addVisionMeasurement(
-    //           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-    //     }  
-    //   );
-    // }
-    // visionEst.ifPresent(
-    //   est -> {
-    //       var estPose = est.estimatedPose.toPose2d();
-    //     if (TargetOdoEnable){
-    //       if (m_vision.getHasLTarget()){
-    //         addTargetVisionMeasurement(
-    //           m_vision.getTargetLPose(), est.timestampSeconds);
-    //       }
-    //       if (m_vision.getHasRTarget()){
-    //         addTargetVisionMeasurement(
-    //           m_vision.getTargetRPose(), est.timestampSeconds);
-    //         }
-    //       }
-    //   }  
-    // );
-    // if (visionEst.isPresent()){
-    //   SmartDashboard.putNumber("TargetYaw",Math.toDegrees(m_vision.getTargetPose().getRotation().getAngle()));
-     
-    //   SmartDashboard.putNumber("targetYaw", m_vision.getTargetYaw());
-    //   SmartDashboard.putNumber("EstX", Units.metersToInches(visionEst.get().estimatedPose.getX()));
-    //   SmartDashboard.putNumber("EstY", Units.metersToInches(visionEst.get().estimatedPose.getY()));
-    //   SmartDashboard.putNumber("EstDeg", Math.toDegrees(visionEst.get().estimatedPose.getRotation().getAngle()));
-    //   // SmartDashboard.putNumber("targetAng", m_vision.getTargetYaw(7));
-    //   // fieldEst.setRobotPose(visionEst.get().estimatedPose.toPose2d());
-    // }
+            addVisionMeasurement(
+              est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        }  
+      );
+    }
+    visionEst.ifPresent(
+      est -> {
+          var estPose = est.estimatedPose.toPose2d();
+        if (TargetOdoEnable){
+          if (m_vision.getHasLTarget()){
+            Logger.recordOutput("LastEstimatorPose", m_vision.getEstimatedGlobalPoseLast().get().estimatedPose.toPose2d());
+            Logger.recordOutput("CurrentPose", m_vision.getCurrentLPose());
+          
+            addTargetVisionMeasurement(
+              m_vision.getTargetLPose(), est.timestampSeconds);
+          }
+          if (m_vision.getHasRTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetRPose(), est.timestampSeconds);
+            }
+          }
+      }  
+    );
+    
+  // }
     
     for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++){
       moduleDeltas[moduleIndex] =

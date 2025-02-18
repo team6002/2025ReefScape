@@ -120,7 +120,19 @@ public class SUB_Vision {
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         return io.getEstimatedGlobalPose();
     }
-  
+
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {
+        return io.getEstimatedGlobalPoseLast();
+    }
+
+    public Pose2d getCurrentLPose(){
+        return io.getCurrentLPose();
+    }
+
+    public Pose2d getCurrentRPose(){
+        return io.getCurrentRPose();
+    }
+
     public Transform3d getTargetLPose(){
         return io.getTargetLPose();
     }

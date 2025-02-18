@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -44,12 +45,15 @@ public interface VisionIO {
     public default void updateInputs(VisionIOInputs inputs) {}
     public default void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets){}
     public default Optional<EstimatedRobotPose> getEstimatedGlobalPose() {return null;}
-    public default Optional<EstimatedRobotPose> getEstimatedGlobalPosenew(Pose2d prevEstimatePose) {return null;}
     public default Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
+    public default Pose2d getCurrentLPose(){return null;}
+    public default Pose2d getCurrentRPose(){return null;}
     public default Transform3d getTargetLPose(){return null;}
     public default Transform3d getTargetRPose(){return null;}
+    public default Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {return null;}
     public default void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){}
+    public default void setLastPose(Pose2d lastpose){};
   
 }

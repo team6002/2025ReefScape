@@ -18,6 +18,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -42,6 +43,8 @@ public class VisionIOPhoton implements VisionIO{
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
     private final PhotonPoseEstimator photonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
+    private final PhotonPoseEstimator photonEstimatorLast = 
+        new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.CLOSEST_TO_LAST_POSE, VisionConstants.kRobotToLCam);
     private Matrix<N3, N1> curStdDevs;
 
     public void setCameraPipeline(int LPipeline, int RPipeline){
@@ -62,6 +65,7 @@ public class VisionIOPhoton implements VisionIO{
     @Override 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
+
         for (var change : RCamera.getAllUnreadResults()) {
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
@@ -72,7 +76,25 @@ public class VisionIOPhoton implements VisionIO{
         }
         return visionEst;
     }
+    
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
+        for (var change : RCamera.getAllUnreadResults()) {
+            visionEst = photonEstimatorLast.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets());
+        }
+        for (var change : LCamera.getAllUnreadResults()) {
+            visionEst = photonEstimatorLast.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets());
+        }
+        return visionEst;
+    }
+
+    @Override
+    public void setLastPose(Pose2d lastpose){
+        photonEstimatorLast.setLastPose(lastpose);
+    }
 
     public PhotonPipelineResult getLatestLResult() {
         if (LCamera.getLatestResult().hasTargets()){
@@ -85,6 +107,31 @@ public class VisionIOPhoton implements VisionIO{
             return RCamera.getLatestResult();
         }else return null;
     }
+    @Override
+    public Pose2d getCurrentLPose(){
+        int tagNum = LCamera.getLatestResult().getBestTarget().getFiducialId();
+        Pose2d tagLocation = new Pose2d();
+        tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
+        Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
+            new Transform2d(getTargetLPose().getTranslation().toTranslation2d(), getTargetLPose().getRotation().toRotation2d())
+            , tagLocation
+            , new Transform2d(VisionConstants.kRobotToLCam.getTranslation().toTranslation2d(), VisionConstants.kRobotToLCam.getRotation().toRotation2d())
+            );
+        return currentPose;
+    }
+    
+    @Override
+    public Pose2d getCurrentRPose(){
+        int tagNum = RCamera.getLatestResult().getBestTarget().getFiducialId();
+        Pose2d tagLocation = new Pose2d();
+        tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
+        Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
+            new Transform2d(getTargetRPose().getTranslation().toTranslation2d(), getTargetRPose().getRotation().toRotation2d())
+            , tagLocation
+            , new Transform2d(VisionConstants.kRobotToRCam.getTranslation().toTranslation2d(), VisionConstants.kRobotToRCam.getRotation().toRotation2d())
+            );
+        return currentPose;
+    }
 
     @Override
     public Transform3d getTargetLPose(){
@@ -92,14 +139,14 @@ public class VisionIOPhoton implements VisionIO{
             if (LCamera.getLatestResult().getBestTarget().getBestCameraToTarget()== null){
                 return null;
             }
-            return LCamera.getLatestResult().getBestTarget().getBestCameraToTarget().plus(VisionConstants.kRobotToLCam.inverse());
+            return LCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
         }else return null;
     }
 
     @Override
     public Transform3d getTargetRPose(){
         if (RCamera.getLatestResult().hasTargets()){
-            return RCamera.getLatestResult().getBestTarget().getBestCameraToTarget().plus(VisionConstants.kRobotToRCam.inverse());
+            return RCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
         
         }else return null;
     }

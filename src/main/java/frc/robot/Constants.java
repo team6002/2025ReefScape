@@ -97,14 +97,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.16;//0.004;
+    public static final double kDrivingP = 0.22;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.21;
 
-    public static final double kDrivingA = 0.4;
-    public static final double kDrivingS = 0.15;
-    public static final double kDrivingV = 2.0;
+    public static final double kDrivingA = 1.1;
+    public static final double kDrivingS = 0.12;
+    public static final double kDrivingV = 2.09;
     
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
@@ -273,7 +273,7 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//1.9006
-    public static final double kTolerance = 1;
+    public static final double kTolerance = 1.5;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
