@@ -8,9 +8,9 @@ import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_DeployLevelThree extends SequentialCommandGroup{
-    public CMD_DeployLevelThree(SUB_CoralHolder p_coralHolder, SUB_Wrist p_wrist){
+    public CMD_DeployLevelThree(SUB_CoralHolder p_intake, SUB_Wrist p_wrist){
         addCommands(
-            new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kReverse))
+            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kReverse))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
         );
     }

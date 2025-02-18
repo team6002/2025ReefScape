@@ -47,51 +47,13 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class SUB_Vision {
     private final VisionIO io;
     private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
-    
-//     private final PhotonCamera camera;
-//     private final PhotonPoseEstimator photonEstimator;
 
     private Matrix<N3, N1> curStdDevs;
 
     public SUB_Vision(VisionIO io) {
         this.io = io;
-
-        // camera = new PhotonCamera(VisionConstants.kFrontCameraName);
-
-        // photonEstimator =
-        //         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToCam);
-        // photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        // io.setMultiTagFallbackStrategy(PoseStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE));
     }
-    
-    /**
-     * The latest estimated robot pose on the field from vision data. This may be empty. This should
-    * only be called once per loop.
-    *
-    * <p>Also includes updates for the standard deviations, which can (optionally) be retrieved with
-    * {@link getEstimationStdDevs}
-    *
-    * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
-    *     used for estimation.
-    */
-    // public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
 
-    // }
-
-    /**
-     * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
-    * deviations based on number of tags, estimation strategy, and distance from the tags.
-    *
-    * @param estimatedPose The estimated pose to guess standard deviations for.
-    * @param targets All targets in this camera frame
-    */
-
-    /**
-     * Returns the latest standard deviations of the estimated pose from {@link
-    * #getEstimatedGlobalPose()}, for use with {@link
-    * edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should
-    * only be used when there are targets visible.
-    */
     public boolean getHasLTarget(){
         return inputs.LTarget;
     }
@@ -128,9 +90,4 @@ public class SUB_Vision {
     public Transform3d getTargetRPose(){
         return io.getTargetRPose();
     }
-
-    
-    /*
-     * 
-     */
 }

@@ -10,9 +10,9 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_Home extends SequentialCommandGroup{
-    public CMD_Home(SUB_Elevator p_elevator, SUB_CoralHolder p_coralHolder, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
+    public CMD_Home(SUB_Elevator p_elevator, SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
-            new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kHolding))
+            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
             ,new WaitCommand(.25)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kHome))

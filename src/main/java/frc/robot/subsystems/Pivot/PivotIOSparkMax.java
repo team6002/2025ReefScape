@@ -99,5 +99,7 @@ public class PivotIOSparkMax implements PivotIO{
     public void reset(){
         m_setpoint = new TrapezoidProfile.State(getPosition() - PivotConstants.kPivotOffset, 0);
         m_goal = m_setpoint;
+        m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
+            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
     }
 }

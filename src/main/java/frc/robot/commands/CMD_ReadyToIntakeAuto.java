@@ -8,11 +8,11 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_ReadyToIntakeAuto extends SequentialCommandGroup{
-    public CMD_ReadyToIntakeAuto(SUB_Elevator p_elevator, SUB_Pivot p_pivot, SUB_CoralHolder p_coralHolder){
+    public CMD_ReadyToIntakeAuto(SUB_Elevator p_elevator, SUB_Pivot p_pivot, SUB_CoralHolder p_intake){
         addCommands(
             new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
-            ,new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kIntake))
+            ,new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
         );
     }

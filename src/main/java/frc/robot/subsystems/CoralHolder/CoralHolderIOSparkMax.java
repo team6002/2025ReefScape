@@ -15,28 +15,28 @@ import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.HardwareConstants;
 
 public class CoralHolderIOSparkMax implements CoralHolderIO{
-    private final SparkMax m_coralHolderMotor;
-    private final RelativeEncoder m_coralHolderEncoder;
-    private final SparkClosedLoopController m_coralHolderController;
-    private SimpleMotorFeedforward m_coralHolderFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
+    private final SparkMax m_intakeMotor;
+    private final RelativeEncoder m_intakeEncoder;
+    private final SparkClosedLoopController m_intakeController;
+    private SimpleMotorFeedforward m_intakeFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
 
-    private double m_coralHolderReference;
+    private double m_intakeReference;
 
     public CoralHolderIOSparkMax(){
         //initialize motor
-        m_coralHolderMotor = new SparkMax(HardwareConstants.kCoralHolderCanId, MotorType.kBrushless);
+        m_intakeMotor = new SparkMax(HardwareConstants.kCoralHolderCanId, MotorType.kBrushless);
 
         //initialize PID controller
-        m_coralHolderController = m_coralHolderMotor.getClosedLoopController();
+        m_intakeController = m_intakeMotor.getClosedLoopController();
 
         //initalize encoder
-        m_coralHolderEncoder = m_coralHolderMotor.getEncoder();
+        m_intakeEncoder = m_intakeMotor.getEncoder();
 
         //apply config
-        m_coralHolderMotor.configure(Configs.CoralHolderConfig.m_coralHolderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_intakeMotor.configure(Configs.CoralHolderConfig.m_intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //reset target speed in init
-        m_coralHolderReference = 0;
+        m_intakeReference = 0;
     }
 
     @Override
@@ -48,40 +48,40 @@ public class CoralHolderIOSparkMax implements CoralHolderIO{
 
     @Override
     public void setReference(double p_rpm){
-        m_coralHolderFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
+        m_intakeFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
         if(p_rpm < 0){
-            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.p(CoralHolderConstants.kPReverse);
+            Configs.CoralHolderConfig.m_intakeConfig.closedLoop.p(CoralHolderConstants.kPReverse);
         }else{
-            Configs.CoralHolderConfig.m_coralHolderConfig.closedLoop.p(CoralHolderConstants.kP);
+            Configs.CoralHolderConfig.m_intakeConfig.closedLoop.p(CoralHolderConstants.kP);
         }
-        m_coralHolderMotor.configure(Configs.CoralHolderConfig.m_coralHolderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        m_coralHolderReference = p_rpm;
+        m_intakeMotor.configure(Configs.CoralHolderConfig.m_intakeConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        m_intakeReference = p_rpm;
     }
 
     @Override
     public void setVoltage(double p_voltage){
-        m_coralHolderFeedforward = new SimpleMotorFeedforward(0, 0);
-        m_coralHolderController.setReference(p_voltage, ControlType.kVoltage);
+        m_intakeFeedforward = new SimpleMotorFeedforward(0, 0);
+        m_intakeController.setReference(p_voltage, ControlType.kVoltage);
     }
 
     @Override
     public double getVelocity(){
-        return m_coralHolderEncoder.getVelocity();
+        return m_intakeEncoder.getVelocity();
     }
 
     @Override
     public double getCurrent(){
-        return m_coralHolderMotor.getOutputCurrent();
+        return m_intakeMotor.getOutputCurrent();
     }
 
     @Override
     public double getReference(){
-        return m_coralHolderReference;
+        return m_intakeReference;
     }
 
     @Override
     public void PID(){
-        m_coralHolderController.setReference(m_coralHolderReference, ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0, m_coralHolderFeedforward.calculate(getReference()));
+        m_intakeController.setReference(m_intakeReference, ControlType.kVelocity, 
+            ClosedLoopSlot.kSlot0, m_intakeFeedforward.calculate(getReference()));
     }
 }

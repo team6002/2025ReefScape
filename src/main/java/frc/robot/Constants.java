@@ -226,10 +226,10 @@ public final class Constants {
     public static final double kG = 0.025;//.025, .18
     public static final double kV = 4.45;//4.45
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(700);//720
-    public static final double kMaxAccel = Math.toRadians(400);//720
-    public static final double kMaxVelExtended = Math.toRadians(540);
-    public static final double kMaxAccelExtended = Math.toRadians(90);
+    public static final double kMaxVel = Math.toRadians(700);//700
+    public static final double kMaxAccel = Math.toRadians(400);//400
+    public static final double kMaxVelExtended = Math.toRadians(540);//540
+    public static final double kMaxAccelExtended = Math.toRadians(90);//90
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -257,22 +257,22 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.15;//.075, .02
+    public static final double kP = 0.0;//.15
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.25;//.233
-    public static final double kV = 0.045;//.045
-    public static final double kG = 0.35;//.01
-    public static final double kMaxVel = 200;//300
-    public static final double kMaxAccel = 200;//300
-    public static final double kMaxVelDown = 100;
-    public static final double kMaxAccelDown = 100;
+    public static final double kS = 0.0;//.25
+    public static final double kV = .1;//.045
+    public static final double kG = 0.3;//.035
+    public static final double kMaxVel = 5;//200
+    public static final double kMaxAccel = 5;//200
+    public static final double kMaxVelDown = 5;//100
+    public static final double kMaxAccelDown = 5;//100
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
-    public static final double kConversionFactor = 3.135;//1.9006
+    public static final double kConversionFactor = 3.17;//1.9006
     public static final double kTolerance = 1;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
@@ -364,7 +364,8 @@ public final class Constants {
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-      
+    
+    public static final AprilTagFieldLayout kFlippedTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)

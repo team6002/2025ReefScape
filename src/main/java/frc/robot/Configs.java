@@ -95,8 +95,8 @@ public final class Configs {
     }
 
     public static final class ElevatorConfig{
-        public static final SparkMaxConfig m_leftElevatorConfig = new SparkMaxConfig();
-        public static final SparkMaxConfig m_rightElevatorConfig = new SparkMaxConfig();
+        public static final SparkFlexConfig m_leftElevatorConfig = new SparkFlexConfig();
+        public static final SparkFlexConfig m_rightElevatorConfig = new SparkFlexConfig();
 
         static {
                 m_leftElevatorConfig
@@ -209,23 +209,23 @@ public final class Configs {
     }   
     
     public static final class CoralHolderConfig{
-        public static final SparkMaxConfig m_coralHolderConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig m_intakeConfig = new SparkMaxConfig();
 
         static{
-                m_coralHolderConfig
+                m_intakeConfig
                         .disableFollowerMode()
                         .idleMode(IdleMode.kBrake)
                         .inverted(CoralHolderConstants.kCoralHolderInverted)
                         .smartCurrentLimit(40)
                         .voltageCompensation(12.0);
-                m_coralHolderConfig.encoder
+                m_intakeConfig.encoder
                         .quadratureAverageDepth(2)
                         .quadratureMeasurementPeriod(10);
-                m_coralHolderConfig.closedLoop
+                m_intakeConfig.closedLoop
                         .pidf(CoralHolderConstants.kP, CoralHolderConstants.kI, CoralHolderConstants.kD, CoralHolderConstants.kFF)
                         .outputRange(CoralHolderConstants.kMinOutput, CoralHolderConstants.kMaxOutput)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-                m_coralHolderConfig.limitSwitch
+                m_intakeConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
         }

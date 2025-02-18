@@ -6,9 +6,9 @@ import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 
 public class CMD_DeployLevelOne extends SequentialCommandGroup{
-    public CMD_DeployLevelOne(SUB_CoralHolder p_coralHolder){
+    public CMD_DeployLevelOne(SUB_CoralHolder p_intake){
         addCommands(
-            new InstantCommand(()-> p_coralHolder.setReference(CoralHolderConstants.kReverseSlow))
+            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kReverseSlow))
         );
     }
 }

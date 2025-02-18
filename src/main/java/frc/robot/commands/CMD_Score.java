@@ -16,16 +16,16 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_Score extends Command{
     SUB_Elevator m_elevator;
     SUB_Wrist m_wrist;
-    SUB_CoralHolder m_coralHolder;
+    SUB_CoralHolder m_intake;
     SUB_Pivot m_pivot;
     SUB_Algae m_algae;
     GlobalVariables m_variables;
-    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_coralHolder, SUB_Pivot p_pivot, 
+    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_intake, SUB_Pivot p_pivot, 
                      SUB_Algae p_algae, GlobalVariables p_variables){
         
         m_elevator = p_elevator;
         m_wrist = p_wrist;
-        m_coralHolder = p_coralHolder;
+        m_intake = p_intake;
         m_pivot = p_pivot;
         m_algae = p_algae;
         m_variables = p_variables;
@@ -46,9 +46,9 @@ public class CMD_Score extends Command{
                 //ready to intake
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralHolder)
+                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_IntakeStow(m_coralHolder)
+                    ,new CMD_IntakeStow(m_intake)
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
@@ -95,16 +95,16 @@ public class CMD_Score extends Command{
 
     private ConditionalCommand readyHome(){
         return new ConditionalCommand(
-            new CMD_ReadyHome(m_elevator, m_wrist, m_pivot, m_coralHolder)
-            ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder)
+            new CMD_ReadyHome(m_elevator, m_wrist, m_pivot, m_intake)
+            ,new CMD_ReadyHomeDefensive(m_elevator, m_wrist, m_pivot, m_intake)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
     }
 
     private ConditionalCommand ready(){
         return new ConditionalCommand(
-            new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralHolder)
-            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_coralHolder)
+            new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
+            ,new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_intake)
             ,()-> m_variables.isMode(Mode.OFFENSIVE)
         );
     }
@@ -135,16 +135,16 @@ public class CMD_Score extends Command{
 
         switch(GlobalVariables.m_targetCoralLevel){
             case 1:
-                m_deployCommand = new CMD_DeployLevelOne(m_coralHolder);
+                m_deployCommand = new CMD_DeployLevelOne(m_intake);
                 break;
             case 2:
-                m_deployCommand = new CMD_DeployLevelTwo(m_coralHolder, m_wrist);
+                m_deployCommand = new CMD_DeployLevelTwo(m_intake, m_wrist);
                 break;
             case 3:
-                m_deployCommand = new CMD_DeployLevelThree(m_coralHolder, m_wrist);
+                m_deployCommand = new CMD_DeployLevelThree(m_intake, m_wrist);
                 break;
             case 4:
-                m_deployCommand = new CMD_DeployLevelFour(m_coralHolder, m_wrist);
+                m_deployCommand = new CMD_DeployLevelFour(m_intake, m_wrist);
                 break;
             default:
                 break;
