@@ -74,6 +74,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
+    m_driverController.leftBumper().onTrue(new SequentialCommandGroup(
+      new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
+      ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables)
+      ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+    ));
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
     m_driverController.start().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     // m_driverController.x().onTrue(new InstantCommand(()-> m_winch.setPower(1)))

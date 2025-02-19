@@ -254,8 +254,8 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(60);
     public static final double kIntakeAlgaeGround = Math.toRadians(37.5);
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
-    public static final double kDeployl2 = Math.toRadians(84.5);//82.75
-    public static final double kDeployl3 = Math.toRadians(86.5);//86
+    public static final double kDeployl2 = Math.toRadians(83);//82.75
+    public static final double kDeployl3 = Math.toRadians(84);//86
     public static final double kDeployl4 = Math.toRadians(86);//85.5
     public static final double kDeployBarge = Math.toRadians(88);
   }
