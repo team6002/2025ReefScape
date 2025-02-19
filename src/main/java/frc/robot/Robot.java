@@ -68,9 +68,9 @@ public class Robot extends LoggedRobot {
         m_autonomousChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData(m_autonomousChooser);
 
-    // m_robotContainer.m_pivot.reset();
-    // m_robotContainer.m_wrist.reset();
-    // m_robotContainer.m_elevator.resetEncoder();
+    m_robotContainer.m_pivot.reset();
+    m_robotContainer.m_wrist.reset();
+    m_robotContainer.m_elevator.resetEncoder();
   }
 
   /**
@@ -99,9 +99,9 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_robotContainer.m_pivot.reset();
-    // m_robotContainer.m_wrist.reset();
-    // m_robotContainer.m_elevator.resetEncoder();
+    m_robotContainer.m_pivot.reset();
+    m_robotContainer.m_wrist.reset();
+    m_robotContainer.m_elevator.resetEncoder();
     // m_autonomousCommand = m_autonomousChooser.getSelected();
     // m_autonomousCommand = new SequentialCommandGroup(
     //   // Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain)
@@ -110,7 +110,7 @@ public class Robot extends LoggedRobot {
       
     // );
         // schedule the autonomous command (example)
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -125,10 +125,10 @@ public class Robot extends LoggedRobot {
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
-    // // this line or comment it out.
-    // m_robotContainer.m_pivot.reset();
-    // m_robotContainer.m_wrist.reset();
-    // m_robotContainer.m_elevator.resetEncoder();
+    // this line or comment it out.
+    m_robotContainer.m_pivot.reset();
+    m_robotContainer.m_wrist.reset();
+    m_robotContainer.m_elevator.resetEncoder();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
