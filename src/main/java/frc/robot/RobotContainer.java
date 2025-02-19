@@ -89,11 +89,8 @@ public class RobotContainer {
         ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome)))
       );
 
-    m_driverController.y().onTrue(new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kDeployL3)));
-    m_driverController.a().onTrue(new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome)));
     m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
-    m_driverController.x().onTrue(new InstantCommand(()-> m_pivot.setGoal(Math.toRadians(90))));
     //operator
     m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
     m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
@@ -104,11 +101,12 @@ public class RobotContainer {
     m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
 
     m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
+    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
     m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));    
     m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));
     m_operatorController.x().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 2));
     m_operatorController.y().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 3));
-    m_operatorController.rightBumper().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
+    m_operatorController.leftStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
     m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));
   }
 

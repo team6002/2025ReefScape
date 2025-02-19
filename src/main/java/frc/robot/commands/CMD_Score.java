@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.Mode;
 import frc.GlobalVariables.RobotState;
@@ -76,8 +77,11 @@ public class CMD_Score extends Command{
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
                     ,deployCommand()
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
+                    ,readyHome()
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
             case DEPLOY:

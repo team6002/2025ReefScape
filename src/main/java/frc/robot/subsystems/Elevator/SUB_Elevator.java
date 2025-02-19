@@ -2,7 +2,6 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.GlobalVariables;
 
@@ -18,7 +17,7 @@ public class SUB_Elevator extends SubsystemBase{
     }
 
     public double getCurrent(){
-      return inputs.m_elevatorCurrent;
+      return inputs.m_rightElevatorCurrent;
     }
 
     public double getGoal(){
@@ -47,6 +46,14 @@ public class SUB_Elevator extends SubsystemBase{
 
     public boolean isResetMode(){
       return io.isResetMode();
+    }
+
+    public double getRightVoltage(){
+      return io.getRightVoltage();
+    }
+
+    public double getLeftVoltage(){
+      return io.getLeftVoltage();
     }
 
     @Override

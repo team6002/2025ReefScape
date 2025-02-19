@@ -7,9 +7,11 @@ public interface ElevatorIO {
   public static class ElevatorIoInputs {
     public double m_elevatorPos;
     public double m_elevatorGoal;
-    public double m_elevatorCurrent;
+    public double m_rightElevatorCurrent;
+    public double m_leftElevatorCurrent;
     public double m_elevatorSetpoint;
-    public double m_voltage;
+    public double m_rightVoltage;
+    public double m_leftVoltage;
     public double m_speed;
     public boolean m_elevatorInPosition;
   }
@@ -33,6 +35,10 @@ public interface ElevatorIO {
   public default void resetEncoder(){}
 
   public default boolean isResetMode(){return false;}
+
+  public default double getRightVoltage(){return 0;}
+
+  public default double getLeftVoltage(){return 0;}
 
   public default void reset(boolean m_reset){}
 }

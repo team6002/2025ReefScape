@@ -95,8 +95,8 @@ public final class Configs {
     }
 
     public static final class ElevatorConfig{
-        public static final SparkFlexConfig m_leftElevatorConfig = new SparkFlexConfig();
-        public static final SparkFlexConfig m_rightElevatorConfig = new SparkFlexConfig();
+        public static final SparkMaxConfig m_leftElevatorConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig m_rightElevatorConfig = new SparkMaxConfig();
 
         static {
                 m_leftElevatorConfig

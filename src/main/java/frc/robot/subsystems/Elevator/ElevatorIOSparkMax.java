@@ -3,7 +3,6 @@ package frc.robot.subsystems.Elevator;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -14,6 +13,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 import frc.GlobalVariables;
 import frc.robot.Configs;
@@ -21,8 +21,8 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.HardwareConstants;
 
 public class ElevatorIOSparkMax implements ElevatorIO{
-    private final SparkFlex m_leftElevator;
-    private final SparkFlex m_rightElevator;
+    private final SparkMax m_leftElevator;
+    private final SparkMax m_rightElevator;
     private final RelativeEncoder m_elevatorEncoder;
     private final SparkClosedLoopController m_elevatorController;
     private final ArmFeedforward m_feedforward = new ArmFeedforward(ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV);
@@ -31,8 +31,8 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     private TrapezoidProfile.State m_setpoint;
     private boolean m_resetMode = false;
     public ElevatorIOSparkMax(){
-        m_leftElevator = new SparkFlex(HardwareConstants.kLeftElevatorCanId, MotorType.kBrushless);
-        m_rightElevator = new SparkFlex(HardwareConstants.kRightElevatorCanId, MotorType.kBrushless);
+        m_leftElevator = new SparkMax(HardwareConstants.kLeftElevatorCanId, MotorType.kBrushless);
+        m_rightElevator = new SparkMax(HardwareConstants.kRightElevatorCanId, MotorType.kBrushless);
 
         m_elevatorEncoder = m_rightElevator.getEncoder();
 
@@ -51,11 +51,13 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     public void updateInputs(ElevatorIoInputs inputs) {
         inputs.m_elevatorGoal = m_goal.position;
         inputs.m_elevatorPos = getPosition();
-        inputs.m_elevatorCurrent = getCurrent();
+        inputs.m_rightElevatorCurrent = getCurrent();
+        inputs.m_leftElevatorCurrent = m_leftElevator.getOutputCurrent();
         inputs.m_elevatorInPosition = inPosition();
         inputs.m_elevatorSetpoint = m_setpoint.position;
         inputs.m_speed = m_rightElevator.get();
-        inputs.m_voltage = m_rightElevator.getBusVoltage();
+        inputs.m_rightVoltage = getRightVoltage();
+        inputs.m_leftVoltage = getLeftVoltage();
     };
 
     @Override
@@ -114,6 +116,16 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     }
 
     @Override
+    public double getRightVoltage(){
+        return m_rightElevator.getAppliedOutput() * m_rightElevator.getBusVoltage();
+    }
+
+    @Override
+    public double getLeftVoltage(){
+        return m_leftElevator.getAppliedOutput() * m_leftElevator.getBusVoltage();
+    }
+
+    @Override
     public void PID(){
         // m_rightElevator.set(.2);
         if(m_resetMode){
@@ -124,7 +136,5 @@ public class ElevatorIOSparkMax implements ElevatorIO{
             m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition,
                 ClosedLoopSlot.kSlot0, m_feedforward.calculate(GlobalVariables.m_pivotAngle - Math.toRadians(90), m_setpoint.velocity));
         }
-
-        SmartDashboard.putNumber("left elev current", m_leftElevator.getOutputCurrent());
     }
 }

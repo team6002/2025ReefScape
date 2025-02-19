@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -252,27 +256,27 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
     public static final double kDeployl2 = Math.toRadians(84.5);//82.75
     public static final double kDeployl3 = Math.toRadians(86.5);//86
-    public static final double kDeployl4 = Math.toRadians(88);//85.5
+    public static final double kDeployl4 = Math.toRadians(86);//85.5
     public static final double kDeployBarge = Math.toRadians(88);
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.0;//.15
+    public static final double kP = 0.15;//.15
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.0;//.25
-    public static final double kV = .1;//.045
-    public static final double kG = 0.3;//.035
-    public static final double kMaxVel = 5;//200
-    public static final double kMaxAccel = 5;//200
-    public static final double kMaxVelDown = 5;//100
-    public static final double kMaxAccelDown = 5;//100
+    public static final double kS = 0.25;//.25
+    public static final double kV = 0.045;//.045
+    public static final double kG = 0.35;//.035
+    public static final double kMaxVel = 300;//200
+    public static final double kMaxAccel = 300;//200
+    public static final double kMaxVelDown = 100;//100
+    public static final double kMaxAccelDown = 100;//100
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
-    public static final double kConversionFactor = 3.17;//1.9006
+    public static final double kConversionFactor = 3.135;//3.17
     public static final double kTolerance = 1;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
@@ -365,7 +369,32 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     
-    public static final AprilTagFieldLayout kFlippedTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    // public static final List<AprilTag> kInvertedTagPoses = {
+    //   kTagLayout.getTagPose(13).get()//tag 1
+    //   ,kTagLayout.getTagPose(12).get()//tag 2
+    //   ,kTagLayout.getTagPose(16).get()//tag 3
+    //   ,kTagLayout.getTagPose(15).get()//tag 4
+    //   ,kTagLayout.getTagPose(14).get()//tag 5
+    //   ,kTagLayout.getTagPose(19).get()//tag 6
+    //   ,kTagLayout.getTagPose(18).get()//tag 7
+    //   ,kTagLayout.getTagPose(17).get()//tag 8
+    //   ,kTagLayout.getTagPose(22).get()//tag 9
+    //   ,kTagLayout.getTagPose(21).get()//tag 10
+    //   ,kTagLayout.getTagPose(20).get()//tag 11
+    //   ,kTagLayout.getTagPose(2).get()//tag 12
+    //   ,kTagLayout.getTagPose(1).get()//tag 13
+    //   ,kTagLayout.getTagPose(5).get()//tag 14
+    //   ,kTagLayout.getTagPose(4).get()//tag 15
+    //   ,kTagLayout.getTagPose(3).get()//tag 16
+    //   ,kTagLayout.getTagPose(8).get()//tag 17
+    //   ,kTagLayout.getTagPose(7).get()//tag 18
+    //   ,kTagLayout.getTagPose(6).get()//tag 19
+    //   ,kTagLayout.getTagPose(11).get()//tag 20
+    //   ,kTagLayout.getTagPose(10).get()//tag 21
+    //   ,kTagLayout.getTagPose(9).get()//tag 22
+    // };
+
+    // public static final AprilTagFieldLayout kInvertedTagLayout = new AprilTagFieldLayout(kInvertedTagPoses, kTagLayout.getFieldLength(), kTagLayout.getFieldWidth());
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)

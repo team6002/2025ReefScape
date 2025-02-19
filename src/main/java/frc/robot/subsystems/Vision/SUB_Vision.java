@@ -24,31 +24,26 @@
 
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
 
 import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class SUB_Vision {
     private final VisionIO io;
     private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
-    private Matrix<N3, N1> curStdDevs;
+    // private Matrix<N3, N1> curStdDevs;
+    private List<AprilTag> invertedTags;
+
 
     public SUB_Vision(VisionIO io) {
         this.io = io;
