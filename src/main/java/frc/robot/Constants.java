@@ -102,14 +102,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.16;//0.004;
+    public static final double kDrivingP = 0.22;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.21;
 
-    public static final double kDrivingA = 0.4;
-    public static final double kDrivingS = 0.15;
-    public static final double kDrivingV = 2.0;
+    public static final double kDrivingA = 1.1;
+    public static final double kDrivingS = 0.12;
+    public static final double kDrivingV = 2.09;
     
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
@@ -278,7 +278,7 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//3.17
-    public static final double kTolerance = 1;
+    public static final double kTolerance = 3;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
@@ -361,10 +361,10 @@ public final class Constants {
     public static final String kLeftCameraName = "LeftCamera";
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(15)));
+    public static final Transform3d   kRobotToLCam =
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-10)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(10)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =

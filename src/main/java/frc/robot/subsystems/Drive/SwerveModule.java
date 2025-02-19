@@ -53,7 +53,7 @@ public class SwerveModule {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
-    Logger.recordOutput("speed" + Integer.toString(index), inputs.driveVelocityRadPerSec);
+    Logger.recordOutput("speed" + Integer.toString(index), Math.abs(inputs.driveVelocityRadPerSec));
     Logger.recordOutput("desiredSpeed" + Integer.toString(index), m_desiredState.speedMetersPerSecond);
   }
   /**
