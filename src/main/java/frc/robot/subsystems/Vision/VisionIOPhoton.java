@@ -41,10 +41,14 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionIOPhoton implements VisionIO{  
     private final PhotonCamera LCamera = new PhotonCamera(VisionConstants.kLeftCameraName);
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
-    private final PhotonPoseEstimator photonEstimator = 
+    private final PhotonPoseEstimator LphotonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
-    private final PhotonPoseEstimator photonEstimatorLast = 
+    private final PhotonPoseEstimator LphotonEstimatorLast = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.CLOSEST_TO_LAST_POSE, VisionConstants.kRobotToLCam);
+    private final PhotonPoseEstimator RphotonEstimator = 
+        new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToRCam);
+    private final PhotonPoseEstimator RphotonEstimatorLast = 
+        new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.CLOSEST_TO_LAST_POSE, VisionConstants.kRobotToRCam);
     private Matrix<N3, N1> curStdDevs;
 
     public void setCameraPipeline(int LPipeline, int RPipeline){
@@ -54,7 +58,7 @@ public class VisionIOPhoton implements VisionIO{
 
     @Override
     public void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){
-        photonEstimator.setMultiTagFallbackStrategy(poseStrategy);
+        LphotonEstimator.setMultiTagFallbackStrategy(poseStrategy);
     }
     
     public void setCameraDriverMode(boolean bootlean){
@@ -63,38 +67,57 @@ public class VisionIOPhoton implements VisionIO{
     }
 
     @Override 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
-        for (var change : RCamera.getAllUnreadResults()) {
-            visionEst = photonEstimator.update(change);
-            updateEstimationStdDevs(visionEst, change.getTargets());
-        }
         for (var change : LCamera.getAllUnreadResults()) {
-            visionEst = photonEstimator.update(change);
+            visionEst = LphotonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
         }
         return visionEst;
     }
     
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPoseLast() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+
+        for (var change : LCamera.getAllUnreadResults()) {
+            visionEst = LphotonEstimatorLast.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets());
+        }
+        return visionEst;
+    }
+
+    @Override 
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
         for (var change : RCamera.getAllUnreadResults()) {
-            visionEst = photonEstimatorLast.update(change);
+            visionEst = RphotonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
         }
-        for (var change : LCamera.getAllUnreadResults()) {
-            visionEst = photonEstimatorLast.update(change);
+        return visionEst;
+    }
+    
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+
+        for (var change : RCamera.getAllUnreadResults()) {
+            visionEst = RphotonEstimatorLast.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
         }
         return visionEst;
     }
 
     @Override
-    public void setLastPose(Pose2d lastpose){
-        photonEstimatorLast.setLastPose(lastpose);
+    public void setLastLPose(Pose2d lastpose){
+        LphotonEstimatorLast.setLastPose(lastpose);
     }
+
+    @Override
+    public void setLastRPose(Pose2d lastpose){
+        RphotonEstimatorLast.setLastPose(lastpose);
+    }
+
 
     public PhotonPipelineResult getLatestLResult() {
         if (LCamera.getLatestResult().hasTargets()){
@@ -110,6 +133,13 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public Pose2d getCurrentLPose(){
         int tagNum = LCamera.getLatestResult().getBestTarget().getFiducialId();
+        for (PhotonTrackedTarget target : LCamera.getLatestResult().targets){
+            if (Math.abs(target.getYaw()) <= 25){
+                continue;
+            }
+            tagNum = target.getFiducialId();
+        }
+        LCamera.getLatestResult().targets.get(tagNum).getYaw();
         Pose2d tagLocation = new Pose2d();
         tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
         Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
@@ -122,8 +152,14 @@ public class VisionIOPhoton implements VisionIO{
     
     @Override
     public Pose2d getCurrentRPose(){
-        int tagNum = RCamera.getLatestResult().getBestTarget().getFiducialId();
-        Pose2d tagLocation = new Pose2d();
+        int tagNum = LCamera.getLatestResult().getBestTarget().getFiducialId();
+        for (PhotonTrackedTarget target : LCamera.getLatestResult().targets){
+            if (Math.abs(target.getYaw()) <= 25){
+                continue;
+            }
+            tagNum = target.getFiducialId();
+        }
+        LCamera.getLatestResult().targets.get(tagNum).getYaw();Pose2d tagLocation = new Pose2d();
         tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
         Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
             new Transform2d(getTargetRPose().getTranslation().toTranslation2d(), getTargetRPose().getRotation().toRotation2d())
@@ -183,20 +219,46 @@ public class VisionIOPhoton implements VisionIO{
     // }
 
     @Override// need to figure out how to get it to actually work with 2
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+    public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
         var estStdDevs = VisionConstants.kSingleTagStdDevs;
         List<PhotonTrackedTarget> targets = new ArrayList<>();
-        if (LCamera.getLatestResult().hasTargets()){
-            targets = getLatestLResult().getTargets();
-        }else if (RCamera.getLatestResult().hasTargets()){
-            targets = getLatestRResult().getTargets();
-        }else{
-            return estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        }
+        targets = getLatestLResult().getTargets();
         int numTags = 0; // tag counter that counts all tags that are within the filter;
         double avgDist = 0;
         for (var tgt : targets) {
-            var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            var tagPose = LphotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            if (tagPose.isEmpty()) continue; 
+            // if (angFilter(totalTags)) continue;
+            numTags++;
+            // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
+            avgDist +=
+                tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+        }
+        if (numTags == 0) return estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        // estStdDevs;
+        avgDist /= numTags;
+        // Decrease std devs if multiple targets are visible
+        if (numTags > 1) estStdDevs = VisionConstants.kMultiTagStdDevs;
+        // Increase std devs based on (average) distance
+        if (numTags == 1 && avgDist > 4)
+            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        if (avgDist > 6)
+            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+
+        // getLatestResult(th).getBestTarget().getPoseAmbiguity();
+        return estStdDevs;
+    }
+
+    @Override// need to figure out how to get it to actually work with 2
+    public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
+        var estStdDevs = VisionConstants.kSingleTagStdDevs;
+        List<PhotonTrackedTarget> targets = new ArrayList<>();
+        targets = getLatestRResult().getTargets();
+        int numTags = 0; // tag counter that counts all tags that are within the filter;
+        double avgDist = 0;
+        for (var tgt : targets) {
+            var tagPose = LphotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue; 
             // if (angFilter(totalTags)) continue;
             numTags++;

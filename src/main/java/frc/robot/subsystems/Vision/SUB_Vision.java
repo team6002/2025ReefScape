@@ -108,8 +108,12 @@ public class SUB_Vision {
     //     return io.getLEstimationStdDevs(estimatedPose);
     // }
 
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-        return io.getEstimationStdDevs(estimatedPose);
+    public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
+        return io.getLEstimationStdDevs(estimatedPose);
+    }
+
+    public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
+        return io.getREstimationStdDevs(estimatedPose);
     }
 
     public void updateInputs(){
@@ -117,12 +121,28 @@ public class SUB_Vision {
         Logger.processInputs("Vision", inputs);
     }
     
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-        return io.getEstimatedGlobalPose();
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPose() {
+        return io.getLEstimatedGlobalPose();
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {
-        return io.getEstimatedGlobalPoseLast();
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPoseLast() {
+        return io.getLEstimatedGlobalPoseLast();
+    }
+
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPose() {
+        return io.getREstimatedGlobalPose();
+    }
+
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {
+        return io.getREstimatedGlobalPoseLast();
+    }
+
+    public void setLastLPose(Pose2d lastPose){
+        io.setLastLPose(lastPose);
+    }
+
+    public void setLastRPose(Pose2d lastPose){
+        io.setLastRPose(lastPose);
     }
 
     public Pose2d getCurrentLPose(){

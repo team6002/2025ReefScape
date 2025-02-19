@@ -44,7 +44,8 @@ public interface VisionIO {
 
     public default void updateInputs(VisionIOInputs inputs) {}
     public default void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets){}
-    public default Optional<EstimatedRobotPose> getEstimatedGlobalPose() {return null;}
+    public default Optional<EstimatedRobotPose> getLEstimatedGlobalPose() {return null;}
+    public default Optional<EstimatedRobotPose> getREstimatedGlobalPose() {return null;}
     public default Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
@@ -52,8 +53,10 @@ public interface VisionIO {
     public default Pose2d getCurrentRPose(){return null;}
     public default Transform3d getTargetLPose(){return null;}
     public default Transform3d getTargetRPose(){return null;}
-    public default Optional<EstimatedRobotPose> getEstimatedGlobalPoseLast() {return null;}
+    public default Optional<EstimatedRobotPose> getLEstimatedGlobalPoseLast() {return null;}
+    public default Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {return null;}
     public default void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){}
-    public default void setLastPose(Pose2d lastpose){};
+    public default void setLastLPose(Pose2d lastpose){};
+    public default void setLastRPose(Pose2d lastpose){};
   
 }

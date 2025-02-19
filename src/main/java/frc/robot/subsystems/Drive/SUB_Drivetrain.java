@@ -254,8 +254,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("gyroHeading", getAngle());
-    var visionEst = m_vision.getEstimatedGlobalPose();
-    var targetEst = m_vision.getEstimatedGlobalPose();
+    var LvisionEst = m_vision.getLEstimatedGlobalPose();
+    var RvisionEst = m_vision.getREstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -294,28 +294,39 @@ public class SUB_Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
     m_vision.updateInputs();
 
-    if (m_vision.getHasLTarget() && m_vision.getHasRTarget()){
-      visionEst.ifPresent(
-        est -> {
-          var estPose = est.estimatedPose.toPose2d();
-          // estPose = m_vision.getEstimatedGlobalPose(estPose);
-          Logger.recordOutput("CameraPose", estPose);
-          // Change our trust in the measurement based on the tags we can see
-          var estStdDevs = m_vision.getEstimationStdDevs(estPose);
-        
-            addVisionMeasurement(
-              est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-        }  
-      );
-    }
-    visionEst.ifPresent(
+    LvisionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+        Logger.recordOutput("LCameraPose", estPose);
+        // Change our trust in the measurement based on the tags we can see
+        var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+      
+          addVisionMeasurement(
+            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }  
+    );
+
+    RvisionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
+        Logger.recordOutput("RCameraPose", estPose);
+        // Change our trust in the measurement based on the tags we can see
+        var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+      
+          addVisionMeasurement(
+            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }  
+    );
+    
+    LvisionEst.ifPresent(
       est -> {
           var estPose = est.estimatedPose.toPose2d();
         if (TargetOdoEnable){
-          if (m_vision.getHasLTarget()){
-            Logger.recordOutput("LastEstimatorPose", m_vision.getEstimatedGlobalPoseLast().get().estimatedPose.toPose2d());
-            Logger.recordOutput("CurrentPose", m_vision.getCurrentLPose());
-          
+          if (m_vision.getHasLTarget()){   
             addTargetVisionMeasurement(
               m_vision.getTargetLPose(), est.timestampSeconds);
           }
