@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -369,32 +370,32 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     
-    // public static final List<AprilTag> kInvertedTagPoses = {
-    //   kTagLayout.getTagPose(13).get()//tag 1
-    //   ,kTagLayout.getTagPose(12).get()//tag 2
-    //   ,kTagLayout.getTagPose(16).get()//tag 3
-    //   ,kTagLayout.getTagPose(15).get()//tag 4
-    //   ,kTagLayout.getTagPose(14).get()//tag 5
-    //   ,kTagLayout.getTagPose(19).get()//tag 6
-    //   ,kTagLayout.getTagPose(18).get()//tag 7
-    //   ,kTagLayout.getTagPose(17).get()//tag 8
-    //   ,kTagLayout.getTagPose(22).get()//tag 9
-    //   ,kTagLayout.getTagPose(21).get()//tag 10
-    //   ,kTagLayout.getTagPose(20).get()//tag 11
-    //   ,kTagLayout.getTagPose(2).get()//tag 12
-    //   ,kTagLayout.getTagPose(1).get()//tag 13
-    //   ,kTagLayout.getTagPose(5).get()//tag 14
-    //   ,kTagLayout.getTagPose(4).get()//tag 15
-    //   ,kTagLayout.getTagPose(3).get()//tag 16
-    //   ,kTagLayout.getTagPose(8).get()//tag 17
-    //   ,kTagLayout.getTagPose(7).get()//tag 18
-    //   ,kTagLayout.getTagPose(6).get()//tag 19
-    //   ,kTagLayout.getTagPose(11).get()//tag 20
-    //   ,kTagLayout.getTagPose(10).get()//tag 21
-    //   ,kTagLayout.getTagPose(9).get()//tag 22
-    // };
+    public static final List<AprilTag> kInvertedTagPoses = new ArrayList<>(){{
+      new AprilTag(1, kTagLayout.getTagPose(13).get());//tag 1
+      new AprilTag(2, kTagLayout.getTagPose(12).get());//tag 2
+      new AprilTag(3, kTagLayout.getTagPose(16).get());//tag 3
+      new AprilTag(4, kTagLayout.getTagPose(15).get());//tag 4
+      new AprilTag(5, kTagLayout.getTagPose(14).get());//tag 5
+      new AprilTag(6, kTagLayout.getTagPose(19).get());//tag 6
+      new AprilTag(7, kTagLayout.getTagPose(18).get());//tag 7
+      new AprilTag(8, kTagLayout.getTagPose(17).get());//tag 8
+      new AprilTag(9, kTagLayout.getTagPose(22).get());//tag 9
+      new AprilTag(10, kTagLayout.getTagPose(21).get());//tag 10
+      new AprilTag(11, kTagLayout.getTagPose(20).get());//tag 11
+      new AprilTag(12, kTagLayout.getTagPose(2).get());//tag 12
+      new AprilTag(13, kTagLayout.getTagPose(1).get());//tag 13
+      new AprilTag(14, kTagLayout.getTagPose(5).get());//tag 14
+      new AprilTag(15, kTagLayout.getTagPose(4).get());//tag 15
+      new AprilTag(16, kTagLayout.getTagPose(3).get());//tag 16
+      new AprilTag(17, kTagLayout.getTagPose(8).get());//tag 17
+      new AprilTag(18, kTagLayout.getTagPose(7).get());//tag 18
+      new AprilTag(19, kTagLayout.getTagPose(6).get());//tag 19
+      new AprilTag(20, kTagLayout.getTagPose(11).get());//tag 20
+      new AprilTag(21, kTagLayout.getTagPose(10).get());//tag 21
+      new AprilTag(22, kTagLayout.getTagPose(9).get());//tag 22
+    }};
 
-    // public static final AprilTagFieldLayout kInvertedTagLayout = new AprilTagFieldLayout(kInvertedTagPoses, kTagLayout.getFieldLength(), kTagLayout.getFieldWidth());
+    public static final AprilTagFieldLayout kInvertedTagLayout = new AprilTagFieldLayout(kInvertedTagPoses, kTagLayout.getFieldLength(), kTagLayout.getFieldWidth());
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
