@@ -99,9 +99,6 @@ public class RobotContainer {
         ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome)))
       );
     
-        ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
-      )
-    );
     m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     //operator
