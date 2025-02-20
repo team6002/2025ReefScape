@@ -28,6 +28,7 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
@@ -65,8 +66,12 @@ public class SUB_Vision {
     //     return io.getLEstimationStdDevs(estimatedPose);
     // }
 
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-        return io.getEstimationStdDevs(estimatedPose);
+    public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
+        return io.getLEstimationStdDevs(estimatedPose);
+    }
+
+    public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
+        return io.getREstimationStdDevs(estimatedPose);
     }
 
     public void updateInputs(){
@@ -74,15 +79,43 @@ public class SUB_Vision {
         Logger.processInputs("Vision", inputs);
     }
     
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-        return io.getEstimatedGlobalPose();
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPose() {
+        return io.getLEstimatedGlobalPose();
     }
-  
+
+    public Optional<EstimatedRobotPose> getLEstimatedGlobalPoseLast() {
+        return io.getLEstimatedGlobalPoseLast();
+    }
+
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPose() {
+        return io.getREstimatedGlobalPose();
+    }
+
+    public Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {
+        return io.getREstimatedGlobalPoseLast();
+    }
+
+    public void setLastLPose(Pose2d lastPose){
+        io.setLastLPose(lastPose);
+    }
+
+    public void setLastRPose(Pose2d lastPose){
+        io.setLastRPose(lastPose);
+    }
+
+    public Pose2d getCurrentLPose(){
+        return io.getCurrentLPose();
+    }
+
+    public Pose2d getCurrentRPose(){
+        return io.getCurrentRPose();
+    }
+
     public Transform3d getTargetLPose(){
-        return io.getTargetLPose();
+        return io.getTargetLPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), 0, -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
     }
 
     public Transform3d getTargetRPose(){
-        return io.getTargetRPose();
+        return io.getTargetRPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), 0, -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }
 }

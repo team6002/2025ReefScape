@@ -4,15 +4,11 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
-
-import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -20,13 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.commands.CMD_DeployLevelFour;
-import frc.robot.commands.CMD_Ready;
-import frc.robot.commands.CMD_ReadyToDeployLevelFour;
+import frc.robot.Autos.AUTO_Left;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,7 +27,7 @@ import frc.robot.commands.CMD_ReadyToDeployLevelFour;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-  private SendableChooser<Command> m_autonomousChooser;
+  private SendableChooser<SequentialCommandGroup> m_autonomousChooser = new SendableChooser<SequentialCommandGroup>();
 
   private RobotContainer m_robotContainer;
 
@@ -44,6 +35,7 @@ public class Robot extends LoggedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  @SuppressWarnings("resource")
   @Override
   public void robotInit() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
@@ -52,21 +44,14 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-    } else {
-        // setUseTiming(false); // Run as fast as possible
-        // String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-        // Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-        // Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
     }
-
-    // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
-      Logger.registerURCL(URCL.startExternal());
-      Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
-        m_autonomousChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData(m_autonomousChooser);
+    
+    Logger.registerURCL(URCL.startExternal());
+    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our autonomous chooser on the dashboard.
+    m_robotContainer = new RobotContainer();
+    m_autonomousChooser.addOption("AUTO_Left", new AUTO_Left(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
+    SmartDashboard.putData(m_autonomousChooser);
 
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
@@ -102,14 +87,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
-    // m_autonomousCommand = m_autonomousChooser.getSelected();
-    // m_autonomousCommand = new SequentialCommandGroup(
-    //   // Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain)
-    //   // ,Commands.runOnce(()->m_robotContainer.m_drivetrain.resetOdoToStartPosition("Box1"), m_robotContainer.m_drivetrain),
-    //   // m_robotContainer.m_drivetrain.FollowPath("Box1")
-      
-    // );
-        // schedule the autonomous command (example)
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
