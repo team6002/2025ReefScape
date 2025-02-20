@@ -32,10 +32,10 @@ public class CMD_ReadyToDeploy extends Command{
                 new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_pivot).schedule();
                 break;
             case 3:
-                new CMD_DeployLevelThree(m_intake, m_wrist).schedule();
+                new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_pivot).schedule();
                 break;
             case 4:
-                new CMD_DeployLevelFour(m_intake, m_wrist).schedule();
+                new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot).schedule();
                 break;
             default:
                 break;

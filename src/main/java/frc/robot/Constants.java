@@ -214,7 +214,7 @@ public final class Constants {
     public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 3000;
+    public static final double kIntake = 2500;
     public static final double kOff = 0;
     public static final double kReverse = -1000;//-2500
     public static final double kReverseSlow = -1000;
@@ -239,7 +239,7 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 2*Math.PI;
-    public static final double kTolerance = Math.toRadians(2);
+    public static final double kTolerance = Math.toRadians(3);
     
     public static final double kHome = Math.toRadians(25);
     public static final double kReady = Math.toRadians(85);
@@ -251,10 +251,10 @@ public final class Constants {
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(55);
     public static final double kAlgaeCoral = Math.toRadians(55);
-    public static final double kIntake = Math.toRadians(60);
+    public static final double kIntake = Math.toRadians(62);
     public static final double kIntakeAlgaeGround = Math.toRadians(37.5);
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
-    public static final double kDeployl2 = Math.toRadians(83);//82.75
+    public static final double kDeployl2 = Math.toRadians(75);//82.75
     public static final double kDeployl3 = Math.toRadians(84);//86
     public static final double kDeployl4 = Math.toRadians(86);//85.5
     public static final double kDeployBarge = Math.toRadians(88);
@@ -277,7 +277,7 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 3.135;//3.17
-    public static final double kTolerance = 1;
+    public static final double kTolerance = 3;
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
@@ -317,7 +317,7 @@ public final class Constants {
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kReadyDefensive = Math.toRadians(110);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = Math.toRadians(-110);
+    public static final double kIntake = Math.toRadians(-115);
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(-15);
     public static final double kAlgaeProcessor = Math.toRadians(-100);

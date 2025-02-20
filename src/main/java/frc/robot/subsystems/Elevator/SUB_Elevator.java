@@ -44,6 +44,23 @@ public class SUB_Elevator extends SubsystemBase{
       return io.inPosition();
     }
 
+    public boolean BelowPosition(double goal, boolean inverted){
+      //true = above, false = below
+      if (inverted){
+        if (goal >= io.getPosition()){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        if (goal <= io.getPosition()){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }
+
     public boolean isResetMode(){
       return io.isResetMode();
     }

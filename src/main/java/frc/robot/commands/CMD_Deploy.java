@@ -38,4 +38,9 @@ public class CMD_Deploy extends Command{
             default:
                 break;
         }}
+
+    @Override
+    public boolean isFinished(){
+        return true;
+    }
 }

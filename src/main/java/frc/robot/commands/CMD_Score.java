@@ -8,6 +8,7 @@ import frc.GlobalVariables;
 import frc.GlobalVariables.Mode;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -52,11 +53,6 @@ public class CMD_Score extends Command{
                     ,new CMD_IntakeStow(m_intake)
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kHome))
-                    ,new CMD_WristInPosition(m_wrist)
-                    ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kReady))
-                    ,new CMD_WristInPosition(m_wrist)
                 ).schedule();
                 break;
             case READY_TO_INTAKE:
@@ -66,10 +62,6 @@ public class CMD_Score extends Command{
                     ,ready()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kHome))
-                    ,new CMD_WristInPosition(m_wrist)
-                    ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kReady))
-                    ,new CMD_WristInPosition(m_wrist)
                 ).schedule();
                 break;
            case READY_STOWED:
@@ -85,9 +77,13 @@ public class CMD_Score extends Command{
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
                     ,new CMD_Deploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_ElevatorInPosition(m_elevator)
+                    ,new CMD_PivotInPosition(m_pivot)
+                    ,new CMD_WristInPosition(m_wrist)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
+                    // ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kIntake))                    
                     ,readyHome()
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
