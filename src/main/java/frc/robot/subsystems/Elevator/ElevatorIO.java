@@ -20,6 +20,8 @@ public interface ElevatorIO {
 
   public default void setGoal(double p_reference){}
 
+  public default void setVoltage(double voltage){}
+  
   public default double getGoal(){return 0;}
 
   public default double getPosition(){return 0;}
@@ -35,6 +37,7 @@ public interface ElevatorIO {
   public default void resetEncoder(){}
 
   public default boolean isResetMode(){return false;}
+
 
   public default double getRightVoltage(){return 0;}
 

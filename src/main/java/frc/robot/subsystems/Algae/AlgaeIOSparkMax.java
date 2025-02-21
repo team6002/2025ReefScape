@@ -50,6 +50,11 @@ public class AlgaeIOSparkMax implements AlgaeIO{
     public double getCurrent(){
         return m_algaeMotor.getAppliedOutput();
     }
+
+    @Override
+    public void setVoltage(double voltage){
+        m_algaeMotor.setVoltage(voltage);
+    }
     
     @Override
     public void PID(){
