@@ -1,7 +1,5 @@
 package frc.robot.subsystems.Wrist;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -14,7 +12,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.GlobalVariables;
 import frc.robot.Configs;
 import frc.robot.Constants.WristConstants;
@@ -28,7 +25,7 @@ public class WristIOSparkMax implements WristIO{
     private final Constraints m_wristConstraints = new Constraints(WristConstants.kMaxVel, WristConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
-    
+
     public WristIOSparkMax(){
         //initialize motor
         m_wristMotor = new SparkMax(HardwareConstants.kWristCanId, MotorType.kBrushless);
@@ -45,8 +42,6 @@ public class WristIOSparkMax implements WristIO{
         //reset reference in init
         m_setpoint = new TrapezoidProfile.State(getPosition() - WristConstants.kWristOffset, 0);
         m_goal = m_setpoint;
-        
-        
     }
 
     @Override
@@ -101,10 +96,5 @@ public class WristIOSparkMax implements WristIO{
         m_goal = m_setpoint;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
             ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() - WristConstants.kWristOffset- GlobalVariables.m_pivotAngle, m_setpoint.velocity));
-    }
-    
-    @Override
-    public void setVoltage(double voltage) {
-        m_wristMotor.setVoltage(voltage);
     }
 }

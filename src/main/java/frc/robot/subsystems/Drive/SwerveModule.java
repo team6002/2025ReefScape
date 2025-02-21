@@ -8,8 +8,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkMax;
@@ -83,9 +81,6 @@ public class SwerveModule {
         new Rotation2d(inputs.turnAbsoluteRadians - m_chassisAngularOffset));
   }
 
-  public void setVolts(double volts){
-    io.setDriveVoltage(volts);
-  }
   /**
    * Sets the desired state for the module.
    *

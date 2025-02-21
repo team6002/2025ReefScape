@@ -16,8 +16,6 @@ public interface WristIO {
   public default void setGoal(double p_goal){}
 
   public default void setGoal(){}
-  
-  public default void setVoltage(double voltage){}
 
   public default double getGoal(){return 0;}
 

@@ -116,11 +116,6 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     }
 
     @Override
-    public void setVoltage(double voltage){
-        m_leftElevator.setVoltage(voltage);
-        m_rightElevator.setVoltage(voltage);
-    }
-    @Override
     public double getRightVoltage(){
         return m_rightElevator.getAppliedOutput() * m_rightElevator.getBusVoltage();
     }

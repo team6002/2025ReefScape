@@ -18,10 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -138,7 +135,6 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   Field2d field;
   Field2d fieldEst;
-  final SysIdRoutine sysIdRoutine;  
   /** Creates a new DriveSubsystem. */
   SUB_Vision m_vision;
   public SUB_Drivetrain(
@@ -196,7 +192,6 @@ public class SUB_Drivetrain extends SubsystemBase {
       e.printStackTrace();
     }
 
-    
     AutoBuilder.configure(
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -247,21 +242,8 @@ public class SUB_Drivetrain extends SubsystemBase {
     getModulePositions()
     );
     
-    // Create the SysId routine
-    sysIdRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(
-        null, null, null, // Use default config
-        (state) -> Logger.recordOutput("SysIdTestState", state.toString())
-      ),
-      
-      new SysIdRoutine.Mechanism(
-        voltage -> {
-          runVolts(voltage.magnitude());
-        },
-        null, // No log consumer, since data is recorded by AdvantageKit
-        this
-      )
-    );
+    // m_vision.updateInputs();
+    
   }
   
   // private double m_SwerveP = m_frontLeft.getSwerveP();
@@ -708,19 +690,4 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
   // Prevent the path from being flipped if the coordinates are already correct
   // path.preventFlipping = true;
-
-  private void runVolts(double volts){
-    m_frontLeft.setVolts(volts);
-    m_frontRight.setVolts(volts);
-    m_rearLeft.setVolts(volts);
-    m_rearRight.setVolts(volts);
-  }
-  
-  public Command sysIdQuasiStatic(SysIdRoutine.Direction direction){
-      return sysIdRoutine.quasistatic(direction);
-  }
-  
-  public Command sysIdDynamic(SysIdRoutine.Direction direction){
-    return sysIdRoutine.dynamic(direction);
-  }
 }

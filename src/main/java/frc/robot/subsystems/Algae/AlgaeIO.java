@@ -13,8 +13,6 @@ public interface AlgaeIO {
     public default void updateInputs(AlgaeIoInputs inputs){}
 
     public default void setReference(double p_voltage){}
-    
-    public default void setVoltage(double p_voltage){}
 
     public default double getReference(){return 0;}
 

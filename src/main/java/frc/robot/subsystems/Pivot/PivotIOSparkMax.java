@@ -102,10 +102,4 @@ public class PivotIOSparkMax implements PivotIO{
         m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
             ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
     }
-
-    @Override
-    public void setVoltage(double voltage){
-        m_leftPivotMotor.setVoltage(voltage);
-        m_rightPivotMotor.setVoltage(voltage);
-    }
 }
