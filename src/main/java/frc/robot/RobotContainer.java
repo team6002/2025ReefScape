@@ -101,7 +101,7 @@ public class RobotContainer {
     );
     
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
-    m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
+    m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     //operator
     m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
     m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
@@ -112,7 +112,10 @@ public class RobotContainer {
     m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
 
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
-    m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_algae, m_pivot, m_elevator, m_coralIntake, m_variables));
+    m_operatorController.leftBumper().onTrue(
+      new InstantCommand(()-> GlobalVariables.m_exceptionMode = !GlobalVariables.m_exceptionMode)
+      .andThen(new CMD_Exception(m_wrist, m_algae, m_pivot, m_elevator, m_coralIntake, m_variables))
+      );
 
     m_operatorController.a().onTrue(
       new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR))
@@ -135,32 +138,6 @@ public class RobotContainer {
     m_operatorController.rightStick().onTrue(
       new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND))
       .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
-    );
-  }
-
-  public SequentialCommandGroup getAutonomousCommand(){
-    return new SequentialCommandGroup(
-    // Commands.runOnce(()->m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_drivetrain)
-    // ,Commands.runOnce(()->m_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), m_drivetrain)
-    // ,new ParallelCommandGroup(
-    //   m_drivetrain.FollowPath(AutoConstants.BlueLeft1)
-    //   ,new CMD_ReadyLevelFourAuto(m_elevator, m_wrist, m_pivot, m_coralIntake)
-    // )
-    // ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
-    // ,new WaitCommand(.2)
-    // ,new ParallelCommandGroup(
-    //   m_drivetrain.FollowPath(AutoConstants.BlueLeft2)
-    //   ,new SequentialCommandGroup(
-    //     new CMD_Ready(m_elevator, m_wrist, m_pivot, m_coralIntake)
-    //     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake)
-    //   )
-    // )
-    // ,new ParallelCommandGroup(
-    //   m_drivetrain.FollowPath(AutoConstants.BlueLeft3)
-    //   ,new CMD_ReadyLevelFourAuto(m_elevator, m_wrist, m_pivot, m_coralIntake)
-    // )
-    // ,new CMD_DeployLevelFour(m_coralIntake, m_wrist)
-    // ,new WaitCommand(.2)
     );
   }
 }

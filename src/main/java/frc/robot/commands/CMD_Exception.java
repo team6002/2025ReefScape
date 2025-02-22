@@ -33,35 +33,47 @@ public class CMD_Exception extends Command{
 
     @Override
     public void initialize(){
-        if(GlobalVariables.m_haveAlgae && (m_variables.isRobotState(RobotState.READY) || 
-            m_variables.isRobotState(RobotState.READY_TO_INTAKE) || m_variables.isRobotState(RobotState.READY_STOWED))){
+        if(GlobalVariables.m_exceptionMode){
+            if(GlobalVariables.m_haveAlgae && (m_variables.isRobotState(RobotState.READY) || 
+                m_variables.isRobotState(RobotState.READY_TO_INTAKE) || m_variables.isRobotState(RobotState.READY_STOWED))){
 
-            //eject algae after intaking off of reef
-            new SequentialCommandGroup(
-                new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
-                ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
-                ,new WaitCommand(.5)
-                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff)) 
-            ).schedule();
-            return;
-        }
+                //eject algae after intaking off of reef
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
+                    ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
+                    ,new WaitCommand(.5)
+                    ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff)) 
+                ).schedule();
+                return;
+            }
 
-        if(m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
-            //if coral is in the middle of robot & coral chute
-            new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist).schedule();
-            return;
-        }
+            if(m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
+                //if coral is in the middle of robot & coral chute
+                new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist).schedule();
+                return;
+            }
 
-        if(GlobalVariables.m_haveAlgae && m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
-            //eject algae after intaking off of reef
-            new CMD_YeetAlgae(m_wrist, m_algae).schedule();
-            return;
-        }
+            if(GlobalVariables.m_haveAlgae && m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+                //eject algae after intaking off of reef
+                new CMD_YeetAlgae(m_wrist, m_algae).schedule();
+                return;
+            }
 
-
-        if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
-            new CMD_ReadyToDeployException(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
-            return;
+            if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+                new CMD_ReadyToDeployException(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
+                return;
+            }
+        }else{
+            if(m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
+                //if coral is in the middle of robot & coral chute
+                new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake).schedule();
+                return;
+            }
+            
+            if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+                new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
+                return;
+            }
         }
     }
 

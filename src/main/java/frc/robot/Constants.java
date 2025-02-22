@@ -382,7 +382,7 @@ public final class Constants {
     public static final String kLeftCameraName = "LeftCamera";
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-    public static final Transform3d   kRobotToLCam =
+    public static final Transform3d kRobotToLCam =
             new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-10)));
     public static final Transform3d kRobotToRCam =
             new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(10)));

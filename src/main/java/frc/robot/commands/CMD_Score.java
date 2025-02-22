@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
@@ -44,7 +45,11 @@ public class CMD_Score extends Command{
                 //ready to intake
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
+                    ,new ConditionalCommand(
+                        new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist),
+                        new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake),
+                        ()-> GlobalVariables.m_exceptionMode
+                    )
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                     ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
@@ -63,7 +68,11 @@ public class CMD_Score extends Command{
                 //ready to deploy
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                    ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new ConditionalCommand(
+                        new CMD_ReadyToDeployException(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                        new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                        ()-> GlobalVariables.m_exceptionMode
+                    )
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
                 ).schedule();
                 break;
@@ -75,7 +84,11 @@ public class CMD_Score extends Command{
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
+                    ,new ConditionalCommand(
+                        new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist),
+                        new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake),
+                        ()-> GlobalVariables.m_exceptionMode
+                    )
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
@@ -90,7 +103,11 @@ public class CMD_Score extends Command{
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
+                    ,new ConditionalCommand(
+                        new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist),
+                        new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake),
+                        ()-> GlobalVariables.m_exceptionMode
+                    )
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)

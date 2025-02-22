@@ -2,7 +2,6 @@ package frc;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GlobalVariables extends SubsystemBase{
@@ -14,6 +13,7 @@ public class GlobalVariables extends SubsystemBase{
     public static double m_elevatorExtension = 0;
     public static boolean m_haveAlgae = false;
     public static boolean m_haveCoral = false;
+    public static boolean m_exceptionMode = false;
 
     public enum RobotState{
         HOME
@@ -98,6 +98,7 @@ public class GlobalVariables extends SubsystemBase{
         Logger.recordOutput("haveAlgae", m_haveAlgae);
         Logger.recordOutput("haveCoral", m_haveCoral);
         Logger.recordOutput("targetCoralLevel", m_targetCoralLevel);
+        Logger.recordOutput("exceptionMode", m_exceptionMode);
     }
 }
  

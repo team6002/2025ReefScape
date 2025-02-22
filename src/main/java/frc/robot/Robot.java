@@ -88,7 +88,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_autonomousChooser.getSelected();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

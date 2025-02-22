@@ -40,21 +40,32 @@ public class CMD_Algae extends Command{
                 ,readyToIntake()
                 ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                 ,new CMD_AlgaeTrigger(m_algae)
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
+                ,new CMD_YeetAlgae(m_wrist, m_algae)
+                ,new ConditionalCommand(
+                    new CMD_ReadyToDeployException(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                    new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                    ()-> GlobalVariables.m_exceptionMode
+                )
+                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-                ,new InstantCommand(()-> setReady())
             ).schedule();
             return;
        }
        if(GlobalVariables.m_haveAlgae == false && m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
             new SequentialCommandGroup(
-                new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
+                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
+                ,new CMD_YeetAlgae(m_wrist, m_algae)
+                ,new ConditionalCommand(
+                    new CMD_ReadyToDeployException(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                    new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables),
+                    ()-> GlobalVariables.m_exceptionMode
+                )
+                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-                ,new InstantCommand(()-> setReady())
             ).schedule();
             return;
        }
@@ -125,14 +136,6 @@ public class CMD_Algae extends Command{
         }
         
         return m_readyToDeployCommand;
-    }
-
-    private void setReady(){
-        if(GlobalVariables.m_haveCoral){
-            m_variables.setRobotState(RobotState.READY_STOWED);
-        }else{
-            m_variables.setRobotState(RobotState.READY);
-        }
     }
 
     @Override
