@@ -78,11 +78,7 @@ public class SUB_Elevator extends SubsystemBase{
       io.updateInputs(inputs);
       Logger.processInputs("Elevator", inputs);
       io.PID();
-      // SmartDashboard.putNumber("elevator pos", getPosition());
-      // SmartDashboard.putNumber("elevator target", getGoal());
-      // SmartDashboard.putNumber("elevator current", getCurrent());
-      // SmartDashboard.putNumber("elevator setpoint", getSetpoint());
-      // SmartDashboard.putBoolean("resetMode", isResetMode());
+      
       GlobalVariables.m_elevatorExtension = getPosition();
     }
 }

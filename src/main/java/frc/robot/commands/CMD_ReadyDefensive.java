@@ -11,7 +11,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_ReadyDefensive extends SequentialCommandGroup{
     public CMD_ReadyDefensive(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kHolding))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyDefensive))
             ,new CMD_WristInPosition(p_wrist)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyDefensive))

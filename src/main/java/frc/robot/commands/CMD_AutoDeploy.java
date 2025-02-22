@@ -34,16 +34,15 @@ public class CMD_AutoDeploy extends Command{
         m_timer.start();
         m_sustainTimer.reset();
         m_sustainTimer.start();
-        m_intake.setReference(-200);
     }
 
     @Override
     public void execute(){
         if(m_timer.get() > .5){
             if(m_forward == true){
-                m_intake.setReference(500);
+                m_intake.setVoltage(2);
             }else{
-                m_intake.setReference(-200);
+                m_intake.setVoltage(-1);
             }
             m_forward = !m_forward;
             m_timer.reset();
@@ -66,17 +65,16 @@ public class CMD_AutoDeploy extends Command{
 
     @Override
     public boolean isFinished(){
-
         return isFinished;
     }
 
     @Override
     public void end(boolean interrupted){
         if(interrupted){
-            m_intake.setReference(50);
+            m_intake.setVoltage(CoralHolderConstants.kHolding);
             return;
         }else{
-            m_intake.setReference(CoralHolderConstants.kReverse);
+            m_intake.setVoltage(CoralHolderConstants.kReverse);
             m_wrist.setGoal(WristConstants.kStowing);
             m_variables.setRobotState(RobotState.DEPLOY);
         }

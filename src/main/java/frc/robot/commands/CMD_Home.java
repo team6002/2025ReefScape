@@ -11,7 +11,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_Home extends SequentialCommandGroup{
     public CMD_Home(SUB_Elevator p_elevator, SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kHolding))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
             ,new CMD_ElevatorReset(p_elevator)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kHome))

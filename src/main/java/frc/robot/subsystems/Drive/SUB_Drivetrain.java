@@ -56,40 +56,11 @@ import frc.robot.Constants.AutoConstants;
 public class SUB_Drivetrain extends SubsystemBase {
   RobotConfig config;
   // Create MAXSwerveModules
-  // SUB_Vision m_vision;
   SwerveModule[] SwerveModules;
-  // Module[] swerveModules = new Module[4];
   private final SwerveModule m_frontLeft;
-      // = new SwerveModule(
-      // HardwareConstants.kFrontLeftDrivingCanId,
-      // HardwareConstants.kFrontLeftTurningCanId,
-      // DriveConstants.kFrontLeftChassisAngularOffset,
-      // "FrontLeft"
-      // );
-
   private final SwerveModule m_frontRight;
-      // = new SwerveModule(
-      // HardwareConstants.kFrontRightDrivingCanId,
-      // HardwareConstants.kFrontRightTurningCanId,
-      // DriveConstants.kFrontRightChassisAngularOffset,
-      // "FrontRight"
-      // );
-
   private final SwerveModule m_rearLeft; 
-      // = new SwerveModule(
-      // HardwareConstants.kRearLeftDrivingCanId,
-      // HardwareConstants.kRearLeftTurningCanId,
-      // DriveConstants.kBackLeftChassisAngularOffset,
-      // "BackLeft"
-      // );
-
   private final SwerveModule m_rearRight;
-      // = new SwerveModule(
-      // HardwareConstants.kRearRightDrivingCanId,
-      // HardwareConstants.kRearRightTurningCanId,
-      // DriveConstants.kBackRightChassisAngularOffset,
-      // "BackRight"
-      // );
   
   private final SwerveDrivePoseEstimator m_odometry;
   //Odometry that has nearest april tag as origin for use in autoalignment
@@ -136,14 +107,14 @@ public class SUB_Drivetrain extends SubsystemBase {
   Field2d field;
   Field2d fieldEst;
   /** Creates a new DriveSubsystem. */
-  SUB_Vision m_vision;
+  // SUB_Vision m_vision;
   public SUB_Drivetrain(
     GyroIO gyroIO,
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
     ModuleIO brModuleIO
-    ,SUB_Vision p_vision
+    // ,SUB_Vision p_vision
     ) 
   {
         
@@ -217,7 +188,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             this // Reference to this subsystem to set requirements
     );
 
-    m_vision = p_vision;
+    // m_vision = p_vision;
     m_odometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
@@ -254,8 +225,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("gyroHeading", getAngle());
-    var LvisionEst = m_vision.getLEstimatedGlobalPose();
-    var RvisionEst = m_vision.getREstimatedGlobalPose();
+    // var LvisionEst = m_vision.getLEstimatedGlobalPose();
+    // var RvisionEst = m_vision.getREstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -290,53 +261,53 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
-    SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
+    // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
     SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    m_vision.updateInputs();
+    // m_vision.updateInputs();
 
-    LvisionEst.ifPresent(
-      est -> {
-        var estPose = est.estimatedPose.toPose2d();
-        // estPose = m_vision.getEstimatedGlobalPose(estPose);
-        Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-        Logger.recordOutput("LCameraPose", estPose);
-        // Change our trust in the measurement based on the tags we can see
-        var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+    // LvisionEst.ifPresent(
+    //   est -> {
+    //     var estPose = est.estimatedPose.toPose2d();
+    //     // estPose = m_vision.getEstimatedGlobalPose(estPose);
+    //     Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+    //     Logger.recordOutput("LCameraPose", estPose);
+    //     // Change our trust in the measurement based on the tags we can see
+    //     var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
       
-          addVisionMeasurement(
-            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-      }  
-    );
+    //       addVisionMeasurement(
+    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+    //   }  
+    // );
 
-    RvisionEst.ifPresent(
-      est -> {
-        var estPose = est.estimatedPose.toPose2d();
-        // estPose = m_vision.getEstimatedGlobalPose(estPose);
-        Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-        Logger.recordOutput("RCameraPose", estPose);
-        // Change our trust in the measurement based on the tags we can see
-        var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+    // RvisionEst.ifPresent(
+    //   est -> {
+    //     var estPose = est.estimatedPose.toPose2d();
+    //     // estPose = m_vision.getEstimatedGlobalPose(estPose);
+    //     Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
+    //     Logger.recordOutput("RCameraPose", estPose);
+    //     // Change our trust in the measurement based on the tags we can see
+    //     var estStdDevs = m_vision.getREstimationStdDevs(estPose);
       
-          addVisionMeasurement(
-            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-      }  
-    );
+    //       addVisionMeasurement(
+    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+    //   }  
+    // );
     
-    LvisionEst.ifPresent(
-      est -> {
-          var estPose = est.estimatedPose.toPose2d();
-        if (TargetOdoEnable){
-          if (m_vision.getHasLTarget()){   
-            addTargetVisionMeasurement(
-              m_vision.getTargetLPose(), est.timestampSeconds);
-          }
-          if (m_vision.getHasRTarget()){
-            addTargetVisionMeasurement(
-              m_vision.getTargetRPose(), est.timestampSeconds);
-            }
-          }
-      }  
-    );
+    // LvisionEst.ifPresent(
+    //   est -> {
+    //       var estPose = est.estimatedPose.toPose2d();
+    //     if (TargetOdoEnable){
+    //       if (m_vision.getHasLTarget()){   
+    //         addTargetVisionMeasurement(
+    //           m_vision.getTargetLPose(), est.timestampSeconds);
+    //       }
+    //       if (m_vision.getHasRTarget()){
+    //         addTargetVisionMeasurement(
+    //           m_vision.getTargetRPose(), est.timestampSeconds);
+    //         }
+    //       }
+    //   }  
+    // );
     
   // }
     

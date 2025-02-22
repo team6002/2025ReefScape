@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Winch;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_Winch extends SubsystemBase{
@@ -11,5 +13,15 @@ public class SUB_Winch extends SubsystemBase{
 
     public void setPower(double p_power){
         io.setPower(p_power);
+    }
+
+    public void setReference(double p_reference){
+        io.setReference(p_reference);
+    }
+
+    @Override
+    public void periodic(){
+        io.updateInputs(inputs);
+        Logger.processInputs("winch", inputs);
     }
 }

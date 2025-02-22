@@ -13,8 +13,6 @@ public interface CoralHolderIO {
   /** Updates the set of loggable inputs. */
   public default void updateInputs(CoralHolderIOInputs inputs) {}
 
-  public default void setReference(double p_rpm){}
-
   public default double getCurrent(){return 0;}
 
   public default double getReference(){return 0;}

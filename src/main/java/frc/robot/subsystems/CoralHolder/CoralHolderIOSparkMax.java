@@ -1,7 +1,6 @@
 package frc.robot.subsystems.CoralHolder;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -9,16 +8,13 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.Configs;
-import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.HardwareConstants;
 
 public class CoralHolderIOSparkMax implements CoralHolderIO{
     private final SparkMax m_intakeMotor;
     private final RelativeEncoder m_intakeEncoder;
     private final SparkClosedLoopController m_intakeController;
-    private SimpleMotorFeedforward m_intakeFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
 
     private double m_intakeReference;
 
@@ -47,24 +43,6 @@ public class CoralHolderIOSparkMax implements CoralHolderIO{
     }
 
     @Override
-    public void setReference(double p_rpm){
-        m_intakeFeedforward = new SimpleMotorFeedforward(CoralHolderConstants.kS, CoralHolderConstants.kV);
-        if(p_rpm < 0){
-            Configs.CoralHolderConfig.m_intakeConfig.closedLoop.p(CoralHolderConstants.kPReverse);
-        }else{
-            Configs.CoralHolderConfig.m_intakeConfig.closedLoop.p(CoralHolderConstants.kP);
-        }
-        m_intakeMotor.configure(Configs.CoralHolderConfig.m_intakeConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        m_intakeReference = p_rpm;
-    }
-
-    @Override
-    public void setVoltage(double p_voltage){
-        m_intakeFeedforward = new SimpleMotorFeedforward(0, 0);
-        m_intakeController.setReference(p_voltage, ControlType.kVoltage);
-    }
-
-    @Override
     public double getVelocity(){
         return m_intakeEncoder.getVelocity();
     }
@@ -80,8 +58,12 @@ public class CoralHolderIOSparkMax implements CoralHolderIO{
     }
 
     @Override
+    public void setVoltage(double p_voltage){
+        m_intakeReference = p_voltage;
+    }
+
+    @Override
     public void PID(){
-        m_intakeController.setReference(m_intakeReference, ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0, m_intakeFeedforward.calculate(getReference()));
+        m_intakeController.setReference(m_intakeReference, ControlType.kVoltage);
     }
 }

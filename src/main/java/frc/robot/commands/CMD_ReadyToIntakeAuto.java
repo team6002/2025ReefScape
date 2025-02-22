@@ -12,7 +12,7 @@ public class CMD_ReadyToIntakeAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
-            ,new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kIntake))
+            ,new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
         );
     }

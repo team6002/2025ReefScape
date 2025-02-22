@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist.SUB_Wrist;
 public class CMD_DeployLevelTwo extends SequentialCommandGroup{
     public CMD_DeployLevelTwo(SUB_CoralHolder p_intake, SUB_Wrist p_wrist){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kReverse))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kReverse))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
         );
     }

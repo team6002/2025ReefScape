@@ -14,7 +14,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_ReadyAlgae extends SequentialCommandGroup{
     public CMD_ReadyAlgae(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, GlobalVariables p_variables){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kHolding))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new ConditionalCommand(
                 new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae)), 
                 new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgael3)),

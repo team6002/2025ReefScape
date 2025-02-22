@@ -12,10 +12,6 @@ public class SUB_CoralHolder extends SubsystemBase{
         this.io = io;
     }
 
-    public void setReference(double p_rpm){
-      io.setReference(p_rpm);
-    }
-
     public double getReference(){
       return inputs.m_intakeReference;
     }

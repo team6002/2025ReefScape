@@ -8,7 +8,7 @@ import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 public class CMD_DeployLevelOne extends SequentialCommandGroup{
     public CMD_DeployLevelOne(SUB_CoralHolder p_intake){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kReverseSlow))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kReverseSlow))
         );
     }
 }

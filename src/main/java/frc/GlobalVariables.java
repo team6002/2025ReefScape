@@ -1,5 +1,7 @@
 package frc;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -84,10 +86,18 @@ public class GlobalVariables extends SubsystemBase{
 
     @Override
     public void periodic(){
-        SmartDashboard.putString("robotState", getRobotState().toString());
-        SmartDashboard.putString("algae target", getAlgaeTarget().toString());
-        SmartDashboard.putString("mode", getMode().toString());
-        SmartDashboard.putNumber("score level", m_targetCoralLevel);
-        SmartDashboard.putBoolean("has algae", m_haveAlgae);
+        // SmartDashboard.putString("robotState", getRobotState().toString());
+        // SmartDashboard.putString("algae target", getAlgaeTarget().toString());
+        // SmartDashboard.putString("mode", getMode().toString());
+        // SmartDashboard.putNumber("score level", m_targetCoralLevel);
+        // SmartDashboard.putBoolean("has algae", m_haveAlgae);
+
+        Logger.recordOutput("robotState", getRobotState());
+        Logger.recordOutput("algaeTarget", getAlgaeTarget());
+        Logger.recordOutput("Mode", getMode());
+        Logger.recordOutput("haveAlgae", m_haveAlgae);
+        Logger.recordOutput("haveCoral", m_haveCoral);
+        Logger.recordOutput("targetCoralLevel", m_targetCoralLevel);
     }
 }
+ 

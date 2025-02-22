@@ -12,7 +12,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_Stow extends SequentialCommandGroup{
     public CMD_Stow(SUB_Elevator p_elevator, SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
-            new InstantCommand(()-> p_intake.setReference(CoralHolderConstants.kHolding))
+            new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
             ,new WaitCommand(.5)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kHome))

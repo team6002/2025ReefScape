@@ -31,7 +31,6 @@ public class CMD_Algae extends Command{
         m_variables = p_variales;
     }
 
-
     @Override
     public void initialize(){
        if(GlobalVariables.m_haveAlgae == false && (m_variables.isRobotState(RobotState.READY) || 

@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkMax;
 import org.littletonrobotics.junction.Logger;
@@ -24,8 +23,6 @@ public class SwerveModule {
   // private String m_moduleChannel;//module channel is for telemetry 
    
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
-
-  private double m_previousVelocity;
 
   private final SimpleMotorFeedforward m_drivingFeedForward;
   
@@ -103,12 +100,7 @@ public class SwerveModule {
     io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
-    m_previousVelocity = m_desiredState.speedMetersPerSecond;
   }
-  // public void logging(){
-  //   io.updateInputs(inputs);
-  //   Logger.processInputs("Drive/Module" + m_moduleChannel, inputs);
-    
-  // } 
+
 }
 
