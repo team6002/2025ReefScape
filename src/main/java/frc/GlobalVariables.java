@@ -13,7 +13,7 @@ public class GlobalVariables extends SubsystemBase{
     public static double m_elevatorExtension = 0;
     public static boolean m_haveAlgae = false;
     public static boolean m_haveCoral = false;
-    public static boolean m_algaeExceptionMode = true;
+    public static boolean m_algaeExceptionMode = false;
 
     public enum RobotState{
         HOME

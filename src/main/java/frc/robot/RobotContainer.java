@@ -76,7 +76,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
 
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
@@ -84,12 +84,17 @@ public class RobotContainer {
     // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
     // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     // m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
+    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
+    // m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
+    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
     m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
 
     m_driverController.start().onTrue(
       new SequentialCommandGroup(
+
         new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb))
         ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kClimb))
         ,new CMD_PivotInPosition(m_pivot)

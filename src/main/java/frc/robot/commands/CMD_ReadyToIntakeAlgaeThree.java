@@ -17,7 +17,7 @@ public class CMD_ReadyToIntakeAlgaeThree extends SequentialCommandGroup{
             new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae))
             ,new CMD_PivotInPosition(p_pivot)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael3))
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyIntakeAlgae))
+            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyAlgael3))
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyIntakeAlgael3))
