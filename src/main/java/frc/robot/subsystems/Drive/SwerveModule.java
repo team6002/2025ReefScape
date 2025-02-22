@@ -20,7 +20,6 @@ public class SwerveModule {
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
   private double prevVelo;
-  private double prevVelo;
 
   // private String m_moduleChannel;//module channel is for telemetry 
    
