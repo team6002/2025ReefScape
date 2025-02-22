@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.111900684931507,
-        "y": 7.127803938356164
+        "x": 0.9,
+        "y": 7.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7647260273972605,
-        "y": 7.232983732876712
+        "x": 2.5528253424657534,
+        "y": 7.4051797945205475
       },
       "isLocked": false,
       "linkedName": "BlueRightPickup"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 4.958476027397261,
-        "y": 5.114362157534247
+        "x": 5.0342,
+        "y": 5.04
       },
       "prevControl": {
-        "x": 4.853296232876712,
-        "y": 5.970826198630136
+        "x": 4.929020205479452,
+        "y": 5.896464041095889
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 57.09475707701202
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "BlueRight",

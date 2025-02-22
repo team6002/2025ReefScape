@@ -101,14 +101,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.22;//0.004;
+    public static final double kDrivingP = 0.48941;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
-    public static final double kDrivingFF = 0.21;
+    public static final double kDrivingFF = 0.0;
 
-    public static final double kDrivingA = 1.1;
-    public static final double kDrivingS = 0.12;
-    public static final double kDrivingV = 2.09;
+    public static final double kDrivingA = .6;//0.48019;
+    public static final double kDrivingS = 0.022622;
+    public static final double kDrivingV = 2.20;//2.1016;
     
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
@@ -197,6 +197,13 @@ public final class Constants {
     public static final String BlueLeft6 = "BlueLeft6";
     public static final String BlueLeft7 = "BlueLeft7";
 
+    public static final String BlueRight1 = "BlueRight1";
+    public static final String BlueRight2 = "BlueRight2";
+    public static final String BlueRight3 = "BlueRight3";
+    public static final String BlueRight4 = "BlueRight4";
+    public static final String BlueRight5 = "BlueRight5";
+    public static final String BlueRight6 = "BlueRight6";
+    public static final String BlueRight7 = "BlueRight7";
   }
 
   public static final class NeoMotorConstants {

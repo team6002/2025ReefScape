@@ -82,11 +82,11 @@ public class RobotContainer {
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
 
     // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
-    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
-    m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
+    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
+    // m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
-    // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
-    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
 
     m_driverController.start().onTrue(
       new SequentialCommandGroup(
@@ -96,7 +96,7 @@ public class RobotContainer {
         ,new CMD_WristInPosition(m_wrist)
         ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
         ,new CMD_ElevatorReset(m_elevator)
-        ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
+        // ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
       )
     );
     
