@@ -263,7 +263,13 @@ public class SUB_Drivetrain extends SubsystemBase {
       )
     );
   }
-  
+  //sets all wheels to forwards?
+  public void setWheels(){
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+  }
   // private double m_SwerveP = m_frontLeft.getSwerveP();
   // private double m_SwerveI = m_frontLeft.getSwerveI();
   // private double m_SwerveD = m_frontLeft.getSwerveD();

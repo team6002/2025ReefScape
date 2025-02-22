@@ -63,7 +63,7 @@ public class RobotContainer {
 
     // Configure default commands
     // m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
-    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
+    // m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
   }
 
   /**
@@ -77,47 +77,55 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.leftBumper().onTrue(new SequentialCommandGroup(
-      new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-      ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables)
-      ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-    ));
-    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
-    m_driverController.start().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
-    m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, false, 0));
-    m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
-    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1)))
-      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
-    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1)))
-      .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
-    m_driverController.back().onTrue(
-      new SequentialCommandGroup(
-        new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReady))
-        ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kHome))
-        ,new CMD_PivotInPosition(m_pivot)
-        ,new CMD_WristInPosition(m_wrist)
-        ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome)))
-      );
+    m_driverController.b().onTrue(new InstantCommand(()-> m_drivetrain.setWheels(), m_drivetrain));
+    m_driverController.y().onTrue(new InstantCommand(()-> m_drivetrain.setWheels(), m_drivetrain));
     
-    m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
-    m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
-    //operator
-    m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
-    m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
+    m_driverController.a().whileTrue(m_drivetrain.sysIdQuasiStatic(SysIdRoutine.Direction.kReverse));
+    m_driverController.y().whileTrue(m_drivetrain.sysIdQuasiStatic(SysIdRoutine.Direction.kForward));
 
-    m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 4));
-    m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 3));
-    m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 2));
-    m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
+    m_driverController.pov(0).whileTrue(m_drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    m_driverController.pov(180).whileTrue(m_drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // m_driverController.leftBumper().onTrue(new SequentialCommandGroup(
+    //   new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
+    //   ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables)
+    //   ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+    // ));
+    // m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    // m_driverController.start().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
+    // m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, false, 0));
+    // m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
+    // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1)))
+    //   .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1)))
+    //   .onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    // m_driverController.back().onTrue(
+    //   new SequentialCommandGroup(
+    //     new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReady))
+    //     ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kHome))
+    //     ,new CMD_PivotInPosition(m_pivot)
+    //     ,new CMD_WristInPosition(m_wrist)
+    //     ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome)))
+    //   );
+    
+    // m_driverController.povUp().onTrue(new CMD_ElevatorReset(m_elevator));
+    // m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
+    // //operator
+    // m_operatorController.start().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.DEFENSIVE)));
+    // m_operatorController.back().onTrue(new InstantCommand(()-> m_variables.setMode(Mode.OFFENSIVE)));
 
-    m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
-    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
-    m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));    
-    m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));
-    m_operatorController.x().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 2));
-    m_operatorController.y().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 3));
-    m_operatorController.leftStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
-    m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));
+    // m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 4));
+    // m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 3));
+    // m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 2));
+    // m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
+
+    // m_operatorController.leftBumper().onTrue(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables));
+    // m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    // m_operatorController.a().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.CORAL)));    
+    // m_operatorController.b().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.BARGE)));
+    // m_operatorController.x().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 2));
+    // m_operatorController.y().onTrue(new CMD_ChangeAlgaeLevel(m_elevator, m_wrist, m_pivot, m_coralIntake, m_algae, m_variables, 3));
+    // m_operatorController.leftStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR)));
+    // m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND)));
   }
 
   public SequentialCommandGroup getAutonomousCommand(){
