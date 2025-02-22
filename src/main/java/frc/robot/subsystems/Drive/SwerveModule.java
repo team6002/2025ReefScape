@@ -19,6 +19,7 @@ public class SwerveModule {
   private final ModuleIO io;
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
+  private double prevVelo;
 
   // private String m_moduleChannel;//module channel is for telemetry 
    
@@ -92,11 +93,11 @@ public class SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees.
     correctedDesiredState.optimize(new Rotation2d(inputs.turnAbsoluteRadians));    
     // double AccelerationThingy =  (optimizedDesiredState.speedMetersPerSecond - m_previousVelocity)* ModuleConstants.kPAcceleration;
-    
+    prevVelo = desiredState.speedMetersPerSecond;
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     // m_drivingPIDController.setReference((optimizedDesiredState.speedMetersPerSecond + AccelerationThingy), CANSparkMax.ControlType.kVelocity);
     // m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
-    io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, 0 ,m_drivingFeedForward.calculate(correctedDesiredState.speedMetersPerSecond));
+    io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, 0 ,m_drivingFeedForward.calculate(correctedDesiredState.speedMetersPerSecond, (desiredState.speedMetersPerSecond - prevVelo) / .02));
     io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
