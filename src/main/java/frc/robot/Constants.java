@@ -106,7 +106,7 @@ public final class Constants {
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.0;
 
-    public static final double kDrivingA = .6;//0.48019;
+    public static final double kDrivingA = .7;//0.48019;
     public static final double kDrivingS = 0.022622;
     public static final double kDrivingV = 2.20;//2.1016;
     
@@ -221,7 +221,7 @@ public final class Constants {
     public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 3;
+    public static final double kIntake = 6;
     public static final double kOff = 0;
     public static final double kReverse = -6;//-2500
     public static final double kReverseSlow = -1.5;
@@ -260,7 +260,7 @@ public final class Constants {
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(20);
     public static final double kAlgaeCoral = Math.toRadians(65);
-    public static final double kIntake = Math.toRadians(65);
+    public static final double kIntake = Math.toRadians(62.5);
     public static final double kBelowIntake = Math.toRadians(55);
     public static final double kIntakeException = Math.toRadians(62);
     public static final double kIntakeAlgaeGround = Math.toRadians(35.5);

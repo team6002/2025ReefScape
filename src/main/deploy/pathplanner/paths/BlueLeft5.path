@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0,
-        "y": 0.35
+        "x": 0.975,
+        "y": 0.275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.351224532852884,
-        "y": 1.11678687121991
+        "x": 2.326224532852884,
+        "y": 1.04178687121991
       },
       "isLocked": false,
       "linkedName": "BlueLeftPickup2"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 2.5,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0,

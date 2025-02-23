@@ -87,8 +87,8 @@ public class RobotContainer {
     // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     // m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
-    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
-    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
+    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
     m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setPower(1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setPower(-1))).onFalse(new InstantCommand(()-> m_winch.setPower(0)));
 

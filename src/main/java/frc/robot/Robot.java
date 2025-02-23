@@ -17,8 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Autos.AUTO_BlueLeft;
-import frc.robot.Autos.AUTO_BlueRight;
+import frc.robot.Autos.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -53,6 +52,8 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
     m_autonomousChooser.addOption("AUTO_BlueLeft", new AUTO_BlueLeft(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
     m_autonomousChooser.addOption("AUTO_BlueRight", new AUTO_BlueRight(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
+    m_autonomousChooser.addOption("AUTO_BlueLeft244", new AUTO_BlueLeft244(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_BlueRight244", new AUTO_BlueRight244(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     SmartDashboard.putData(m_autonomousChooser);
 
     m_robotContainer.m_pivot.reset();

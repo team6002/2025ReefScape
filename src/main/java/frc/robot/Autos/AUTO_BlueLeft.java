@@ -1,6 +1,8 @@
 package frc.robot.Autos;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -44,13 +46,15 @@ public class AUTO_BlueLeft extends SequentialCommandGroup{
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
             )
-            ,new CMD_IntakeStow(p_intake).withTimeout(1)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath(AutoConstants.BlueRight5)
-              ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
-            )
-            ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            ,new WaitCommand(.2)
+            ,new CMD_IntakeStow(p_intake).withTimeout(3)
+            ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
+            // ,new ParallelCommandGroup(
+            //   p_drivetrain.FollowPath(AutoConstants.BlueRight5)
+            //   ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
+            // )
+            ,new InstantCommand(()-> p_drivetrain.setHeading(
+                new Rotation2d(Math.toRadians(p_drivetrain.getAngle())).plus(new Rotation2d(Math.PI)).getDegrees()
+            ))
         );
     }
 }
