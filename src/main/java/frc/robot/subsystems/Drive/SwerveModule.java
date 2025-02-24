@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,6 +27,7 @@ public class SwerveModule {
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
   private final SimpleMotorFeedforward m_drivingFeedForward;
+  private final SimpleMotorFeedforward m_autoFeedForward;
   
   private double m_chassisAngularOffset = 0;
   // private final ModuleIO io;
@@ -45,6 +47,7 @@ public class SwerveModule {
     // m_moduleChannel = p_moduleChannel;
 
     m_drivingFeedForward = new SimpleMotorFeedforward(ModuleConstants.kDrivingS, ModuleConstants.kDrivingV, ModuleConstants.kDrivingA);
+    m_autoFeedForward = new SimpleMotorFeedforward(ModuleConstants.kAutoS, ModuleConstants.kAutoV, ModuleConstants.kAutoA);
     
   }
 
@@ -84,25 +87,57 @@ public class SwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
+
+  public void setDesiredStateAuto(SwerveModuleState desiredState) {
+    // Apply chassis angular offset to the desired state.
+    SwerveModuleState correctedDesiredState = new SwerveModuleState();
+    correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+    correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
+
+    
+    // Optimize the reference state to avoid spinning further than 90 degrees.
+    correctedDesiredState.optimize(new Rotation2d(inputs.turnAbsoluteRadians));    
+    // double AccelerationThingy =  (optimizedDesiredState.speedMetersPerSecond - m_previousVelocity)* ModuleConstants.kPAcceleration;
+    // prevVelo = io.getVelo
+    // Command driving and turning SPARKS MAX towards their respective setpoints.
+    // m_drivingPIDController.setReference((optimizedDesiredState.speedMetersPerSecond + AccelerationThingy), CANSparkMax.ControlType.kVelocity);
+    // m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
+    Logger.recordOutput("DriveFFOutput" + index, m_drivingFeedForward.calculate(m_autoFeedForward.calculateWithVelocities(prevVelo, correctedDesiredState.speedMetersPerSecond)));
+    // Logger.recordOutput("DrivePrevVelo" + index, (prevVelo));
+    // Logger.recordOutput("DriveAccel" + index, ((correctedDesiredState.speedMetersPerSecond - prevVelo)/ .02));
+    double acceleration = ((correctedDesiredState.speedMetersPerSecond - prevVelo)/0.02);
+    double feedForward = m_autoFeedForward.calculate(correctedDesiredState.speedMetersPerSecond, acceleration);
+    // double feedForward = ModuleConstants.kAutoS 
+    io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot1 , feedForward);
+    io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);
+
+    m_desiredState = desiredState;
+    prevVelo = correctedDesiredState.speedMetersPerSecond;
+  
+  }
   public void setDesiredState(SwerveModuleState desiredState) {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
 
-    prevVelo = desiredState.speedMetersPerSecond;
-
+    
     // Optimize the reference state to avoid spinning further than 90 degrees.
     correctedDesiredState.optimize(new Rotation2d(inputs.turnAbsoluteRadians));    
     // double AccelerationThingy =  (optimizedDesiredState.speedMetersPerSecond - m_previousVelocity)* ModuleConstants.kPAcceleration;
-    prevVelo = desiredState.speedMetersPerSecond;
+    // prevVelo = io.getVelo
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     // m_drivingPIDController.setReference((optimizedDesiredState.speedMetersPerSecond + AccelerationThingy), CANSparkMax.ControlType.kVelocity);
     // m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
-    io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, 0 ,m_drivingFeedForward.calculate(correctedDesiredState.speedMetersPerSecond, (desiredState.speedMetersPerSecond - prevVelo)/ .02));
+    // Logger.recordOutput("DriveFFOutput" + index, m_drivingFeedForward.calculate(correctedDesiredState.speedMetersPerSecond, (correctedDesiredState.speedMetersPerSecond - prevVelo)/ .02));
+    // Logger.recordOutput("DrivePrevVelo" + index, (prevVelo));
+    // Logger.recordOutput("DriveAccel" + index, ((correctedDesiredState.speedMetersPerSecond - prevVelo)/ .02));
+    io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0 ,m_drivingFeedForward.calculate(correctedDesiredState.speedMetersPerSecond));
     io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
+    prevVelo = correctedDesiredState.speedMetersPerSecond;
+  
   }
 
 }

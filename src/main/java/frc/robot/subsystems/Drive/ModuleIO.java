@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 
 public interface ModuleIO {
@@ -53,7 +54,7 @@ public interface ModuleIO {
   public default void setTurnBrakeMode(boolean enable) {}
 
 
-  public default void setDriveReference(double desiredState, ControlType ctrlType, int PIDSlot, double feedForward){}
+  public default void setDriveReference(double desiredState, ControlType ctrlType, ClosedLoopSlot PIDSlot, double feedForward){}
 
   public default void setTurnReference(double desiredState, ControlType ctrlType){}
   

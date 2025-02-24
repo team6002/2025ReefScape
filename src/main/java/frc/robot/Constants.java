@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = 0.96;  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.96);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -101,15 +101,24 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.48941;//0.004;
+    public static final double kAutoP =.0;//0.004;
+    public static final double kAutoI = 0.0;
+    public static final double kAutoD = 0.0;
+    public static final double kAutoFF = 0.0;
+
+    public static final double kAutoA = .39;//0.48019;
+    public static final double kAutoS = .004;
+    public static final double kAutoV = 2.20;//2.1016;
+    
+    
+    public static final double kDrivingP = 0.2;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.0;
 
-    public static final double kDrivingA = .7;//0.48019;
-    public static final double kDrivingS = 0.022622;
-    public static final double kDrivingV = 2.20;//2.1016;
-    
+    public static final double kDrivingA = .42;//0.48019;
+    public static final double kDrivingS = 0.004;
+    public static final double kDrivingV = 2.14;//2.1016;
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
     // public static final double kDrivingV = 2.7538;
@@ -176,14 +185,14 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 4.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2.5;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1.5;
-    public static final double kPYController = 1.5;
-    public static final double kPThetaController = 1;
+    public static final double kPXController = 0;
+    public static final double kPYController = 0;
+    public static final double kPThetaController = 0;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(

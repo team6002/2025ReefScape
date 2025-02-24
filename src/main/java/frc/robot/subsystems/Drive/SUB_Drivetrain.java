@@ -28,6 +28,7 @@ import frc.robot.subsystems.Vision.VisionIO;
 // import frc.robot.subsystems.SUB_Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -396,7 +397,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(p_ChassisSpeed, 0.02);
   
       SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
-      setModuleStates(targetStates);
+      setModuleStatesAuto(targetStates);
   }
 
 
@@ -484,6 +485,16 @@ public class SUB_Drivetrain extends SubsystemBase {
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
   }
+
+  public void setModuleStatesAuto(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredStateAuto(desiredStates[0]);
+    m_frontRight.setDesiredStateAuto(desiredStates[1]);
+    m_rearLeft.setDesiredStateAuto(desiredStates[2]);
+    m_rearRight.setDesiredStateAuto(desiredStates[3]);
+  }
+
   //*Gets Rotation from  */
   public Rotation2d getOdoRotation(){
     return getPose().getRotation();
@@ -648,6 +659,18 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public Command FollowPath(String pathName) {
+    try{
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path).andThen(new InstantCommand(() -> drive(0, 0, 0, false),this));
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
+  public Command Stop(String pathName) {
     try{
         // Load the path you want to follow using its name in the GUI
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);

@@ -3,12 +3,15 @@ package frc.robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.WinchConstants;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.CoralHolderConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -22,8 +25,8 @@ public final class Configs {
 
         static {
             // Use module constants to calculate conversion factors and feed forward gain.
-            double drivingFactor = ModuleConstants.kWheelDiameterMeters * Math.PI
-                    / ModuleConstants.kDrivingMotorReduction;
+            double drivingFactor = (ModuleConstants.kWheelDiameterMeters * Math.PI
+                    / ModuleConstants.kDrivingMotorReduction)*(ModuleConstants.kXFactor);
             double turningFactor = 2 * Math.PI;
             double drivingVelocityFeedForward = 0;
 
@@ -33,14 +36,15 @@ public final class Configs {
                     .smartCurrentLimit(40)
                     .inverted(false);
             drivingConfig.encoder
-                    .positionConversionFactor(drivingFactor) // meters
-                    .velocityConversionFactor(drivingFactor / 60.0)// meters per second
+                    .positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor) // meters
+                    .velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor)// meters per second
                     .uvwMeasurementPeriod(10)
                     .uvwAverageDepth(2); 
             drivingConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
-                    .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD)
+                    .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD,ClosedLoopSlot.kSlot0)
+                    .pid(ModuleConstants.kAutoP, ModuleConstants.kAutoI, ModuleConstants.kAutoD,ClosedLoopSlot.kSlot1)
                     .velocityFF(drivingVelocityFeedForward)
                     .outputRange(-1, 1);
             drivingConfig.limitSwitch

@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 4.0,
+        "x": 5.572,
         "y": 7.0
       },
       "prevControl": {
-        "x": 3.0,
+        "x": 4.572,
         "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Tuning1"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.4775834420652
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "BOX",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -177.78032806019738
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

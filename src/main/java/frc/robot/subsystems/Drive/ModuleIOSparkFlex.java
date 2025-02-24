@@ -151,8 +151,9 @@ public class ModuleIOSparkFlex implements ModuleIO {
   }
 
   @Override
-  public void setDriveReference(double desiredState, ControlType ctrlType, int PIDSlot, double feedForward){
-    m_drivingPIDController.setReference((desiredState), ctrlType, ClosedLoopSlot.kSlot0, feedForward);
+  public void setDriveReference(double desiredState, ControlType ctrlType, ClosedLoopSlot PIDSlot, double feedForward){
+    // String slot = "" + PIDSlot;
+    m_drivingPIDController.setReference((desiredState), ctrlType, PIDSlot, feedForward);
     // m_drivingPIDController.setReference(desiredState, ctrlType);
   }
   @Override
