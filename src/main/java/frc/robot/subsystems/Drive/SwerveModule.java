@@ -107,9 +107,7 @@ public class SwerveModule {
     
     double acceleration = ((correctedDesiredState.speedMetersPerSecond - prevVelo)/0.02);
     double feedForward = m_autoFeedForward.calculate(correctedDesiredState.speedMetersPerSecond, acceleration);
-    // if (Math.abs(prevVelo) <= .5  && Math.abs(acceleration) >= .2){
-    //   feedForward += Math.signum(correctedDesiredState.speedMetersPerSecond) * 1;
-    // }
+    // iwwww
     // double feedForward = ModuleConstants.kAutoS 
     io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot1 , feedForward);
     io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);

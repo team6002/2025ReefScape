@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9,
-        "y": 7.3
+        "x": 1.202054794520548,
+        "y": 6.9925727739726025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5528253424657534,
-        "y": 7.4051797945205475
+        "x": 2.8548801369863015,
+        "y": 7.09775256849315
       },
       "isLocked": false,
       "linkedName": "BlueRightPickup"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 5.0342,
-        "y": 5.04
+        "x": 5.018578767123288,
+        "y": 5.249593321917807
       },
       "prevControl": {
-        "x": 4.929020205479452,
-        "y": 5.896464041095889
+        "x": 4.91339897260274,
+        "y": 6.106057363013696
       },
       "nextControl": null,
       "isLocked": false,
@@ -64,7 +64,7 @@
   "folder": "BlueRight",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 130.69553103949204
+    "rotation": 125.00000000000001
   },
   "useDefaultConstraints": true
 }
