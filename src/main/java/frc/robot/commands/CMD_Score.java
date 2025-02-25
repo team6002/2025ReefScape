@@ -36,7 +36,7 @@ public class CMD_Score extends Command{
                 //ready, no object
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
                 ).schedule();
                 break;
@@ -47,7 +47,7 @@ public class CMD_Score extends Command{
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
@@ -55,7 +55,7 @@ public class CMD_Score extends Command{
                 //ready with an object to score
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                 ).schedule();
                 break;
@@ -79,7 +79,7 @@ public class CMD_Score extends Command{
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;
@@ -90,12 +90,11 @@ public class CMD_Score extends Command{
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake)
-                    // ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_intake)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
                 ).schedule();
                 break;

@@ -113,14 +113,14 @@ public final class Constants {
     public static final double kAutoS = .5;//.004;
     public static final double kAutoV = 2.33;//2.22;//2.1016;
     
-    public static final double kDrivingP = 0.2;//0.004;
+    public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
     public static final double kDrivingFF = 0.0;
 
-    public static final double kDrivingA = .42;//0.48019;
-    public static final double kDrivingS = 0.004;
-    public static final double kDrivingV = 2.14;//2.1016;
+    public static final double kDrivingA = .6;//0.48019;
+    public static final double kDrivingS = 0.22622;
+    public static final double kDrivingV = 2.2;//2.1016;
     // public static final double kDrivingA = 0.44218;
     // public static final double kDrivingS = 0.17491;
     // public static final double kDrivingV = 2.7538;
@@ -257,15 +257,15 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
     public static final double kConversionFactor = 2*Math.PI;
-    public static final double kTolerance = Math.toRadians(5);
+    public static final double kTolerance = Math.toRadians(3);
     
     public static final double kHome = Math.toRadians(25);
     public static final double kReady = Math.toRadians(85);
     public static final double kReadyIntake = Math.toRadians(55);
     public static final double kClimb = Math.toRadians(100);
-    public static final double kReadyAlgae = Math.toRadians(60);
+    public static final double kReadyAlgae = Math.toRadians(55);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
-    public static final double kReadyAlgael3 = Math.toRadians(72);
+    public static final double kReadyAlgael3 = Math.toRadians(67);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(75);
     public static final double kReadyDefensive = Math.toRadians(25);
     public static final double kReadyToScore = Math.toRadians(82);
@@ -379,8 +379,8 @@ public final class Constants {
     public static final double kFF = 0.0;
 
     public static final double kHome = 0.0;
-    public static final double kReadyClimb = 275.0;
-    public static final double kClimb = 120.0;
+    public static final double kReadyClimb = 100.0;
+    public static final double kClimb = 50.0;
   }
 
   public static final class AlgaeConstants{

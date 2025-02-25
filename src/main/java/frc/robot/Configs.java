@@ -3,7 +3,6 @@ package frc.robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -11,7 +10,6 @@ import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.WinchConstants;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.CoralHolderConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -20,7 +18,6 @@ import frc.robot.Constants.ModuleConstants;
 public final class Configs {
     public static final class MAXSwerveModule {
         public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
-        public static final SparkFlexConfig invertedDrivingConfig = new SparkFlexConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
@@ -270,11 +267,12 @@ public final class Configs {
                         .voltageCompensation(12.0)
                         .smartCurrentLimit(40);
                 m_AlgaeConfig.closedLoop
-                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                         .outputRange(WinchConstants.kMinOutput, WinchConstants.kMaxOutput);
                 m_AlgaeConfig.encoder
                         .uvwAverageDepth(2)
                         .uvwMeasurementPeriod(10)
+                        .positionConversionFactor(360)
                         .velocityConversionFactor(1);
                 m_AlgaeConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)

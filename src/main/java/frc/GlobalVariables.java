@@ -14,6 +14,7 @@ public class GlobalVariables extends SubsystemBase{
     public static boolean m_haveAlgae = false;
     public static boolean m_haveCoral = false;
     public static boolean m_algaeExceptionMode = false;
+    public static boolean m_defenseMode = false;
 
     public enum RobotState{
         HOME
@@ -51,20 +52,6 @@ public class GlobalVariables extends SubsystemBase{
         ,DEFENSIVE
     }
 
-    Mode m_mode = Mode.OFFENSIVE;
-    
-    public void setMode(Mode p_mode){
-        m_mode = p_mode;
-    }
-
-    public boolean isMode(Mode p_mode){
-        return m_mode == p_mode;
-    }
-
-    public Mode getMode(){
-        return m_mode;
-    }
-
     public enum AlgaeTarget{
         LEVEL_2
         ,LEVEL_3
@@ -94,7 +81,7 @@ public class GlobalVariables extends SubsystemBase{
 
         Logger.recordOutput("robotState", getRobotState());
         Logger.recordOutput("algaeTarget", getAlgaeTarget());
-        Logger.recordOutput("Mode", getMode());
+        Logger.recordOutput("Mode", m_defenseMode);
         Logger.recordOutput("haveAlgae", m_haveAlgae);
         Logger.recordOutput("haveCoral", m_haveCoral);
         Logger.recordOutput("targetCoralLevel", m_targetCoralLevel);

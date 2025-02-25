@@ -14,7 +14,8 @@ import frc.robot.Constants.WristConstants;
 public class CMD_ReadyToIntakeAlgaeThree extends SequentialCommandGroup{
     public CMD_ReadyToIntakeAlgaeThree(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae){
         addCommands(
-            new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae))
+            new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kIntake))
+            ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae))
             ,new CMD_PivotInPosition(p_pivot)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael3))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyAlgael3))
@@ -22,7 +23,6 @@ public class CMD_ReadyToIntakeAlgaeThree extends SequentialCommandGroup{
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyIntakeAlgael3))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kIntake))
         );
     }
 }
