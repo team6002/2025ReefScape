@@ -170,7 +170,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds) -> driveAutoBuilder(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants  
                     new PIDConstants(AutoConstants.kPThetaController, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration

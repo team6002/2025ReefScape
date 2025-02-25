@@ -72,7 +72,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 14;
+    public static final int kDrivingMotorPinionTeeth = 12;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.96);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.98);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -101,15 +101,17 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kAutoP =.0;//0.004;
+    public static final double kAutoP = .1;//0.004;
     public static final double kAutoI = 0.0;
     public static final double kAutoD = 0.0;
     public static final double kAutoFF = 0.0;
 
-    public static final double kAutoA = .39;//0.48019;
-    public static final double kAutoS = .004;
-    public static final double kAutoV = 2.20;//2.1016;
-    
+    // public static final double kAutoA = .3;//.42;//0.48019;
+    // public static final double kAutoS = .5;//.004;
+    // public static final double kAutoV = 2.388;//2.22;//2.1016;
+    public static final double kAutoA = .34;//.42;//0.48019;
+    public static final double kAutoS = .5;//.004;
+    public static final double kAutoV = 2.298;//2.22;//2.1016;
     
     public static final double kDrivingP = 0.2;//0.004;
     public static final double kDrivingI = 0.0;
@@ -190,7 +192,7 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 0;
+    public static final double kPXController = 9;
     public static final double kPYController = 0;
     public static final double kPThetaController = 0;
 
