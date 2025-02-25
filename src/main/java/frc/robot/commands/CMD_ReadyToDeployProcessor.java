@@ -9,8 +9,8 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
-public class CMD_ReadyDeployProcessor extends SequentialCommandGroup{
-    public CMD_ReadyDeployProcessor(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
+public class CMD_ReadyToDeployProcessor extends SequentialCommandGroup{
+    public CMD_ReadyToDeployProcessor(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kAlgaeProcessor))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAlgaeProcessor))

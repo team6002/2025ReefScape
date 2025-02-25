@@ -11,7 +11,5 @@ public interface WinchIO {
 
   public default void updateInputs(WinchIOInputs inputs) {}
 
-  public default void setPower(double p_power){}
-
   public default void setReference(double p_reference){}
 }

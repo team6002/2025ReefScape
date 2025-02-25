@@ -19,12 +19,11 @@ public class CMD_ReadyAlgae extends SequentialCommandGroup{
                 ()-> p_variables.getAlgaeTarget() == AlgaeTarget.LEVEL_2    
             )
             ,new CMD_PivotInPosition(p_pivot)
-            // ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyAlgae))
-            // ,new CMD_WristInPosition(p_wrist)
-            // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            // ,new CMD_ElevatorInPosition(p_elevator)
-            // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
-            // ,new CMD_PivotInPosition(p_pivot)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            ,new CMD_ElevatorInPosition(p_elevator)
+            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReady))
+            ,new CMD_WristInPosition(p_wrist)
+            ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
         );
     }
 }

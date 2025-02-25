@@ -11,10 +11,6 @@ public class SUB_Winch extends SubsystemBase{
         this.io = io;
     }
 
-    public void setPower(double p_power){
-        io.setPower(p_power);
-    }
-
     public void setReference(double p_reference){
         io.setReference(p_reference);
     }

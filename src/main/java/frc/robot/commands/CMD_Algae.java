@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
-import frc.GlobalVariables.Mode;
+import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -21,6 +23,8 @@ public class CMD_Algae extends Command{
     private final SUB_Algae m_algae;
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
+    private boolean m_intakingAlgae = false;
+    private boolean m_deployingAlgae = false;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){
         m_wrist = p_wrist;
@@ -33,114 +37,81 @@ public class CMD_Algae extends Command{
 
     @Override
     public void initialize(){
-       if(GlobalVariables.m_haveAlgae == false && (m_variables.isRobotState(RobotState.READY) || 
-            m_variables.isRobotState(RobotState.READY_STOWED) || m_variables.isRobotState(RobotState.HOME))){
+        if(GlobalVariables.m_haveAlgae == false && m_intakingAlgae == true){
             new SequentialCommandGroup(
-                new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
-                ,readyToIntake()
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                new InstantCommand(()-> m_intakingAlgae = false)
+                ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
+                ,new ConditionalCommand(
+                    new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgae)), 
+                    new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3)), 
+                    ()-> m_variables.getAlgaeTarget() == AlgaeTarget.LEVEL_2)
+                ,new ConditionalCommand(
+                    new CMD_YeetAlgae(m_wrist, m_algae)
+                    ,new InstantCommand()
+                    ,()-> GlobalVariables.m_algaeExceptionMode
+                )
+                ,new ConditionalCommand(
+                    new SequentialCommandGroup(
+                        new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
+                        ,new CMD_PivotInPosition(m_pivot)
+                        ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+                    )
+                    ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
+                ,()-> GlobalVariables.m_haveCoral)
+            ).schedule();
+            return;
+        }
+
+        if(GlobalVariables.m_haveAlgae == false){
+            m_intakingAlgae = true;
+            new SequentialCommandGroup(
+                new CMD_ReadyToIntakeAlgae(m_wrist, m_pivot, m_elevator, m_algae, m_variables)
                 ,new CMD_AlgaeTrigger(m_algae)
+                ,new InstantCommand(()-> m_intakingAlgae = false)
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
+                ,new ConditionalCommand(
+                    new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgae)), 
+                    new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3)), 
+                    ()-> m_variables.getAlgaeTarget() == AlgaeTarget.LEVEL_2)
+                ,new CMD_PivotInPosition(m_pivot)
                 ,new ConditionalCommand(
                     new CMD_YeetAlgae(m_wrist, m_algae)
                     ,new InstantCommand()
                     ,()-> GlobalVariables.m_algaeExceptionMode
                 )
-                // ,new ConditionalCommand(
-                // new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake).andThen(
-                    // new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                // )
-                ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                // ,()-> (m_variables.getAlgaeTarget() == GlobalVariables.AlgaeTarget.LEVEL_2))
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-            ).schedule();
-            return;
-       }
-       if(GlobalVariables.m_haveAlgae == false && m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
-            new SequentialCommandGroup(
-                new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
-                ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
                 ,new ConditionalCommand(
-                    new CMD_YeetAlgae(m_wrist, m_algae)
-                    ,new InstantCommand()
-                    ,()-> GlobalVariables.m_algaeExceptionMode
-                )
-                ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-                ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
+                    new SequentialCommandGroup(
+                        new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
+                        ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+                    )
+                    ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
+                ,()-> GlobalVariables.m_haveCoral)
             ).schedule();
             return;
-       }
-       if(GlobalVariables.m_haveAlgae &! m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+        }
+
+        if(GlobalVariables.m_haveAlgae && m_deployingAlgae){
             new SequentialCommandGroup(
-                new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                ,readyToDeployAlgae()
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-            ).schedule();
-            return;
-       }
-       if(GlobalVariables.m_haveAlgae && m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
-            new SequentialCommandGroup(
-                new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
-                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
+                new InstantCommand(()-> m_deployingAlgae = false)
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))   
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
+                ,new WaitCommand(.5)
+                ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
             ).schedule();
             return;
-       }
-       if(m_variables.isRobotState(RobotState.DEPLOY)){
-        new SequentialCommandGroup(
-            new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-            ,new ConditionalCommand(
-                new CMD_ReadyToIntakeFromProcessor(m_elevator, m_wrist, m_pivot, m_intake), 
-                new CMD_ReadyDefensive(m_elevator, m_wrist, m_pivot, m_intake),
-                ()-> m_variables.isMode(Mode.OFFENSIVE))
-            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-            ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
-            ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
-        ).schedule();
-        return;
-       }
-    }
-
-    private SequentialCommandGroup readyToIntake(){
-        SequentialCommandGroup m_readyIntakeCommand = new SequentialCommandGroup();
-        switch (m_variables.getAlgaeTarget()) {
-            case LEVEL_2:
-                m_readyIntakeCommand = new CMD_ReadyToIntakeAlgaeTwo(m_wrist, m_pivot, m_elevator, m_algae);
-                break;
-            case LEVEL_3:
-                m_readyIntakeCommand = new CMD_ReadyToIntakeAlgaeThree(m_wrist, m_pivot, m_elevator, m_algae);
-                break;
-            case GROUND:
-                m_readyIntakeCommand = new CMD_AlgaeIntakeGround(m_wrist, m_pivot, m_elevator, m_algae);
-                break;
-            case CORAL:
-                m_readyIntakeCommand = new CMD_AlgaeIntakeCoral(m_wrist, m_pivot, m_elevator, m_algae);
-            default:
-                break;
         }
-        return m_readyIntakeCommand;
-    }
 
-    private SequentialCommandGroup readyToDeployAlgae(){
-        SequentialCommandGroup m_readyToDeployCommand = new SequentialCommandGroup();
-
-        switch (m_variables.getAlgaeTarget()) {
-            case PROCESSOR:
-                m_readyToDeployCommand = new CMD_ReadyDeployProcessor(m_elevator, m_wrist, m_pivot);
-                break;
-            case BARGE:
-                m_readyToDeployCommand = new CMD_ReadyToDeployBarge(m_wrist, m_pivot, m_elevator);
-                break;
-            default:
-                break;
+        if(GlobalVariables.m_haveAlgae){
+            m_deployingAlgae = true;
+            new ConditionalCommand(
+                new CMD_ReadyToDeployBarge(m_wrist, m_pivot, m_elevator)
+                ,new CMD_ReadyToDeployProcessor(m_elevator, m_wrist, m_pivot)
+                ,()-> m_variables.getAlgaeTarget() == AlgaeTarget.BARGE).schedule();
+            return;
         }
-        
-        return m_readyToDeployCommand;
     }
 
     @Override

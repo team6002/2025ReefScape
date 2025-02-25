@@ -42,8 +42,15 @@ public class CMD_Drive extends Command {
     rot = MathUtil.applyDeadband(-m_controller.getRightX(), deadzone);
     m_autoSlew = false;
 
+    double slowMax = .9;
+    double slowMo = m_controller.getLeftTriggerAxis();
+    if(slowMo != 0){
+      xSpeed *= slowMax / slowMo;
+      ySpeed *= slowMax / slowMo;
+    }
+
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive( xSpeed, ySpeed, rot,true);
+    m_drivetrain.drive(xSpeed, ySpeed, rot,true);
   }
 
   // private static double modifyAxis(double value) {
