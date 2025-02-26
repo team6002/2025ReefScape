@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Winch;
 
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -14,13 +14,13 @@ import frc.robot.Constants.HardwareConstants;
 public class WinchIOSparkMax implements WinchIO{
     private final SparkMax m_winchMotor;
     private final SparkClosedLoopController m_winchController;
-    private final RelativeEncoder m_winchEncoder;
+    private final AbsoluteEncoder m_winchEncoder;
     public WinchIOSparkMax(){
         m_winchMotor = new SparkMax(HardwareConstants.kWinchCanId, MotorType.kBrushless);
 
         m_winchController = m_winchMotor.getClosedLoopController();
 
-        m_winchEncoder = m_winchMotor.getEncoder();
+        m_winchEncoder = m_winchMotor.getAbsoluteEncoder();
 
         m_winchMotor.configure(Configs.WinchConfig.m_WinchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

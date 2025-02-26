@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
@@ -46,16 +47,35 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new CMD_IntakeStow(m_intake)
+                    ,new InstantCommand(()-> GlobalVariables.m_coralException = false)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                    ,new ConditionalCommand(
+                        new SequentialCommandGroup(
+                            new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+                        )
+                        ,new SequentialCommandGroup(
+                            new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
+                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                        )
+                    ,()-> GlobalVariables.m_targetCoralLevel == 3 || GlobalVariables.m_targetCoralLevel == 2)
                 ).schedule();
                 break;
             case READY_TO_INTAKE:
                 //ready with an object to score
                 new SequentialCommandGroup(
-                    new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
+                    new InstantCommand(()-> GlobalVariables.m_coralException = false)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                    ,new ConditionalCommand(
+                        new SequentialCommandGroup(
+                            new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
+                        )
+                        ,new SequentialCommandGroup(
+                            new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
+                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                        )
+                    ,()-> GlobalVariables.m_targetCoralLevel == 3 || GlobalVariables.m_targetCoralLevel == 2)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                 ).schedule();
                 break;
@@ -72,6 +92,7 @@ public class CMD_Score extends Command{
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
                     ,new CMD_Deploy(m_wrist, m_intake)
+                    ,new InstantCommand(()-> GlobalVariables.m_coralException = false)
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
                     ,new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake)

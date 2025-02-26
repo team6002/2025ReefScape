@@ -232,7 +232,7 @@ public final class Constants {
     public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 2;//6;
+    public static final double kIntake = 3;//6;
     public static final double kOff = 0;
     public static final double kReverse = -6;//-2500
     public static final double kReverseSlow = -1.5;
@@ -273,7 +273,7 @@ public final class Constants {
     public static final double kAlgaeCoral = Math.toRadians(65);
     public static final double kIntake = Math.toRadians(60.5);
     public static final double kBelowIntake = Math.toRadians(50);
-    public static final double kIntakeException = Math.toRadians(62);
+    public static final double kIntakeException = Math.toRadians(58);
     public static final double kIntakeAlgaeGround = Math.toRadians(35.5);
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
     public static final double kDeployl2 = Math.toRadians(76);//82.75
@@ -316,12 +316,12 @@ public final class Constants {
     public static final double kIntakeAlgaeGround = 8.5;
     public static final double kDeployL1 = 14.5;
     public static final double kDeployL2 = 0;
-    public static final double kDeployL3 = 21;//28
-    public static final double kDeployL4 = 71;//68
+    public static final double kDeployL3 = 23;//28
+    public static final double kDeployL4 = 67;//68
     public static final double kDeployl1Exception = 14.5;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 19;//28
-    public static final double kDeployl4Exception = 68;//68
+    public static final double kDeployl4Exception = 66.5;//68
     public static final double kDeployBarge = 68;
   }
 
@@ -360,12 +360,12 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-107);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(38);//43
+    public static final double kDeployl4 = Math.toRadians(36);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(50);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
     public static final double kDeployl4Exception = Math.toRadians(40);//43
-    public static final double kDeployBarge = Math.toRadians(-20);
+    public static final double kDeployBarge = Math.toRadians(-40);
     public static final double kAlgaeYeet = Math.toRadians(-0);
   }
 
@@ -373,14 +373,14 @@ public final class Constants {
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kP = 0.01;
+    public static final double kP = 0.02;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFF = 0.0;
 
-    public static final double kHome = 0.0;
-    public static final double kReadyClimb = 100.0;
-    public static final double kClimb = 50.0;
+    public static final double kHome = 1.0;
+    public static final double kReadyClimb = 180.0;
+    public static final double kClimb = 70.0;
   }
 
   public static final class AlgaeConstants{
@@ -389,7 +389,7 @@ public final class Constants {
 
     public static final double kIntake = 5;
     public static final double kOff = 0;
-    public static final double kHolding = .25;
+    public static final double kHolding = 1;
     public static final double kReverse = -10;
 
     //l2, l3, barge, off coral, ground, processor

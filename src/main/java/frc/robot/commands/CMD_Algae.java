@@ -39,8 +39,8 @@ public class CMD_Algae extends Command{
     public void initialize(){
         if(GlobalVariables.m_haveAlgae == false && m_intakingAlgae == true){
             new SequentialCommandGroup(
-                new InstantCommand(()-> m_intakingAlgae = false)
-                ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
+                new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
+                ,new InstantCommand(()-> m_intakingAlgae = false)
                 ,new ConditionalCommand(
                     new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgae)), 
                     new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3)), 
@@ -68,6 +68,7 @@ public class CMD_Algae extends Command{
             new SequentialCommandGroup(
                 new CMD_ReadyToIntakeAlgae(m_wrist, m_pivot, m_elevator, m_algae, m_variables)
                 ,new CMD_AlgaeTrigger(m_algae)
+                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
                 ,new InstantCommand(()-> m_intakingAlgae = false)
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
                 ,new ConditionalCommand(

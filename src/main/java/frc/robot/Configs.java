@@ -85,7 +85,7 @@ public final class Configs {
                         .inverted(ElevatorConstants.kLeftInverted)
                         .follow(HardwareConstants.kRightElevatorCanId, true)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(40);
+                        .smartCurrentLimit(50);
                 m_leftElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -103,7 +103,7 @@ public final class Configs {
                         .inverted(ElevatorConstants.kRightInverted)
                         .disableFollowerMode()
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(40);
+                        .smartCurrentLimit(50);
                 m_rightElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -157,7 +157,7 @@ public final class Configs {
                         .inverted(PivotConstants.kLeftInverted)
                         .voltageCompensation(12.0)
                         .follow(HardwareConstants.kRightPivotCanId,true)
-                        .smartCurrentLimit(40);
+                        .smartCurrentLimit(50);
                 m_leftPivotConfig.closedLoop
                         .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -175,7 +175,7 @@ public final class Configs {
                         .inverted(PivotConstants.kRightInverted)
                         .voltageCompensation(12.0)
                         .disableFollowerMode()
-                        .smartCurrentLimit(40);
+                        .smartCurrentLimit(50);
                 m_rightPivotConfig.closedLoop
                         .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
@@ -224,12 +224,12 @@ public final class Configs {
                         .smartCurrentLimit(40);
                 m_WinchConfig.closedLoop
                         .pidf(WinchConstants.kP, WinchConstants.kI, WinchConstants.kD, WinchConstants.kFF)
-                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                         .outputRange(AlgaeConstants.kMinOutput, AlgaeConstants.kMaxOutput);
-                m_WinchConfig.encoder
-                        .uvwAverageDepth(2)
-                        .uvwMeasurementPeriod(10)
-                        .positionConversionFactor(1);
+                m_WinchConfig.absoluteEncoder
+                        .averageDepth(2)
+                        .inverted(false)
+                        .positionConversionFactor(360);
                 m_WinchConfig.limitSwitch
                         .forwardLimitSwitchEnabled(false)
                         .reverseLimitSwitchEnabled(false);
@@ -247,7 +247,7 @@ public final class Configs {
                         .voltageCompensation(12.0)
                         .smartCurrentLimit(40);
                 m_AlgaeConfig.closedLoop
-                        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .outputRange(WinchConstants.kMinOutput, WinchConstants.kMaxOutput);
                 m_AlgaeConfig.encoder
                         .uvwAverageDepth(2)

@@ -26,9 +26,9 @@ public class CMD_Exception extends Command{
 
     @Override
     public void initialize(){
-        GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode;
+        GlobalVariables.m_coralException = !GlobalVariables.m_coralException;
 
-        if(GlobalVariables.m_algaeExceptionMode){
+        if(GlobalVariables.m_coralException){
             if(m_variables.isRobotState(RobotState.READY_TO_INTAKE)){
                 //if coral is in the middle of robot & coral chute
                 new CMD_ReadyToIntakeException(m_pivot, m_elevator, m_wrist).schedule();
