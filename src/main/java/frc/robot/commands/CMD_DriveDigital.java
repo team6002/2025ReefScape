@@ -30,9 +30,9 @@ public class CMD_DriveDigital extends Command {
   @Override
   public void initialize() {
     if (right){
-      y = .3;
+      y = .1;
     }else{
-      y = -.3;
+      y = -.1;
     }
     timer.start();
   }

@@ -79,9 +79,9 @@ public class RobotContainer {
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
 
-    // m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
-    // m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
-    // m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
+    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
+    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
+    m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
     m_driverController.start().onTrue(
       new SequentialCommandGroup(
@@ -92,7 +92,7 @@ public class RobotContainer {
         ,new CMD_WristInPosition(m_wrist)
         ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
         ,new CMD_ElevatorReset(m_elevator)
-        // ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
+        ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
       )
     );
     
@@ -107,6 +107,7 @@ public class RobotContainer {
     m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
 
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
+    m_operatorController.rightTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot));
     m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_pivot, m_elevator, m_coralIntake, m_variables));
     m_operatorController.leftStick().onTrue(new InstantCommand(()-> GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode));
 

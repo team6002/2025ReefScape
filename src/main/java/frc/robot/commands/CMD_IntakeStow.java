@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 
 public class CMD_IntakeStow extends Command{
@@ -19,7 +20,7 @@ public class CMD_IntakeStow extends Command{
 
     @Override
     public void execute(){
-        if(m_intake.getCurrent() > 30){
+        if(m_intake.getCurrent() > 20){
             m_intakeTimer.start();
         }else{
             m_intakeTimer.reset();
@@ -30,8 +31,15 @@ public class CMD_IntakeStow extends Command{
         }
     }
 
+
+    @Override 
+    public void end(boolean interrupted){
+        m_intake.setVoltage(CoralHolderConstants.kHolding);
+    }
+
     @Override
     public boolean isFinished(){
+
         return isFinished;
     }
 }

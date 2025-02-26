@@ -18,7 +18,6 @@ public class CMD_YeetAlgae extends SequentialCommandGroup{
             ,new WaitCommand(.33)
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kOff))
             ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
-            ,new CMD_WristSetDeploy(p_wrist)
         );
     }
 }
