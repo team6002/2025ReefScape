@@ -95,6 +95,7 @@ public class RobotContainer {
         ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
       )
     );
+    m_driverController.povLeft().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));

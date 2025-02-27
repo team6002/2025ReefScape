@@ -85,7 +85,7 @@ public final class Configs {
                         .inverted(ElevatorConstants.kLeftInverted)
                         .follow(HardwareConstants.kRightElevatorCanId, true)
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(80);
                 m_leftElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -103,7 +103,7 @@ public final class Configs {
                         .inverted(ElevatorConstants.kRightInverted)
                         .disableFollowerMode()
                         .voltageCompensation(12.0)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(80);
                 m_rightElevatorConfig.closedLoop
                         .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -157,7 +157,7 @@ public final class Configs {
                         .inverted(PivotConstants.kLeftInverted)
                         .voltageCompensation(12.0)
                         .follow(HardwareConstants.kRightPivotCanId,true)
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(80);
                 m_leftPivotConfig.closedLoop
                         .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -175,7 +175,7 @@ public final class Configs {
                         .inverted(PivotConstants.kRightInverted)
                         .voltageCompensation(12.0)
                         .disableFollowerMode()
-                        .smartCurrentLimit(50);
+                        .smartCurrentLimit(80);
                 m_rightPivotConfig.closedLoop
                         .pid(PivotConstants.kP, PivotConstants.kI, PivotConstants.kD)
                         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)

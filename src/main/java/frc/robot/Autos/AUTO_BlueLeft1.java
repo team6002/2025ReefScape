@@ -22,11 +22,11 @@ public class AUTO_BlueLeft1 extends SequentialCommandGroup{
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
-              ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_wrist, p_pivot)
+            //   ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_wrist, p_pivot)
             )
-            ,new CMD_DeployLevelTwo(p_intake, p_wrist)
-            ,new WaitCommand(.1)
-            ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
+            // ,new CMD_DeployLevelTwo(p_intake, p_wrist)
+            // ,new WaitCommand(.1)
+            // ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
             // ,new ParallelCommandGroup(
             //   p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
             //   ,new SequentialCommandGroup(

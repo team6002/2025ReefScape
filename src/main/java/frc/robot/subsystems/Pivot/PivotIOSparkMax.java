@@ -23,11 +23,12 @@ public class PivotIOSparkMax implements PivotIO{
     private final SparkAbsoluteEncoder m_pivotEncoder;
     private final SparkClosedLoopController m_pivotController;
     private ArmFeedforward m_pivotFeedforward = new ArmFeedforward(PivotConstants.kS, PivotConstants.kG,
-        PivotConstants.kV);
+        PivotConstants.kV, PivotConstants.kA);
     private Constraints m_pivotConstraints = new Constraints(PivotConstants.kMaxVel, PivotConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
 
+    double prevVelo;
     public PivotIOSparkMax(){
         m_leftPivotMotor = new SparkMax(HardwareConstants.kLeftPivotCanId, MotorType.kBrushless);
         m_rightPivotMotor = new SparkMax(HardwareConstants.kRightPivotCanId, MotorType.kBrushless);
@@ -48,7 +49,7 @@ public class PivotIOSparkMax implements PivotIO{
         inputs.m_pivotPos = getPosition();
         inputs.m_pivotCurrent = getCurrent();
         inputs.m_pivotInPosition = inPosition();
-        inputs.m_pivotSetpoint = m_setpoint.position;
+        inputs.m_pivotSetpoint = m_setpoint.position+PivotConstants.kPivotOffset;
     };
     
     @Override
@@ -97,9 +98,12 @@ public class PivotIOSparkMax implements PivotIO{
 
     @Override
     public void reset(){
+        double accel = (m_setpoint.velocity - prevVelo)/.02;
+        double feedforwards = m_pivotFeedforward.calculate(getPosition(), m_setpoint.velocity, accel);
         m_setpoint = new TrapezoidProfile.State(getPosition() - PivotConstants.kPivotOffset, 0);
         m_goal = m_setpoint;
-        m_pivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_pivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
+        m_pivotController.setReference(m_setpoint.position, ControlType.kPosition,
+            ClosedLoopSlot.kSlot0, feedforwards );
+        prevVelo = m_setpoint.velocity;
     }
 }

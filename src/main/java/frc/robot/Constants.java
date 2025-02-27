@@ -240,16 +240,17 @@ public final class Constants {
   }
 
   public static final class PivotConstants{
-    public static final double kP = 1.5;//2.0
+    public static final double kP = 1.5;//1.5;//2.0
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.03;//.03
     public static final double kG = 0.025;//.025, .18
-    public static final double kV = 4.45;//4.45
+    public static final double kV = 4.5;//4.45
+    public static final double kA = 1.8;
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(700);//700
-    public static final double kMaxAccel = Math.toRadians(400);//400
+    public static final double kMaxVel = Math.toRadians(500);//700
+    public static final double kMaxAccel = Math.toRadians(500);//400
     public static final double kMaxVelExtended = Math.toRadians(540);//540
     public static final double kMaxAccelExtended = Math.toRadians(90);//90
     public static final double kMinOutput = -1;
@@ -378,7 +379,7 @@ public final class Constants {
     public static final double kD = 0;
     public static final double kFF = 0.0;
 
-    public static final double kHome = 1.0;
+    public static final double kHome = .5;
     public static final double kReadyClimb = 180.0;
     public static final double kClimb = 70.0;
   }

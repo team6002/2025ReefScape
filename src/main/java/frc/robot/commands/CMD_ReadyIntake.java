@@ -14,9 +14,9 @@ public class CMD_ReadyIntake extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReady))
             ,new WaitCommand(.3)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyIntake))
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReady))
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_PivotInPosition(p_pivot)
