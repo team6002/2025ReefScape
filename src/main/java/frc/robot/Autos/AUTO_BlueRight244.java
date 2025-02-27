@@ -59,7 +59,12 @@ public class AUTO_BlueRight244 extends SequentialCommandGroup{
                 new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
+            ),
+            new ParallelCommandGroup(
+              p_drivetrain.FollowPath("BlueLeftTrio7")
+              ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_wrist, p_pivot)
             )
+            ,new CMD_DeployLevelTwo(p_intake, p_wrist)
             ,new InstantCommand(()-> p_drivetrain.setHeading(
                 new Rotation2d(Math.toRadians(p_drivetrain.getAngle())).plus(new Rotation2d(Math.PI)).getDegrees()
             ))

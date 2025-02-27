@@ -108,14 +108,14 @@ public class SUB_Drivetrain extends SubsystemBase {
   Field2d field;
   Field2d fieldEst;
   /** Creates a new DriveSubsystem. */
-  // SUB_Vision m_vision;
+  SUB_Vision m_vision;
   public SUB_Drivetrain(
     GyroIO gyroIO,
     ModuleIO flModuleIO,
     ModuleIO frModuleIO,
     ModuleIO blModuleIO,
     ModuleIO brModuleIO
-    // ,SUB_Vision p_vision
+    ,SUB_Vision p_vision
     ) 
   {
         
@@ -189,7 +189,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             this // Reference to this subsystem to set requirements
     );
 
-    // m_vision = p_vision;
+    m_vision = p_vision;
     m_odometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
@@ -214,7 +214,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     getModulePositions()
     );
     
-    // m_vision.updateInputs();
+    m_vision.updateInputs();
     
   }
   
@@ -226,8 +226,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("gyroHeading", getAngle());
-    // var LvisionEst = m_vision.getLEstimatedGlobalPose();
-    // var RvisionEst = m_vision.getREstimatedGlobalPose();
+    var LvisionEst = m_vision.getLEstimatedGlobalPose();
+    var RvisionEst = m_vision.getREstimatedGlobalPose();
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
@@ -657,8 +657,48 @@ public class SUB_Drivetrain extends SubsystemBase {
       DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     }
   }
+/**
+   * Resets the odometery to start of path
+   * @return
+   */
+  public void resetOdoToStartPositionFlipped(String pathName){
+    try{
+      // Load the path you want to follow using its name in the GUI
+      PathPlannerPath path;
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+        path = PathPlannerPath.fromPathFile(pathName).flipPath();
+      }else{
+        path = PathPlannerPath.fromPathFile(pathName);
+      }
+      Optional<Pose2d> intialPose = path.getStartingHolonomicPose();
+      intialPose.ifPresent(
+        pose -> {
+          System.out.println(pose.getRotation());
+          gyroIO.set(pose.getRotation());
+          resetOdometry(pose);
+        }
+        
+      );
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+  }
 
   public Command FollowPath(String pathName) {
+    try{
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path).andThen(new InstantCommand(() -> drive(0, 0, 0, false),this));
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
+
+  public Command FollowPathFlipped(String pathName) {
     try{
         // Load the path you want to follow using its name in the GUI
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);

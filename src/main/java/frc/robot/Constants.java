@@ -194,7 +194,7 @@ public final class Constants {
 
     public static final double kPXController = 6;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 1.25;
+    public static final double kPThetaController = 1.5;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -232,9 +232,9 @@ public final class Constants {
     public static final boolean kCoralHolderInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 3;//6;
+    public static final double kIntake = 4;//6;
     public static final double kOff = 0;
-    public static final double kReverse = -6;//-2500
+    public static final double kReverse = -7;//-2500
     public static final double kReverseSlow = -1.5;
     public static final double kHolding = .5;
   }
@@ -244,10 +244,10 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kS = 0.03;//.03
+    public static final double kS = 0.025;//.03
     public static final double kG = 0.025;//.025, .18
     public static final double kV = 4.5;//4.45
-    public static final double kA = 1.8;
+    public static final double kA = 0;
     public static final double kPivotOffset = Math.toRadians(-90);
     public static final double kMaxVel = Math.toRadians(500);//700
     public static final double kMaxAccel = Math.toRadians(500);//400
@@ -288,15 +288,15 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.17;//.15
+    public static final double kP = 0.2;//.15
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.25;//.25
     public static final double kV = 0.045;//.045
     public static final double kG = 0.35;//.035
-    public static final double kMaxVel = 300;//200
-    public static final double kMaxAccel = 300;//200
+    public static final double kMaxVel = 700;//200
+    public static final double kMaxAccel = 700;//200
     public static final double kMaxVelDown = 100;//100
     public static final double kMaxAccelDown = 100;//100
     public static final double kMinOutput = -1;
@@ -358,7 +358,7 @@ public final class Constants {
     public static final double kAlgaeProcessor = Math.toRadians(-10);
     public static final double kAlgaeCoral = Math.toRadians(-90);
     public static final double kIntakeAlgaeGround = Math.toRadians(-80);
-    public static final double kDeployl1 = Math.toRadians(-107);
+    public static final double kDeployl1 = Math.toRadians(-104);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
     public static final double kDeployl4 = Math.toRadians(36);//43
@@ -405,9 +405,9 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(-10)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, 0, Math.toRadians(10)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =

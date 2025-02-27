@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.99,
+        "x": 4.03,
         "y": 2.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.377873686102252,
-        "y": 3.154359601693712
+        "x": 4.430948928583231,
+        "y": 3.1463176304635394
       },
       "isLocked": false,
       "linkedName": "LeftTrio3"
     },
     {
       "anchor": {
-        "x": 1.57,
-        "y": 0.6799999999999999
+        "x": 1.44,
+        "y": 0.5700000000000001
       },
       "prevControl": {
-        "x": 1.3848684852492787,
-        "y": 0.5119930886954246
+        "x": 1.1882416056531073,
+        "y": 0.3529130211958609
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,8 +35,8 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 4.0,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 180.0,
+    "maxAngularVelocity": 240.0,
+    "maxAngularAcceleration": 240.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

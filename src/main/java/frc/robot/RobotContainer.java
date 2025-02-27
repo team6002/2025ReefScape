@@ -33,14 +33,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
-  // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
+  final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_drivetrain = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
     ,new ModuleIOSparkFlex(1)
     ,new ModuleIOSparkFlex(2)
     ,new ModuleIOSparkFlex(3)
-    // ,m_vision
+    ,m_vision
   );
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
