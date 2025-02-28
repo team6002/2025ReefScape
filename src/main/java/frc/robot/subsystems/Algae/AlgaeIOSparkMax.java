@@ -48,7 +48,7 @@ public class AlgaeIOSparkMax implements AlgaeIO{
 
     @Override
     public double getCurrent(){
-        return m_algaeMotor.getAppliedOutput();
+        return m_algaeMotor.getOutputCurrent();
     }
     
     @Override

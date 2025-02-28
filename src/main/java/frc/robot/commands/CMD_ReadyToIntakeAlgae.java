@@ -30,7 +30,7 @@ public class CMD_ReadyToIntakeAlgae extends Command{
                 new CMD_ReadyToIntakeAlgaeTwo(m_wrist, m_pivot, m_elevator, m_algae).schedule();
                 break;
             case LEVEL_3:
-                new CMD_ReadyToIntakeAlgaeThree(m_wrist, m_pivot, m_elevator, m_algae).schedule();
+                new CMD_ReadyToIntakeAlgaeThree(m_wrist, m_pivot, m_elevator, m_algae, m_variables).schedule();
                 break;
             case GROUND:
                 new CMD_AlgaeIntakeGround(m_wrist, m_pivot, m_elevator, m_algae).schedule();

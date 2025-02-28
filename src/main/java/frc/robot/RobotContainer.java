@@ -19,8 +19,11 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.Pivot.*;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -101,6 +104,11 @@ public class RobotContainer {
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     //operator
     m_operatorController.start().onTrue(new CMD_ToggleMode(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
+    m_operatorController.back().onTrue(new SequentialCommandGroup( 
+      new InstantCommand(()->  m_algae.setReference(AlgaeConstants.kReverse))
+      ,new WaitCommand(.33)
+      ,new InstantCommand(()-> m_algae.setReference(0))
+    ));
 
     m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 4));
     m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 3));
@@ -123,16 +131,22 @@ public class RobotContainer {
     m_operatorController.x().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2))
-        ,new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
-        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
-      ) 
+        // ,new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
+        ,new ConditionalCommand(
+          new InstantCommand(()-> m_variables.setRobotState(GlobalVariables.RobotState.READY_STOWED)),
+          new PrintCommand("I hate ur code"),
+           ()-> GlobalVariables.m_algaeExceptionMode)
+        ,new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
+        ) 
     );
     m_operatorController.y().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_3))
-        ,new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
-        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
-      )    
+        ,new ConditionalCommand(
+          new InstantCommand(()-> GlobalVariables.lvl3AlgaeException = true).andThen(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2))
+          ,new CMD_AlgaeLevelThree(m_coralIntake, m_wrist, m_algae, m_elevator, m_variables, m_pivot)
+          ,()-> GlobalVariables.m_algaeExceptionMode)
+        )    
     );
     m_operatorController.rightStick().onTrue(
       new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND))

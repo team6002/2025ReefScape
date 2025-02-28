@@ -16,6 +16,7 @@ public class GlobalVariables extends SubsystemBase{
     public static boolean m_coralException = false;
     public static boolean m_algaeExceptionMode = false;
     public static boolean m_defenseMode = false;
+    public static boolean lvl3AlgaeException = false;
 
     public enum RobotState{
         HOME
@@ -87,6 +88,7 @@ public class GlobalVariables extends SubsystemBase{
         Logger.recordOutput("haveCoral", m_haveCoral);
         Logger.recordOutput("targetCoralLevel", m_targetCoralLevel);
         Logger.recordOutput("exceptionMode", m_algaeExceptionMode);
+        Logger.recordOutput("Lvl3AlgaeExcept", lvl3AlgaeException);
     }
 }
  
