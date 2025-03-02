@@ -7,12 +7,10 @@ import frc.robot.subsystems.Algae.SUB_Algae;
 
 public class CMD_AlgaeTrigger extends Command{
     private final SUB_Algae m_algae;
-    private final GlobalVariables m_variables;
     private final Timer m_triggerTimer = new Timer();
     private boolean isFinished = false;
-    public CMD_AlgaeTrigger(SUB_Algae p_algae, GlobalVariables p_variables){
+    public CMD_AlgaeTrigger(SUB_Algae p_algae){
         m_algae = p_algae;
-        m_variables = p_variables;
     }
 
     @Override
@@ -27,7 +25,7 @@ public class CMD_AlgaeTrigger extends Command{
         if(m_algae.getCurrent() > 20){
             if(m_triggerTimer.get() > .1){
                 isFinished = true;
-                m_variables.m_haveAlgae = true;
+                GlobalVariables.m_haveAlgae = true;
             }
         }else{
             m_triggerTimer.reset();

@@ -1,17 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
-import frc.GlobalVariables.AlgaeTarget;
-import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.PivotConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -23,7 +16,7 @@ public class CMD_AlgaeLevelThree extends SequentialCommandGroup{
         SUB_Elevator p_elevator, GlobalVariables p_variables, SUB_Pivot p_pivot){
         addCommands(
             new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_variables)
-            ,new CMD_AlgaeTrigger(p_algae, p_variables)
+            ,new CMD_AlgaeTrigger(p_algae)
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kHolding))
             ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
             // ,new ConditionalCommand(
