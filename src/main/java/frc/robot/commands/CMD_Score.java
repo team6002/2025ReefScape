@@ -1,18 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
-import frc.robot.subsystems.Wrist.SUB_Wrist;
-import frc.robot.Constants.CoralHolderConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
+import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_Score extends Command{
     SUB_Elevator m_elevator;
@@ -34,56 +31,22 @@ public class CMD_Score extends Command{
 
     @Override
     public void initialize(){
-        switch(m_variables.getRobotState()){
-           case HOME:
-                //ready, no object
+        switch (m_variables.getRobotState()) {
+            case HOME:
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
                     ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+                    ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
                 break;
             case READY:
-                //ready to intake
-                new SequentialCommandGroup(
-                    new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new CMD_IntakeStow(m_intake)
-                    ,new InstantCommand(()-> m_intake.setVoltage(CoralHolderConstants.kHolding)) 
-                    ,new InstantCommand(()-> GlobalVariables.m_coralException = false)
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new ConditionalCommand(
-                        new SequentialCommandGroup(
-                            new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                        )
-                        ,new SequentialCommandGroup(
-                            new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
-                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                        )
-                    ,()-> GlobalVariables.m_targetCoralLevel == 3 || GlobalVariables.m_targetCoralLevel == 2)
-                ).schedule();
+                new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
                 break;
             case READY_TO_INTAKE:
-                //ready with an object to score
-                new SequentialCommandGroup(
-                    new InstantCommand(()-> GlobalVariables.m_coralException = false)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                    ,new ConditionalCommand(
-                        new SequentialCommandGroup(
-                            new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                        )
-                        ,new SequentialCommandGroup(
-                            new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
-                            ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                        )
-                    ,()-> GlobalVariables.m_targetCoralLevel == 3 || GlobalVariables.m_targetCoralLevel == 2)
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                ).schedule();
+                new CMD_SetReadyStowed(m_elevator, m_pivot, m_wrist, m_intake, m_variables).schedule();
                 break;
-           case READY_STOWED:
-                //ready to deploy
+            case READY_STOWED:
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
                     ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
@@ -91,51 +54,11 @@ public class CMD_Score extends Command{
                 ).schedule();
                 break;
             case READY_TO_DEPLOY:
-                //deploy/score
-                new SequentialCommandGroup(
-                    new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
-                    ,new CMD_Deploy(m_wrist, m_intake)
-                    ,new ConditionalCommand(
-                        new CMD_AlgaeLevel3Eject(m_intake, m_wrist, m_algae, m_elevator, m_variables, m_pivot)
-                        ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kStowing)).andThen(new InstantCommand(()-> m_algae.setReference(0)))
-                        ,()-> GlobalVariables.lvl3AlgaeException && GlobalVariables.m_targetCoralLevel == 2
-                    )
-                    ,new InstantCommand(()-> GlobalVariables.m_coralException = false)
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
-                    ,new ConditionalCommand(
-                        new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake),
-                        new InstantCommand(),
-                        ()-> GlobalVariables.m_targetCoralLevel == 4 
-                    )
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_IntakeStow(m_intake)
-                    ,new InstantCommand(()-> m_intake.setVoltage(CoralHolderConstants.kHolding)) 
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                ).schedule();
+                new CMD_SetDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables)
+                .andThen(new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)).schedule();
                 break;
             case DEPLOY:
-                //ready, no object
-                new SequentialCommandGroup(
-                    new InstantCommand(()-> m_variables.setRobotState(RobotState.DEPLOY))
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = false)
-                    ,new ConditionalCommand(
-                        new InstantCommand(),
-                        new InstantCommand(()-> m_algae.setReference(0)),
-                        ()-> GlobalVariables.m_haveAlgae)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_INTAKE))
-                    ,new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                    ,new CMD_IntakeStow(m_intake)
-                    ,new InstantCommand(()-> m_intake.setVoltage(CoralHolderConstants.kHolding))
-                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
-                ).schedule();
+                new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
                 break;
             default:
                 break;

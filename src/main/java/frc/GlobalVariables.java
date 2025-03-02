@@ -24,8 +24,6 @@ public class GlobalVariables extends SubsystemBase{
         ,TRANSITIONING_TO_READY
         ,READY
         ,READY_TO_INTAKE
-        ,TRANSITONING_TO_STOW
-        ,STOW
         ,READY_STOWED
         ,TRANSITIONING_TO_DEPLOY
         ,READY_TO_DEPLOY
