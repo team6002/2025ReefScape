@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.98);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.96);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -101,7 +101,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kAutoP = .125;//0.004;
+    public static final double kAutoP = .115;//0.004;
     public static final double kAutoI = 0.0;
     public static final double kAutoD = 0.0;
     public static final double kAutoFF = 0.0;
@@ -192,7 +192,7 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 6;
+    public static final double kPXController = 5.25;
     public static final double kPYController = 0;
     public static final double kPThetaController = 1.5;
 
@@ -275,7 +275,7 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(60.5);
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
-    public static final double kIntakeAlgaeGround = Math.toRadians(35.5);
+    public static final double kIntakeAlgaeGround = Math.toRadians(31.5);
     public static final double kDeployl1 = Math.toRadians(37.5);//82.75
     public static final double kDeployl2 = Math.toRadians(76);//82.75
     public static final double kDeployl3 = Math.toRadians(84);//86
@@ -345,7 +345,7 @@ public final class Constants {
     public static final double kTolerance = Math.toRadians(5);
 
     public static final double kHome = Math.toRadians(100);
-    public static final double kClimb = Math.toRadians(50);
+    public static final double kClimb = Math.toRadians(30);
     public static final double kReady = Math.toRadians(-110);
     public static final double kReadyAlgae = Math.toRadians(0);
     public static final double kReadyAlgael3 = Math.toRadians(50);
@@ -359,16 +359,16 @@ public final class Constants {
     public static final double kReadyToScore = Math.toRadians(-15);
     public static final double kAlgaeProcessor = Math.toRadians(-10);
     public static final double kAlgaeCoral = Math.toRadians(-90);
-    public static final double kIntakeAlgaeGround = Math.toRadians(-80);
+    public static final double kIntakeAlgaeGround = Math.toRadians(-85);
     public static final double kDeployl1 = Math.toRadians(-104);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(36);//43
+    public static final double kDeployl4 = Math.toRadians(39);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(50);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
     public static final double kDeployl4Exception = Math.toRadians(40);//43
-    public static final double kDeployBarge = Math.toRadians(-40);
+    public static final double kDeployBarge = Math.toRadians(-35);
     public static final double kAlgaeYeet = Math.toRadians(-0);
   }
 
@@ -376,14 +376,14 @@ public final class Constants {
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kP = 0.02;
+    public static final double kP = 0.08;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFF = 0.0;
 
-    public static final double kHome = .5;
-    public static final double kReadyClimb = 180.0;
-    public static final double kClimb = 70.0;
+    public static final double kHome = 33;
+    public static final double kReadyClimb = 210.0;
+    public static final double kClimb = 110.0;
   }
 
   public static final class AlgaeConstants{
@@ -407,9 +407,9 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =

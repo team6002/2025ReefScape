@@ -264,35 +264,35 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(new Rotation2d().fromDegrees(180)));
     // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
     SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(new Rotation2d().fromDegrees(180)).getDegrees());
-    // m_vision.updateInputs();
+    m_vision.updateInputs();
 
-    // LvisionEst.ifPresent(
-    //   est -> {
-    //     var estPose = est.estimatedPose.toPose2d();
-    //     // estPose = m_vision.getEstimatedGlobalPose(estPose);
-    //     Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-    //     Logger.recordOutput("LCameraPose", estPose);
-    //     // Change our trust in the measurement based on the tags we can see
-    //     var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+    LvisionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+        Logger.recordOutput("LCameraPose", estPose);
+        // Change our trust in the measurement based on the tags we can see
+        // var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
       
-    //       addVisionMeasurement(
-    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-    //   }  
-    // );
+        //   addVisionMeasurement(
+        //     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }
+    );
 
-    // RvisionEst.ifPresent(
-    //   est -> {
-    //     var estPose = est.estimatedPose.toPose2d();
-    //     // estPose = m_vision.getEstimatedGlobalPose(estPose);
-    //     Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-    //     Logger.recordOutput("RCameraPose", estPose);
-    //     // Change our trust in the measurement based on the tags we can see
-    //     var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+    RvisionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
+        Logger.recordOutput("RCameraPose", estPose);
+        // Change our trust in the measurement based on the tags we can see
+        // var estStdDevs = m_vision.getREstimationStdDevs(estPose);
       
-    //       addVisionMeasurement(
-    //         est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-    //   }  
-    // );
+        //   addVisionMeasurement(
+        //     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }  
+    );
     
     // LvisionEst.ifPresent(
     //   est -> {
@@ -351,10 +351,16 @@ public class SUB_Drivetrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     setHeading(pose.getRotation().getDegrees());
+    m_pureOdometry.resetPosition(
+      Rotation2d.fromDegrees(getAngle()),
+      getModulePositions(),
+      pose
+    );
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(getAngle()),
-        getModulePositions(),
-        pose);
+      Rotation2d.fromDegrees(getAngle()),
+      getModulePositions(),
+      pose
+    );
   }
 
   public void resetTargetOdometry(Pose2d pose) {
@@ -598,8 +604,15 @@ public class SUB_Drivetrain extends SubsystemBase {
   public void addVisionMeasurement(
           Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
       //uses navx instead of camera vision.
+      if (visionMeasurement.equals(null)){
+        return;
+      }
+      try {
       Pose2d p_angledPose = new Pose2d(visionMeasurement.getTranslation(), Rotation2d.fromDegrees(getAngle())); 
       m_odometry.addVisionMeasurement(p_angledPose, timestampSeconds, stdDevs);
+      } catch (Exception e){
+        System.out.println(e);
+      }
   }
 
   public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
@@ -667,9 +680,9 @@ public class SUB_Drivetrain extends SubsystemBase {
       PathPlannerPath path;
       var alliance = DriverStation.getAlliance();
       if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-        path = PathPlannerPath.fromPathFile(pathName).flipPath();
+        path = PathPlannerPath.fromPathFile(pathName).flipPath().mirrorPath();
       }else{
-        path = PathPlannerPath.fromPathFile(pathName);
+        path = PathPlannerPath.fromPathFile(pathName).mirrorPath();
       }
       Optional<Pose2d> intialPose = path.getStartingHolonomicPose();
       intialPose.ifPresent(
@@ -701,7 +714,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   public Command FollowPathFlipped(String pathName) {
     try{
         // Load the path you want to follow using its name in the GUI
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName).mirrorPath();
         // PathPlannerTrajectory trajectory = path.generateTrajectory(getChasisSpeed(), getOdoRotation(), config);
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return AutoBuilder.followPath(path).andThen(new InstantCommand(() -> drive(0, 0, 0, false),this));

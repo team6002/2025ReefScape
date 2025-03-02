@@ -33,7 +33,7 @@ public class AUTO_BlueRight244 extends SequentialCommandGroup{
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
             )
-            ,new CMD_IntakeStow(p_intake).withTimeout(.05)
+            ,new CMD_IntakeStow(p_intake).withTimeout(5)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPath("BlueLeftTrio3")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
@@ -46,7 +46,7 @@ public class AUTO_BlueRight244 extends SequentialCommandGroup{
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
             )
-            ,new CMD_IntakeStow(p_intake).withTimeout(.05)
+            ,new CMD_IntakeStow(p_intake).withTimeout(5)
             // ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPath("BlueLeftTrio5")

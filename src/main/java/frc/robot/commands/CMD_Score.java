@@ -113,7 +113,7 @@ public class CMD_Score extends Command{
                     ,new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
                     ,new CMD_IntakeStow(m_intake)
-                    ,new InstantCommand(()-> m_intake.setVoltage(0))
+                    ,new InstantCommand(()-> m_intake.setVoltage(CoralHolderConstants.kHolding)) 
                     ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                     ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))

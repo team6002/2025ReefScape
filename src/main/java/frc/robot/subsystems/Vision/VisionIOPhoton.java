@@ -293,15 +293,15 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
-        if (LCamera.getLatestResult().hasTargets()){
-            inputs.LTargetPose = getTargetLPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), 0.0, -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
-        }
-        inputs.LTarget = LCamera.getLatestResult().hasTargets(); 
+        // if (LCamera.getLatestResult().hasTargets()){
+        //     inputs.LTargetPose = getTargetLPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), 0.0, -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
+        // }
+        // inputs.LTarget = LCamera.getLatestResult().hasTargets(); 
           
-        if (RCamera.getLatestResult().hasTargets()){
-            inputs.RTargetPose = getTargetRPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), 0, -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
-        }
-        inputs.RTarget = RCamera.getLatestResult().hasTargets();   
+        // if (RCamera.getLatestResult().hasTargets()){
+        //     inputs.RTargetPose = getTargetRPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), 0, -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
+        // }
+        // inputs.RTarget = RCamera.getLatestResult().hasTargets();   
         
     }
 

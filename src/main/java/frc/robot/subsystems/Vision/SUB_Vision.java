@@ -26,6 +26,7 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -67,7 +68,14 @@ public class SUB_Vision {
     // }
 
     public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
+        try{
+        if (estimatedPose.equals(estimatedPose)){
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        }
         return io.getLEstimationStdDevs(estimatedPose);
+        } catch (Exception e){
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        }
     }
 
     public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {

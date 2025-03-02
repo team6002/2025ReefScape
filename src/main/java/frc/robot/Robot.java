@@ -63,6 +63,7 @@ public class Robot extends LoggedRobot {
     m_autonomousChooser.addOption("AUTO_BlueLeft", new AUTO_BlueLeft(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
     m_autonomousChooser.addOption("AUTO_BlueRight", new AUTO_BlueRight(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
     m_autonomousChooser.addOption("AUTO_BlueLeft244", new AUTO_BlueLeft244(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_BlueLeft244", new AUTO_BlueLeft444(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     m_autonomousChooser.addOption("AUTO_BlueRight244", new AUTO_BlueRight244(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     m_autonomousChooser.addOption("AUTO_BlueRight444", new AUTO_BlueRight444(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     SmartDashboard.putData(m_autonomousChooser);
@@ -120,7 +121,7 @@ public class Robot extends LoggedRobot {
     // this line or comment it out.
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
-    m_robotContainer.m_elevator.resetEncoder();
+    // m_robotContainer.m_elevator.resetEncoder();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

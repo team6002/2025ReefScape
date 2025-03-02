@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 1.44,
-        "y": 0.58
+        "y": 0.76
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5629293733314158,
-        "y": 0.8248425705631319
+        "x": 1.562942484329671,
+        "y": 1.004869650113787
       },
       "isLocked": false,
       "linkedName": "BlueLeftPickup"
     },
     {
       "anchor": {
-        "x": 3.15,
-        "y": 3.75
+        "x": 3.11,
+        "y": 3.79
       },
       "prevControl": {
-        "x": 2.812038438203438,
-        "y": 3.0760241038082596
+        "x": 2.7720249240676513,
+        "y": 3.115990468874124
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -174.42780219603617
+    "rotation": -174.428
   },
   "reversed": false,
   "folder": "BlueLeft",
