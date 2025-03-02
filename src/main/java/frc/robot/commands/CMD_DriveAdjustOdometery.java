@@ -11,11 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
@@ -33,8 +29,8 @@ public class CMD_DriveAdjustOdometery extends Command{
   private double xSpeed, ySpeed, turnSpeed;
   private Pose2d goalPose;
   private Pose2d robotOdom;
-  private TrapezoidProfile.State m_goal;
-  private TrapezoidProfile.State m_setpoint;
+  // private TrapezoidProfile.State m_goal;
+  // private TrapezoidProfile.State m_setpoint;
 
   private double xAdjustment = 0;
   private double yAdjustment = 0;
@@ -77,7 +73,8 @@ public class CMD_DriveAdjustOdometery extends Command{
   public void initialize() {
     System.out.println("Started Autoalign");
     
-    goalPose = new Pose2d(m_drivetrain.getPose().getX() + xAdjustment ,m_drivetrain.getPose().getY() + yAdjustment, m_drivetrain.getPose().getRotation().plus(new Rotation2d().fromDegrees(turnAdjustment)));
+    new Rotation2d();
+    goalPose = new Pose2d(m_drivetrain.getPose().getX() + xAdjustment ,m_drivetrain.getPose().getY() + yAdjustment, m_drivetrain.getPose().getRotation().plus(Rotation2d.fromDegrees(turnAdjustment)));
     
     robotOdom = m_drivetrain.getPose();
 

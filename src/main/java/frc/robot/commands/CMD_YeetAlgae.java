@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 

@@ -7,9 +7,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
-import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -23,7 +21,7 @@ public class CMD_Algae extends Command{
     private final SUB_Algae m_algae;
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
-    private boolean m_intakingAlgae = false;
+    // private boolean m_intakingAlgae = false;
     private boolean m_deployingAlgae = false;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){

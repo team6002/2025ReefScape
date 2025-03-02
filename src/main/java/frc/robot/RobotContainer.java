@@ -79,8 +79,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //driver
-    m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, false, 0));
-    m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, m_driverController, true, 0));
+    m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
+    m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
 
     m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));

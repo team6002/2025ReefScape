@@ -7,15 +7,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.Constants.VisionConstants;
@@ -33,12 +29,12 @@ public class CMD_DriveAlignVisionAdjust extends Command{
   private boolean end;
 
   private double xSpeed, ySpeed, turnSpeed;
-  private double positionRatio;// its like a inverse cnc machine, the farther y the slower the x
-  private double turnRatio;// its like a inverse cnc machine, the farther y the slower the turn
+  // private double positionRatio;// its like a inverse cnc machine, the farther y the slower the x
+  // private double turnRatio;// its like a inverse cnc machine, the farther y the slower the turn
   private Pose2d goalPose;
   private Pose2d robotOdom;
-  private TrapezoidProfile.State m_goal;
-  private TrapezoidProfile.State m_setpoint;
+  // private TrapezoidProfile.State m_goal;
+  // private TrapezoidProfile.State m_setpoint;
 
   private double xAdjustment = 0;
   private double yAdjustment = 0;
