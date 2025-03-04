@@ -398,63 +398,6 @@ public class SUB_Drivetrain extends SubsystemBase {
       setModuleStatesAuto(targetStates);
   }
 
-
-  /**
-   * Using the PathPlanner pathfinding algorithm, pathfind from our current position to a path. Used
-   * in teleop to pathfind to the start of a known path location.  Requires AutoPathBuilder to be
-   * configured before use.  
-   * @param wanted_path Path we want to pathfind to.  Known location in TeleopPath.
-   * @return Command to follow the path that it found.
-   */
-  // public Command teleopPathfindTo(TeleopPath wanted_path){
-  //   PathPlannerPath path;
-  //   if (DriverStation.getAlliance().isPresent()){
-  //     switch (wanted_path) {
-  //       case AMP:
-  //         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-  //           path = PathPlannerPath.fromPathFile("RedAmp");
-  //         }
-  //         else {
-  //           path = PathPlannerPath.fromPathFile("BlueAmp");
-  //         }
-  //         break;
-  //       case SOURCE:
-  //         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-  //           path = PathPlannerPath.fromPathFile("RedSource");
-  //         }
-  //         else {
-  //           path = PathPlannerPath.fromPathFile("BlueSource");
-  //         }
-  //         break;
-        
-  //       default:
-  //         // no valid path to select.  Do nothing
-  //         return new InstantCommand();
-  //     }
-  //   }else {
-  //     // Driver alliance not selected
-  //     return new InstantCommand();
-  //   }
-     
-    
-    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
-  //   PathConstraints constraints = new PathConstraints(
-  //           3.0, 2.0,
-  //           Units.degreesToRadians(360), Units.degreesToRadians(180));
-    
-  //   Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-  //     path, 
-  //     constraints,
-  //     3.0 // Rotation delay in meters.  How far robot will travel before rotating.
-  //     );
-  //   return pathfindingCommand;
-  // }
-
-  // public void setModuleStates(SwerveModuleState[] desireStates){
-  //   SwerveDriveKinematics.desaturateWheelSpeeds(
-  //     desireStates, DriveConstants.kMaxSpeedMetersPerSecond);
-  // }
-
   public double getXVelocity(){
     return getChasisSpeed().vxMetersPerSecond;
   }
@@ -546,6 +489,10 @@ public class SUB_Drivetrain extends SubsystemBase {
   public double getAngle() {
     // return Math.toDegrees(MathUtil.angleModulus(-Rotation2d.fromDegrees(m_gyro.getAngle()).getRadians())) + m_angleOffset;
     return gyroInputs.yawPosition.getDegrees();
+  }
+
+  public double getPitch(){
+    return gyroInputs.pitch;
   }
 
   public Rotation2d getRotation2d() {

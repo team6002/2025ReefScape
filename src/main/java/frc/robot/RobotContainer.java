@@ -11,10 +11,8 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.*;
 import frc.robot.subsystems.Vision.*;
-import frc.robot.subsystems.Winch.SUB_Winch;
-import frc.robot.subsystems.Winch.WinchIOSparkMax;
-import frc.robot.subsystems.Algae.AlgaeIOSparkMax;
-import frc.robot.subsystems.Algae.SUB_Algae;
+import frc.robot.subsystems.Winch.*;
+import frc.robot.subsystems.Algae.*;
 import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
@@ -82,22 +80,10 @@ public class RobotContainer {
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
 
-    m_driverController.y().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
-    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
+    m_driverController.a().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
     m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
-    m_driverController.start().onTrue(
-      new SequentialCommandGroup(
-
-        new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb))
-        ,new InstantCommand(()-> m_wrist.setGoal(WristConstants.kClimb))
-        ,new CMD_PivotInPosition(m_pivot)
-        ,new CMD_WristInPosition(m_wrist)
-        ,new InstantCommand(()-> m_elevator.setGoal(ElevatorConstants.kHome))
-        ,new CMD_ElevatorReset(m_elevator)
-        ,new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb))
-      )
-    );
+    m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch));
     m_driverController.povLeft().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
@@ -148,16 +134,6 @@ public class RobotContainer {
           ,()-> GlobalVariables.m_algaeExceptionMode)
         )    
     );
-    m_operatorController.rightStick().onTrue(
-      new SequentialCommandGroup(
-        new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND))
-        ,new CMD_AlgaeIntakeGround(m_wrist, m_pivot, m_elevator, m_algae)
-        ,new CMD_AlgaeTrigger(m_algae)    
-        ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-        ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-        ,new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3))
-        ,new CMD_PivotInPosition(m_pivot)
-      )
-    );
+    m_operatorController.rightStick().onTrue(new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
   }
 }

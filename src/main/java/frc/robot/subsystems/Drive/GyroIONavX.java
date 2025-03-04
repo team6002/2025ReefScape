@@ -30,6 +30,7 @@ public class GyroIONavX implements GyroIO{
     inputs.yawPosition = m_gyro.getRotation2d().plus(Rotation2d.fromDegrees(inputs.angleAdjustment));
     inputs.pitchPosition = Rotation2d.fromDegrees(m_gyro.getPitch());
     inputs.rollPosition = Rotation2d.fromDegrees(m_gyro.getRoll());
+    inputs.pitch = m_gyro.getPitch();
     // inputs.yawVelocityRadPerSec = m_gyro.getYawve()
   }
 
