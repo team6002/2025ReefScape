@@ -1,15 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
-import frc.GlobalVariables.AlgaeTarget;
-import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;

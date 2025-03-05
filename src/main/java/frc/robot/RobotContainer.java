@@ -152,7 +152,7 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND))
         ,new CMD_AlgaeIntakeGround(m_wrist, m_pivot, m_elevator, m_algae)
-        ,new CMD_AlgaeTrigger(m_algae, m_variables)    
+        ,new CMD_AlgaeTrigger(m_algae)    
         ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
         ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
         ,new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3))

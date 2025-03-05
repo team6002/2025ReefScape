@@ -21,9 +21,6 @@ public final class Configs {
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
-            // Use module constants to calculate conversion factors and feed forward gain.
-            double drivingFactor = (ModuleConstants.kWheelDiameterMeters * Math.PI
-                    / ModuleConstants.kDrivingMotorReduction)*(ModuleConstants.kXFactor);
             double turningFactor = 2 * Math.PI;
             double drivingVelocityFeedForward = 0;
 
