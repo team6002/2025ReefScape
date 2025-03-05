@@ -88,10 +88,22 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public void resetEncoder(){
         m_elevatorEncoder.setPosition(0);
-        m_rightElevator.set(0);
         m_resetMode = false;
         m_setpoint = new TrapezoidProfile.State(0, 0);
         m_goal = m_setpoint;
+        m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition,
+            ClosedLoopSlot.kSlot0, m_feedforward.calculate(GlobalVariables.m_pivotAngle - Math.toRadians(90), 
+            m_setpoint.velocity));  
+    }
+
+    @Override
+    public void resetTrapezoid() {
+        m_resetMode = false;
+        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+        m_goal = m_setpoint;
+        m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition,
+            ClosedLoopSlot.kSlot0, m_feedforward.calculate(GlobalVariables.m_pivotAngle - Math.toRadians(90), 
+            m_setpoint.velocity));
     }
 
     @Override
@@ -126,7 +138,6 @@ public class ElevatorIOSparkMax implements ElevatorIO{
 
     @Override
     public void PID(){
-        // m_rightElevator.set(.2);
         if(m_resetMode){
             m_elevatorController.setReference(-1, ControlType.kVoltage);
         }else{

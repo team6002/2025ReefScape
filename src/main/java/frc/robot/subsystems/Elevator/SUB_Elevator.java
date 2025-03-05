@@ -36,6 +36,10 @@ public class SUB_Elevator extends SubsystemBase{
       io.resetEncoder();
     }
 
+    public void resetTrapezoid(){
+      io.resetTrapezoid();
+    }
+
     public double getSetpoint(){
       return io.getSetpoint();
     }

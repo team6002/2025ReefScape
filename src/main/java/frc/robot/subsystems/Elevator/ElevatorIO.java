@@ -36,6 +36,10 @@ public interface ElevatorIO {
 
   public default boolean isResetMode(){return false;}
 
+  public default void resetTrapezoid(){
+    
+  }
+
   public default double getRightVoltage(){return 0;}
 
   public default double getLeftVoltage(){return 0;}
