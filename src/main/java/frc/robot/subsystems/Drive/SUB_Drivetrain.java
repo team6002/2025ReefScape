@@ -273,42 +273,44 @@ public class SUB_Drivetrain extends SubsystemBase {
         // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
         Logger.recordOutput("LCameraPose", estPose);
         // Change our trust in the measurement based on the tags we can see
-        // var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+        var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
       
-        //   addVisionMeasurement(
-        //     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+          addVisionMeasurement(
+            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
       }
     );
 
     RvisionEst.ifPresent(
       est -> {
         var estPose = est.estimatedPose.toPose2d();
+        // estPose = m_vision.getREstimatedGlobalPose();
         // estPose = m_vision.getEstimatedGlobalPose(estPose);
         // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
         Logger.recordOutput("RCameraPose", estPose);
+        // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
         // Change our trust in the measurement based on the tags we can see
-        // var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+        var estStdDevs = m_vision.getREstimationStdDevs(estPose);
       
-        //   addVisionMeasurement(
-        //     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+          addVisionMeasurement(
+            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
       }  
     );
     
-    // LvisionEst.ifPresent(
-    //   est -> {
-    //       var estPose = est.estimatedPose.toPose2d();
-    //     if (TargetOdoEnable){
-    //       if (m_vision.getHasLTarget()){   
-    //         addTargetVisionMeasurement(
-    //           m_vision.getTargetLPose(), est.timestampSeconds);
-    //       }
-    //       if (m_vision.getHasRTarget()){
-    //         addTargetVisionMeasurement(
-    //           m_vision.getTargetRPose(), est.timestampSeconds);
-    //         }
-    //       }
-    //   }  
-    // );
+    LvisionEst.ifPresent(
+      est -> {
+          var estPose = est.estimatedPose.toPose2d();
+        if (TargetOdoEnable){
+          if (m_vision.getHasLTarget()){   
+            addTargetVisionMeasurement(
+              m_vision.getTargetLPose(), est.timestampSeconds);
+          }
+          if (m_vision.getHasRTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetRPose(), est.timestampSeconds);
+            }
+          }
+      }  
+    );
     
   // }
     
@@ -616,9 +618,13 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
-    Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
-    m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds, stdDevs);
-  }
+    try {
+      Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
+      m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds, stdDevs);
+    } catch (Exception e){
+      System.out.println(e);
+    }
+}
   // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
   List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
