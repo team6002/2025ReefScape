@@ -102,7 +102,8 @@ public class RobotContainer {
     m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
 
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
-    m_operatorController.rightTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot));
+    m_operatorController.rightTrigger().onTrue(new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
+    m_operatorController.leftTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot));
     m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_pivot, m_elevator, m_coralIntake, m_variables));
     m_operatorController.leftStick().onTrue(new InstantCommand(()-> GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode));
 

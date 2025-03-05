@@ -35,39 +35,6 @@ public class CMD_Algae extends Command{
 
     @Override
     public void initialize(){
-        // if(GlobalVariables.m_haveAlgae == false && m_intakingAlgae == true){
-        //     new SequentialCommandGroup(
-        //         new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-        //         ,new InstantCommand(()-> m_intakingAlgae = false)
-        //         ,new ConditionalCommand(
-        //             new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgae)), 
-        //             new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kReadyAlgael3)), 
-        //             ()-> m_variables.getAlgaeTarget() == AlgaeTarget.LEVEL_2)
-        //         ,new ConditionalCommand(
-        //             new CMD_YeetAlgae(m_wrist, m_algae)
-        //             ,new InstantCommand()
-        //             ,()-> GlobalVariables.m_algaeExceptionMode
-        //         )
-        //         ,new ConditionalCommand(
-        //             new SequentialCommandGroup(
-        //                 new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
-        //                 ,new CMD_PivotInPosition(m_pivot)
-        //                 ,new CMD_ReadyToDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-        //                 ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-        //             )
-        //             ,new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_variables)
-        //         ,()-> GlobalVariables.m_haveCoral)
-        //     ).schedule();
-        //     return;
-        // }
-
-        // if(GlobalVariables.m_haveAlgae == false){
-        //     m_intakingAlgae = true;
-        //     new SequentialCommandGroup(
-        //     ).schedule();
-        //     return;
-        // }
-
         if(GlobalVariables.m_haveAlgae && m_deployingAlgae){
             new SequentialCommandGroup(
                 new InstantCommand(()-> m_deployingAlgae = false)
