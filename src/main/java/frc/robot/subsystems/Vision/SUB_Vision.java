@@ -63,9 +63,9 @@ public class SUB_Vision {
 
     public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
         try{
-        if (estimatedPose.equals(estimatedPose)){
-            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        }
+        // if (estimatedPose.equals(estimatedPose)){
+        //     return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        // }
         return io.getLEstimationStdDevs(estimatedPose);
         } catch (Exception e){
             return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -73,7 +73,14 @@ public class SUB_Vision {
     }
 
     public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
+        try{
+        // if (estimatedPose.equals(estimatedPose)){
+        //     return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        // }
         return io.getREstimationStdDevs(estimatedPose);
+        } catch (Exception e){
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        }
     }
 
     public void updateInputs(){
@@ -114,10 +121,12 @@ public class SUB_Vision {
     }
 
     public Transform3d getTargetLPose(){
-        return io.getTargetLPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), 0, -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
+        return io.getTargetLPose();
+        // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), -VisionConstants.kRobotToLCam.getY(), -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
     }
 
     public Transform3d getTargetRPose(){
-        return io.getTargetRPose().plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), 0, -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
+        return io.getTargetRPose();
+        // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }
 }

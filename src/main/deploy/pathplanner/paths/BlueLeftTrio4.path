@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 4.01,
-        "y": 2.87
+        "y": 2.81
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.411092515724507,
-        "y": 3.216445946476195
+        "y": 3.156445946476195
       },
       "isLocked": false,
       "linkedName": "LeftTrio3"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 1.44,
-        "y": 0.76
+        "y": 0.62
       },
       "prevControl": {
         "x": 1.1885678727260234,
-        "y": 0.5431915929340313
+        "y": 0.4031915929340313
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BlueLeftPickup"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

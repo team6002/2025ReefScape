@@ -2,6 +2,8 @@ package frc.robot.subsystems.Wrist;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
+
 public interface WristIO {
   @AutoLog
   public static class WristIOInputs {
@@ -16,6 +18,8 @@ public interface WristIO {
   public default void setGoal(double p_goal){}
 
   public default void setGoal(){}
+
+  public default void setConstraints(double velocity, double acceleration){};
 
   public default double getGoal(){return 0;}
 

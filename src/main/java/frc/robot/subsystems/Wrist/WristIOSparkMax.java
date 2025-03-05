@@ -22,7 +22,7 @@ public class WristIOSparkMax implements WristIO{
     private final AbsoluteEncoder m_wristEncoder;
     private final SparkClosedLoopController m_wristController;
     private  ArmFeedforward m_wristFeedforward = new ArmFeedforward(WristConstants.kS, WristConstants.kG, WristConstants.kV);
-    private final Constraints m_wristConstraints = new Constraints(WristConstants.kMaxVel, WristConstants.kMaxAccel);
+    private Constraints m_wristConstraints = new Constraints(WristConstants.kMaxVel, WristConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
 
@@ -90,6 +90,11 @@ public class WristIOSparkMax implements WristIO{
             ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() - WristConstants.kWristOffset- GlobalVariables.m_pivotAngle, m_setpoint.velocity));
     }
 
+    @Override
+    public void setConstraints(double velocity, double acceleration){
+        m_wristConstraints = new Constraints(velocity, acceleration);
+
+    }
     @Override
     public void reset(){
         m_setpoint = new TrapezoidProfile.State(getPosition() - WristConstants.kWristOffset, 0);

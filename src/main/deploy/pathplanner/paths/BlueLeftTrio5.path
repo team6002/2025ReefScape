@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 1.44,
-        "y": 0.76
+        "y": 0.62
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.6439587281687533,
-        "y": 0.9045712184488481
+        "y": 0.7645712184488481
       },
       "isLocked": false,
-      "linkedName": "BlueLeftPickup"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.691,
-        "y": 3.05
+        "x": 3.701,
+        "y": 2.95
       },
       "prevControl": {
-        "x": 3.3603662785140322,
-        "y": 2.7359660174179554
+        "x": 3.3703662785140325,
+        "y": 2.6359660174179558
       },
       "nextControl": null,
       "isLocked": false,

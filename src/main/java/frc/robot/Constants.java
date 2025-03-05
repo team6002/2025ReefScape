@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -234,7 +235,8 @@ public final class Constants {
     public static final double kMaxOutput = 1;
     public static final double kIntake = 4;//6;
     public static final double kOff = 0;
-    public static final double kReverse = -7;//-2500
+    public static final double kReverse = -5;//-2500
+    public static final double kReverseLvl4 = -7;//-2500
     public static final double kReverseSlow = -1.5;
     public static final double kHolding = .5;
   }
@@ -267,7 +269,7 @@ public final class Constants {
     public static final double kReadyAlgae = Math.toRadians(55);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
     public static final double kReadyAlgael3 = Math.toRadians(67);
-    public static final double kReadyIntakeAlgael3 = Math.toRadians(83);
+    public static final double kReadyIntakeAlgael3 = Math.toRadians(86);
     public static final double kReadyDefensive = Math.toRadians(25);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(20);
@@ -339,10 +341,13 @@ public final class Constants {
     public static final double kV = 1.15;//2.7, 1.15
     public static final double kMaxVel = Math.toRadians(1080);//1080
     public static final double kMaxAccel = Math.toRadians(540);//1080, 360
+    public static final double kMaxVelGround = Math.toRadians(1080);//1080
+    public static final double kMaxAccelGround = Math.toRadians(1080);//1080, 360
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
     public static final double kTolerance = Math.toRadians(5);
+    
 
     public static final double kHome = Math.toRadians(100);
     public static final double kClimb = Math.toRadians(30);
@@ -356,7 +361,8 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(-115);
     public static final double kIntakeException = Math.toRadians(-115);
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
-    public static final double kReadyToScore = Math.toRadians(-15);
+    public static final double kReadyToScore = Math.toRadians(0);
+    // public static final double kReadyToScorelVL4 = Math.toRadians(0);
     public static final double kAlgaeProcessor = Math.toRadians(-10);
     public static final double kAlgaeCoral = Math.toRadians(-90);
     public static final double kIntakeAlgaeGround = Math.toRadians(-85);
@@ -370,6 +376,9 @@ public final class Constants {
     public static final double kDeployl4Exception = Math.toRadians(40);//43
     public static final double kDeployBarge = Math.toRadians(-35);
     public static final double kAlgaeYeet = Math.toRadians(-0);
+    
+    // private static final Constraints m_wristGroundConstraints = ;
+    
   }
 
   public static final class WinchConstants{
@@ -407,9 +416,9 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-11), Units.inchesToMeters(10.5)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-11), Units.inchesToMeters(10.25)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(11), Units.inchesToMeters(10.5)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =

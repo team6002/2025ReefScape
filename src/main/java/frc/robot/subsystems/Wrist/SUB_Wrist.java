@@ -2,6 +2,7 @@ package frc.robot.subsystems.Wrist;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_Wrist extends SubsystemBase{
@@ -31,6 +32,9 @@ public class SUB_Wrist extends SubsystemBase{
       io.reset();
     }
 
+    public void setConstraints(double velocity, double acceleration){
+      io.setConstraints(velocity, acceleration);
+    }
     public double getSetpoint(){
       return io.getSetpoint();
     }
