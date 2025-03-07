@@ -17,6 +17,8 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.Pivot.*;
+import frc.robot.subsystems.Questimator.QuestNavIO;
+import frc.robot.subsystems.Questimator.QuestNavIOMeta;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -42,6 +44,7 @@ public class RobotContainer {
     ,new ModuleIOSparkFlex(2)
     ,new ModuleIOSparkFlex(3)
     ,m_vision
+    ,new QuestNavIOMeta()
   );
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());

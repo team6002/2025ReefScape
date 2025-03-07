@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.Questimator.QuestNavIO;
+import frc.robot.subsystems.Questimator.QuestimatorIOInputsAutoLogged;
 import frc.robot.subsystems.Vision.SUB_Vision;
 // import frc.robot.subsystems.SUB_Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,6 +61,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_odometry;
   //Odometry that has nearest april tag as origin for use in autoalignment
   private final SwerveDrivePoseEstimator m_targetOdometry;
+  private final SwerveDriveOdometry questimetry;
   private final SwerveDriveOdometry m_pureOdometry;
   private SwerveModulePosition[] lastModulePositions = 
   new SwerveModulePosition[] {
@@ -76,6 +80,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   
+  private final QuestNavIO QuestNavIO;
+  private final QuestimatorIOInputsAutoLogged questimatorInputs = new QuestimatorIOInputsAutoLogged();
   // Slew rate filter variables for controlling lateral acceleration
   // private double m_currentRotation = 0.0;
   // private double m_currentTranslationDir = 0.0;
@@ -109,10 +115,12 @@ public class SUB_Drivetrain extends SubsystemBase {
     ModuleIO blModuleIO,
     ModuleIO brModuleIO
     ,SUB_Vision p_vision
+    ,QuestNavIO p_questNavIO
     ) 
   {
         
     this.gyroIO = gyroIO;
+    QuestNavIO = p_questNavIO;
 
     m_frontLeft = new SwerveModule(
       flModuleIO,
@@ -200,6 +208,11 @@ public class SUB_Drivetrain extends SubsystemBase {
         new Pose2d(),
         stateStdDevs,
         visionStdDevs);
+    questimetry = 
+      new SwerveDriveOdometry(
+        DriveConstants.kDriveKinematics
+        ,Rotation2d.fromDegrees(getAngle()),
+        getModulePositions());
 
     m_pureOdometry = new SwerveDriveOdometry(
     DriveConstants.kDriveKinematics,
@@ -224,7 +237,11 @@ public class SUB_Drivetrain extends SubsystemBase {
   
     // Update the odometry in the periodic block
     gyroIO.updateInputs(gyroInputs);
+    QuestNavIO.updateInputs(questimatorInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
+    Logger.processInputs("Drive/QuestNav", questimatorInputs);
+
+    QuestNavIO.cleanUpQuestNavMessages();
 
     m_frontLeft.periodic();
     m_frontRight.periodic();
@@ -250,10 +267,14 @@ public class SUB_Drivetrain extends SubsystemBase {
       // m_targetOdometry.getEstimatedPosition().getRotation(),
       getTargetModulePositions()
     );
+    questimetry.update(
+      QuestNavIO.getPose().getRotation(),
+       getTargetModulePositions());
 
     m_pureOdometry.update(getOdoRotation(), modulePositions);
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
+    Logger.recordOutput("Questimetry", questimetry.getPoseMeters());
     // new Rotation2d();
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
     // new Rotation2d();
@@ -358,6 +379,10 @@ public class SUB_Drivetrain extends SubsystemBase {
       getModulePositions(),
       pose
     );
+    questimetry.resetPosition(
+      QuestNavIO.getQuestNavPose().getRotation(), 
+      getModulePositions(), 
+      pose);
   }
 
   public void resetTargetOdometry(Pose2d pose) {
@@ -453,6 +478,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   // /** Zeroes the heading of the robot. LOL*/
   public void zeroHeading() {
     gyroIO.reset();
+    QuestNavIO.zeroPosition();
+    QuestNavIO.zeroHeading();
   }
 
   // public Command CMDzeroHeading() {

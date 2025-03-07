@@ -1,0 +1,14 @@
+{
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "6002"
+  },
+  "transitory": {
+    "AdvantageKit": {
+      "open": true
+    },
+    "questnav": {
+      "open": true
+    }
+  }
+}
