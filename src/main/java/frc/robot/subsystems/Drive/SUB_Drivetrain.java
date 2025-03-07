@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems.Drive;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -99,6 +101,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   Field2d fieldEst;
   /** Creates a new DriveSubsystem. */
   SUB_Vision m_vision;
+  private Rotation2d m_cameraRotation;// angle of the robot from cameras
   public SUB_Drivetrain(
     GyroIO gyroIO,
     ModuleIO flModuleIO,
@@ -251,11 +254,11 @@ public class SUB_Drivetrain extends SubsystemBase {
     m_pureOdometry.update(getOdoRotation(), modulePositions);
     Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
     Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
-    new Rotation2d();
+    // new Rotation2d();
     Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
-    new Rotation2d();
+    // new Rotation2d();
     // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
-    SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
+    // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
     m_vision.updateInputs();
 
     LvisionEst.ifPresent(
@@ -549,6 +552,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         return;
       }
       try {
+      m_cameraRotation = visionMeasurement.getRotation().k180deg;
       Pose2d p_angledPose = new Pose2d(visionMeasurement.getTranslation(), Rotation2d.fromDegrees(getAngle())); 
       m_odometry.addVisionMeasurement(p_angledPose, timestampSeconds, stdDevs);
       } catch (Exception e){
@@ -587,7 +591,16 @@ public class SUB_Drivetrain extends SubsystemBase {
     TargetOdoEnable = state;
   }
 
-  
+  public void resetOdoToCurrentPosition(){
+    try{
+    
+      resetOdometry(getPose());
+      gyroIO.set(m_cameraRotation);
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+  }
+
   /**
    * Resets the odometery to start of path
    * @return

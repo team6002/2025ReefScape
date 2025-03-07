@@ -168,6 +168,7 @@ public final class Constants {
 
   public static final class HardwareConstants{
     // SPARK MAX CAN IDs 
+    
     public static final int kFrontLeftDrivingCanId = 2;//8
     public static final int kFrontLeftTurningCanId = 1;//9
     public static final int kFrontRightDrivingCanId =  8;//2
