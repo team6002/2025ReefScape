@@ -109,8 +109,8 @@ public class RobotContainer {
     m_operatorController.povLeft().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_pivot, m_variables, 1));
 
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
-    m_operatorController.rightTrigger().onTrue(new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
-    m_operatorController.leftTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot));
+    // m_operatorController.rightTrigger().onTrue(new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
+    m_operatorController.leftTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot, m_coralIntake));
     m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_pivot, m_elevator, m_coralIntake, m_variables));
     m_operatorController.leftStick().onTrue(new InstantCommand(()-> GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode));
 
@@ -125,11 +125,11 @@ public class RobotContainer {
     m_operatorController.x().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2))
-        // ,new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
         ,new ConditionalCommand(
-          new InstantCommand(()-> m_variables.setRobotState(GlobalVariables.RobotState.READY_STOWED)),
-          new PrintCommand("I hate ur code"),
-           ()-> GlobalVariables.m_algaeExceptionMode)
+            new InstantCommand(()-> m_variables.setRobotState(GlobalVariables.RobotState.READY_STOWED)),
+            new PrintCommand("I hate ur code"),
+            ()-> GlobalVariables.m_algaeExceptionMode
+          )
         ,new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
         ) 
     );
@@ -142,7 +142,7 @@ public class RobotContainer {
           ,()-> GlobalVariables.m_algaeExceptionMode)
         )    
     );
-    m_operatorController.rightStick().onTrue(new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
+    m_operatorController.rightStick().onTrue(new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_coralIntake, m_variables));
   }
     
 }

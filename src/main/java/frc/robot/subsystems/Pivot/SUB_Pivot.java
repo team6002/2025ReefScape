@@ -19,15 +19,15 @@ public class SUB_Pivot extends SubsystemBase{
     }
 
     public double getPosition(){
-      return inputs.m_pivotPos;
+      return io.getPosition();
     }
 
     public double getCurrent(){
-      return inputs.m_pivotCurrent;
+      return io.getCurrent();
     }
 
     public double getGoal(){
-     return inputs.m_pivotGoal;
+     return io.getGoal();
     }
 
     public void setGoal(double p_goal){

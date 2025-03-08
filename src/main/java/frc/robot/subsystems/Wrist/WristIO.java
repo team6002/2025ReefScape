@@ -2,8 +2,6 @@ package frc.robot.subsystems.Wrist;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
-
 public interface WristIO {
   @AutoLog
   public static class WristIOInputs {
@@ -11,6 +9,7 @@ public interface WristIO {
     public double m_wristPosition;
     public double m_wristGoal;
     public boolean m_wristInPosition;
+    public double m_wristSetpoint;
   }
 
   public default void updateInputs(WristIOInputs inputs) {}

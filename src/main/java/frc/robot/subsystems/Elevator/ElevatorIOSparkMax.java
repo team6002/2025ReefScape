@@ -139,7 +139,7 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     @Override
     public void PID(){
         if(m_resetMode){
-            m_elevatorController.setReference(-1, ControlType.kVoltage);
+            m_elevatorController.setReference(-2, ControlType.kVoltage);
         }else{
             var profile = new TrapezoidProfile(m_constraints).calculate(0.02, m_setpoint, m_goal);
             m_setpoint = profile;

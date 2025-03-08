@@ -73,12 +73,6 @@ public class GlobalVariables extends SubsystemBase{
 
     @Override
     public void periodic(){
-        // SmartDashboard.putString("robotState", getRobotState().toString());
-        // SmartDashboard.putString("algae target", getAlgaeTarget().toString());
-        // SmartDashboard.putString("mode", getMode().toString());
-        // SmartDashboard.putNumber("score level", m_targetCoralLevel);
-        // SmartDashboard.putBoolean("has algae", m_haveAlgae);
-
         Logger.recordOutput("robotState", getRobotState());
         Logger.recordOutput("algaeTarget", getAlgaeTarget());
         Logger.recordOutput("Mode", m_defenseMode);

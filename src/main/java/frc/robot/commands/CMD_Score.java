@@ -12,14 +12,14 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_Score extends Command{
-    SUB_Elevator m_elevator;
-    SUB_Wrist m_wrist;
-    SUB_CoralHolder m_intake;
-    SUB_Pivot m_pivot;
-    SUB_Algae m_algae;
-    GlobalVariables m_variables;
-    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_intake, SUB_Pivot p_pivot, 
-                     SUB_Algae p_algae, GlobalVariables p_variables){
+    private final SUB_Elevator m_elevator;
+    private final SUB_Wrist m_wrist;
+    private final SUB_CoralHolder m_intake;
+    private final SUB_Pivot m_pivot;
+    private final SUB_Algae m_algae;
+    private final GlobalVariables m_variables;
+    public CMD_Score(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_CoralHolder p_intake, SUB_Pivot p_pivot, SUB_Algae p_algae,
+        GlobalVariables p_variables){
         
         m_elevator = p_elevator;
         m_wrist = p_wrist;
@@ -35,16 +35,15 @@ public class CMD_Score extends Command{
             case HOME:
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
-                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake)
+                    ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_algae)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
-                    ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
                 break;
             case READY:
                 new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
                 break;
             case READY_TO_INTAKE:
-                new CMD_SetReadyStowed(m_elevator, m_pivot, m_wrist, m_intake, m_variables).schedule();
+                new CMD_SetReadyStowed(m_elevator, m_pivot, m_wrist, m_intake, m_algae, m_variables).schedule();
                 break;
             case READY_STOWED:
                 new SequentialCommandGroup(
@@ -58,7 +57,8 @@ public class CMD_Score extends Command{
                 .andThen(new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)).schedule();
                 break;
             case DEPLOY:
-                new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables).schedule();
+                new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+                .andThen(new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_algae)).schedule();
                 break;
             default:
                 break;

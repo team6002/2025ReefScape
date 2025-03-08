@@ -21,7 +21,7 @@ public class CMD_SetDeploy extends SequentialCommandGroup{
             ,new CMD_Deploy(p_wrist, p_intake)
             ,new ConditionalCommand(
                 new CMD_AlgaeLevel3Eject(p_intake, p_wrist, p_algae, p_elevator, p_variables, p_pivot)
-                ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing)).andThen(new InstantCommand(()-> p_algae.setReference(0)))
+                ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kStowing))
                 ,()-> GlobalVariables.lvl3AlgaeException && GlobalVariables.m_targetCoralLevel == 2
             )
             ,new InstantCommand(()-> GlobalVariables.m_coralException = false)

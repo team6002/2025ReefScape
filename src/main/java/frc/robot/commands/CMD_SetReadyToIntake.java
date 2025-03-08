@@ -13,7 +13,8 @@ import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_SetReadyToIntake extends SequentialCommandGroup{
     
-    public CMD_SetReadyToIntake(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, GlobalVariables p_variables){
+    public CMD_SetReadyToIntake(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, 
+        GlobalVariables p_variables){
         addCommands(
             new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
             ,new ConditionalCommand(
@@ -23,19 +24,16 @@ public class CMD_SetReadyToIntake extends SequentialCommandGroup{
             )
             ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
             ,new CMD_IntakeStow(p_intake)
-            ,new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding)) 
             ,new InstantCommand(()-> GlobalVariables.m_coralException = false)
+            ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_STOWED))
             ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
+            ,new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new ConditionalCommand(
-                new SequentialCommandGroup(
-                    new CMD_ReadyToDeploy(p_elevator, p_wrist, p_pivot, p_intake, p_variables)
-                    ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                )
-                ,new SequentialCommandGroup(
-                    new CMD_SetReady(p_elevator, p_wrist, p_pivot, p_intake)
-                    ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_STOWED))
-                )
-            ,()-> GlobalVariables.m_targetCoralLevel == 3 || GlobalVariables.m_targetCoralLevel == 2)
+                new InstantCommand()
+                ,new InstantCommand(()-> this.cancel())
+                ,()-> GlobalVariables.m_haveCoral
+            )
+            ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
         );
     }
 }
