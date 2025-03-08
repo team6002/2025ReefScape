@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
 import frc.robot.subsystems.Algae.SUB_Algae;
@@ -38,8 +37,6 @@ public class CMD_Score extends Command{
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_READY))
                     ,new CMD_SetReady(m_elevator, m_wrist, m_pivot, m_intake, m_algae)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
-                    ,new WaitCommand(.75)
-                    ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
                 break;
             case READY:

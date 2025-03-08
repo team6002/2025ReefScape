@@ -45,11 +45,11 @@ public class PivotIOSparkMax implements PivotIO{
 
     @Override
     public void updateInputs(PivotIoInputs inputs) {
-        inputs.m_pivotGoal = m_goal.position + PivotConstants.kPivotOffset;
-        inputs.m_pivotPos = getPosition();
+        inputs.m_pivotGoal = Math.toDegrees(getGoal());
+        inputs.m_pivotPos = Math.toDegrees(getPosition());
         inputs.m_pivotCurrent = getCurrent();
         inputs.m_pivotInPosition = inPosition();
-        inputs.m_pivotSetpoint = m_setpoint.position+PivotConstants.kPivotOffset;
+        inputs.m_pivotSetpoint = Math.toDegrees(getSetpoint()+PivotConstants.kPivotOffset);
     };
     
     @Override

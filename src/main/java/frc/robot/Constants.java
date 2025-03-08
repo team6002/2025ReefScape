@@ -236,7 +236,7 @@ public final class Constants {
     public static final double kOff = 0;
     public static final double kReverse = -5;//-2500
     public static final double kReverseLvl4 = -7;//-2500
-    public static final double kReverseSlow = -1.5;
+    public static final double kReverseSlow = -4;
     public static final double kHolding = .5;
   }
 
