@@ -21,7 +21,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -251,9 +250,9 @@ public final class Constants {
     public static final double kV = 4.5;//4.45
     public static final double kA = 0;
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(500);//700
-    public static final double kMaxAccel = Math.toRadians(500);//400
-    public static final double kMaxVelExtended = Math.toRadians(540);//540
+    public static final double kMaxVel = Math.toRadians(200);//500
+    public static final double kMaxAccel = Math.toRadians(200);//500
+    public static final double kMaxVelExtended = Math.toRadians(200);//540
     public static final double kMaxAccelExtended = Math.toRadians(90);//90
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
@@ -264,17 +263,17 @@ public final class Constants {
     
     public static final double kHome = Math.toRadians(25);
     public static final double kReady = Math.toRadians(85);
-    public static final double kReadyIntake = Math.toRadians(55);
+    public static final double kReadyIntake = Math.toRadians(60);//61 
     public static final double kClimb = Math.toRadians(100);
-    public static final double kReadyAlgae = Math.toRadians(55);
+    public static final double kReadyAlgae = Math.toRadians(50);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
-    public static final double kReadyAlgael3 = Math.toRadians(67);
+    public static final double kReadyAlgael3 = Math.toRadians(73);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(86);
     public static final double kReadyDefensive = Math.toRadians(25);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(20);
     public static final double kAlgaeCoral = Math.toRadians(65);
-    public static final double kIntake = Math.toRadians(60.5);
+    public static final double kIntake = Math.toRadians(60);//61
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
     public static final double kIntakeAlgaeGround = Math.toRadians(31.5);
@@ -297,8 +296,8 @@ public final class Constants {
     public static final double kS = 0.25;//.25
     public static final double kV = 0.045;//.045
     public static final double kG = 0.35;//.035
-    public static final double kMaxVel = 700;//200
-    public static final double kMaxAccel = 700;//200
+    public static final double kMaxVel = 700;//700
+    public static final double kMaxAccel = 700;//700
     public static final double kMaxVelDown = 100;//100
     public static final double kMaxAccelDown = 100;//100
     public static final double kMinOutput = -1;
@@ -310,19 +309,19 @@ public final class Constants {
     public static final double kHome = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
-    public static final double kIntake = 14.5;
-    public static final double kIntakeException = 14.5;
+    public static final double kIntake = 13.5;//14.5
+    public static final double kIntakeException = 13.5;//14.5
     public static final double kReadyIntakeAlgael2 = 0;
     public static final double kReadyIntakeAlgaeEject = 3;
     public static final double kReadyIntakeAlgael3 = 5;
     public static final double kAlgaeProcessor = 0;
     public static final double kAlgaeCoral = 14.5;
     public static final double kIntakeAlgaeGround = 8.5;
-    public static final double kDeployL1 = 14.5;
+    public static final double kDeployL1 = 16;
     public static final double kDeployL2 = 0;
-    public static final double kDeployL3 = 23;//28
+    public static final double kDeployL3 = 21.5;//28
     public static final double kDeployL4 = 67;//68
-    public static final double kDeployl1Exception = 14.5;
+    public static final double kDeployl1Exception = 16;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 19;//28
     public static final double kDeployl4Exception = 66.5;//68
@@ -340,16 +339,15 @@ public final class Constants {
     public static final double kG = 0.19;//.2
     public static final double kV = 1.15;//2.7, 1.15
     public static final double kMaxVel = Math.toRadians(1080);//1080
-    public static final double kMaxAccel = Math.toRadians(540);//1080, 360
+    public static final double kMaxAccel = Math.toRadians(540);//540
     public static final double kMaxVelGround = Math.toRadians(1080);//1080
-    public static final double kMaxAccelGround = Math.toRadians(1080);//1080, 360
+    public static final double kMaxAccelGround = Math.toRadians(1080);//1080
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kConverstionFactor = 2*Math.PI;
     public static final double kTolerance = Math.toRadians(5);
     
-
-    public static final double kHome = Math.toRadians(100);
+    public static final double kHome = Math.toRadians(90);
     public static final double kClimb = Math.toRadians(30);
     public static final double kReady = Math.toRadians(-110);
     public static final double kReadyAlgae = Math.toRadians(0);
@@ -358,8 +356,8 @@ public final class Constants {
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kReadyDefensive = Math.toRadians(110);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = Math.toRadians(-115);
-    public static final double kIntakeException = Math.toRadians(-115);
+    public static final double kIntake = Math.toRadians(-112.5);//-115
+    public static final double kIntakeException = Math.toRadians(-112.5);//-115
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);
     // public static final double kReadyToScorelVL4 = Math.toRadians(0);
@@ -401,7 +399,7 @@ public final class Constants {
 
     public static final double kIntake = 5;
     public static final double kOff = 0;
-    public static final double kHolding = 1;
+    public static final double kHolding = .75;
     public static final double kReverse = -10;
 
     //l2, l3, barge, off coral, ground, processor

@@ -14,8 +14,7 @@ public class CMD_ToggleMode extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
-    public CMD_ToggleMode(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, 
-        GlobalVariables p_variables){
+    public CMD_ToggleMode(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, GlobalVariables p_variables){
         
         m_elevator = p_elevator;
         m_wrist = p_wrist;

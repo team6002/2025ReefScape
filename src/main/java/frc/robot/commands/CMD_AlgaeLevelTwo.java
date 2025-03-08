@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
+import frc.GlobalVariables.AlgaeTarget;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
@@ -24,13 +25,15 @@ public class CMD_AlgaeLevelTwo extends SequentialCommandGroup{
                     new CMD_AlgaeTrigger(p_algae)
                     ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kHolding))
                     ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-                    ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgael3))
+                    ,new ConditionalCommand(
+                        new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgael3))
+                        ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgae))
+                        ,()-> p_variables.getAlgaeTarget() == AlgaeTarget.LEVEL_3
+                    )
                     ,new CMD_PivotInPosition(p_pivot)
-                    
                 ),
-                ()-> GlobalVariables.m_algaeExceptionMode)
-            
-            );
+                ()-> GlobalVariables.m_algaeExceptionMode
+            )
+        );
     }
-
 }

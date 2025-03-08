@@ -28,7 +28,7 @@ public class CMD_ElevatorReset extends Command{
     public void execute(){
         if (m_isMoving) {
             if (m_elevator.getCurrent() > 30) {
-                if(m_runTime.get() > .1){
+                if(m_runTime.get() > .15){
                     m_isMoving = false;
                     m_isFinished = true;
                 }
