@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
 import frc.GlobalVariables.*;
@@ -34,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  Pose2d currentPose;
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
@@ -87,8 +92,7 @@ public class RobotContainer {
     m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
     m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch));
-    m_driverController.povLeft().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
-    
+    // m_driverController.povRight().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     //operator
@@ -140,4 +144,5 @@ public class RobotContainer {
     );
     m_operatorController.rightStick().onTrue(new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
   }
+    
 }

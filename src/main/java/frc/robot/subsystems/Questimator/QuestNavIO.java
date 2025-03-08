@@ -31,7 +31,7 @@ public interface QuestNavIO {
   }
 
   public default void updateInputs(QuestimatorIOInputs inputs) {}
-  public default Pose2d getPose(){return null;}
+  public default Pose2d getQuestPose(){return null;}
   public default Pose2d getRobotPose(){return null;}
   // Gets the battery percent of the Quest.
   public default double getBatteryPercent(){return 0;}
@@ -45,10 +45,15 @@ public interface QuestNavIO {
   public default void zeroHeading(){}
   // Zero the absolute 3D position of the robot (similar to long-pressing the quest logo)
   public default void zeroPosition(){}
+  // public void setPosition(Pose2d newPose) {
+  public default void setPosition(Pose2d pose){}
+  public default void resetPose(Pose2d newPose){}
   // Clean up questnav subroutine messages after processing on the headset
   public default void cleanUpQuestNavMessages(){}
   // Get the yaw Euler angle of the headset
   public default float getOculusYaw() {return 0;}
   public default Translation2d getQuestNavTranslation(){return null;}
   public default Pose2d getQuestNavPose(){return null;}
+  public default void hardReset() {}
+  
 }

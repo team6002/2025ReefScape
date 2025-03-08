@@ -31,17 +31,25 @@ public class QuestNavIOMeta implements QuestNavIO{
   // Local heading helper variables
   private float yaw_offset = 0.0f;
   private Pose2d resetPosition = new Pose2d();
+  private Pose2d resetPositionOculus = new Pose2d();
+  private Pose2d resetPositionRobot = new Pose2d();
 
-  private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(8),Units.inchesToMeters(3.5), new Rotation2d(Math.PI/2));
+  // private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(8),Units.inchesToMeters(3.5), new Rotation2d(-Math.PI/2));
+  // private Transform2d kRobotToQuest = new Transform2d(0.06,-0.22, new Rotation2d(-Math.PI/2));
+  private Transform2d kRobotToQuest = new Transform2d(0.0,-0., new Rotation2d(-Math.PI/2));
   // Gets the Quest's measured position.
   @Override
-  public Pose2d getPose() {
-    return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
+  public Pose2d getQuestPose() {
+    Pose2d rawPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
+    var poseRelativetoReset = rawPose.minus(resetPositionOculus);
+    return resetPositionRobot.transformBy(poseRelativetoReset);
+    // return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
   }
 
   @Override
   public Pose2d getRobotPose(){
-    return getPose().transformBy(kRobotToQuest.inverse());
+    return getQuestPose().transformBy(kRobotToQuest.inverse());
+    // (getPose().getX() - Units.inchesToMeters(8) * Math.cos())
   }
 
   // Gets the battery percent of the Quest.
@@ -79,12 +87,30 @@ public class QuestNavIOMeta implements QuestNavIO{
   // Zero the absolute 3D position of the robot (similar to long-pressing the quest logo)
   @Override
   public void zeroPosition() {
-    resetPosition = getPose();
-    if (questMiso.get() != 99) {
-      questMosi.set(1);
-    }
+    resetPosition = getQuestPose();
+    // if (questMiso.get() != 99) {
+    //   questMosi.set(1);
+    // }
   }
 
+  @Override
+  public void setPosition(Pose2d newPose) {
+    resetPosition = new Pose2d(0, 0, new Rotation2d());
+    resetPosition = getQuestPose();
+    resetPosition = newPose.transformBy(kRobotToQuest.inverse());
+    // restPoseOcculus
+    // if (questMiso.get() != 99) {
+    //   questMosi.set(1);
+    // }
+  }
+
+  @Override
+  public void resetPose(Pose2d newPose){
+    Pose2d uncorrectedOcculusPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
+    resetPositionOculus = uncorrectedOcculusPose.transformBy(kRobotToQuest.inverse());
+    resetPositionRobot = newPose;
+
+  }
   // Clean up questnav subroutine messages after processing on the headset
   @Override
   public void cleanUpQuestNavMessages() {
@@ -97,12 +123,13 @@ public class QuestNavIOMeta implements QuestNavIO{
   @Override
   public float getOculusYaw() {
     float[] eulerAngles = questEulerAngles.get();
-    var ret = eulerAngles[1] - yaw_offset;
+    var ret = eulerAngles[1];
+    //  - yaw_offset;
     ret %= 360;
     if (ret < 0) {
       ret += 360;
     }
-    return ret;
+    return -ret;
   }
 
   @Override
@@ -119,11 +146,19 @@ public class QuestNavIOMeta implements QuestNavIO{
 
   @Override
   public void updateInputs(QuestimatorIOInputs inputs){
-    inputs.questPose = getPose();
+    inputs.questPose = getQuestPose();
     inputs.robotPose = getRobotPose();
     inputs.battery = getBatteryPercent();
     inputs.connected = connected();
     inputs.quaternion = getQuaternion();
     inputs.timestamp = timestamp();
+  }
+
+  // @Override
+  public void hardReset() {
+    // resetPosition = getPose();
+    if (questMiso.get() != 99) {
+      questMosi.set(1);
+    }
   }
 }

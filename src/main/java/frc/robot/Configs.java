@@ -27,7 +27,7 @@ public final class Configs {
             drivingConfig
                     .idleMode(IdleMode.kBrake)
                     .voltageCompensation(12)
-                    .smartCurrentLimit(90)
+                    .smartCurrentLimit(100)
                     .inverted(false);
             drivingConfig.encoder
                     .positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor) // meters

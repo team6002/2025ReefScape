@@ -89,7 +89,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.96);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.98);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -112,7 +112,7 @@ public final class Constants {
     // public static final double kAutoV = 2.388;//2.22;//2.1016;
     public static final double kAutoA = .35;//.42;//0.48019;
     public static final double kAutoS = .5;//.004;
-    public static final double kAutoV = 2.33;//2.22;//2.1016;
+    public static final double kAutoV = 2.37;//2.22;//2.1016;
     
     public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
@@ -194,7 +194,8 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 5.25;
+    public static final double kPXController = 3.7;
+    public static final double kDXController = 0.01;
     public static final double kPYController = 0;
     public static final double kPThetaController = 1.5;
 

@@ -51,10 +51,10 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // m_autonomousChooser.addOption("AUTO_SideTuning", new AUTO_SideTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
-    m_autonomousChooser.addOption("AUTO_AccelTuning", new AUTO_AccelTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
-    // m_autonomousChooser.addOption("AUTO_AccelTuningF", new AUTO_AccelTuningF(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
+    // m_autonomousChooser.addOption("AUTO_AccelTuning", new AUTO_AccelTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_AccelTuningF", new AUTO_AccelTuningF(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_AccelTuningB", new AUTO_AccelTuningB(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
-    // m_autonomousChooser.addOption("AUTO_WheelTuningF", new AUTO_WheelTuningForwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_WheelTuningF", new AUTO_WheelTuningForwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_WheelTuningB", new AUTO_WheelTuningBackwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_WheelTuning", new AUTO_WheelTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_Tuning", new AUTO_Tuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
@@ -102,6 +102,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
+    m_robotContainer.m_drivetrain.questNavReset();
 
     m_autonomousCommand = m_autonomousChooser.getSelected();
     if (m_autonomousCommand != null) {
