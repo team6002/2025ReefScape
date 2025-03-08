@@ -1,10 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
+import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -31,6 +35,20 @@ public class CMD_Score extends Command{
 
     @Override
     public void initialize(){
+        if(m_variables.getAlgaeTarget() == AlgaeTarget.GROUND && m_pivot.getGoal() <= PivotConstants.kIntakeAlgaeGround){
+            new ParallelCommandGroup(
+                new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                ,new SequentialCommandGroup(
+                    new CMD_CheckCoral(m_intake)
+                    ,new ConditionalCommand(
+                        new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_STOWED))
+                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY))
+                        ,()-> GlobalVariables.m_haveCoral
+                    )
+                ) 
+            ).schedule();
+            return;
+        }
         switch (m_variables.getRobotState()) {
             case HOME:
                 new SequentialCommandGroup(

@@ -41,7 +41,11 @@ public class CMD_Algae extends Command{
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
                 ,new WaitCommand(.5)
-                ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
+                ,new ConditionalCommand(
+                    new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
+                    ,()-> m_variables.getAlgaeTarget() == AlgaeTarget.PROCESSOR
+                )
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
             ).schedule();
             return;
