@@ -19,8 +19,8 @@ public class CMD_SetReadyClimb extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kClimb))
             ,new CMD_PivotInPosition(p_pivot)
             ,new CMD_WristInPosition(p_wrist)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kHome))
             ,new CMD_ElevatorReset(p_elevator)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kClimb))
             ,new InstantCommand(()-> p_winch.setReference(WinchConstants.kReadyClimb))
         );
     }

@@ -289,14 +289,20 @@ public class SUB_Drivetrain extends SubsystemBase {
         LvisionEst.ifPresent(
           est -> {
             var estPose = est.estimatedPose.toPose2d();
-            // estPose = m_vision.getEstimatedGlobalPose(estPose);
+            
+              // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-            Logger.recordOutput("LCameraPose", estPose);
-            // Change our trust in the measurement based on the tags we can see
             var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-          
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+            if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            }
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+              Logger.recordOutput("LCameraPose", estPose);
+            }
+            // Change our trust in the measurement based on the tags we can see
+            
+              // addVisionMeasurement(
+              //   est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           }
         );
     
@@ -306,43 +312,51 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getREstimatedGlobalPose();
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-            Logger.recordOutput("RCameraPose", estPose);
+            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+            if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            }
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+              Logger.recordOutput("RCameraPose", estPose);
+            }
+            // Logger.recordOutput("RCameraPose", estPose);
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
-            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
           
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+              // addVisionMeasurement(
+              //   est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+          
           }  
         );
        
-        if (LvisionEst.isPresent() && RvisionEst.isPresent()){
-          try {
-          var L = LvisionEst.get();
-          var R = RvisionEst.get();
-          var Rpose2d = RvisionEst.get().estimatedPose.toPose2d();
-          var difPose = LvisionEst.get().estimatedPose.toPose2d().minus(Rpose2d);
+        // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
+        //   try {
+        //   var L = LvisionEst.get();
+        //   var R = RvisionEst.get();
+        //   var Rpose2d = RvisionEst.get().estimatedPose.toPose2d();
+        //   var difPose = LvisionEst.get().estimatedPose.toPose2d().minus(Rpose2d);
           
-          if (
-            Math.abs(difPose.getX()) < Units.inchesToMeters(3)
-            &&
-            Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
-            ){
-          System.out.println("GOOD");
-          var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
+        //   if (
+        //     Math.abs(difPose.getX()) < Units.inchesToMeters(3)
+        //     &&
+        //     Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
+        //     ){
+        //   System.out.println("GOOD");
+        //   var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
              
-            Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
-            addVisionMeasurement(
-              L.estimatedPose.toPose2d(), L.timestampSeconds, stdDevs);
+        //     Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
+        //     addVisionMeasurement(
+        //       L.estimatedPose.toPose2d(), L.timestampSeconds, stdDevs);
               
-            addVisionMeasurement(
-              R.estimatedPose.toPose2d(), R.timestampSeconds, stdDevs);
+        //     addVisionMeasurement(
+        //       R.estimatedPose.toPose2d(), R.timestampSeconds, stdDevs);
             
-            }
-          } catch(Exception e){
+        //     }
+        //   } catch(Exception e){
 
-          }
-        }
+        //   }
+        // }
+
         // LvisionEst.ifPresent(
         //   est -> {
         //       var estPose = est.estimatedPose.toPose2d();
@@ -376,6 +390,10 @@ public class SUB_Drivetrain extends SubsystemBase {
         return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
       }
       
+      public boolean checkClosity(Pose2d robotPose, Pose2d CameraPose){
+        var difPose = robotPose.minus(CameraPose);
+        return ((Math.abs(difPose.getX()) < Units.inchesToMeters(12))) && Math.abs(difPose.getY()) < Units.inchesToMeters(12);
+      }
       /**
        * Returns the currently-estimated pose of the robot.
        *

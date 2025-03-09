@@ -111,7 +111,8 @@ public class SwerveModule {
     // double feedForward = ModuleConstants.kAutoS 
     io.setDriveReference((correctedDesiredState.speedMetersPerSecond), SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot1 , feedForward);
     io.setTurnReference(correctedDesiredState.angle.getRadians(), SparkMax.ControlType.kPosition);
-    Logger.recordOutput("DriveFFOutput" + index, feedForward);
+    // Logger.recordOutput("DriveFFOutput" + index, feedForward);
+    Logger.recordOutput("Drive/Module/DesiredTurnAngle" + index, correctedDesiredState.angle.getRadians());
     
     m_desiredState = desiredState;
     prevVelo = correctedDesiredState.speedMetersPerSecond;

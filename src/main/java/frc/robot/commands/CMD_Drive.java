@@ -27,9 +27,9 @@ public class CMD_Drive extends Command {
   @Override
   public void initialize() {
     if (DriverStation.getAlliance().get() == Alliance.Red){
-      sideMod = -1;
-    }else {
       sideMod = 1;
+    }else {
+      sideMod = -1;
     }
   }
  

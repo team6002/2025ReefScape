@@ -16,11 +16,12 @@ public class CMD_Home extends SequentialCommandGroup{
             new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kOff))
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kOff))
             ,new WaitCommand(.5)
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
+            ,new InstantCommand(()-> p_wrist.setGoal(0))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kHome))
             ,new CMD_PivotInPosition(p_pivot)
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_ElevatorReset(p_elevator)
+            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kHome))
         );
     }
 }

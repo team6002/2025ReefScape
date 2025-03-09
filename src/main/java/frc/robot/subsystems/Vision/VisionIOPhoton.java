@@ -196,11 +196,13 @@ public class VisionIOPhoton implements VisionIO{
         List<PhotonTrackedTarget> targets = new ArrayList<>();
         targets = getLatestLResult().getTargets();
         int numTags = 0; // tag counter that counts all tags that are within the filter;
+        int totalTags = -1; // a tag counter that counts all of the tags
         double avgDist = 0;
         for (var tgt : targets) {
             var tagPose = LphotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue; 
-            // if (angFilter(totalTags)) continue;
+            totalTags ++;
+            if (angFilter(targets, totalTags)) continue;
             numTags++;
             // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
             avgDist +=
@@ -260,12 +262,13 @@ public class VisionIOPhoton implements VisionIO{
         var estStdDevs = VisionConstants.kSingleTagStdDevs;
         List<PhotonTrackedTarget> targets = new ArrayList<>();
         targets = getLatestRResult().getTargets();
+        int totalTags = -1; // a tag counter that counts all of the tags
         int numTags = 0; // tag counter that counts all tags that are within the filter;
         double avgDist = 0;
         for (var tgt : targets) {
             var tagPose = RphotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue; 
-            // if (angFilter(totalTags)) continue;
+            if (angFilter(targets, totalTags)) continue;
             numTags++;
             // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
             avgDist +=
@@ -277,9 +280,9 @@ public class VisionIOPhoton implements VisionIO{
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = VisionConstants.kMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        if (numTags == 1 && avgDist > 2)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        if (avgDist > 4)
+        if (avgDist > 2)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
@@ -292,6 +295,11 @@ public class VisionIOPhoton implements VisionIO{
              || new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -45
         );
     }
+
+    // public boolean angFilterSTD(int TagNum){// tag num is the index number for the target Table
+    //     return (new Rotation2d(Math.toRadians(180)).plus(getLatestResult().getTargets().get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() > 45
+    //          || new Rotation2d(Math.toRadians(180)).plus(getLatestResult().getTargets().get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -45);
+    // }
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {

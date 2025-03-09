@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.98);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.97);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -101,7 +101,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kAutoP = .115;//0.004;
+    public static final double kAutoP = 0.01;//.115;//0.004;
     public static final double kAutoI = 0.0;
     public static final double kAutoD = 0.0;
     public static final double kAutoFF = 0.0;
@@ -109,9 +109,9 @@ public final class Constants {
     // public static final double kAutoA = .3;//.42;//0.48019;
     // public static final double kAutoS = .5;//.004;
     // public static final double kAutoV = 2.388;//2.22;//2.1016;
-    public static final double kAutoA = .35;//.42;//0.48019;
-    public static final double kAutoS = .5;//.004;
-    public static final double kAutoV = 2.37;//2.22;//2.1016;
+    public static final double kAutoA = .4;//.35;//.42;//0.48019;
+    public static final double kAutoS = .16;//.004;
+    public static final double kAutoV = 2.52;//2.37;//2.22;//2.1016;
     
     public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
@@ -128,7 +128,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 1;
+    public static final double kTurningP = 5;
     // public static final double kTurningP = 1.5;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
@@ -193,10 +193,10 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 3.7;
-    public static final double kDXController = 0.01;
+    public static final double kPXController = 3.75;
+    public static final double kDXController = 0;//0.01;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 1.5;
+    public static final double kPThetaController = 3;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -300,8 +300,8 @@ public final class Constants {
     public static final double kG = 0.35;//.035
     public static final double kMaxVel = 700;//700
     public static final double kMaxAccel = 700;//700
-    public static final double kMaxVelDown = 100;//100
-    public static final double kMaxAccelDown = 100;//100
+    public static final double kMaxVelDown = 850;//100
+    public static final double kMaxAccelDown = 850;//100
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -309,6 +309,7 @@ public final class Constants {
     public static final double kConversionFactor = 3.135;//3.17
     public static final double kTolerance = 5;
     public static final double kHome = 0;
+    public static final double kClimb = 0;
     public static final double kReady = 14.5;
     public static final double kReadyDefensive = 1;
     public static final double kIntake = 13.5;//14.5
@@ -358,7 +359,7 @@ public final class Constants {
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kReadyDefensive = Math.toRadians(110);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = Math.toRadians(-112.5);//-115
+    public static final double kIntake = Math.toRadians(-117.5);//-115
     public static final double kIntakeException = Math.toRadians(-112.5);//-115
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);

@@ -70,6 +70,9 @@ public class ElevatorIOSparkMax implements ElevatorIO{
         m_goal = new TrapezoidProfile.State(p_elevatorGoal, 0);
     }
 
+    public double getVelocity(){
+        return m_elevatorEncoder.getVelocity();
+    }
     @Override
     public double getGoal(){
         return m_goal.position;
