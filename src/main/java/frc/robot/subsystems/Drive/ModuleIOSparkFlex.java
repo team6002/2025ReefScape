@@ -81,7 +81,6 @@ public class ModuleIOSparkFlex implements ModuleIO {
         turnSparkMax = new SparkMax(HardwareConstants.kRearLeftTurningCanId, MotorType.kBrushless);
         turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder();
         driveSparkFlex.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
         break;
       case 3:
         driveSparkFlex = new SparkFlex(HardwareConstants.kRearRightDrivingCanId, MotorType.kBrushless);

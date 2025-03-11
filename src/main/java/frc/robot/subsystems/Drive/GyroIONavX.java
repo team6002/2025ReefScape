@@ -36,7 +36,7 @@ public class GyroIONavX implements GyroIO{
 
   @Override
   public void reset(){
-    m_gyro.reset();
+    // m_gyro.reset();
     m_gyro.zeroYaw();
     angleAdjustment = 0;
   }
