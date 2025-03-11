@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Autos.*;
 
@@ -28,10 +29,12 @@ import frc.robot.Autos.*;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   private SendableChooser<SequentialCommandGroup> m_autonomousChooser = new SendableChooser<SequentialCommandGroup>();
+  private SendableChooser<InstantCommand> m_odometryChooser = new SendableChooser<InstantCommand>();
 
   private RobotContainer m_robotContainer;
+  private InstantCommand currentOdometry;
 
-  /**
+  /**n
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
@@ -68,6 +71,11 @@ public class Robot extends LoggedRobot {
     m_autonomousChooser.addOption("AUTO_BlueRight444", new AUTO_BlueRight444(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_wrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     SmartDashboard.putData(m_autonomousChooser);
 
+    m_odometryChooser.setDefaultOption("PureOdometry", new InstantCommand(() -> m_robotContainer.m_drivetrain.setCurrentOdometry(0)));
+    m_odometryChooser.addOption("VisionOdometry", new InstantCommand(() -> m_robotContainer.m_drivetrain.setCurrentOdometry(1)));
+    m_odometryChooser.addOption("QuestOdometry", new InstantCommand(() -> m_robotContainer.m_drivetrain.setCurrentOdometry(2)));
+    SmartDashboard.putData(m_odometryChooser);
+
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
@@ -86,6 +94,12 @@ public class Robot extends LoggedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    currentOdometry = m_odometryChooser.getSelected();
+    if (currentOdometry != m_odometryChooser.getSelected()){
+      m_odometryChooser.getSelected().schedule();
+      System.out.print(m_odometryChooser.getSelected());
+      System.out.print(m_robotContainer.m_drivetrain.getCurrentOdometry());
+    }
     CommandScheduler.getInstance().run();
   }
 
@@ -94,11 +108,19 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    currentOdometry = m_odometryChooser.getSelected();
+    if (currentOdometry != m_odometryChooser.getSelected()){
+      m_odometryChooser.getSelected().schedule();
+      System.out.print(m_odometryChooser.getSelected());
+      System.out.print(m_robotContainer.m_drivetrain.getCurrentOdometry());
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
@@ -120,6 +142,7 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetTrapezoid();

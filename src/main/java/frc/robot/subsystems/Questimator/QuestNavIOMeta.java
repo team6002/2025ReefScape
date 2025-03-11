@@ -34,13 +34,14 @@ public class QuestNavIOMeta implements QuestNavIO{
   private Pose2d resetPositionOculus = new Pose2d();
   private Pose2d resetPositionRobot = new Pose2d();
 
-  // private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(8),Units.inchesToMeters(3.5), new Rotation2d(-Math.PI/2));
+  private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(3.5),Units.inchesToMeters(-7), new Rotation2d(-Math.PI/2));
   // private Transform2d kRobotToQuest = new Transform2d(0.06,-0.22, new Rotation2d(-Math.PI/2));
-  private Transform2d kRobotToQuest = new Transform2d(0.0,-0., new Rotation2d(-Math.PI/2));
+  // private Transform2d kRobotToQuest = new Transform2d(0.0,-0., new Rotation2d(-Math.PI/2));
   // Gets the Quest's measured position.
   @Override
   public Pose2d getQuestPose() {
-    Pose2d rawPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
+    // Pose2d rawPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
+    var rawPose = getUncorrectedOculusPose();
     var poseRelativetoReset = rawPose.minus(resetPositionOculus);
     return resetPositionRobot.transformBy(poseRelativetoReset);
     // return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
@@ -48,7 +49,8 @@ public class QuestNavIOMeta implements QuestNavIO{
 
   @Override
   public Pose2d getRobotPose(){
-    return getQuestPose().transformBy(kRobotToQuest.inverse());
+    Pose2d translationPose = new Pose2d(getQuestPose().getX(), getQuestPose().getY(), new Rotation2d()).times(1.025);
+    return new Pose2d(translationPose.getTranslation(), getQuestPose().getRotation()).transformBy(kRobotToQuest.inverse());
     // (getPose().getX() - Units.inchesToMeters(8) * Math.cos())
   }
 
@@ -80,6 +82,7 @@ public class QuestNavIOMeta implements QuestNavIO{
   // Zero the relativerobot heading
   @Override
   public void zeroHeading() {
+    yaw_offset = 0;
     float[] eulerAngles = questEulerAngles.get();
     yaw_offset = eulerAngles[1];
   }
@@ -87,27 +90,29 @@ public class QuestNavIOMeta implements QuestNavIO{
   // Zero the absolute 3D position of the robot (similar to long-pressing the quest logo)
   @Override
   public void zeroPosition() {
+    resetPosition = new Pose2d(0,0,new Rotation2d());
     resetPosition = getQuestPose();
     // if (questMiso.get() != 99) {
     //   questMosi.set(1);
     // }
   }
 
-  @Override
-  public void setPosition(Pose2d newPose) {
-    resetPosition = new Pose2d(0, 0, new Rotation2d());
-    resetPosition = getQuestPose();
-    resetPosition = newPose.transformBy(kRobotToQuest.inverse());
-    // restPoseOcculus
-    // if (questMiso.get() != 99) {
-    //   questMosi.set(1);
-    // }
-  }
+  // @Override
+  // public void setPosition(Pose2d newPose) {
+  //   resetPosition = new Pose2d(0, 0, new Rotation2d());
+  //   resetPosition = getQuestPose();
+  //   resetPosition = newPose.transformBy(kRobotToQuest.inverse());
+  //   // restPoseOcculus
+  //   // if (questMiso.get() != 99) {
+  //   //   questMosi.set(1);
+  //   // }
+  // }
 
   @Override
   public void resetPose(Pose2d newPose){
-    Pose2d uncorrectedOcculusPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
-    resetPositionOculus = uncorrectedOcculusPose.transformBy(kRobotToQuest.inverse());
+    resetPositionOculus = getUncorrectedOculusPose().transformBy(kRobotToQuest.inverse());
+    // Pose2d uncorrectedOcculusPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
+    // resetPositionOculus = uncorrectedOcculusPose.transformBy(kRobotToQuest.inverse());
     resetPositionRobot = newPose;
 
   }
@@ -142,6 +147,15 @@ public class QuestNavIOMeta implements QuestNavIO{
   public Pose2d getQuestNavPose() {
     var oculousPositionCompensated = getQuestNavTranslation().minus(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0))); // 6.5
     return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()));
+  }
+
+  private Pose2d getUncorrectedOculusPose() {
+    var eulerAngles = questEulerAngles.get();
+    var rotation = Rotation2d.fromDegrees(-Math.IEEEremainder(eulerAngles[1], 360d));
+
+    var questnavPosition = questPosition.get();
+    var translation = new Translation2d(questnavPosition[2], -questnavPosition[0]);
+    return new Pose2d(translation, rotation);
   }
 
   @Override

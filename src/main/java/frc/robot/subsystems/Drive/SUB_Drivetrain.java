@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -62,7 +64,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       private final SwerveDrivePoseEstimator m_odometry;
       //Odometry that has nearest april tag as origin for use in autoalignment
       private final SwerveDrivePoseEstimator m_targetOdometry;
-      private final SwerveDriveOdometry questimetry;
+      private final SwerveDrivePoseEstimator questimetry;
       private final SwerveDriveOdometry m_pureOdometry;
       private SwerveModulePosition[] lastModulePositions = 
       new SwerveModulePosition[] {
@@ -109,6 +111,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       /** Creates a new DriveSubsystem. */
       SUB_Vision m_vision;
       private Pose2d currentPose;
+      private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
   
       private Rotation2d m_cameraRotation;// angle of the robot from cameras
       public SUB_Drivetrain(
@@ -169,7 +172,8 @@ public class SUB_Drivetrain extends SubsystemBase {
         }
     
         AutoBuilder.configure(
-                this::getPose, // Robot pose supplier
+                this::getOdometry,
+                // this::getPose, // Robot pose supplier
                 // QuestNavIO::getRobotPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -212,11 +216,14 @@ public class SUB_Drivetrain extends SubsystemBase {
             new Pose2d(),
             stateStdDevs,
             visionStdDevs);
-        questimetry = 
-          new SwerveDriveOdometry(
-            DriveConstants.kDriveKinematics
-            ,Rotation2d.fromDegrees(getAngle()),
-            getModulePositions());
+        questimetry =
+          new SwerveDrivePoseEstimator(
+            DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(getAngle()),
+            getModulePositions(),
+            new Pose2d(),
+            stateStdDevs,
+            visionStdDevs);
     
         m_pureOdometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics,
@@ -232,7 +239,27 @@ public class SUB_Drivetrain extends SubsystemBase {
       // private double m_SwerveI = m_frontLeft.getSwerveI();
       // private double m_SwerveD = m_frontLeft.getSwerveD();
       // private double m_SwerveFF = m_frontLeft.getSwerveFF();
-    
+      public void setCurrentOdometry(int odo){
+        currentOdometry = odo;
+        System.out.println(odo);
+      }
+
+      public int getCurrentOdometry(){
+        return currentOdometry;
+      }
+
+      public Pose2d getOdometry(){
+        // Pose2d currentPose;
+        if (currentOdometry == 2){
+          return questimetry.getEstimatedPosition();
+        }if (currentOdometry == 1 ) {
+          return m_odometry.getEstimatedPosition();
+        }else{
+          return m_pureOdometry.getPoseMeters();
+        }
+        // return currentPose;
+      }
+
       @Override
       public void periodic() {
         SmartDashboard.putNumber("gyroHeading", getAngle());
@@ -272,20 +299,25 @@ public class SUB_Drivetrain extends SubsystemBase {
           getTargetModulePositions()
         );
         questimetry.update(
-          QuestNavIO.getQuestPose().getRotation(),
-           getTargetModulePositions());
+          QuestNavIO.getRobotPose().getRotation(),
+           getModulePositions());
     
         m_pureOdometry.update(getOdoRotation(), modulePositions);
         Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
         Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
-        Logger.recordOutput("Questimetry", questimetry.getPoseMeters());
+        Logger.recordOutput("Questimetry", questimetry.getEstimatedPosition());
         // new Rotation2d();
         Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
         // new Rotation2d();
         // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
         // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
         m_vision.updateInputs();
-    
+        if (QuestNavIO.connected()){
+          addQuestMeasurement(QuestNavIO.getRobotPose()
+            ,Timer.getFPGATimestamp()
+            // ,QuestNavIO.timestamp()
+          );
+        }
         LvisionEst.ifPresent(
           est -> {
             var estPose = est.estimatedPose.toPose2d();
@@ -374,6 +406,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         // );
         
       // }
+
         
         for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++){
           moduleDeltas[moduleIndex] =
@@ -429,7 +462,7 @@ public class SUB_Drivetrain extends SubsystemBase {
           pose
         );
         questimetry.resetPosition(
-          QuestNavIO.getQuestNavPose().getRotation(), 
+          QuestNavIO.getRobotPose().getRotation(), 
           getModulePositions(), 
           pose);
       }
@@ -643,7 +676,16 @@ public class SUB_Drivetrain extends SubsystemBase {
         } catch (Exception e){
           System.out.println(e);
         }
-    }
+      }
+      
+      public void addQuestMeasurement(Pose2d visionMeasurement, double timestampSeconds) {
+        try {
+          Matrix<N3, N1> stdDevs = VecBuilder.fill(1, 1, 1);
+          questimetry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation()), timestampSeconds, stdDevs);
+        } catch (Exception e){
+          System.out.println(e);
+        }
+      }
       // Create a list of waypoints from poses. Each pose represents one waypoint.
       // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
       List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
@@ -697,6 +739,7 @@ public class SUB_Drivetrain extends SubsystemBase {
               System.out.println(pose.getRotation());
               gyroIO.set(pose.getRotation());
               resetOdometry(pose);
+              QuestNavIO.zeroHeading();
               QuestNavIO.resetPose(pose);
             }
             
@@ -725,6 +768,8 @@ public class SUB_Drivetrain extends SubsystemBase {
               System.out.println(pose.getRotation());
               gyroIO.set(pose.getRotation());
               resetOdometry(pose);
+              QuestNavIO.zeroHeading();
+              QuestNavIO.resetPose(pose);
             }
             
           );
