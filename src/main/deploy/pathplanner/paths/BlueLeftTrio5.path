@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.34,
-        "y": 0.6
+        "x": 1.56,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5439587281687535,
-        "y": 0.7445712184488481
+        "x": 1.7639587281687534,
+        "y": 0.8945712184488481
       },
       "isLocked": false,
       "linkedName": "BlueLeftPickup"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.671,
-        "y": 2.91
+        "y": 2.96
       },
       "prevControl": {
         "x": 3.3403662785140322,
-        "y": 2.5959660174179557
+        "y": 2.6459660174179556
       },
       "nextControl": null,
       "isLocked": false,

@@ -109,7 +109,7 @@ public final class Constants {
     // public static final double kAutoA = .3;//.42;//0.48019;
     // public static final double kAutoS = .5;//.004;
     // public static final double kAutoV = 2.388;//2.22;//2.1016;
-    public static final double kAutoA = .4;//.35;//.42;//0.48019;
+    public static final double kAutoA = .37;//.35;//.42;//0.48019;
     public static final double kAutoS = .16;//.004;
     public static final double kAutoV = 2.52;//2.37;//2.22;//2.1016;
     
@@ -370,7 +370,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-104);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(39);//43
+    public static final double kDeployl4 = Math.toRadians(37);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(50);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
@@ -415,6 +415,7 @@ public final class Constants {
   public static final class VisionConstants{
     public static final String kLeftCameraName = "LeftCamera";
     public static final String kRightCameraName = "RightCamera";
+    public static final String kTopCameraName = "TopCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
             new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-11), Units.inchesToMeters(10.5)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
@@ -474,6 +475,7 @@ public final class Constants {
   
       /* Turn constraints. Output ranges [-1, 1] */
       public static final double kTurnTolerance = .5;
+      public static final double kTurnToleranceColor = 3;
       public static final TrapezoidProfile.Constraints turnConstraints = new TrapezoidProfile.Constraints(1, .75);
       public static final double turnKp = 0.011;
       public static final double turnKi = 0.;

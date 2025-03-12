@@ -23,6 +23,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
 
+import static edu.wpi.first.units.Units.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +40,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionIOPhoton implements VisionIO{  
     private final PhotonCamera LCamera = new PhotonCamera(VisionConstants.kLeftCameraName);
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
+    private final PhotonCamera TCamera = new PhotonCamera(VisionConstants.kTopCameraName);
     private final PhotonPoseEstimator LphotonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
     private final PhotonPoseEstimator LphotonEstimatorLast = 
@@ -50,6 +53,19 @@ public class VisionIOPhoton implements VisionIO{
     public void setCameraPipeline(int LPipeline, int RPipeline){
         LCamera.setPipelineIndex(LPipeline);
         RCamera.setPipelineIndex(RPipeline);
+    }
+
+    public void setTCameraPipeline(int TPipeline){
+        TCamera.setPipelineIndex(TPipeline);
+    }
+
+    @Override
+    public double getTcameraYaw(){
+        try {
+            return TCamera.getLatestResult().getBestTarget().getYaw();    
+        } catch (Exception e) {
+            return Double.MAX_VALUE;
+        }
     }
 
     @Override

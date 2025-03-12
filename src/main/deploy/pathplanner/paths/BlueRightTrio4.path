@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.03,
-        "y": 5.2
+        "x": 3.97,
+        "y": 5.24
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.002525500044589,
-        "y": 6.088047410231331
+        "x": 2.942525500044589,
+        "y": 6.128047410231331
       },
       "isLocked": false,
       "linkedName": "RightTrio3"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.44,
-        "y": 7.44
+        "y": 7.1899999999999995
       },
       "prevControl": {
         "x": 2.6907438230671694,
-        "y": 6.283353083175146
+        "y": 6.033353083175145
       },
       "nextControl": null,
       "isLocked": false,

@@ -97,6 +97,9 @@ public class RobotContainer {
     // m_driverController.povRight().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
+    
+    m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
+    
     //operator
     // m_operatorController.start().onTrue(new CMD_ToggleMode(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
@@ -115,7 +118,6 @@ public class RobotContainer {
     m_operatorController.leftTrigger().onTrue(new CMD_RockCoral(m_wrist, m_elevator, m_pivot, m_coralIntake));
     m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_pivot, m_elevator, m_coralIntake, m_variables));
     m_operatorController.leftStick().onTrue(new InstantCommand(()-> GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode));
-
     m_operatorController.a().onTrue(
       new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR))
       .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))

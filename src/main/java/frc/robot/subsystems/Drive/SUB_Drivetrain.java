@@ -739,7 +739,7 @@ public class SUB_Drivetrain extends SubsystemBase {
               System.out.println(pose.getRotation());
               gyroIO.set(pose.getRotation());
               resetOdometry(pose);
-              QuestNavIO.zeroHeading();
+              // QuestNavIO.zeroHeading();
               QuestNavIO.resetPose(pose);
             }
             
@@ -768,7 +768,6 @@ public class SUB_Drivetrain extends SubsystemBase {
               System.out.println(pose.getRotation());
               gyroIO.set(pose.getRotation());
               resetOdometry(pose);
-              QuestNavIO.zeroHeading();
               QuestNavIO.resetPose(pose);
             }
             

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.34,
-        "y": 0.6
+        "x": 1.56,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4583763920176978,
-        "y": 1.4093291498213323
+        "x": 2.678376392017693,
+        "y": 1.5593291498213322
       },
       "isLocked": false,
       "linkedName": "BlueLeftPickup"

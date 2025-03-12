@@ -41,9 +41,10 @@ public class QuestNavIOMeta implements QuestNavIO{
   @Override
   public Pose2d getQuestPose() {
     // Pose2d rawPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
-    var rawPose = getUncorrectedOculusPose();
-    var poseRelativetoReset = rawPose.minus(resetPositionOculus);
-    return resetPositionRobot.transformBy(poseRelativetoReset);
+    // var rawPose = getUncorrectedOculusPose();
+    // var poseRelativetoReset = rawPose.minus(resetPositionOculus);
+    // return resetPositionRobot.transformBy(poseRelativetoReset);
+    return resetPositionRobot.transformBy(kRobotToQuest);
     // return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
   }
 
@@ -113,7 +114,9 @@ public class QuestNavIOMeta implements QuestNavIO{
     resetPositionOculus = getUncorrectedOculusPose().transformBy(kRobotToQuest.inverse());
     // Pose2d uncorrectedOcculusPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
     // resetPositionOculus = uncorrectedOcculusPose.transformBy(kRobotToQuest.inverse());
-    resetPositionRobot = newPose;
+    var transformationerToCenter = (newPose.minus(new Pose2d(.03, .17, new Rotation2d()))); 
+    var reseterPose = new Pose2d (transformationerToCenter.getX(), transformationerToCenter.getY(), transformationerToCenter.getRotation());
+    resetPositionRobot = reseterPose;
 
   }
   // Clean up questnav subroutine messages after processing on the headset
@@ -168,7 +171,7 @@ public class QuestNavIOMeta implements QuestNavIO{
     inputs.timestamp = timestamp();
   }
 
-  // @Override
+  @Override
   public void hardReset() {
     // resetPosition = getPose();
     if (questMiso.get() != 99) {

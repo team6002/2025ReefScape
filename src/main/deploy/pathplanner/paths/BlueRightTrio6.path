@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.701,
-        "y": 5.03
+        "x": 3.691,
+        "y": 5.09
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.936151128782953,
-        "y": 5.86778468433814
+        "x": 2.9261511287829527,
+        "y": 5.92778468433814
       },
       "isLocked": false,
       "linkedName": "BlueRIght5"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.44,
-        "y": 7.44
+        "y": 7.1899999999999995
       },
       "prevControl": {
         "x": 2.6191593633802612,
-        "y": 6.197682360439973
+        "y": 5.9476823604399724
       },
       "nextControl": null,
       "isLocked": false,
