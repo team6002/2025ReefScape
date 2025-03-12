@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -10,19 +11,55 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
-public class CMD_SetReadyToIntake extends SequentialCommandGroup{
-    
+public class CMD_SetReadyToIntake extends Command{
+    private final SUB_Elevator m_elevator;
+    private final SUB_Wrist m_wrist;
+    private final SUB_Pivot m_pivot;
+    private final SUB_CoralHolder m_intake;
+    private final GlobalVariables m_variables;
     public CMD_SetReadyToIntake(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, 
         GlobalVariables p_variables){
-        addCommands(
-            new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
+        
+        m_elevator = p_elevator;
+        m_wrist = p_wrist;
+        m_pivot = p_pivot;
+        m_intake = p_intake;
+        m_variables = p_variables;
+    }
+
+    @Override
+    public void initialize(){
+        new SequentialCommandGroup(
+            new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
             ,new ConditionalCommand(
-                new CMD_ReadyIntake(p_elevator, p_wrist, p_pivot, p_intake),
+                new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake),
                 new InstantCommand(),
-                ()-> GlobalVariables.m_targetCoralLevel == 4 
+                ()-> GlobalVariables.m_targetCoralLevel == 4 &! GlobalVariables.m_intakingAlgae
             )
-            ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
-            ,new CMD_IntakeStow(p_intake)
-        );
+            ,getIntakeCommand()
+            ,new InstantCommand(()-> GlobalVariables.m_intakingAlgae = false)
+            ,new CMD_IntakeStow(m_intake)
+        ).schedule();
+    }
+
+    private SequentialCommandGroup getIntakeCommand(){
+        SequentialCommandGroup intakeCommand = new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake);
+
+        if(GlobalVariables.m_intakingAlgae){
+            switch (m_variables.getAlgaeTarget()) {
+                case BARGE:
+                    intakeCommand = new CMD_ReadyToIntakeFromBarge(m_elevator, m_wrist, m_pivot, m_intake);
+                    break;
+                case PROCESSOR:
+                    intakeCommand = new CMD_ReadyToIntakeFromProcessor(m_elevator, m_wrist, m_pivot, m_intake);
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            intakeCommand = new CMD_ReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake);
+        }
+
+        return intakeCommand; 
     }
 }

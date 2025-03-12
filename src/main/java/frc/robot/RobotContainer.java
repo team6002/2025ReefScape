@@ -141,7 +141,9 @@ public class RobotContainer {
           ,()-> GlobalVariables.m_algaeExceptionMode)
         )    
     );
-    m_operatorController.rightStick().onTrue(new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_coralIntake, m_variables));
+    m_operatorController.rightStick().onTrue(
+      new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_coralIntake, m_variables)
+    );
   }
     
 }

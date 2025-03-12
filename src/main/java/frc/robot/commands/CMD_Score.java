@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.CoralHolderConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -53,26 +54,31 @@ public class CMD_Score extends Command{
             case HOME:
                 new SequentialCommandGroup(
                     new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                    ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
                     ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
                 break;
             case READY_TO_INTAKE:
                 new SequentialCommandGroup(
                     new InstantCommand(()-> m_variables.setRobotState(RobotState.TRANSITIONING_TO_DEPLOY))
+                    ,new InstantCommand(()-> m_intake.setVoltage(CoralHolderConstants.kHolding))
                     ,new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
                     ,new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_pivot)
                     ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_DEPLOY))
-                );
+                ).schedule();
+                break;
             case READY_TO_DEPLOY:
                 new SequentialCommandGroup(
                     new CMD_SetDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables)
                     ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
+                break;
             case DEPLOY:
                 new SequentialCommandGroup(
                     new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
                     ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                 ).schedule();
+                break;
             default:
                 break;
         }

@@ -21,7 +21,6 @@ public class CMD_Algae extends Command{
     private final SUB_Algae m_algae;
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
-    // private boolean m_intakingAlgae = false;
     private boolean m_deployingAlgae = false;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){

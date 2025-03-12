@@ -4,16 +4,13 @@
 
 package frc.robot.subsystems.Drive;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -329,7 +326,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
             ){
           System.out.println("GOOD");
-          var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
+          // var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
              
             Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
             addVisionMeasurement(
@@ -610,7 +607,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             return;
           }
           try {
-          m_cameraRotation = visionMeasurement.getRotation().k180deg;
+          visionMeasurement.getRotation();
+          m_cameraRotation = Rotation2d.k180deg;
           Pose2d p_angledPose = new Pose2d(visionMeasurement.getTranslation(), Rotation2d.fromDegrees(getAngle())); 
           m_odometry.addVisionMeasurement(p_angledPose, timestampSeconds, stdDevs);
           } catch (Exception e){

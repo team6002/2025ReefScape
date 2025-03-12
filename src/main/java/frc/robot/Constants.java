@@ -252,9 +252,9 @@ public final class Constants {
     public static final double kV = 4.5;//4.45
     public static final double kA = 0;
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(200);//500
-    public static final double kMaxAccel = Math.toRadians(200);//500
-    public static final double kMaxVelExtended = Math.toRadians(200);//540
+    public static final double kMaxVel = Math.toRadians(200);//200
+    public static final double kMaxAccel = Math.toRadians(200);//200
+    public static final double kMaxVelExtended = Math.toRadians(200);//200
     public static final double kMaxAccelExtended = Math.toRadians(90);//90
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
@@ -277,7 +277,7 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(60);//61
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
-    public static final double kIntakeAlgaeGround = Math.toRadians(31.5);
+    public static final double kIntakeAlgaeGround = Math.toRadians(30.0);
     public static final double kDeployl1 = Math.toRadians(37);//37.5
     public static final double kDeployl2 = Math.toRadians(76);//82.75
     public static final double kDeployl3 = Math.toRadians(82);//86
@@ -299,8 +299,8 @@ public final class Constants {
     public static final double kG = 0.35;//.035
     public static final double kMaxVel = 700;//700
     public static final double kMaxAccel = 700;//700
-    public static final double kMaxVelDown = 100;//100
-    public static final double kMaxAccelDown = 100;//100
+    public static final double kMaxVelDown = 850;//850
+    public static final double kMaxAccelDown = 850;//850
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -324,8 +324,8 @@ public final class Constants {
     public static final double kDeployl1Exception = 16;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 22;//19
-    public static final double kDeployl4Exception = 68;//68
-    public static final double kDeployBarge = 68;
+    public static final double kDeployl4Exception = 67.5;//68
+    public static final double kDeployBarge = 67.5;
   }
 
   public static final class WristConstants{
