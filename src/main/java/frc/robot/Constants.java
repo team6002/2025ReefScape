@@ -167,6 +167,7 @@ public final class Constants {
 
   public static final class HardwareConstants{
     // SPARK MAX CAN IDs 
+    
     public static final int kFrontLeftDrivingCanId = 2;//8
     public static final int kFrontLeftTurningCanId = 1;//9
     public static final int kFrontRightDrivingCanId =  8;//2
@@ -194,6 +195,7 @@ public final class Constants {
 
     public static final double kPXController = 3.7;
     public static final double kDXController = 0.01;
+    public static final double kPYController = 0;
     public static final double kPThetaController = 1.5;
 
     // Constraint for the motion profiled robot angle controller
