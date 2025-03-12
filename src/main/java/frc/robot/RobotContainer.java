@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.GlobalVariables;
 import frc.GlobalVariables.*;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.CoralHolder.*;
 import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
 import frc.robot.subsystems.Pivot.*;
+import frc.robot.subsystems.Questimator.QuestNavIOMeta;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -32,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    Pose2d currentPose;
   // The robot's subsystems
   // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
@@ -42,6 +45,7 @@ public class RobotContainer {
     ,new ModuleIOSparkFlex(2)
     ,new ModuleIOSparkFlex(3)
     ,m_vision
+    ,new QuestNavIOMeta()
   );
   final GlobalVariables m_variables = new GlobalVariables();
   final SUB_CoralHolder m_coralIntake = new SUB_CoralHolder(new CoralHolderIOSparkMax());
