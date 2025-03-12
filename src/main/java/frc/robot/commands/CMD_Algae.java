@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
+import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -40,13 +40,20 @@ public class CMD_Algae extends Command{
                 new InstantCommand(()-> m_deployingAlgae = false)
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
-                ,new WaitCommand(.5)
-                ,new ConditionalCommand(
-                    new CMD_ReadyAlgae(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                    ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,()-> m_variables.getAlgaeTarget() == AlgaeTarget.PROCESSOR
-                )
+                ,new CMD_CheckCoral(m_intake)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
+                ,new ConditionalCommand(
+                    new SequentialCommandGroup(
+                        new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
+                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                        ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
+                    )
+                    ,new SequentialCommandGroup(
+                        new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
+                        ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
+                    )
+                    ,()-> GlobalVariables.m_haveCoral
+                )
             ).schedule();
             return;
         }

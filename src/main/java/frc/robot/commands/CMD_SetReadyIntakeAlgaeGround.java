@@ -35,8 +35,8 @@ public class CMD_SetReadyIntakeAlgaeGround extends SequentialCommandGroup{
                 ,new SequentialCommandGroup(
                     new CMD_CheckCoral(p_intake)
                     ,new ConditionalCommand(
-                        new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_STOWED))
-                        ,new InstantCommand(()-> p_variables.setRobotState(RobotState.READY))
+                        new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                        ,new InstantCommand(()-> p_variables.setRobotState(RobotState.HOME))
                         ,()-> GlobalVariables.m_haveCoral
                     )
                 )
