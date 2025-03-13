@@ -300,8 +300,8 @@ public final class Constants {
     public static final double kG = 0.35;//.035
     public static final double kMaxVel = 700;//700
     public static final double kMaxAccel = 700;//700
-    public static final double kMaxVelDown = 850;//100
-    public static final double kMaxAccelDown = 850;//100
+    public static final double kMaxVelDown = 420;//100
+    public static final double kMaxAccelDown = 420;//100
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -321,8 +321,8 @@ public final class Constants {
     public static final double kIntakeAlgaeGround = 8.5;
     public static final double kDeployL1 = 19;
     public static final double kDeployL2 = 0;
-    public static final double kDeployL3 = 21.5;//28
-    public static final double kDeployL4 = 67;//68
+    public static final double kDeployL3 = 23.5;//28
+    public static final double kDeployL4 = 69;//68
     public static final double kDeployl1Exception = 16;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 22;//19

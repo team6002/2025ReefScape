@@ -365,12 +365,12 @@ public class SUB_Drivetrain extends SubsystemBase {
         //   var Rpose2d = RvisionEst.get().estimatedPose.toPose2d();
         //   var difPose = LvisionEst.get().estimatedPose.toPose2d().minus(Rpose2d);
           
-          if (
-            Math.abs(difPose.getX()) < Units.inchesToMeters(3)
-            &&
-            Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
-            ){
-          System.out.println("GOOD");
+          // if (
+          //   Math.abs(difPose.getX()) < Units.inchesToMeters(3)
+          //   &&
+          //   Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
+          //   ){
+          // System.out.println("GOOD");
           // var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
              
         //     Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
