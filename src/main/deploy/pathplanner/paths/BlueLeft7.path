@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.56,
-        "y": 0.75
+        "y": 0.69
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.678376392017693,
-        "y": 1.5593291498213322
+        "y": 1.4993291498213321
       },
       "isLocked": false,
       "linkedName": "BlueLeftPickup"

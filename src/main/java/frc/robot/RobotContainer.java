@@ -100,6 +100,7 @@ public class RobotContainer {
     
     m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
     
+    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision));//is in use
     //operator
     // m_operatorController.start().onTrue(new CMD_ToggleMode(m_elevator, m_wrist, m_pivot, m_coralIntake, m_variables));
     m_operatorController.back().onTrue(new SequentialCommandGroup( 

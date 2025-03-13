@@ -6,11 +6,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
+import frc.robot.subsystems.Vision.SUB_Vision;
 
-public class CMD_Drive extends Command {
+public class CMD_DriveAutoAlign extends Command {
 
   private final SUB_Drivetrain m_drivetrain;
   private final CommandXboxController m_controller;
+  private final SUB_Vision m_vision;
 
   double deadzone = 0.1;	//variable for amount of deadzone
   double y = 0;           //variable for forward/backward movement
@@ -18,9 +20,10 @@ public class CMD_Drive extends Command {
   double rot = 0;        //variable for turning mo vement
   double sideMod = 1; // variable for which side is the robot on
   boolean m_autoSlew;
-  public CMD_Drive(SUB_Drivetrain p_drivetrain, CommandXboxController p_controller) {
+  public CMD_DriveAutoAlign(SUB_Drivetrain p_drivetrain, CommandXboxController p_controller, SUB_Vision p_vision) {
     m_drivetrain = p_drivetrain;
     m_controller = p_controller;
+    m_vision = p_vision;
     addRequirements(m_drivetrain);
   }
 
@@ -40,6 +43,15 @@ public class CMD_Drive extends Command {
     var xSpeed = MathUtil.applyDeadband(m_controller.getLeftY(),deadzone)*sideMod;
 
     rot = MathUtil.applyDeadband(-m_controller.getRightX(), deadzone);
+    if (m_controller.leftTrigger(.5).getAsBoolean() && m_vision.getTcameraYaw() != Double.MAX_VALUE){
+      try { 
+        rot = Math.copySign(.05, -m_vision.getTcameraYaw());
+      } catch (Exception e) {
+      } 
+    }
+    if (m_vision.getTcameraYaw() !=Double.MAX_VALUE && Math.abs(m_vision.getTcameraYaw()) <= 3.5){
+      rot = 0;
+    }
     m_autoSlew = false;
 
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));

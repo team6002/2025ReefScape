@@ -41,10 +41,10 @@ public class QuestNavIOMeta implements QuestNavIO{
   @Override
   public Pose2d getQuestPose() {
     // Pose2d rawPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
-    // var rawPose = getUncorrectedOculusPose();
-    // var poseRelativetoReset = rawPose.minus(resetPositionOculus);
-    // return resetPositionRobot.transformBy(poseRelativetoReset);
-    return resetPositionRobot.transformBy(kRobotToQuest);
+    var rawPose = getUncorrectedOculusPose();
+    var poseRelativetoReset = rawPose.minus(resetPositionOculus);
+    return resetPositionRobot.transformBy(poseRelativetoReset);
+    // return resetPositionRobot.transformBy(kRobotToQuest);
     // return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
   }
 
@@ -111,12 +111,15 @@ public class QuestNavIOMeta implements QuestNavIO{
 
   @Override
   public void resetPose(Pose2d newPose){
+    resetPosition = new Pose2d(0,0,new Rotation2d());
     resetPositionOculus = getUncorrectedOculusPose().transformBy(kRobotToQuest.inverse());
     // Pose2d uncorrectedOcculusPose = new Pose2d(getQuestNavTranslation(), new Rotation2d(Math.toRadians(getOculusYaw())));
     // resetPositionOculus = uncorrectedOcculusPose.transformBy(kRobotToQuest.inverse());
-    var transformationerToCenter = (newPose.minus(new Pose2d(.03, .17, new Rotation2d()))); 
-    var reseterPose = new Pose2d (transformationerToCenter.getX(), transformationerToCenter.getY(), transformationerToCenter.getRotation());
-    resetPositionRobot = reseterPose;
+    // var transformationerToCenter = (newPose.minus(new Pose2d(.03, .17, new Rotation2d()))); 
+    // var reseterPose = new Pose2d (transformationerToCenter.getX(), transformationerToCenter.getY(), transformationerToCenter.getRotation());
+    // resetPositionRobot = reseterPose;
+    Pose2d translationPose = new Pose2d(newPose.getX(), newPose.getY(), new Rotation2d()).div(1.025);
+    resetPositionRobot = new Pose2d(translationPose.getTranslation(), newPose.getRotation());
 
   }
   // Clean up questnav subroutine messages after processing on the headset
