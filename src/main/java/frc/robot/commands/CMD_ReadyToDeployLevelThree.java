@@ -15,10 +15,11 @@ public class CMD_ReadyToDeployLevelThree extends SequentialCommandGroup{
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kReadyToScore))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kDeployl3))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL3))
-            ,new CMD_ElevatorInPosition(p_elevator).withTimeout(2)
-            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kDeployl3))
             ,new CMD_WristInPosition(p_wrist)
+            ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kDeployl3))
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL3))
+            ,new CMD_WristInPosition(p_wrist)
+            ,new CMD_ElevatorInPosition(p_elevator)
         );
     }
 }

@@ -15,25 +15,13 @@ public class CMD_AlgaeLevelThree extends SequentialCommandGroup{
     public CMD_AlgaeLevelThree(SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_Algae p_algae,
         SUB_Elevator p_elevator, GlobalVariables p_variables, SUB_Pivot p_pivot){
         addCommands(
-            new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_variables)
+            new InstantCommand(()-> GlobalVariables.m_intakingAlgae = true)
+            ,new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_intake, p_variables)
             ,new CMD_AlgaeTrigger(p_algae)
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kHolding))
             ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)
-            // ,new ConditionalCommand(
-            //     new SequentialCommandGroup(
-            //         new CMD_DeployLevelTwo(p_intake, p_wrist),
-            //         new WaitCommand(.2)
-            //         ,new InstantCommand(()-> p_intake.setVoltage(0))
-            //     )
-            //     ,new PrintCommand("AGABGADA")// ,new CMD_ReadyAlgae(p_elevator, p_wrist, p_pivot, p_variables)
-            // ,()-> GlobalVariables.m_haveCoral && GlobalVariables.m_haveAlgae)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReadyAlgael3))
             ,new CMD_PivotInPosition(p_pivot)
-            // ,new ConditionalCommand(
-            //     new CMD_YeetAlgae(p_wrist, p_algae)
-            //     ,new InstantCommand()
-            //     ,()-> GlobalVariables.m_algaeExceptionMode
-            // )
-            );
+        );
     }
 }

@@ -36,10 +36,14 @@ public class CMD_Drive extends Command {
   @Override
   public void execute() {
     var ySpeed = MathUtil.applyDeadband(m_controller.getLeftX(),deadzone)*sideMod;
+    // ySpeed = Math.copySign(Math.pow(ySpeed, 2), ySpeed);
 
     var xSpeed = MathUtil.applyDeadband(m_controller.getLeftY(),deadzone)*sideMod;
+    // xSpeed = Math.copySign(Math.pow(xSpeed, 2), xSpeed);
 
     rot = MathUtil.applyDeadband(-m_controller.getRightX(), deadzone);
+    // rot = Math.copySign(Math.pow(rot, 2), rot);
+
     m_autoSlew = false;
 
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
