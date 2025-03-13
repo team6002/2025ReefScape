@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.GlobalVariables;
 import frc.robot.Configs;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.HardwareConstants;
 
 public class PivotIOSparkMax implements PivotIO{
@@ -49,12 +50,12 @@ public class PivotIOSparkMax implements PivotIO{
         inputs.m_pivotPos = Math.toDegrees(getPosition());
         inputs.m_pivotCurrent = getCurrent();
         inputs.m_pivotInPosition = inPosition();
-        inputs.m_pivotSetpoint = Math.toDegrees(getSetpoint()+PivotConstants.kPivotOffset);
+        inputs.m_pivotSetpoint = Math.toDegrees(getSetpoint());
     };
     
     @Override
     public void setGoal(double p_pivotGoal){
-        if(GlobalVariables.m_elevatorExtension > 5){
+        if(GlobalVariables.m_elevatorExtension > ElevatorConstants.kDeployL3){
             m_pivotConstraints = new Constraints(PivotConstants.kMaxVelExtended, PivotConstants.kMaxAccelExtended);
         }else{
             m_pivotConstraints = new Constraints(PivotConstants.kMaxVel, PivotConstants.kMaxAccel);

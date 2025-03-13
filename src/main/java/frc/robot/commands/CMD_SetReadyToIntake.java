@@ -34,11 +34,12 @@ public class CMD_SetReadyToIntake extends Command{
             ,new ConditionalCommand(
                 new CMD_ReadyIntake(m_elevator, m_wrist, m_pivot, m_intake),
                 new InstantCommand(),
-                ()-> GlobalVariables.m_targetCoralLevel == 4 &! GlobalVariables.m_intakingAlgae
+                ()-> GlobalVariables.m_targetCoralLevel == 4 &! GlobalVariables.m_intakingAlgae &! m_variables.isRobotState(RobotState.HOME)
             )
             ,getIntakeCommand()
             ,new InstantCommand(()-> GlobalVariables.m_intakingAlgae = false)
             ,new CMD_IntakeStow(m_intake)
+            ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
         ).schedule();
     }
 
@@ -61,5 +62,10 @@ public class CMD_SetReadyToIntake extends Command{
         }
 
         return intakeCommand; 
+    }
+
+    @Override
+    public boolean isFinished(){
+        return GlobalVariables.m_haveCoral;
     }
 }

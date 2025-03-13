@@ -84,7 +84,8 @@ public class RobotContainer {
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
 
-    m_driverController.a().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
+    // m_driverController.a().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
+    m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
     m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch));

@@ -40,19 +40,9 @@ public class CMD_Algae extends Command{
                 ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
                 ,new CMD_CheckCoral(m_intake)
+                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
-                ,new ConditionalCommand(
-                    new SequentialCommandGroup(
-                        new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 3)
-                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                        ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
-                    )
-                    ,new SequentialCommandGroup(
-                        new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
-                        ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
-                    )
-                    ,()-> GlobalVariables.m_haveCoral
-                )
+                ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
             ).schedule();
             return;
         }

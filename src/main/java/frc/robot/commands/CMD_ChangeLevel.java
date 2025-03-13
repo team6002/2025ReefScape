@@ -25,11 +25,7 @@ public class CMD_ChangeLevel extends Command{
 
     @Override
     public void initialize(){
-        if(GlobalVariables.m_targetCoralLevel == m_newLevel){
-            return;
-        }else{
-            GlobalVariables.m_targetCoralLevel = m_newLevel;
-        }
+        GlobalVariables.m_targetCoralLevel = m_newLevel;
         
         //check if in good state or if already at the selected level
         if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY) == false){

@@ -243,17 +243,17 @@ public final class Constants {
   }
 
   public static final class PivotConstants{
-    public static final double kP = 1.5;//1.5;//2.0
+    public static final double kP = 2;//1.5
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.025;//.03
     public static final double kG = 0.025;//.025, .18
-    public static final double kV = 4.5;//4.45
+    public static final double kV = 3;//4.5
     public static final double kA = 0;
     public static final double kPivotOffset = Math.toRadians(-90);
-    public static final double kMaxVel = Math.toRadians(200);//200
-    public static final double kMaxAccel = Math.toRadians(200);//200
+    public static final double kMaxVel = Math.toRadians(540);//200
+    public static final double kMaxAccel = Math.toRadians(540);//200
     public static final double kMaxVelExtended = Math.toRadians(200);//200
     public static final double kMaxAccelExtended = Math.toRadians(90);//90
     public static final double kMinOutput = -1;
@@ -389,7 +389,7 @@ public final class Constants {
 
     public static final double kHome = 33;
     public static final double kReadyClimb = 210.0;
-    public static final double kClimb = 110.0;
+    public static final double kClimb = 130.0;
   }
 
   public static final class AlgaeConstants{
