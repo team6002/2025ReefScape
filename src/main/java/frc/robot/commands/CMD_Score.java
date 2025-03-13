@@ -77,14 +77,14 @@ public class CMD_Score extends Command{
                 ).schedule();
                 break;
             case READY_TO_DEPLOY:
-                new ConditionalCommand(
-                    new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
-                    ,new SequentialCommandGroup(
-                        new CMD_SetDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables)
-                        ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
+                new SequentialCommandGroup(
+                    new CMD_SetDeploy(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables)
+                    ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
+                    ,new ConditionalCommand(
+                        new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
                         ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
+                        ,()-> GlobalVariables.m_haveAlgae
                     )
-                    ,()-> GlobalVariables.m_haveAlgae
                 ).schedule();
                 break;
             default:
