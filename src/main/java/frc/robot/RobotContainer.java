@@ -135,9 +135,7 @@ public class RobotContainer {
             ()-> GlobalVariables.m_algaeExceptionMode
         )
         ,new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
-        .andThen(
-          new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables))
-        ) 
+        )
     );
     m_operatorController.y().onTrue(
       new SequentialCommandGroup(
@@ -145,7 +143,6 @@ public class RobotContainer {
         ,new ConditionalCommand(
           new InstantCommand(()-> GlobalVariables.lvl3AlgaeException = true).andThen(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2))
           ,new CMD_AlgaeLevelThree(m_coralIntake, m_wrist, m_algae, m_elevator, m_variables, m_pivot)
-            .andThen(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables))
           ,()-> GlobalVariables.m_algaeExceptionMode)
         )    
     );
