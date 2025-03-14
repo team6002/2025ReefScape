@@ -25,7 +25,6 @@ import frc.robot.subsystems.Pivot.*;
 import frc.robot.subsystems.Questimator.QuestNavIOMeta;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -90,19 +89,41 @@ public class RobotContainer {
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
 
-    // m_driverController.a().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
     m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch));
     m_driverController.povRight().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
-    // m_driverController.povRight().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     
     m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
     
     m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision));//is in use
+
+    m_driverController.leftBumper().onTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
+        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
+      )
+    ).onFalse(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
+        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
+      )
+    );
+
+    m_driverController.leftTrigger().onTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
+        ,new WaitCommand(.2)
+        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
+      )
+    ).onFalse(
+      new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome)).andThen(
+      new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
+    );
+
     //operator
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
       new InstantCommand(()->  m_algae.setReference(AlgaeConstants.kReverse))
@@ -129,11 +150,6 @@ public class RobotContainer {
     m_operatorController.x().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2))
-        ,new ConditionalCommand(
-            new InstantCommand(),
-            new PrintCommand("I hate ur code"),
-            ()-> GlobalVariables.m_algaeExceptionMode
-        )
         ,new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
         )
     );

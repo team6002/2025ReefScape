@@ -406,19 +406,24 @@ public final class Constants {
 
   public static final class GroundPivotConstants{
     public static final boolean kInverted = false;
-    public static final double kP = 0.0;
+    public static final double kP = 0.3;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kV = 0.0;
-    public static final double kG = 0.0;
+    public static final double kV = .8;
+    public static final double kG = 0.2;
     public static final double kS = 0.0;
     public static final double kConversionFactor = 2*Math.PI;
-    public static final double kMaxVel = Math.toRadians(90);
-    public static final double kMaxAccel = Math.toRadians(90);
+    public static final double kOffset = Math.toRadians(-33);
+    public static final double kMaxVel = Math.toRadians(1440);
+    public static final double kMaxAccel = Math.toRadians(1440);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kTolerance = 5;
+
+    public static final double kHome = Math.toRadians(125);
+    public static final double kIntake = Math.toRadians(240);
+    public static final double kDeploy = Math.toRadians(140);
   }
 
   public static final class GroundIntakeConstants{
@@ -431,10 +436,10 @@ public final class Constants {
     public static final boolean kInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 4;
+    public static final double kIntake = 6;
     public static final double kOff = 0;
-    public static final double kReverse = -5;
-    public static final double kHolding = .5;
+    public static final double kReverse = -3.5;
+    public static final double kHolding = .75;
   }
 
   public static final class LocationConstants{}

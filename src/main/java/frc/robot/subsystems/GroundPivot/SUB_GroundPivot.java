@@ -45,7 +45,7 @@ public class SUB_GroundPivot extends SubsystemBase{
     @Override
     public void periodic(){
       io.updateInputs(inputs);
-      Logger.processInputs("Wrist", inputs);
+      Logger.processInputs("GroundPivot", inputs);
       io.PID();
     }
 }
