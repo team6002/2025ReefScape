@@ -248,6 +248,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       public Pose2d getOdometry(){
         // Pose2d currentPose;
         if (currentOdometry == 2){
+          // return QuestNavIO.getRobotPose();
           return questimetry.getEstimatedPosition();
         }if (currentOdometry == 1 ) {
           return m_odometry.getEstimatedPosition();
@@ -311,7 +312,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         m_vision.updateInputs();
         if (QuestNavIO.connected()){
           addQuestMeasurement(QuestNavIO.getRobotPose()
-            ,Timer.getFPGATimestamp()
+            ,Timer.getFPGATimestamp()-.04
             // ,QuestNavIO.timestamp()
           );
         }
