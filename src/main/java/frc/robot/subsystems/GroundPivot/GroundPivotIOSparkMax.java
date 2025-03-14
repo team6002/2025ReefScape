@@ -101,6 +101,6 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
         m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
         m_goal = m_setpoint;
         m_groundPivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition() + GroundPivotConstants.kOffset, m_setpoint.velocity));
     }
 }

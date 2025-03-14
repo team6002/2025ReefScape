@@ -80,6 +80,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
+    m_robotContainer.m_groundPivot.reset();
   }
 
   /**
@@ -124,6 +125,7 @@ public class Robot extends LoggedRobot {
     m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
+    m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
     m_robotContainer.m_drivetrain.questNavReset();
 
@@ -146,6 +148,7 @@ public class Robot extends LoggedRobot {
     m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_wrist.reset();
+    m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

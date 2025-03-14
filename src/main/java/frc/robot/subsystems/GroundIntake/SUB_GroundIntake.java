@@ -32,7 +32,7 @@ public class SUB_GroundIntake extends SubsystemBase{
     public void periodic(){
       io.updateInputs(inputs);
       io.PID();
-      Logger.processInputs("CoralHolder", inputs);
+      Logger.processInputs("GroundIntake", inputs);
 
       SmartDashboard.putNumber("intake speed", getVelocity());
       SmartDashboard.putNumber("intake goal", getReference());
