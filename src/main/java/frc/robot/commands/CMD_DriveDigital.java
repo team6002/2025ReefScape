@@ -61,7 +61,7 @@ public class CMD_DriveDigital extends Command {
 
   @Override
     public boolean isFinished(){
-        return timer.advanceIfElapsed(.15);
+        return timer.advanceIfElapsed(.1);
     }
 
 }
