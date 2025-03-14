@@ -26,24 +26,24 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
               p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
-            ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.1)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
-              ,new SequentialCommandGroup(
-                new CMD_ReadyIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake)
-                ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
-              )
-            )
-            ,new CMD_IntakeStow(p_intake).withTimeout(10)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath("BlueLeftTrio3")
-              ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
-            )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
-            ,new CMD_DeployLevelFour(p_intake, p_wrist)
+            // ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
+            // ,new CMD_DeployLevelFour(p_intake, p_wrist)
+            // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            // ,new WaitCommand(.1)
+            // ,new ParallelCommandGroup(
+            //   p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
+            //   ,new SequentialCommandGroup(
+            //     new CMD_ReadyIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake)
+            //     ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
+            //   )
+            // )
+            // ,new CMD_IntakeStow(p_intake).withTimeout(10)
+            // ,new ParallelCommandGroup(
+            //   p_drivetrain.FollowPath("BlueLeftTrio3")
+            //   ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
+            // )
+            // ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
+            // ,new CMD_DeployLevelFour(p_intake, p_wrist)
             // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
             // ,new WaitCommand(.1)
             // ,new ParallelCommandGroup(

@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.97);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.986);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -367,7 +367,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(37);//43
+    public static final double kDeployl4 = Math.toRadians(33);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(36);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
@@ -450,9 +450,9 @@ public final class Constants {
     public static final String kTopCameraName = "TopCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-11), Units.inchesToMeters(10.5)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(35)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(11), Units.inchesToMeters(10.5)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-15)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(-35)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -487,7 +487,7 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 

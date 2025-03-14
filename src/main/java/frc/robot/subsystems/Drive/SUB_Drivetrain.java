@@ -248,6 +248,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       public Pose2d getOdometry(){
         // Pose2d currentPose;
         if (currentOdometry == 2){
+          // return QuestNavIO.getRobotPose();
           return questimetry.getEstimatedPosition();
         }if (currentOdometry == 1 ) {
           return m_odometry.getEstimatedPosition();
@@ -311,10 +312,11 @@ public class SUB_Drivetrain extends SubsystemBase {
         m_vision.updateInputs();
         if (QuestNavIO.connected()){
           addQuestMeasurement(QuestNavIO.getRobotPose()
-            ,Timer.getFPGATimestamp()
+            ,Timer.getFPGATimestamp()-.04
             // ,QuestNavIO.timestamp()
           );
         }
+        
         LvisionEst.ifPresent(
           est -> {
             var estPose = est.estimatedPose.toPose2d();
@@ -322,16 +324,16 @@ public class SUB_Drivetrain extends SubsystemBase {
               // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
             var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-            if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            }
+            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            // }
             if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
               Logger.recordOutput("LCameraPose", estPose);
             }
             // Change our trust in the measurement based on the tags we can see
             
-              // addVisionMeasurement(
-              //   est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+              addVisionMeasurement(
+                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02, estStdDevs);
           }
         );
     
@@ -342,9 +344,9 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
             var estStdDevs = m_vision.getREstimationStdDevs(estPose);
-            if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            }
+            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            // }
             if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
               Logger.recordOutput("RCameraPose", estPose);
             }
@@ -352,8 +354,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
           
-              // addVisionMeasurement(
-              //   est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+              addVisionMeasurement(
+                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02 , estStdDevs);
           
           }  
         );
@@ -654,9 +656,6 @@ public class SUB_Drivetrain extends SubsystemBase {
       public void addVisionMeasurement(
               Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
           //uses navx instead of camera vision.
-          if (visionMeasurement.equals(null)){
-            return;
-          }
           try {
           visionMeasurement.getRotation();
           m_cameraRotation = Rotation2d.k180deg;

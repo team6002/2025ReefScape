@@ -17,6 +17,7 @@ public class CMD_AutoClimb extends Command{
         m_winch = p_winch;
         m_driverController = p_driverController;
         addRequirements(m_drivetrain);
+        isFinshed = false;
     }
 
     @Override
@@ -26,17 +27,18 @@ public class CMD_AutoClimb extends Command{
 
     @Override
     public void execute(){
-        m_drivetrain.drive(.3, 0, 0, false);
-        if(Math.abs(m_drivetrain.getPitch()) > 10);// || m_driverController.a().getAsBoolean())
+        m_drivetrain.drive(.15, 0, 0, false);
+        if(Math.abs(m_drivetrain.getPitch()) > 10 || m_driverController.a().getAsBoolean())
         {
             m_drivetrain.drive(0, 0, 0, false);
-            new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb));
+            m_winch.setReference(WinchConstants.kClimb);
             isFinshed = true;
         }
     }
 
     @Override
     public boolean isFinished(){
-        return isFinshed || Math.abs(m_driverController.getLeftX()) > .1 || Math.abs(m_driverController.getLeftY()) > .1 || Math.abs(m_driverController.getRightX()) > .1;
+        return isFinshed
+         || Math.abs(m_driverController.getLeftX()) > .1 || Math.abs(m_driverController.getLeftY()) > .1 || Math.abs(m_driverController.getRightX()) > .1;
     }
 }
