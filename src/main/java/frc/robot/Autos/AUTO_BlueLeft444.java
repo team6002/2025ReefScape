@@ -1,6 +1,5 @@
 package frc.robot.Autos;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -27,10 +26,10 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
               p_drivetrain.FollowPathFlipped(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
+            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(2)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.1)
+            ,new WaitCommand(.5)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped(AutoConstants.BlueLeft2)
               ,new SequentialCommandGroup(
@@ -38,15 +37,19 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
             )
-            ,new CMD_IntakeStow(p_intake).withTimeout(5)
+            ,new ParallelCommandGroup(
+              new CMD_IntakeStow(p_intake).withTimeout(10)
+              ,new CMD_DriveForwards(p_drivetrain, 0)
+            )
+            ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped("BlueLeftTrio3"), p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio3")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
+            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(2)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.1)
+            ,new WaitCommand(.5)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio4")
               ,new SequentialCommandGroup(
@@ -54,31 +57,38 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
                 ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
               )
             )
-            ,new CMD_IntakeStow(p_intake).withTimeout(5)
+            ,new ParallelCommandGroup(
+              new CMD_IntakeStow(p_intake).withTimeout(10)
+              ,new CMD_DriveForwards(p_drivetrain, 0)
+            )
+            ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped("BlueLeftTrio5"), p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio5")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision)
+            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(2)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            // ,new ParallelCommandGroup(
-            //   p_drivetrain.FollowPathFlipped("BlueLeftTrio6")
-            //   ,new SequentialCommandGroup(
-            //     new CMD_ReadyIntake(p_elevator, p_wrist, p_pivot, p_intake)
-            //     ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
-            //   )
-            // )
-            // ,new CMD_IntakeStow(p_intake).withTimeout(5)
-            // ,new ParallelCommandGroup(
-            //   p_drivetrain.FollowPathFlipped("BlueLeftTrio7")
-            //   ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_wrist, p_pivot)
-            // )
-            // ,new CMD_DeployLevelTwo(p_intake, p_wrist)
-            // ,new InstantCommand(()-> p_drivetrain.setHeading(
-            //     new Rotation2d(Math.toRadians(p_drivetrain.getAngle())).plus(new Rotation2d(Math.PI)).getDegrees()
-            // ))
-            // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
-            ///////// ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
+            ,new ParallelCommandGroup(
+              p_drivetrain.FollowPathFlipped("BlueLeftTrio6")
+              ,new SequentialCommandGroup(
+                new CMD_ReadyIntake(p_elevator, p_wrist, p_pivot, p_intake)
+                ,new CMD_ReadyToIntake(p_elevator, p_wrist, p_pivot, p_intake)
+              )
+            )
+            // ,new CMD_DriveForwards(p_drivetrain, 0)
+            ,new ParallelCommandGroup(
+              new CMD_IntakeStow(p_intake).withTimeout(10)
+              ,new CMD_DriveForwards(p_drivetrain, 0)
+            )
+            ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped("BlueLeftTrio7"), p_drivetrain)
+            ,new ParallelCommandGroup(
+              p_drivetrain.FollowPathFlipped("BlueLeftTrio7")
+              ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_wrist, p_pivot)
+            )
+            ,new CMD_DeployLevelTwo(p_intake, p_wrist)
+
+            ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
+            /////// ,new CMD_Ready(p_elevator, p_wrist, p_pivot, p_intake)
         );
     }
 }

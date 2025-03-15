@@ -92,10 +92,11 @@ public class RobotContainer {
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     m_driverController.back().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
 
-    m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch));
+    m_driverController.start().onTrue(new CMD_SetReadyClimb(m_pivot, m_wrist, m_elevator, m_winch, m_groundPivot));
     m_driverController.y().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
     // m_driverController.povRight().onTrue(new InstantCommand(()-> m_pivot.setGoal(PivotConstants.kClimb)));
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
+    m_driverController.povRight().onTrue(new CMD_DeployGroundPivot(m_groundPivot, m_pivot));
     m_driverController.povDown().onTrue(new CMD_Home(m_elevator, m_coralIntake, m_wrist, m_pivot, m_algae).andThen(new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))));
     
     m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));

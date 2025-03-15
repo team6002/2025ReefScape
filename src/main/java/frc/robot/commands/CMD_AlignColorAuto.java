@@ -103,6 +103,9 @@ public class CMD_AlignColorAuto extends Command{
 
     turnController.enableContinuousInput(-180, 180);
     
+    if (Math.abs(m_vision.getTcameraYaw()) <= 3.5){
+      end = true;
+    }
   }
 
   @Override
@@ -128,10 +131,10 @@ public class CMD_AlignColorAuto extends Command{
     }
     }else{
       m_timer.start();
-      if (m_timer.get() >= .2){
+      if (m_timer.get() >= .4){
         turnSpeed = .1;
       }else {
-        if (m_timer.get() >= .4){
+        if (m_timer.get() >= .8){
           m_timer.reset();
         }
         turnSpeed = -.1;

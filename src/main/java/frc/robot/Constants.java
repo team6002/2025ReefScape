@@ -327,7 +327,7 @@ public final class Constants {
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 22;//19
     public static final double kDeployl4Exception = 67.5;//68
-    public static final double kDeployBarge = 67.5;
+    public static final double kDeployBarge = 68;
   }
 
   public static final class WristConstants{
@@ -367,7 +367,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(33);//43
+    public static final double kDeployl4 = Math.toRadians(36);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(36);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
