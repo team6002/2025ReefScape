@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 
 public class CMD_GroundPivotInPosition extends Command{
-    SUB_GroundPivot m_GroundPivot;
-    public CMD_GroundPivotInPosition(SUB_GroundPivot p_GroundPivot){
-        m_GroundPivot = p_GroundPivot;
+    private final SUB_GroundPivot m_groundPivot;
+    public CMD_GroundPivotInPosition(SUB_GroundPivot p_groundPivot){
+        m_groundPivot = p_groundPivot;
     }
 
     @Override
     public boolean isFinished(){
-        return m_GroundPivot.inPosition();
+        return m_groundPivot.inPosition();
     }
 }
