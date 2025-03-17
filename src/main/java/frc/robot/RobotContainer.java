@@ -119,7 +119,7 @@ public class RobotContainer {
       )
     );
 
-    m_driverController.leftBumper().onChange(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
+    // m_driverController.leftBumper().onChange(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
 
     // m_driverController.leftTrigger().onTrue(
     //   new SequentialCommandGroup(
