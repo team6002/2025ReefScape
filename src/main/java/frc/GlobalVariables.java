@@ -17,6 +17,7 @@ public class GlobalVariables extends SubsystemBase{
     public static boolean m_algaeExceptionMode = false;
     public static boolean lvl3AlgaeException = false;
     public static boolean m_intakingAlgae = false;
+    public static boolean m_groundPivotDeployed = false;
 
     public enum RobotState{
         HOME

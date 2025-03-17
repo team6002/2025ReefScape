@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.97,
-        "y": 2.79
+        "x": 4.03,
+        "y": 2.87
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.3710925157245075,
-        "y": 3.136445946476195
+        "x": 4.431092515724507,
+        "y": 3.216445946476195
       },
       "isLocked": false,
       "linkedName": "LeftTrio3"

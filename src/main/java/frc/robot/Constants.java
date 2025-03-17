@@ -238,7 +238,8 @@ public final class Constants {
     public static final double kIntake = 4;//6;
     public static final double kOff = 0;
     public static final double kReverse = -5;//-2500
-    public static final double kReverseLvl4 = -7;//-2500
+    public static final double kReverseLVl2 = -3;//-2500
+    public static final double kReverseLvl4 = -6;//-2500
     public static final double kReverseSlow = -4;
     public static final double kHolding = .5;
   }
@@ -270,12 +271,12 @@ public final class Constants {
     public static final double kClimb = Math.toRadians(100);
     public static final double kReadyAlgae = Math.toRadians(50);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
-    public static final double kReadyAlgael3 = Math.toRadians(73);
+    public static final double kReadyAlgael3 = Math.toRadians(78);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(86);
     public static final double kReadyToScore = Math.toRadians(82);
     public static final double kAlgaeProcessor = Math.toRadians(20);
     public static final double kAlgaeCoral = Math.toRadians(65);
-    public static final double kIntake = Math.toRadians(60);//61
+    public static final double kIntake = Math.toRadians(61);//61
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
     public static final double kIntakeAlgaeGround = Math.toRadians(30.0);
@@ -321,13 +322,13 @@ public final class Constants {
     public static final double kIntakeAlgaeGround = 8.5;
     public static final double kDeployL1 = 19;
     public static final double kDeployL2 = 0;
-    public static final double kDeployL3 = 23.5;//28
-    public static final double kDeployL4 = 69;//68
+    public static final double kDeployL3 = 22.5;//28
+    public static final double kDeployL4 = 67;//68
     public static final double kDeployl1Exception = 16;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 22;//19
     public static final double kDeployl4Exception = 67.5;//68
-    public static final double kDeployBarge = 68;
+    public static final double kDeployBarge = 67;
   }
 
   public static final class WristConstants{
@@ -396,7 +397,7 @@ public final class Constants {
 
     public static final double kIntake = 5;
     public static final double kOff = 0;
-    public static final double kHolding = .75;
+    public static final double kHolding = 2;
     public static final double kReverse = -10;
 
     //l2, l3, barge, off coral, ground, processor
@@ -436,7 +437,7 @@ public final class Constants {
     public static final boolean kInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 6;
+    public static final double kIntake = 8;
     public static final double kOff = 0;
     public static final double kReverse = -3.5;
     public static final double kHolding = .75;

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
@@ -58,8 +59,10 @@ public class CMD_Score extends Command{
                             ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                         )
                         ,new SequentialCommandGroup(
-                            new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
-                            ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
+                            new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
+                            ,new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                            ,new CMD_Score(m_elevator, m_wrist, 
+                            m_intake, m_pivot, m_algae, m_variables)
                         )
                         ,()-> GlobalVariables.m_haveCoral
                     )

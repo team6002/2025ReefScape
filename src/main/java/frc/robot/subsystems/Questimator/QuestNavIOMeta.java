@@ -33,7 +33,8 @@ public class QuestNavIOMeta implements QuestNavIO{
   private Pose2d resetPosition = new Pose2d();
   private Pose2d resetPositionOculus = new Pose2d();
   private Pose2d resetPositionRobot = new Pose2d();
-  private double postitionMod = 1.036;
+  private double postitionModX = 1.046;//1.036;
+  private double postitionModY = 1.069;//1.036;
 
   private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(3.5),Units.inchesToMeters(-7), new Rotation2d(-Math.PI/2));
   // private Transform2d kRobotToQuest = new Transform2d(0.06,-0.22, new Rotation2d(-Math.PI/2));
@@ -51,7 +52,7 @@ public class QuestNavIOMeta implements QuestNavIO{
 
   @Override
   public Pose2d getRobotPose(){
-    Pose2d translationPose = new Pose2d(getQuestPose().getX() * postitionMod, getQuestPose().getY(), new Rotation2d());
+    Pose2d translationPose = new Pose2d(getQuestPose().getX() * postitionModX, getQuestPose().getY() * postitionModY, new Rotation2d());
     return new Pose2d(translationPose.getTranslation(), getQuestPose().getRotation()).transformBy(kRobotToQuest.inverse());
     // (getPose().getX() - Units.inchesToMeters(8) * Math.cos())
   }
@@ -119,7 +120,7 @@ public class QuestNavIOMeta implements QuestNavIO{
     // var transformationerToCenter = (newPose.minus(new Pose2d(.03, .17, new Rotation2d()))); 
     // var reseterPose = new Pose2d (transformationerToCenter.getX(), transformationerToCenter.getY(), transformationerToCenter.getRotation());
     // resetPositionRobot = reseterPose;
-    Pose2d translationPose = new Pose2d(newPose.getX()/postitionMod, newPose.getY(), new Rotation2d());
+    Pose2d translationPose = new Pose2d(newPose.getX()/postitionModX, newPose.getY()/postitionModY, new Rotation2d());
     resetPositionRobot = new Pose2d(translationPose.getTranslation(), newPose.getRotation());
 
   }

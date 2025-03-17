@@ -559,8 +559,8 @@ public class SUB_Drivetrain extends SubsystemBase {
       // /** Zeroes the heading of the robot. LOL*/
       public void zeroHeading() {
         gyroIO.reset();
-        QuestNavIO.resetPose(new Pose2d(0, 0, new Rotation2d()));
-        // QuestNavIO.zeroHeading();
+        // QuestNavIO.resetPose(new Pose2d(0, 0, new Rotation2d()));
+        QuestNavIO.zeroHeading();
       }
     
       // public Command CMDzeroHeading() {

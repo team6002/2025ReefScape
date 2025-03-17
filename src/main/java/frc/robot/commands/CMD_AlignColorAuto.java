@@ -125,16 +125,16 @@ public class CMD_AlignColorAuto extends Command{
     if (m_vision.getTcameraYaw() != Double.MAX_VALUE){
     try { 
         m_timer.stop();
-        turnSpeed = Math.copySign(.05, -m_vision.getTcameraYaw());
+        turnSpeed = Math.copySign(.1, -m_vision.getTcameraYaw());
         // turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTcameraYaw()), -.1, .1);
     } catch (Exception e) {
     }
     }else{
       m_timer.start();
-      if (m_timer.get() >= .4){
+      if (m_timer.get() >= .8){
         turnSpeed = .1;
       }else {
-        if (m_timer.get() >= .8){
+        if (m_timer.get() >= 1.6){
           m_timer.reset();
         }
         turnSpeed = -.1;

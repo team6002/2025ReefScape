@@ -320,6 +320,9 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
+        // if (getTcameraYaw == Double.MAX_VALUE){
+        inputs.TCameraYaw = getTcameraYaw();
+        // }
         if (LCamera.getLatestResult().hasTargets()){
             inputs.LTargetPose = getTargetLPose();
             // .plus(new Transform3d (new Translation3d(VisionConstants.kRobotToLCam.getX(), -VisionConstants.kRobotToLCam.getY(), -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));

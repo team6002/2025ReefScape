@@ -30,6 +30,10 @@ public class CMD_AlgaeTrigger extends Command{
         }else{
             m_triggerTimer.reset();
         }
+
+        if (m_algae.getVelocity() < 3){
+            isFinished = true;
+        }
     }
 
     @Override
