@@ -263,6 +263,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("gyroHeading", getAngle());
         var LvisionEst = m_vision.getLEstimatedGlobalPose();
         var RvisionEst = m_vision.getREstimatedGlobalPose();
+        m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
       
         // Update the odometry in the periodic block
         gyroIO.updateInputs(gyroInputs);
@@ -319,7 +320,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         
         LvisionEst.ifPresent(
           est -> {
-            var estPose = est.estimatedPose.toPose2d();
+            var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
             
               // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
@@ -339,7 +340,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     
         RvisionEst.ifPresent(
           est -> {
-            var estPose = est.estimatedPose.toPose2d();
+            var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
             // estPose = m_vision.getREstimatedGlobalPose();
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());

@@ -27,9 +27,13 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.robot.Constants.VisionConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 import java.util.Optional;
@@ -131,4 +135,37 @@ public class SUB_Vision {
         return io.getTargetRPose();
         // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }
+
+    public void setRobotRotation(Rotation2d robotRotation){
+        io.setRobotRotation(robotRotation);
+    }
+    public Pose3d getLPose(Pose2d actualRobotPose){
+        var possiblePoses = io.retrieveSingleTagEstimates(io.getLCamResult(), VisionConstants.kRobotToLCam);
+        var ClosestPose = selectClosestPose(possiblePoses, actualRobotPose);
+        return ClosestPose;
+    } 
+
+    public Pose3d getRPose(Pose2d actualRobotPose){
+        var possiblePoses = io.retrieveSingleTagEstimates(io.getRCamResult(), VisionConstants.kRobotToRCam);
+        var ClosestPose = selectClosestPose(possiblePoses, actualRobotPose);
+        return ClosestPose;
+    } 
+
+    private Pose3d selectClosestPose(Pose3d[] fieldSpaceRobotPoses, Pose2d actualRobotPose) {
+        // Get the distance closest to the current robot pose if multiple poses are determined for a
+        // camera
+        double minDistance = Double.POSITIVE_INFINITY;
+        Pose3d selectedPose = null;
+        Pose3d actualRobotPose3d = new Pose3d(actualRobotPose);
+
+        for (Pose3d fieldSpaceRobotPose : fieldSpaceRobotPoses) {
+            double distance = fieldSpaceRobotPose.getTranslation().getDistance(actualRobotPose3d.getTranslation());
+            if (distance < minDistance) {
+                minDistance = distance;
+                selectedPose = fieldSpaceRobotPose;
+            }
+        }
+        return selectedPose;
+    }
+
 }
