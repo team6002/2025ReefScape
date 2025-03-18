@@ -37,11 +37,13 @@ public class CMD_Algae extends Command{
     @Override
     public void initialize(){
         //allows for switching from level 2 -> 3 as well as manually stopping intaking
-        if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
+        if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() != m_lastTarget){
             GlobalVariables.m_intakingAlgae = false;
         }
-        else if(GlobalVariables.m_intakingAlgae){
+        
+        if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
             m_variables.setRobotState(RobotState.HOME);
+            GlobalVariables.m_haveAlgae = false;
             new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables).schedule();
             return;
         }
