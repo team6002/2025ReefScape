@@ -16,11 +16,15 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.VisionConstants;
 
 import static edu.wpi.first.units.Units.Value;
@@ -49,6 +53,8 @@ public class VisionIOPhoton implements VisionIO{
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToRCam);
     private final PhotonPoseEstimator RphotonEstimatorLast = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.CLOSEST_TO_LAST_POSE, VisionConstants.kRobotToRCam);
+
+    TimeInterpolatableBuffer<Rotation2d> rotationBuffer = TimeInterpolatableBuffer.createBuffer(1.5);
 
     public void setCameraPipeline(int LPipeline, int RPipeline){
         LCamera.setPipelineIndex(LPipeline);
@@ -335,6 +341,87 @@ public class VisionIOPhoton implements VisionIO{
         }
         inputs.RTarget = RCamera.getLatestResult().hasTargets();   
         
+    }
+
+    public PhotonPipelineResult getLCamResult(){
+        return LCamera.getLatestResult();
+    }
+
+    public PhotonPipelineResult getRCamResult(){
+        return RCamera.getLatestResult();
+    }
+     /**
+     * Pass the robot rotation that is measured with the IMU to the vision system This should be updated every loop
+     *
+     * @param robotRotation Actual rotation of the robot
+     */
+    @Override
+    public void setRobotRotation(Rotation2d robotRotation) {
+        // Put the rotation in a buffer
+        rotationBuffer.addSample(RobotController.getFPGATime() / 1e6, robotRotation);
+    }
+
+    /**
+     * Determine several options for the robot pose in field space when only 1 tag is visible This algorithm will
+     * discard the rotation of the tag and use the robot rotation instead for improved accuracy
+     *
+     * @param latestResult latest PhotonPipelineResult
+     * @return Array with possible robot poses in field space
+     */
+    public Pose3d[] retrieveSingleTagEstimates(PhotonPipelineResult latestResult, Transform3d CameraToRobot) {
+        Pose3d[] possibleRobotposes = new Pose3d[2];
+        PhotonTrackedTarget target = latestResult.getBestTarget();
+
+        // Only proceed if the target can be found in the april tag field layout
+        // and the robot rotation can be retrieved at the time that the result was determined
+        Optional<Pose3d> tagPoseOptional = VisionConstants.kTagLayout.getTagPose(target.getFiducialId());
+        Optional<Rotation2d> robotRotationOptional = rotationBuffer.getSample(latestResult.getTimestampSeconds());
+        if (tagPoseOptional.isPresent() && robotRotationOptional.isPresent()) {
+            Pose3d tagPose = tagPoseOptional.get();
+            Rotation3d tagRotation = tagPose.getRotation();
+            Rotation2d robotRotation = robotRotationOptional.get();
+
+            // Now convert robot rotation to Rotation3d and subtract it from the tag pose to get the
+            // relative rotation between robot and target
+            Rotation3d robotToTargetRot = tagRotation.minus(new Rotation3d(0, 0, robotRotation.getRadians()));
+            // Now we can include the rotation between the camera and the robot
+            Rotation3d cameraToTargetRot = robotToTargetRot.plus(CameraToRobot.getRotation());
+
+            // Now we can combine the rotation of the robot with the translation determined by the
+            // camera
+            Transform3d[] camToTargetOptions = {
+                new Transform3d(target.getBestCameraToTarget().getTranslation(), cameraToTargetRot),
+                new Transform3d(target.getAlternateCameraToTarget().getTranslation(), cameraToTargetRot)
+            };
+
+            for (int i = 0; i < camToTargetOptions.length; i++) {
+                Transform3d camToTarget = camToTargetOptions[i];
+                possibleRobotposes[i] =
+                        PhotonUtils.estimateFieldToRobotAprilTag(camToTarget, tagPose, CameraToRobot);
+            }
+            // logRotationDiff(tagPose.plus(target.getBestCameraToTarget().inverse()));
+        }
+        return possibleRobotposes;
+    }
+
+    /**
+     * Determine several options for the robot pose in field space when multiple tags are visible
+     *
+     * @param latestResult latest PhotonPipelineResult
+     * @return Array with possible robot poses in field space
+     */
+    public Pose3d[] retrieveMultiTagEstimates(PhotonPipelineResult latestResult, Transform3d CameraToRobot) {
+        // Retrieve the camera pose in field space represented as transform
+        Transform3d bestMultiPose = latestResult.getMultiTagResult().get().estimatedPose.best;
+        Transform3d alternateMultiPose = latestResult.getMultiTagResult().get().estimatedPose.alt;
+
+        // logRotationDiff(new Pose3d().transformBy(bestMultiPose));
+
+        // Convert to field space robot pose and return
+        return new Pose3d[] {
+            new Pose3d().transformBy(bestMultiPose).transformBy(CameraToRobot),
+            new Pose3d().transformBy(alternateMultiPose).transformBy(CameraToRobot)
+        };
     }
 
        

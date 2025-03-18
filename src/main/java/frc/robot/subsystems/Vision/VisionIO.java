@@ -15,6 +15,8 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -24,6 +26,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public interface VisionIO {
@@ -55,5 +58,12 @@ public interface VisionIO {
     public default void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){}
     public default void setLastLPose(Pose2d lastpose){};
     public default void setLastRPose(Pose2d lastpose){};
+    public default void setRobotRotation(Rotation2d robotRotation) {}
+    public default Pose3d[] retrieveMultiTagEstimates(PhotonPipelineResult latestResult, Transform3d CameraToRobot) {return null;}
+    public default Pose3d[] retrieveSingleTagEstimates(PhotonPipelineResult latestResult, Transform3d CameraToRobot) {return null;}
+    public default PhotonPipelineResult getLCamResult(){return null;}
+    public default PhotonPipelineResult getRCamResult(){return null;}
+    
+    
   
 }
