@@ -22,6 +22,7 @@ public class CMD_Algae extends Command{
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
     private boolean m_deployingAlgae = false;
+    private AlgaeTarget m_lastTarget = AlgaeTarget.LEVEL_2;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){
         m_wrist = p_wrist;
@@ -30,15 +31,28 @@ public class CMD_Algae extends Command{
         m_algae = p_algae;
         m_intake = p_intake;
         m_variables = p_variales;
+        addRequirements(m_algae);
     }
 
     @Override
     public void initialize(){
-        if(GlobalVariables.m_haveAlgae && m_deployingAlgae){
+        //allows for switching from level 2 -> 3 as well as manually stopping intaking
+        if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
+            GlobalVariables.m_intakingAlgae = false;
+        }
+        else if(GlobalVariables.m_intakingAlgae){
+            m_variables.setRobotState(RobotState.HOME);
+            new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables).schedule();
+            return;
+        }
+
+        //if ready to deploy, shoot, and go back to intake coral
+        if(m_deployingAlgae){
+            m_deployingAlgae = false;
+            GlobalVariables.m_haveAlgae = false;
+            m_lastTarget = null;
             new SequentialCommandGroup(
-                new InstantCommand(()-> m_deployingAlgae = false)
-                ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
-                ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
+                new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
                 ,new CMD_CheckCoral(m_intake)
                 ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
@@ -47,13 +61,43 @@ public class CMD_Algae extends Command{
             return;
         }
 
-        if(GlobalVariables.m_haveAlgae){
-            m_deployingAlgae = true;
-            new ConditionalCommand(
-                new CMD_ReadyToDeployBarge(m_wrist, m_pivot, m_elevator)
-                ,new CMD_ReadyToDeployProcessor(m_elevator, m_wrist, m_pivot)
-                ,()-> m_variables.getAlgaeTarget() == AlgaeTarget.BARGE).schedule();
-            return;
+        switch (m_variables.getAlgaeTarget()) {
+            case LEVEL_2:
+                GlobalVariables.m_intakingAlgae = true;
+                m_deployingAlgae = false;
+                m_lastTarget = AlgaeTarget.LEVEL_2;
+                new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_intake, m_variables).schedule();
+                break;
+            case LEVEL_3:
+                GlobalVariables.m_intakingAlgae = true;
+                m_deployingAlgae = false;
+                m_lastTarget = AlgaeTarget.LEVEL_3;
+                new ConditionalCommand(
+                    new InstantCommand(()-> GlobalVariables.lvl3AlgaeException = true).andThen(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2))
+                    ,new CMD_AlgaeLevelThree(m_intake, m_wrist, m_algae, m_elevator, m_variables, m_pivot)
+                    ,()-> GlobalVariables.m_algaeExceptionMode
+                ).schedule();   
+                break;
+            case GROUND:
+                GlobalVariables.m_intakingAlgae = true;
+                m_deployingAlgae = false;
+                m_lastTarget = AlgaeTarget.GROUND;
+                new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_intake, m_variables).schedule();
+                break;
+            case BARGE:
+                m_deployingAlgae = true;
+                GlobalVariables.m_intakingAlgae = false;
+                m_lastTarget = AlgaeTarget.BARGE;
+                new CMD_ReadyToDeployBarge(m_wrist, m_pivot, m_elevator).schedule();
+                break;
+            case PROCESSOR:
+                m_deployingAlgae = true;
+                GlobalVariables.m_intakingAlgae = false;
+                m_lastTarget = AlgaeTarget.PROCESSOR;
+                new CMD_ReadyToDeployProcessor(m_elevator, m_wrist, m_pivot).schedule();
+                break;
+            default:
+                break;
         }
     }
 

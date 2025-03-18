@@ -19,6 +19,7 @@ public class CMD_SetReadyIntakeAlgaeGround extends SequentialCommandGroup{
     
     public CMD_SetReadyIntakeAlgaeGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Algae p_algae,
         SUB_CoralHolder p_intake, GlobalVariables p_variables){
+        addRequirements(p_algae);
         addCommands(
             new ParallelCommandGroup(
                 //normal algae ground sequence

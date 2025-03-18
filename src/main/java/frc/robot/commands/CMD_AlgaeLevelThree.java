@@ -14,6 +14,7 @@ import frc.robot.subsystems.Wrist.SUB_Wrist;
 public class CMD_AlgaeLevelThree extends SequentialCommandGroup{
     public CMD_AlgaeLevelThree(SUB_CoralHolder p_intake, SUB_Wrist p_wrist, SUB_Algae p_algae,
         SUB_Elevator p_elevator, GlobalVariables p_variables, SUB_Pivot p_pivot){
+        addRequirements(p_algae);
         addCommands(
             new InstantCommand(()-> GlobalVariables.m_intakingAlgae = true)
             ,new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_intake, p_variables)

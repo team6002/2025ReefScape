@@ -159,17 +159,14 @@ public class RobotContainer {
     m_operatorController.x().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2))
-        ,new CMD_AlgaeLevelTwo(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables).until(()-> m_operatorController.y().getAsBoolean())
+        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
         )
     );
     m_operatorController.y().onTrue(
       new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_3))
-        ,new ConditionalCommand(
-          new InstantCommand(()-> GlobalVariables.lvl3AlgaeException = true).andThen(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 2))
-          ,new CMD_AlgaeLevelThree(m_coralIntake, m_wrist, m_algae, m_elevator, m_variables, m_pivot).until(()-> m_operatorController.x().getAsBoolean())
-          ,()-> GlobalVariables.m_algaeExceptionMode)
-        )    
+        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
+      )
     );
     m_operatorController.rightStick().onTrue(
       new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_coralIntake, m_variables)

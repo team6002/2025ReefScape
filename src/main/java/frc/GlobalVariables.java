@@ -66,13 +66,13 @@ public class GlobalVariables extends SubsystemBase{
 
     @Override
     public void periodic(){
-        Logger.recordOutput("robotState", getRobotState());
-        Logger.recordOutput("algaeTarget", getAlgaeTarget());
-        Logger.recordOutput("haveAlgae", m_haveAlgae);
-        Logger.recordOutput("haveCoral", m_haveCoral);
-        Logger.recordOutput("targetCoralLevel", m_targetCoralLevel);
-        Logger.recordOutput("exceptionMode", m_algaeExceptionMode);
-        Logger.recordOutput("Lvl3AlgaeExcept", lvl3AlgaeException);
-        Logger.recordOutput("intaking algae", m_intakingAlgae);
+        Logger.recordOutput("GlobalVariables/robotState", getRobotState());
+        Logger.recordOutput("GlobalVariables/algaeTarget", getAlgaeTarget());
+        Logger.recordOutput("GlobalVariables/haveAlgae", m_haveAlgae);
+        Logger.recordOutput("GlobalVariables/haveCoral", m_haveCoral);
+        Logger.recordOutput("GlobalVariables/targetCoralLevel", m_targetCoralLevel);
+        Logger.recordOutput("GlobalVariables/exceptionMode", m_algaeExceptionMode);
+        Logger.recordOutput("GlobalVariables/Lvl3AlgaeExcept", lvl3AlgaeException);
+        Logger.recordOutput("GlobalVariables/intaking algae", m_intakingAlgae);
     }
 }
