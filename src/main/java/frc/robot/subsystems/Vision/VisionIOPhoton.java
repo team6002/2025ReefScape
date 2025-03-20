@@ -27,8 +27,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.VisionConstants;
 
-import static edu.wpi.first.units.Units.Value;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

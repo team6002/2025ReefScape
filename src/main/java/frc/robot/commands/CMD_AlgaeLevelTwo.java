@@ -19,8 +19,7 @@ public class CMD_AlgaeLevelTwo extends SequentialCommandGroup{
             SUB_CoralHolder p_coralIntake, GlobalVariables p_variables) {
         addRequirements(p_algae);
         addCommands(
-            new InstantCommand(()-> GlobalVariables.m_intakingAlgae = true)
-            ,new CMD_ReadyToIntakeAlgaeTwo(p_wrist, p_pivot, p_elevator, p_algae, p_coralIntake, p_variables)
+            new CMD_ReadyToIntakeAlgaeTwo(p_wrist, p_pivot, p_elevator, p_algae, p_coralIntake, p_variables)
             ,new ConditionalCommand(
                 new PrintCommand("I still hate ur code"),
                 new SequentialCommandGroup(

@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,8 +24,8 @@ public class CMD_Algae extends Command{
     private final SUB_Algae m_algae;
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
-    private boolean m_deployingAlgae = false;
-    private AlgaeTarget m_lastTarget = null;
+    private boolean m_deployingAlgae;
+    private AlgaeTarget m_lastTarget;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){
         m_wrist = p_wrist;
@@ -107,5 +109,10 @@ public class CMD_Algae extends Command{
     @Override
     public boolean isFinished(){
         return true;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        Logger.recordOutput("lastAlgaeTarget", m_lastTarget);
     }
 }

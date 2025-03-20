@@ -7,15 +7,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
@@ -38,10 +35,6 @@ public class CMD_AlignColor extends Command{
   private double m_turnTime;//how long we turn for
   // private TrapezoidProfile.State m_goal;
   // private TrapezoidProfile.State m_setpoint;
-
-  private double xAdjustment = 0;
-  private double yAdjustment = 0;
-  private double turnAdjustment = 0;
 
   private CommandXboxController m_driverController;
 //This only uses Odometry to align itself

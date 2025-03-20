@@ -16,8 +16,7 @@ public class CMD_AlgaeLevelThree extends SequentialCommandGroup{
         SUB_Elevator p_elevator, GlobalVariables p_variables, SUB_Pivot p_pivot){
         addRequirements(p_algae);
         addCommands(
-            new InstantCommand(()-> GlobalVariables.m_intakingAlgae = true)
-            ,new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_intake, p_variables)
+            new CMD_ReadyToIntakeAlgaeThree(p_wrist, p_pivot, p_elevator, p_algae, p_intake, p_variables)
             ,new CMD_AlgaeTrigger(p_algae)
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kHolding))
             ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)

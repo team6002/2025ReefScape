@@ -38,7 +38,6 @@ public class CMD_SetReadyToIntake extends Command{
                 ()-> GlobalVariables.m_targetCoralLevel == 4 &! GlobalVariables.m_intakingAlgae &! m_variables.isRobotState(RobotState.HOME)
             )
             ,getIntakeCommand()
-            ,new InstantCommand(()-> GlobalVariables.m_intakingAlgae = false)
             ,new CMD_IntakeStow(m_intake)
             ,new InstantCommand(()-> GlobalVariables.m_haveCoral = true)
         ).schedule();
