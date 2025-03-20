@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.986);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.96);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -109,9 +109,9 @@ public final class Constants {
     // public static final double kAutoA = .3;//.42;//0.48019;
     // public static final double kAutoS = .5;//.004;
     // public static final double kAutoV = 2.388;//2.22;//2.1016;
-    public static final double kAutoA = .37;//.35;//.42;//0.48019;
-    public static final double kAutoS = .16;//.004;
-    public static final double kAutoV = 2.52;//2.37;//2.22;//2.1016;
+    public static final double kAutoA = .44;//.35;//.42;//0.48019;
+    public static final double kAutoS = .004;//.004;
+    public static final double kAutoV = 2.6;//2.37;//2.22;//2.1016;
     
     public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
@@ -195,10 +195,10 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 3.75;
+    public static final double kPXController = 1;
     public static final double kDXController = 0;//0.01;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 3;
+    public static final double kPThetaController = 3.75;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -283,7 +283,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(37);//37.5
     public static final double kDeployl2 = Math.toRadians(76);//82.75
     public static final double kDeployl3 = Math.toRadians(82);//86
-    public static final double kDeployl4 = Math.toRadians(84.5);//85.5
+    public static final double kDeployl4 = Math.toRadians(85.5);//85.5
     public static final double kDeployl1Exception = Math.toRadians(35);//37.5
     public static final double kDeployl2Exception = Math.toRadians(84);//82.75
     public static final double kDeployl3Exception = Math.toRadians(88);//87
@@ -312,8 +312,8 @@ public final class Constants {
     public static final double kHome = 0;
     public static final double kClimb = 0;
     public static final double kReady = 14.5;
-    public static final double kIntake = 13.5;//14.5
-    public static final double kIntakeException = 13.5;//14.5
+    public static final double kIntake = 14.5;//14.5
+    public static final double kIntakeException = 14.5;//14.5
     public static final double kReadyIntakeAlgael2 = 0;
     public static final double kReadyIntakeAlgaeEject = 3;
     public static final double kReadyIntakeAlgael3 = 5;
@@ -342,7 +342,7 @@ public final class Constants {
     public static final double kG = 0.19;//.2
     public static final double kV = 1.15;//2.7, 1.15
     public static final double kMaxVel = Math.toRadians(1080);//1080
-    public static final double kMaxAccel = Math.toRadians(540);//540
+    public static final double kMaxAccel = Math.toRadians(1080);//540
     public static final double kMaxVelGround = Math.toRadians(1080);//1080
     public static final double kMaxAccelGround = Math.toRadians(1080);//1080
     public static final double kMinOutput = -1;
@@ -358,8 +358,8 @@ public final class Constants {
     public static final double kReadyAlgael3Eject = Math.toRadians(40);
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = Math.toRadians(-117.5);//-115
-    public static final double kIntakeException = Math.toRadians(-112.5);//-115
+    public static final double kIntake = Math.toRadians(-112);//-115
+    public static final double kIntakeException = Math.toRadians(-111);//-115
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);
     public static final double kAlgaeProcessor = Math.toRadians(-10);
@@ -368,7 +368,7 @@ public final class Constants {
     public static final double kDeployl1 = Math.toRadians(-110);
     public static final double kDeployl2 = Math.toRadians(43);//30
     public static final double kDeployl3 = Math.toRadians(31);//22.5
-    public static final double kDeployl4 = Math.toRadians(36);//43
+    public static final double kDeployl4 = Math.toRadians(38);//43
     public static final double kDeployl1Exception = Math.toRadians(-110);
     public static final double kDeployl2Exception = Math.toRadians(36);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
@@ -451,9 +451,9 @@ public final class Constants {
     public static final String kTopCameraName = "TopCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(35)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(45)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(-35)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(-45)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -488,7 +488,7 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, Double.MAX_VALUE);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 

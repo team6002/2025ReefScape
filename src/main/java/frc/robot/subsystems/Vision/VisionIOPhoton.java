@@ -217,13 +217,12 @@ public class VisionIOPhoton implements VisionIO{
         var estStdDevs = VisionConstants.kSingleTagStdDevs;
         List<PhotonTrackedTarget> targets = new ArrayList<>();
         targets = getLatestLResult().getTargets();
-        int numTags = 0; // tag counter that counts all tags that are within the filter;
         int totalTags = -1; // a tag counter that counts all of the tags
+        int numTags = 0; // tag counter that counts all tags that are within the filter;
         double avgDist = 0;
         for (var tgt : targets) {
             var tagPose = LphotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue; 
-            totalTags ++;
             if (angFilter(targets, totalTags)) continue;
             numTags++;
             // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
@@ -236,16 +235,15 @@ public class VisionIOPhoton implements VisionIO{
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = VisionConstants.kMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 2)
+        if (numTags == 1 && avgDist > 3)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        if (avgDist > 2)
+        if (avgDist > 3)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+        else estStdDevs = estStdDevs.times(1);
 
         // getLatestResult(th).getBestTarget().getPoseAmbiguity();
         return estStdDevs;
     }
-
 
     // @Override// need to figure out how to get it to actually work with 2
     // public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
@@ -302,19 +300,19 @@ public class VisionIOPhoton implements VisionIO{
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = VisionConstants.kMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 2)
+        if (numTags == 1 && avgDist > 3)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        if (avgDist > 2)
+        if (avgDist > 3)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+        else estStdDevs = estStdDevs.times(1);
 
         // getLatestResult(th).getBestTarget().getPoseAmbiguity();
         return estStdDevs;
     }
 
     public boolean angFilter(List<PhotonTrackedTarget> targets, int TagNum){// tag num is the index number for the target Table
-        return (new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() > 45
-             || new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -45
+        return (new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() > 60
+             || new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -60
         );
     }
 
@@ -358,7 +356,7 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public void setRobotRotation(Rotation2d robotRotation) {
         // Put the rotation in a buffer
-        rotationBuffer.addSample(RobotController.getFPGATime() / 1e6, robotRotation);
+        rotationBuffer.addSample(RobotController.getFPGATime()-.02, robotRotation.plus(Rotation2d.k180deg));
     }
 
     /**
@@ -385,7 +383,7 @@ public class VisionIOPhoton implements VisionIO{
             // relative rotation between robot and target
             Rotation3d robotToTargetRot = tagRotation.minus(new Rotation3d(0, 0, robotRotation.getRadians()));
             // Now we can include the rotation between the camera and the robot
-            Rotation3d cameraToTargetRot = robotToTargetRot.plus(CameraToRobot.getRotation());
+            Rotation3d cameraToTargetRot = robotToTargetRot.plus(CameraToRobot.inverse().getRotation());
 
             // Now we can combine the rotation of the robot with the translation determined by the
             // camera
@@ -397,7 +395,7 @@ public class VisionIOPhoton implements VisionIO{
             for (int i = 0; i < camToTargetOptions.length; i++) {
                 Transform3d camToTarget = camToTargetOptions[i];
                 possibleRobotposes[i] =
-                        PhotonUtils.estimateFieldToRobotAprilTag(camToTarget, tagPose, CameraToRobot);
+                        PhotonUtils.estimateFieldToRobotAprilTag(camToTarget, tagPose, CameraToRobot.inverse());
             }
             // logRotationDiff(tagPose.plus(target.getBestCameraToTarget().inverse()));
         }
@@ -424,5 +422,8 @@ public class VisionIOPhoton implements VisionIO{
         };
     }
 
-       
+    // @Override
+    // public double getLLatency(){
+    //     return LCamera.
+    // } 
 }
