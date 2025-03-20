@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -108,7 +107,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       Field2d fieldEst;
       /** Creates a new DriveSubsystem. */
       SUB_Vision m_vision;
-      private Pose2d currentPose;
+      // private Pose2d currentPose;
       private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
   
       private Rotation2d m_cameraRotation;// angle of the robot from cameras
@@ -229,7 +228,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         getModulePositions()
         );
         
-        // m_vision.updateInputs();
+        m_vision.updateInputs();
         
       }
       
@@ -307,7 +306,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
         Logger.recordOutput("Questimetry", questimetry.getEstimatedPosition());
         // new Rotation2d();
-        // Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
+        Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
         // new Rotation2d();
         // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
         // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
@@ -324,16 +323,16 @@ public class SUB_Drivetrain extends SubsystemBase {
             // var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
             var estPose = est.estimatedPose.toPose2d();
             
-        //       // estPose = m_vision.getEstimatedGlobalPose(estPose);
-        //     // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-        //     var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-        //     // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-        //     //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        //     // }
-        //     if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-        //       Logger.recordOutput("LCameraPose", estPose);
-        //     }
-        //     // Change our trust in the measurement based on the tags we can see
+              // estPose = m_vision.getEstimatedGlobalPose(estPose);
+            // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            // }
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+              Logger.recordOutput("LCameraPose", estPose);
+            }
+            // Change our trust in the measurement based on the tags we can see
             
               addVisionMeasurement(
                 est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035, estStdDevs);
@@ -361,8 +360,8 @@ public class SUB_Drivetrain extends SubsystemBase {
               addVisionMeasurement(
                 est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035 , estStdDevs);
           
-        //   }  
-        // );
+          }  
+        );
        
         // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
         //   try {
