@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.GlobalVariables;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
@@ -17,7 +16,6 @@ public class CMD_AlgaeIntakeGround extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kIntakeAlgaeGround))
             ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kIntake))
-            ,new InstantCommand(()-> GlobalVariables.m_intakingAlgae = true)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntakeAlgaeGround))
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_ElevatorInPosition(p_elevator).withTimeout(2)
