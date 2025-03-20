@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
@@ -22,7 +23,7 @@ public class CMD_Algae extends Command{
     private final SUB_CoralHolder m_intake;
     private final GlobalVariables m_variables;
     private boolean m_deployingAlgae = false;
-    private AlgaeTarget m_lastTarget = AlgaeTarget.LEVEL_2;
+    private AlgaeTarget m_lastTarget = null;
     public CMD_Algae(SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Algae p_algae, 
         SUB_CoralHolder p_intake, GlobalVariables p_variales){
         m_wrist = p_wrist;
@@ -36,9 +37,9 @@ public class CMD_Algae extends Command{
 
     @Override
     public void initialize(){
-        //allows for switching from level 2 -> 3 as well as manually stopping intaking
+        // allows for switching from level 2 -> 3 as well as manually stopping intaking
         if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() != m_lastTarget){
-            GlobalVariables.m_intakingAlgae = false;
+            m_deployingAlgae = false;
         }
         
         if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
@@ -56,9 +57,9 @@ public class CMD_Algae extends Command{
             new SequentialCommandGroup(
                 new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
                 ,new CMD_CheckCoral(m_intake)
-                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
+                ,new WaitCommand(.5)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
-                ,new CMD_Ready(m_elevator, m_wrist, m_pivot, m_intake)
+                ,new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
             ).schedule();
             return;
         }

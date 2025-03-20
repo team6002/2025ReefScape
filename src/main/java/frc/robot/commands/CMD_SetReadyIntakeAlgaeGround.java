@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.GlobalVariables.AlgaeTarget;
 import frc.GlobalVariables.RobotState;
@@ -26,6 +27,7 @@ public class CMD_SetReadyIntakeAlgaeGround extends SequentialCommandGroup{
                 new SequentialCommandGroup(
                     new InstantCommand(()-> p_variables.setAlgaeTarget(AlgaeTarget.GROUND))
                     ,new CMD_AlgaeIntakeGround(p_wrist, p_pivot, p_elevator, p_algae)
+                    ,new WaitCommand(.5)
                     ,new CMD_AlgaeTrigger(p_algae)    
                     ,new InstantCommand(()-> p_algae.setReference(AlgaeConstants.kHolding))
                     ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = true)

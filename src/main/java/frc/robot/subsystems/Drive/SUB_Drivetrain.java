@@ -228,7 +228,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         getModulePositions()
         );
         
-        m_vision.updateInputs();
+        // m_vision.updateInputs();
         
       }
       
@@ -261,9 +261,9 @@ public class SUB_Drivetrain extends SubsystemBase {
       @Override
       public void periodic() {
         SmartDashboard.putNumber("gyroHeading", getAngle());
-        var LvisionEst = m_vision.getLEstimatedGlobalPose();
-        var RvisionEst = m_vision.getREstimatedGlobalPose();
-        m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
+        // var LvisionEst = m_vision.getLEstimatedGlobalPose();
+        // var RvisionEst = m_vision.getREstimatedGlobalPose();
+        // m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
       
         // Update the odometry in the periodic block
         gyroIO.updateInputs(gyroInputs);
@@ -306,7 +306,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
         Logger.recordOutput("Questimetry", questimetry.getEstimatedPosition());
         // new Rotation2d();
-        Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
+        // Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
         // new Rotation2d();
         // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
         // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
@@ -318,48 +318,48 @@ public class SUB_Drivetrain extends SubsystemBase {
           );
         }
         
-        LvisionEst.ifPresent(
-          est -> {
-            var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
+        // LvisionEst.ifPresent(
+        //   est -> {
+        //     var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
             
-              // estPose = m_vision.getEstimatedGlobalPose(estPose);
-            // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            // }
-            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("LCameraPose", estPose);
-            }
-            // Change our trust in the measurement based on the tags we can see
+        //       // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        //     // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+        //     var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+        //     // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+        //     //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        //     // }
+        //     if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+        //       Logger.recordOutput("LCameraPose", estPose);
+        //     }
+        //     // Change our trust in the measurement based on the tags we can see
             
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02, estStdDevs);
-          }
-        );
+        //       addVisionMeasurement(
+        //         est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02, estStdDevs);
+        //   }
+        // );
     
-        RvisionEst.ifPresent(
-          est -> {
-            var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
-            // estPose = m_vision.getREstimatedGlobalPose();
-            // estPose = m_vision.getEstimatedGlobalPose(estPose);
-            // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
-            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            // }
-            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("RCameraPose", estPose);
-            }
-            // Logger.recordOutput("RCameraPose", estPose);
-            // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
-            // Change our trust in the measurement based on the tags we can see
+        // RvisionEst.ifPresent(
+        //   est -> {
+        //     var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+        //     // estPose = m_vision.getREstimatedGlobalPose();
+        //     // estPose = m_vision.getEstimatedGlobalPose(estPose);
+        //     // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
+        //     var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+        //     // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+        //     //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        //     // }
+        //     if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+        //       Logger.recordOutput("RCameraPose", estPose);
+        //     }
+        //     // Logger.recordOutput("RCameraPose", estPose);
+        //     // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
+        //     // Change our trust in the measurement based on the tags we can see
           
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02 , estStdDevs);
+        //       addVisionMeasurement(
+        //         est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .02 , estStdDevs);
           
-          }  
-        );
+        //   }  
+        // );
        
         // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
         //   try {
