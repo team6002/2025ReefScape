@@ -140,13 +140,13 @@ public class SUB_Vision {
         io.setRobotRotation(robotRotation);
     }
     public Pose3d getLPose(Pose2d actualRobotPose){
-        var possiblePoses = io.retrieveSingleTagEstimates(io.getLCamResult(), VisionConstants.kRobotToLCam);
+        var possiblePoses = io.retrieveSingleTagEstimates(io.getLCamResult(), VisionConstants.kRobotToLCam.inverse());
         var ClosestPose = selectClosestPose(possiblePoses, actualRobotPose);
         return ClosestPose;
     } 
 
     public Pose3d getRPose(Pose2d actualRobotPose){
-        var possiblePoses = io.retrieveSingleTagEstimates(io.getRCamResult(), VisionConstants.kRobotToRCam);
+        var possiblePoses = io.retrieveSingleTagEstimates(io.getRCamResult(), VisionConstants.kRobotToRCam.inverse());
         var ClosestPose = selectClosestPose(possiblePoses, actualRobotPose);
         return ClosestPose;
     } 
@@ -167,5 +167,7 @@ public class SUB_Vision {
         }
         return selectedPose;
     }
-
+    // public double getLLatency(){
+    //     // return
+    // }
 }

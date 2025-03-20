@@ -63,6 +63,8 @@ public interface VisionIO {
     public default Pose3d[] retrieveSingleTagEstimates(PhotonPipelineResult latestResult, Transform3d CameraToRobot) {return null;}
     public default PhotonPipelineResult getLCamResult(){return null;}
     public default PhotonPipelineResult getRCamResult(){return null;}
+    public default double getLLatency(){return 0;}
+    public default double getRLatency(){return 0;}
     
     
   

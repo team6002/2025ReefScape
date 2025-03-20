@@ -33,8 +33,8 @@ public class QuestNavIOMeta implements QuestNavIO{
   private Pose2d resetPosition = new Pose2d();
   private Pose2d resetPositionOculus = new Pose2d();
   private Pose2d resetPositionRobot = new Pose2d();
-  private double postitionModX = 1.046;//1.036;
-  private double postitionModY = 1.069;//1.036;
+  private double postitionModX = 1.036;//1.046;//1.036;
+  private double postitionModY = 1.047;//1.069;//1.036;
 
   private Transform2d kRobotToQuest = new Transform2d(Units.inchesToMeters(3.5),Units.inchesToMeters(-7), new Rotation2d(-Math.PI/2));
   // private Transform2d kRobotToQuest = new Transform2d(0.06,-0.22, new Rotation2d(-Math.PI/2));
