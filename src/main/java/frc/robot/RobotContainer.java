@@ -150,6 +150,7 @@ public class RobotContainer {
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables));
     m_operatorController.leftBumper().onTrue(new CMD_Exception(m_wrist, m_pivot, m_elevator, m_coralIntake, m_variables));
     m_operatorController.leftStick().onTrue(new InstantCommand(()-> GlobalVariables.m_algaeExceptionMode = !GlobalVariables.m_algaeExceptionMode));
+    
     m_operatorController.a().onTrue(
       new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.PROCESSOR))
       .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
@@ -159,19 +160,16 @@ public class RobotContainer {
       .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
     );
     m_operatorController.x().onTrue(
-      new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_2))
-        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
-        )
+        .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
     );
     m_operatorController.y().onTrue(
-      new SequentialCommandGroup(
         new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.LEVEL_3))
-        ,new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables)
-      )
+        .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
     );
     m_operatorController.rightStick().onTrue(
-      new CMD_SetReadyIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_coralIntake, m_variables)
+      new InstantCommand(()-> m_variables.setAlgaeTarget(AlgaeTarget.GROUND))
+      .andThen(new CMD_Algae(m_wrist, m_pivot, m_elevator, m_algae, m_coralIntake, m_variables))
     );
   }
     
