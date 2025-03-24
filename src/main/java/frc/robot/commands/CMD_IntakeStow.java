@@ -20,7 +20,7 @@ public class CMD_IntakeStow extends Command{
 
     @Override
     public void execute(){
-        if(m_intake.getCurrent() > 12){
+        if(m_intake.getCurrent() > 18){
             m_intakeTimer.start();
         }else{
             m_intakeTimer.reset();

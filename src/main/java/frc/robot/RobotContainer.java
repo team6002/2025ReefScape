@@ -105,34 +105,34 @@ public class RobotContainer {
     
     m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision));//is in use
 
-    m_driverController.leftBumper().onTrue(
-      new SequentialCommandGroup(
-        new ConditionalCommand(
-          new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
-          , new CMD_DeployGroundPivot(m_groundPivot, m_pivot, m_variables)
-          , ()-> GlobalVariables.m_groundPivotDeployed)
-        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
-        ,new CMD_GroundIntakeDetect(m_groundIntake, m_driverController).withTimeout(3).onlyWhile(()->m_driverController.leftBumper().getAsBoolean())
-      )
-    ).onFalse(
-      new SequentialCommandGroup(
-        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
-        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
-      )
-    );
-
-    // m_driverController.leftBumper().onChange(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
-
-    // m_driverController.leftTrigger().onTrue(
+    // m_driverController.leftBumper().onTrue(
     //   new SequentialCommandGroup(
-    //     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
-    //     ,new WaitCommand(.2)
-    //     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
+    //     new ConditionalCommand(
+    //       new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
+    //       , new CMD_DeployGroundPivot(m_groundPivot, m_pivot, m_variables)
+    //       , ()-> GlobalVariables.m_groundPivotDeployed)
+    //     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
+    //     ,new CMD_GroundIntakeDetect(m_groundIntake, m_driverController).withTimeout(3).onlyWhile(()->m_driverController.leftBumper().getAsBoolean())
     //   )
     // ).onFalse(
-    //   new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome)).andThen(
-    //   new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
+    //   new SequentialCommandGroup(
+    //     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
+    //     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
+    //   )
     // );
+
+    m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
+
+    m_driverController.leftTrigger().onTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
+        ,new WaitCommand(.2)
+        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
+      )
+    ).onFalse(
+      new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome)).andThen(
+      new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
+    );
 
     //operator
     m_operatorController.back().onTrue(new SequentialCommandGroup( 

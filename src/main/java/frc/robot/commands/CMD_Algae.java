@@ -39,17 +39,20 @@ public class CMD_Algae extends Command{
 
     @Override
     public void initialize(){
+        m_intake.setVoltage(0);
+        // m_deployingAlgae = false;
         // allows for switching from level 2 -> 3 as well as manually stopping intaking
         if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() != m_lastTarget){
             m_deployingAlgae = false;
+            GlobalVariables.m_intakingAlgae = false;
         }
         
-        if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
-            m_variables.setRobotState(RobotState.HOME);
-            GlobalVariables.m_haveAlgae = false;
-            new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables).schedule();
-            return;
-        }
+        // if(GlobalVariables.m_intakingAlgae && m_variables.getAlgaeTarget() == m_lastTarget){
+        //     m_variables.setRobotState(RobotState.HOME);
+        //     GlobalVariables.m_haveAlgae = false;
+        //     new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables).schedule();
+        //     return;
+        // }
 
         //if ready to deploy, shoot, and go back to intake coral
         if(m_deployingAlgae){
@@ -57,11 +60,20 @@ public class CMD_Algae extends Command{
             GlobalVariables.m_haveAlgae = false;
             m_lastTarget = null;
             new SequentialCommandGroup(
+                // new ConditionalCommand(
+                // new CMD_AlageJackhammer(m_algae).withTimeout(.5)
+                    // ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse)
+                    // new InstantCommand(()-> m_algae.setReference(0))
+                    // ,()-> m_lastTarget == AlgaeTarget.processor))
+                
+                // ,new CMD_CheckCoral(m_intake)
+                // ,new WaitCommand(.05)
                 new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse))
-                ,new CMD_CheckCoral(m_intake)
-                ,new WaitCommand(.5)
+                ,new WaitCommand(.7)
                 ,new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kOff))
-                ,new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                ,new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
+                ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
+                // ,new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
             ).schedule();
             return;
         }

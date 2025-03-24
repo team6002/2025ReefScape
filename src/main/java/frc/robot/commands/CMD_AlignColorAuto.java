@@ -39,7 +39,6 @@ public class CMD_AlignColorAuto extends Command{
   public CMD_AlignColorAuto(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision) {
     m_drivetrain = p_drivetrain;
     m_vision = p_vision;
-    // m_driverController = p_driverController;
     m_turnTime = 0;
     m_timer = new Timer();
 
@@ -67,7 +66,7 @@ public class CMD_AlignColorAuto extends Command{
   @Override
   public void initialize() {
     m_timer.reset();
-    m_timer.stop();
+    m_timer.start();
     System.out.println("Started Autoalign");
     // double GridAdjustment = (-(CurrentGrid - WantedGrid)*1.8);
     // Transform2d GridTransformation = new Transform2d(new Translation2d(0, GridAdjustment),new Rotation2d(0));
@@ -93,15 +92,20 @@ public class CMD_AlignColorAuto extends Command{
     turnController.reset();
 
     turnController.enableContinuousInput(-180, 180);
-    
-    if (Math.abs(m_vision.getTcameraYaw()) <= 3.5){
-      end = true;
+    if (m_vision.getTcameraYaw() != Double.MAX_VALUE){
+      try { 
+        m_turnTime = Math.abs(m_vision.getTcameraYaw() * .007); 
+        turnSpeed = Math.copySign(.2, -m_vision.getTcameraYaw());
+        // turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTcameraYaw()), -.1, .1);
+      } catch (Exception e) {
+      }
+    }else{
+      m_turnTime = 0;
     }
   }
 
   @Override
   public void execute() {
-
     // xController.setGoal(VisionConstants.kRobotToLCam.getX()+Units.inchesToMeters(7.25)+xAdjustment);
     // yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
   
@@ -113,32 +117,6 @@ public class CMD_AlignColorAuto extends Command{
     //   }
     // }
 
-    if (m_vision.getTcameraYaw() != Double.MAX_VALUE){
-    try { 
-        m_timer.stop();
-        turnSpeed = Math.copySign(.1, -m_vision.getTcameraYaw());
-        // turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTcameraYaw()), -.1, .1);
-    } catch (Exception e) {
-    }
-    }else{
-      m_timer.start();
-      if (m_timer.get() >= .8){
-        turnSpeed = .1;
-      }else {
-        if (m_timer.get() >= 1.6){
-          m_timer.reset();
-        }
-        turnSpeed = -.1;
-      }
-      // m_turnTime = 0;
-    }
-
-    // if (Math.abs(m_driverController.getLeftY()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getLeftX()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getRightX()) > AutoAlignConstants.kAbortThreshold) {
-    //   end = true;
-    //   System.out.println("Aborted by driver");
-    //   return;
-    // }
-    
     if (xController.atGoal()) {
       xSpeed = 0.0;
     }
@@ -147,7 +125,7 @@ public class CMD_AlignColorAuto extends Command{
       ySpeed = 0.0;
     }
 
-    if (Math.abs(m_vision.getTcameraYaw()) <= 3.5){
+    if (m_timer.get() >= m_turnTime){
       end = true;
     }
     // turnSpeed = 0;  

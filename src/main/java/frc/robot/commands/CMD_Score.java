@@ -59,8 +59,8 @@ public class CMD_Score extends Command{
                             ,new CMD_Score(m_elevator, m_wrist, m_intake, m_pivot, m_algae, m_variables)
                         )
                         ,new SequentialCommandGroup(
-                            new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
-                            ,new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
+                            // new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kHolding))
+                            new CMD_SetReadyToIntake(m_elevator, m_wrist, m_pivot, m_intake, m_variables)
                             ,new CMD_Score(m_elevator, m_wrist, 
                             m_intake, m_pivot, m_algae, m_variables)
                         )

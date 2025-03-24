@@ -88,7 +88,7 @@ public final class Constants {
         / kDrivingMotorReduction;
 
     // This accounts for stuff such as wheel wear//323 is the middle fo the field
-    public static final double kXFactor = (.979);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
+    public static final double kXFactor = (.959);  // if actual is smaller than odo go down  .96 is brand new // .912 baldest
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -101,17 +101,17 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kAutoP = 0.01;//.115;//0.004;
+    public static final double kAutoP = 0.05;//.115;//0.004;
     public static final double kAutoI = 0.0;
-    public static final double kAutoD = 0.0;
+    public static final double kAutoD = 0.01;
     public static final double kAutoFF = 0.0;
 
     // public static final double kAutoA = .3;//.42;//0.48019;
     // public static final double kAutoS = .5;//.004;
     // public static final double kAutoV = 2.388;//2.22;//2.1016;
-    public static final double kAutoA = .44;//.35;//.42;//0.48019;
-    public static final double kAutoS = .004;//.004;
-    public static final double kAutoV = 2.6;//2.37;//2.22;//2.1016;
+    public static final double kAutoA = .4;//.35;//.42;//0.48019;
+    public static final double kAutoS = .001;//.004;
+    public static final double kAutoV = 2.82;//2.37;//2.22;//2.1016;
     
     public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
@@ -195,10 +195,10 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kDXController = 0;//0.01;
+    public static final double kPXController = 1;//1;
+    public static final double kDXController = 0.01;//0.01;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 3.75;
+    public static final double kPThetaController = 3;//2;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -235,11 +235,11 @@ public final class Constants {
     public static final boolean kInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 4;//6;
+    public static final double kIntake = 5;//6;
     public static final double kOff = 0;
     public static final double kReverse = -5;//-2500
     public static final double kReverseLVl2 = -3;//-2500
-    public static final double kReverseLvl4 = -6;//-2500
+    public static final double kReverseLvl4 = -7;//-2500
     public static final double kReverseSlow = -4;
     public static final double kHolding = .5;
   }
@@ -269,7 +269,7 @@ public final class Constants {
     public static final double kReady = Math.toRadians(85);
     public static final double kReadyIntake = Math.toRadians(60);//61 
     public static final double kClimb = Math.toRadians(100);
-    public static final double kReadyAlgae = Math.toRadians(50);
+    public static final double kReadyAlgae = Math.toRadians(51);
     public static final double kReadyIntakeAlgae = Math.toRadians(63);
     public static final double kReadyAlgael3 = Math.toRadians(78);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(86);
@@ -279,7 +279,7 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(61);//61
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
-    public static final double kIntakeAlgaeGround = Math.toRadians(30.0);
+    public static final double kIntakeAlgaeGround = Math.toRadians(28.0);
     public static final double kDeployl1 = Math.toRadians(37);//37.5
     public static final double kDeployl2 = Math.toRadians(76);//82.75
     public static final double kDeployl3 = Math.toRadians(82);//86
@@ -288,7 +288,7 @@ public final class Constants {
     public static final double kDeployl2Exception = Math.toRadians(84);//82.75
     public static final double kDeployl3Exception = Math.toRadians(88);//87
     public static final double kDeployl4Exception = Math.toRadians(88);//86
-    public static final double kDeployBarge = Math.toRadians(88);
+    public static final double kDeployBarge = Math.toRadians(90);
   }
 
   public static final class ElevatorConstants{
@@ -301,8 +301,8 @@ public final class Constants {
     public static final double kG = 0.35;//.035
     public static final double kMaxVel = 700;//700
     public static final double kMaxAccel = 700;//700
-    public static final double kMaxVelDown = 420;//100
-    public static final double kMaxAccelDown = 420;//100
+    public static final double kMaxVelDown = 620;//100
+    public static final double kMaxAccelDown = 620;//100
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -323,12 +323,12 @@ public final class Constants {
     public static final double kDeployL1 = 19;
     public static final double kDeployL2 = 0;
     public static final double kDeployL3 = 22.5;//28
-    public static final double kDeployL4 = 67;//68
+    public static final double kDeployL4 = 69;//68
     public static final double kDeployl1Exception = 16;
     public static final double kDeployl2Exception = 0;
     public static final double kDeployl3Exception = 22;//19
     public static final double kDeployl4Exception = 67.5;//68
-    public static final double kDeployBarge = 67;
+    public static final double kDeployBarge = 70;
   }
 
   public static final class WristConstants{
@@ -358,7 +358,7 @@ public final class Constants {
     public static final double kReadyAlgael3Eject = Math.toRadians(40);
     public static final double kReadyHome = Math.toRadians(0);
     public static final double kStowing = Math.toRadians(0);
-    public static final double kIntake = Math.toRadians(-112);//-115
+    public static final double kIntake = Math.toRadians(-115);//-115
     public static final double kIntakeException = Math.toRadians(-111);//-115
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);
@@ -373,7 +373,8 @@ public final class Constants {
     public static final double kDeployl2Exception = Math.toRadians(36);//30
     public static final double kDeployl3Exception = Math.toRadians(25);//22.5
     public static final double kDeployl4Exception = Math.toRadians(42);//43
-    public static final double kDeployBarge = Math.toRadians(-35);
+    public static final double kDeployBarge = Math.toRadians(-36);
+    public static final double kReadyDeployBarge = Math.toRadians(-36);
     public static final double kAlgaeYeet = Math.toRadians(-0);    
   }
 
@@ -387,7 +388,7 @@ public final class Constants {
     public static final double kFF = 0.0;
 
     public static final double kHome = 33;
-    public static final double kReadyClimb = 210.0;
+    public static final double kReadyClimb = 207.0;
     public static final double kClimb = 130.0;
   }
 
@@ -398,7 +399,7 @@ public final class Constants {
     public static final double kIntake = 5;
     public static final double kOff = 0;
     public static final double kHolding = 2;
-    public static final double kReverse = -10;
+    public static final double kReverse = -8;
 
     //l2, l3, barge, off coral, ground, processor
     //l2 wrist: 1.9 pivot: 1.05

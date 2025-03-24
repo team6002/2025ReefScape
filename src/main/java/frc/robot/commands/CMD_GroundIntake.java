@@ -46,6 +46,7 @@ public class CMD_GroundIntake extends Command{
             }else{
                 command = new SequentialCommandGroup(
                     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
+                    ,new WaitCommand(.2)
                     ,new CMD_GroundPivotInPosition(m_groundPivot).withTimeout(.5)
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
                     ,new WaitCommand(.33)

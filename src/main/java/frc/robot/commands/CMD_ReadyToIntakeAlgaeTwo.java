@@ -31,12 +31,13 @@ public class CMD_ReadyToIntakeAlgaeTwo extends SequentialCommandGroup{
                     ,new CMD_PivotInPosition(p_pivot)
                 )
                 ,new SequentialCommandGroup(
-                    new CMD_CheckCoral(p_intake)
-                    ,new ConditionalCommand(
-                        new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
-                        ,new InstantCommand(()-> p_variables.setRobotState(RobotState.HOME))
-                        ,()-> GlobalVariables.m_haveCoral
-                    )
+                    new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                    // new CMD_CheckCoral(p_intake)
+                    // new ConditionalCommand(
+                    //     new InstantCommand(()-> p_variables.setRobotState(RobotState.READY_TO_INTAKE))
+                    //     ,new InstantCommand(()-> p_variables.setRobotState(RobotState.HOME))
+                    //     ,()-> GlobalVariables.m_haveCoral
+                    // )
                 )
             )
         );

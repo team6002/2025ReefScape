@@ -14,9 +14,9 @@ public class CMD_ReadyLevelFourAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()-> p_intake.setVoltage(CoralHolderConstants.kHolding))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.1)
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kDeployl4))
+            ,new WaitCommand(.1)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_PivotInPosition(p_pivot)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL4))

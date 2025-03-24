@@ -13,8 +13,8 @@ public class CMD_ReadyToDeployProcessor extends SequentialCommandGroup{
     public CMD_ReadyToDeployProcessor(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot){
         addCommands(
             new InstantCommand(()-> p_wrist.setGoal(WristConstants.kAlgaeProcessor))
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAlgaeProcessor))
             ,new CMD_WristInPosition(p_wrist)
+            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAlgaeProcessor))
             ,new CMD_ElevatorInPosition(p_elevator)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAlgaeProcessor))
             ,new CMD_PivotInPosition(p_pivot)
