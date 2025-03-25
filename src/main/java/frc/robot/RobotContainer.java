@@ -91,9 +91,8 @@ public class RobotContainer {
     //operator
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_pivot, m_intake, m_variables));
 
-    m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 4));
-    m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 3));
-    m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 2));
+    m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 4));
+    m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 3));
+    m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 2));
   }
-    
 }

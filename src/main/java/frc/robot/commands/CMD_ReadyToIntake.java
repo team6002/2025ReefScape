@@ -62,7 +62,7 @@ public class CMD_ReadyToIntake extends Command{
     @Override
     public void execute(){
         //if elevator is lower than intake pos, can move pivot right away
-        if(m_elevator.BelowPosition(ElevatorConstants.kIntake, false)){
+        if(m_pivot.getPosition() <= PivotConstants.kIntake){
             //move pivot to ready to intake if not there already
             if(!m_pivot.inPosition(PivotConstants.kReadyIntake)){
                 if(!pivotInMotion) m_pivot.setGoal(PivotConstants.kReadyIntake);

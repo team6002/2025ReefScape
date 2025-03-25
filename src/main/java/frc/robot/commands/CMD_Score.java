@@ -36,18 +36,7 @@ public class CMD_Score extends Command{
                 new CMD_Deploy(m_intake, m_wrist, m_variables).schedule();
                 break;
             case DEPLOY:
-                if(GlobalVariables.m_targetCoralLevel == 2){
-                    new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 2).schedule();
-                }else if(GlobalVariables.m_targetCoralLevel == 3){
-                    new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 3).schedule();
-                }else if(GlobalVariables.m_targetCoralLevel == 4){
-                    new CMD_ChangeLevel(m_pivot, m_elevator, m_wrist, m_variables, 4).schedule();
-                }
-                break;
-            case READY_TO_SCORE:
-                new CMD_Deploy(m_intake, m_wrist, m_variables)
-                .andThen(new WaitCommand(.5))
-                .andThen(new CMD_ReadyToIntake(m_pivot, m_elevator, m_wrist, m_intake, m_variables)).schedule();
+                new CMD_ReadyToIntake(m_pivot, m_elevator, m_wrist, m_intake, m_variables).schedule();
                 break;
             default:
                 break;
