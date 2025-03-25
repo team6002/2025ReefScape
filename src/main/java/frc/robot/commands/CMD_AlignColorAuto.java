@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.*;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoAlignConstants;
@@ -26,14 +24,8 @@ public class CMD_AlignColorAuto extends Command{
   private boolean end;
 
   private double xSpeed, ySpeed, turnSpeed;
-  // private double positionRatio;// its like a inverse cnc machine, the farther y the slower the x
-  // private double turnRatio;// its like a inverse cnc machine, the farther y the slower the turn
-  private Pose2d goalPose;
-  private Pose2d robotOdom;
   private Timer m_timer;
   private double m_turnTime;//how long we turn for
-  // private TrapezoidProfile.State m_goal;
-  // private TrapezoidProfile.State m_setpoint;
 
 //This only uses Odometry to align itself
   public CMD_AlignColorAuto(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision) {
@@ -68,17 +60,6 @@ public class CMD_AlignColorAuto extends Command{
     m_timer.reset();
     m_timer.start();
     System.out.println("Started Autoalign");
-    // double GridAdjustment = (-(CurrentGrid - WantedGrid)*1.8);
-    // Transform2d GridTransformation = new Transform2d(new Translation2d(0, GridAdjustment),new Rotation2d(0));
-    goalPose = new Pose2d(0,0, new Rotation2d(0));
-    // add back in when u have a variable that store this condition
-    // if (m_variables.getHasCoral() == true){
-      // goalPose = Constants.AutoAlignConstants.goalPose.get(m_variables.getAlignPosition());
-    // }else{
-      // goalPose = Constants.AutoAlignConstants.goalPose.get(m_variables.getAlignPosition());
-    // }
-    robotOdom = m_drivetrain.getPose();
-
     end = false;
 
     turnController.setSetpoint(0);
@@ -87,8 +68,6 @@ public class CMD_AlignColorAuto extends Command{
     yController.setTolerance(AutoAlignConstants.kYTolerance);
     turnController.setTolerance(AutoAlignConstants.kTurnToleranceColor);
 
-    // xController.reset(m_drivetrain.getTargetOdo().getX());
-    // yController.reset(m_drivetrain.getTargetOdo().getY());
     turnController.reset();
 
     turnController.enableContinuousInput(-180, 180);
@@ -96,7 +75,6 @@ public class CMD_AlignColorAuto extends Command{
       try { 
         m_turnTime = Math.abs(m_vision.getTcameraYaw() * .007); 
         turnSpeed = Math.copySign(.2, -m_vision.getTcameraYaw());
-        // turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTcameraYaw()), -.1, .1);
       } catch (Exception e) {
       }
     }else{
@@ -106,17 +84,6 @@ public class CMD_AlignColorAuto extends Command{
 
   @Override
   public void execute() {
-    // xController.setGoal(VisionConstants.kRobotToLCam.getX()+Units.inchesToMeters(7.25)+xAdjustment);
-    // yController.setGoal(0+Units.inchesToMeters(0)+ yAdjustment);
-  
-    
-    // if (m_vision.getTcameraYaw() != Double.MAX_VALUE){
-    //   try {    
-    //     // turnSpeed = MathUtil.clamp(turnController.calculate(m_vision.getTcameraYaw()), -.1, .1);
-    //   } catch (Exception e) {
-    //   }
-    // }
-
     if (xController.atGoal()) {
       xSpeed = 0.0;
     }
@@ -128,18 +95,8 @@ public class CMD_AlignColorAuto extends Command{
     if (m_timer.get() >= m_turnTime){
       end = true;
     }
-    // turnSpeed = 0;  
-    // turnSpeed = MathUtil.clamp(turnController.calculate(m_drivetrain.getAngle()), -0.5, 0.5);
-    // Logger.recordOutput("XError", m_drivetrain.getTargetOdo().getX());
-    // Logger.recordOutput("YError", m_drivetrain.getTargetOdo().getY());
-    // Logger.recordOutput("TurnError", m_drivetrain.getTargetOdo().getRotation().getDegrees());
-    // Logger.recordOutput("AutoAlignXSpeed", xSpeed);
-    // Logger.recordOutput("AutoAlignySpeed", ySpeed);
-    Logger.recordOutput("AutoAlignTurnSpeed", turnSpeed);
-    // Logger.recordOutput("Autoalign turn Goal", goalPose.getRotation());
-    // Logger.recordOutput("XCtrlOutput", yController.calculate(m_drivetrain.getTargetOdo().getY()));
-    // Logger.recordOutput("YsetPoint", yController.getSetpoint().position);
 
+    Logger.recordOutput("AutoAlignTurnSpeed", turnSpeed);
 
     m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
   }

@@ -183,15 +183,15 @@ public final class Configs {
                         m_intakeConfig
                                 .disableFollowerMode()
                                 .idleMode(IdleMode.kBrake)
-                                .inverted(CoralHolderConstants.kInverted)
+                                .inverted(IntakeConstants.kInverted)
                                 .smartCurrentLimit(40)
                                 .voltageCompensation(12.0);
                         m_intakeConfig.encoder
                                 .quadratureAverageDepth(2)
                                 .quadratureMeasurementPeriod(10);
                         m_intakeConfig.closedLoop
-                                .pidf(CoralHolderConstants.kP, CoralHolderConstants.kI, CoralHolderConstants.kD, CoralHolderConstants.kFF)
-                                .outputRange(CoralHolderConstants.kMinOutput, CoralHolderConstants.kMaxOutput)
+                                .pidf(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kFF)
+                                .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput)
                                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                         m_intakeConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)

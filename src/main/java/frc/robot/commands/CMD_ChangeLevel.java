@@ -1,71 +1,91 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
-import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_ChangeLevel extends Command{
+    private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_Wrist m_wrist;
-    private final SUB_Pivot m_pivot;
     private final GlobalVariables m_variables;
     private int m_newLevel;
-    public CMD_ChangeLevel(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, GlobalVariables p_variables, int p_level){
+    private boolean wristSet;
+    private boolean elevatorSet;
+    
+    public CMD_ChangeLevel(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables,
+        int p_newLevel){
+        
+        m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_wrist = p_wrist;
-        m_pivot = p_pivot;
         m_variables = p_variables;
-        m_newLevel = p_level;
+        m_newLevel = p_newLevel;
+        addRequirements(m_elevator, m_pivot, m_wrist);
     }
 
     @Override
     public void initialize(){
+        elevatorSet = false;
+        wristSet = false;
+
+        if(m_newLevel < 2 || m_newLevel >3) return;
+
         GlobalVariables.m_targetCoralLevel = m_newLevel;
-        
-        //check if in good state or if already at the selected level
-        if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY) == false){
+
+        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+            elevatorSet = true;
+            wristSet = true;
             return;
+        }else{
+            elevatorSet = false;
+            wristSet = false;
         }
 
-        m_pivot.setGoal(PivotConstants.kReady);
-
-        switch (m_newLevel) {
-            case 1:
-                new SequentialCommandGroup(
-                    new CMD_PivotInPosition(m_pivot)
-                    ,new CMD_ReadyToDeployLevelOne(m_elevator, m_wrist, m_pivot)
-                ).schedule();
-                break;
-            case 2:
-                new SequentialCommandGroup(
-                    new CMD_PivotInPosition(m_pivot)
-                    ,new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_pivot)
-                ).schedule();
-                break;
-            case 3:
-            new SequentialCommandGroup(
-                    new CMD_PivotInPosition(m_pivot)
-                    ,new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_pivot)
-                ).schedule();
-                break;
-            case 4:
-            new SequentialCommandGroup(
-                    new CMD_PivotInPosition(m_pivot)
-                    ,new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot)
-                ).schedule();
-                break;
-            default:
-                break;
-        }
+        m_wrist.setGoal(WristConstants.kReadyToScore);
     }
 
     @Override
-    public boolean isFinished(){
-        return true;
+    public void execute(){
+        if(m_wrist.inPosition() &! elevatorSet){
+            switch (GlobalVariables.m_targetCoralLevel) {
+                case 2:
+                    m_elevator.setGoal(ElevatorConstants.kDeployL2);
+                    break;
+                case 3:
+                    m_elevator.setGoal(ElevatorConstants.kDeployL3);
+                    break;
+                case 4:
+                    m_elevator.setGoal(ElevatorConstants.kDeployL4);
+                    break;
+                default:
+                    break;
+            }
+            elevatorSet = true;
+        }
+
+        if(m_wrist.inPosition(WristConstants.kReadyToScore) && m_elevator.inPosition() &! wristSet){
+            wristSet = true;
+            switch (GlobalVariables.m_targetCoralLevel) {
+                case 2:
+                    m_wrist.setGoal(WristConstants.kDeployL2);
+                    break;
+                case 3:
+                    m_wrist.setGoal(WristConstants.kDeployL3);
+                    break;
+                case 4:
+                    m_wrist.setGoal(WristConstants.kDeployL4);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if(wristSet && elevatorSet) m_variables.setRobotState(RobotState.READY_TO_SCORE); return;
     }
 }

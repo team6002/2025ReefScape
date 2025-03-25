@@ -30,6 +30,8 @@ public interface WristIO {
 
   public default boolean inPosition(){return false;}
 
+  public default boolean inPosition(double p_position){return false;}
+
   public default void PID(){}
 
   public default void reset(){

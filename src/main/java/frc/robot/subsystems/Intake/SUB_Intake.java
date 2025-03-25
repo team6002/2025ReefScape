@@ -1,14 +1,14 @@
-package frc.robot.subsystems.CoralHolder;
+package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SUB_CoralHolder extends SubsystemBase{
-    private final CoralHolderIO io;
-    private final CoralHolderIOInputsAutoLogged inputs = new CoralHolderIOInputsAutoLogged();
-    public SUB_CoralHolder(CoralHolderIO io){
+public class SUB_Intake extends SubsystemBase{
+    private final IntakeIO io;
+    private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    public SUB_Intake(IntakeIO io){
         this.io = io;
     }
 

@@ -125,6 +125,11 @@ public class ElevatorIOSparkMax implements ElevatorIO{
     }
 
     @Override
+    public boolean inPosition(double p_position){
+        return Math.abs(getGoal() - p_position) < ElevatorConstants.kTolerance;
+    }
+
+    @Override
     public boolean isResetMode(){
         return m_resetMode;
     }

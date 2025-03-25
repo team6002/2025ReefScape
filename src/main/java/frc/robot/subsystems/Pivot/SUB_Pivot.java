@@ -46,6 +46,10 @@ public class SUB_Pivot extends SubsystemBase{
       return io.inPosition();
     }
 
+    public boolean inPosition(double p_position){
+      return io.inPosition(p_position);
+    }
+
     public Command incrementGoal(double increment){
       return Commands.runOnce(() -> io.setGoal(increment + getGoal()));
     }

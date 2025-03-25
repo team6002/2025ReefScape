@@ -1,17 +1,17 @@
-package frc.robot.subsystems.CoralHolder;
+package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface CoralHolderIO {
+public interface IntakeIO {
   @AutoLog
-  public static class CoralHolderIOInputs {
+  public static class IntakeIOInputs {
     public double m_intakeCurrent;
     public double m_intakeVelocity;
     public double m_intakeReference;
   }
 
   /** Updates the set of loggable inputs. */
-  public default void updateInputs(CoralHolderIOInputs inputs) {}
+  public default void updateInputs(IntakeIOInputs inputs) {}
 
   public default double getCurrent(){return 0;}
 

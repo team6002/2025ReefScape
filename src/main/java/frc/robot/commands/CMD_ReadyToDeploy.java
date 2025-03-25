@@ -2,48 +2,82 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
-import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
+import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_ReadyToDeploy extends Command{
-    SUB_Elevator m_elevator;
-    SUB_Wrist m_wrist;
-    SUB_Pivot m_pivot;
-    SUB_CoralHolder m_intake;
-    GlobalVariables m_variables;
-    public CMD_ReadyToDeploy(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, SUB_CoralHolder p_intake, 
-        GlobalVariables p_variables){
+    private final SUB_Pivot m_pivot;
+    private final SUB_Elevator m_elevator;
+    private final SUB_Wrist m_wrist;
+    private final GlobalVariables m_variables;
+
+    private boolean elevatorInPosition;
+    private boolean pivotInPosition;
+    private boolean wristInPosition;
+
+    private boolean elevatorInMotion;
+    private boolean pivotInMotion;
+    private boolean wristInMotion;
+
+    public CMD_ReadyToDeploy(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
+        m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_wrist = p_wrist;
-        m_pivot = p_pivot;
-        m_intake = p_intake;
         m_variables = p_variables;
+        addRequirements(m_pivot, m_elevator, m_wrist);
     }
 
     @Override
-    public void initialize(){ 
-        switch (GlobalVariables.m_targetCoralLevel) {
-            case 1:
-                new CMD_ReadyToDeployLevelOne(m_elevator, m_wrist, m_pivot).schedule();
-                break;
-            case 2:
-                new CMD_ReadyToDeployLevelTwo(m_elevator, m_wrist, m_pivot).schedule();
-                break;
-            case 3:
-                new CMD_ReadyToDeployLevelThree(m_elevator, m_wrist, m_pivot).schedule();
-                break;
-            case 4:
-                new CMD_ReadyToDeployLevelFour(m_elevator, m_wrist, m_pivot).schedule();
-                break;
-            default:
-                break;
+    public void initialize(){
+        pivotInPosition = false;
+        elevatorInPosition = false;
+        wristInPosition = false;
+
+        pivotInMotion = false;
+        elevatorInMotion = false;
+        wristInMotion = false; 
+    }
+
+    @Override
+    public void execute(){
+        if(!m_pivot.inPosition(PivotConstants.kDeployL4)){
+            if(!pivotInMotion) m_pivot.setGoal(PivotConstants.kDeployL4);
+            pivotInMotion = true;
+        }else{
+            pivotInMotion = false;
+            pivotInPosition = true;
+        }
+
+        if(!m_elevator.inPosition(ElevatorConstants.kDeployL2)){
+            if(!elevatorInMotion) m_elevator.setGoal(ElevatorConstants.kDeployL2);
+            elevatorInMotion = true;
+        }else{
+            elevatorInMotion = false;
+            elevatorInPosition = true;
+        }
+
+        if(!m_wrist.inPosition(WristConstants.kDeployL2)){
+            if(!wristInMotion) m_wrist.setGoal(WristConstants.kDeployL2);
+            wristInMotion = true;
+        }else{
+            wristInMotion = false;
+            wristInPosition = true;
         }
     }
 
     @Override
     public boolean isFinished(){
-        return m_elevator.inPosition() && m_wrist.inPosition() && m_pivot.inPosition();
+        return pivotInPosition && elevatorInPosition && wristInPosition;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        if(interrupted) return;
+        m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
     }
 }

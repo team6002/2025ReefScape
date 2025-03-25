@@ -1,4 +1,4 @@
-package frc.robot.subsystems.CoralHolder;
+package frc.robot.subsystems.Intake;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -11,14 +11,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Configs;
 import frc.robot.Constants.HardwareConstants;
 
-public class CoralHolderIOSparkMax implements CoralHolderIO{
+public class IntakeIOSparkMax implements IntakeIO{
     private final SparkMax m_intakeMotor;
     private final RelativeEncoder m_intakeEncoder;
     private final SparkClosedLoopController m_intakeController;
 
     private double m_intakeReference;
 
-    public CoralHolderIOSparkMax(){
+    public IntakeIOSparkMax(){
         //initialize motor
         m_intakeMotor = new SparkMax(HardwareConstants.kCoralHolderCanId, MotorType.kBrushless);
 
@@ -36,7 +36,7 @@ public class CoralHolderIOSparkMax implements CoralHolderIO{
     }
 
     @Override
-    public void updateInputs(CoralHolderIOInputs inputs){
+    public void updateInputs(IntakeIOInputs inputs){
         inputs.m_intakeReference = getReference();
         inputs.m_intakeCurrent = getCurrent();
         inputs.m_intakeVelocity = getVelocity();

@@ -1,43 +1,42 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
-import frc.robot.subsystems.CoralHolder.SUB_CoralHolder;
+import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.WristConstants;
+import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_Deploy extends Command{
-    SUB_Wrist m_wrist;
-    SUB_CoralHolder m_intake;
-    Timer m_runTime = new Timer();
-    public CMD_Deploy(SUB_Wrist p_wrist, SUB_CoralHolder p_intake){
+    private final SUB_Intake m_intake;
+    private final SUB_Wrist m_wrist;
+    private final GlobalVariables m_variables;
+
+    public CMD_Deploy(SUB_Intake p_intake, SUB_Wrist p_wrist, GlobalVariables p_variables){
         m_wrist = p_wrist;
         m_intake = p_intake;
+        m_variables = p_variables;
+
+        addRequirements(m_intake, m_wrist);
     }
 
     @Override
-    public void initialize(){ 
-        m_runTime.reset();
-        m_runTime.start();
-        switch (GlobalVariables.m_targetCoralLevel) {
-            case 1:
-                new CMD_DeployLevelOne(m_intake).schedule();
-                break;
-            case 2:
-                new CMD_DeployLevelTwo(m_intake, m_wrist).schedule();
-                break;
-            case 3:
-                new CMD_DeployLevelThree(m_intake, m_wrist).schedule();
-                break;
-            case 4:
-                new CMD_DeployLevelFour(m_intake, m_wrist).schedule();
-                break;
-            default:
-                break;
-        }}
+    public void initialize(){
+        m_intake.setVoltage(IntakeConstants.kReverse);
+        if(GlobalVariables.m_targetCoralLevel == 4){
+            m_wrist.setGoal(WristConstants.kStowing);
+        }
+    }
 
     @Override
     public boolean isFinished(){
-        return m_wrist.inPosition() && m_runTime.get() > .5;
+        return true;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        m_variables.setRobotState(RobotState.DEPLOY);
+        GlobalVariables.m_haveCoral = false;
     }
 }

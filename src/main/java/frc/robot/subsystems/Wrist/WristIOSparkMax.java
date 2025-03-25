@@ -85,6 +85,11 @@ public class WristIOSparkMax implements WristIO{
     }
 
     @Override
+    public boolean inPosition(double p_position){
+        return Math.abs(getPosition() - p_position) < WristConstants.kTolerance;
+    }
+
+    @Override
     public void PID(){
         var profile = new TrapezoidProfile(m_wristConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
