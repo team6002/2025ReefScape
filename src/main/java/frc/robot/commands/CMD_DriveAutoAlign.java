@@ -27,6 +27,7 @@ public class CMD_DriveAutoAlign extends Command {
   double sideMod = 1; // variable for which side is the robot on
   double xAdjustment=0;
   double yAdjustment=0;
+  double rotAdjustment=0;
   double xGoal = 0;
   double yGoal = 5;
   double rotGoal = 0;
@@ -72,8 +73,19 @@ public class CMD_DriveAutoAlign extends Command {
         
         }
 
+        if (Math.abs(m_drivetrain.getTargetOdo().getRotation().getDegrees()) <= 3){
+          rotAdjustment = 0;  
+        }else{
+          var turnDirection = Math.signum(m_drivetrain.getTargetOdo().getRotation().getDegrees());
+          rotAdjustment = -.01 * turnDirection;
+        }
+
         // adjustedAdjustments = new Translation2d(xAdjustment, yAdjustment).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()));
     
+      }else{
+        xAdjustment = 0;
+        yAdjustment = 0;
+        rotAdjustment = 0;
       }  
     } catch (Exception e) {
     
@@ -97,7 +109,7 @@ public class CMD_DriveAutoAlign extends Command {
 
     FieldCentricTranslation = new Translation2d(xSpeed, ySpeed).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()).unaryMinus());
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive(FieldCentricTranslation.getX() + xSpeed, FieldCentricTranslation.getY() + yAdjustment, rot, false);
+    m_drivetrain.drive(xSpeed, ySpeed + yAdjustment, rot + rotAdjustment, false);
   }
 
   // private static double modifyAxis(double value) {
