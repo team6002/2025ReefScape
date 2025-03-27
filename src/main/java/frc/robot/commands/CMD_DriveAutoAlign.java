@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +23,7 @@ public class CMD_DriveAutoAlign extends Command {
   double sideMod = 1; // variable for which side is the robot on
   double xAdjustment=0;
   double yAdjustment=0;
+  double rotAdjustment=0;
   double xGoal = 0;
   double yGoal = 5;
   double rotGoal = 0;
@@ -36,15 +38,6 @@ public class CMD_DriveAutoAlign extends Command {
     addRequirements(m_drivetrain);
     this.yGoal = yGoal;
   }
-
-  @Override
-  public void initialize() {
-    // if (DriverStation.getAlliance().get() == Alliance.Red){
-    //   sideMod = 1;
-    // }else {
-    //   sideMod = -1;
-    // }
-  }
  
   @Override
   public void execute() {
@@ -53,9 +46,6 @@ public class CMD_DriveAutoAlign extends Command {
       if (m_vision.getHasLTarget() || m_vision.getHasRTarget()){
         if (Math.abs((m_drivetrain.getTargetOdo().getX() - Units.inchesToMeters(xGoal))) <= Units.inchesToMeters(.5)){
           xAdjustment = 0;
-        }else{
-          // xAdjustment = -.1;
-        
         }
         
         if (Math.abs((Units.inchesToMeters(yGoal) - m_drivetrain.getTargetOdo().getY())) <= Units.inchesToMeters(.5)){
@@ -67,8 +57,16 @@ public class CMD_DriveAutoAlign extends Command {
         
         }
 
-        // adjustedAdjustments = new Translation2d(xAdjustment, yAdjustment).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()));
-    
+        if (Math.abs(m_drivetrain.getTargetOdo().getRotation().getDegrees()) <= 3){
+          rotAdjustment = 0;  
+        }else{
+          var turnDirection = Math.signum(m_drivetrain.getTargetOdo().getRotation().getDegrees());
+          rotAdjustment = -.01 * turnDirection;
+        }    
+      }else{
+        xAdjustment = 0;
+        yAdjustment = 0;
+        rotAdjustment = 0;
       }  
     } catch (Exception e) {
     
@@ -80,31 +78,15 @@ public class CMD_DriveAutoAlign extends Command {
     var xSpeed = MathUtil.applyDeadband(m_controller.getLeftY(),deadzone)*sideMod;
 
     rot = MathUtil.applyDeadband(-m_controller.getRightX(), deadzone);
-    // if (m_controller.leftTrigger(.5).getAsBoolean() && m_vision.getTcameraYaw() != Double.MAX_VALUE){
-    //   try { 
-    //     rot = Math.copySign(.05, -m_vision.getTcameraYaw());
-    //   } catch (Exception e) {
-    //   } 
-    // }
+
     if (m_vision.getTcameraYaw() !=Double.MAX_VALUE && Math.abs(m_vision.getTcameraYaw()) <= 3.5){
       rot = 0;
     }
 
-    // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive(xSpeed + xSpeed, ySpeed + yAdjustment, rot, false);
+    FieldCentricTranslation = new Translation2d(xSpeed, ySpeed).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()).unaryMinus());
+    m_drivetrain.drive(xSpeed, ySpeed + yAdjustment, rot + rotAdjustment, false);
   }
 
-  // private static double modifyAxis(double value) {
-  //   double modifedValue;
-  //   // Deadband
-  //   // value = deadband(value, 0.2);
-
-  //   // Square the axis
-  //   modifedValue = value * value;
-  //   modifedValue = Math.copySign(value, value);
-
-  //   return modifedValue;
-  // }
   @Override
   public void end(boolean interrupted) {
       m_drivetrain.drive(0.0, 0.0, 0.0, true);
