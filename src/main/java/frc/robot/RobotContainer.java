@@ -124,7 +124,7 @@ public class RobotContainer {
 
     m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
 
-    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, -5));//is in use
+    m_driverController.leftTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, -5));//is in use
 
 
     //operator
