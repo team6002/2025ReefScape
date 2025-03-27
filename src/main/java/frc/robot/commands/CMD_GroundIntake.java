@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.subsystems.GroundIntake.SUB_GroundIntake;
@@ -13,18 +12,17 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 public class CMD_GroundIntake extends Command{
     private final SUB_GroundPivot m_groundPivot;
     private final SUB_GroundIntake m_groundIntake;
-    private final CommandXboxController m_driverController;
     private boolean m_haveCoral = false;
-    public CMD_GroundIntake(SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, CommandXboxController p_driverController){
+    public CMD_GroundIntake(SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake){
         m_groundPivot = p_groundPivot;
         m_groundIntake = p_groundIntake;
-        m_driverController = p_driverController;
         addRequirements(m_groundPivot, m_groundIntake);
     }
 
     public void initialize(){
         SequentialCommandGroup command;
-        if(m_driverController.leftBumper().getAsBoolean() == false && m_groundPivot.getGoal() > Math.toRadians(180)){
+        if(
+            m_groundPivot.getGoal() > Math.toRadians(180)){
             command = new SequentialCommandGroup(
                 new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                 ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff))

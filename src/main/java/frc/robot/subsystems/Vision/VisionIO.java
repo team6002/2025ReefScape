@@ -35,9 +35,9 @@ public interface VisionIO {
   public static class VisionIOInputs {
     // public Pose2d CameraPose = new Pose2d();
     public boolean LTarget = false;
-    public Transform3d LTargetPose = new Transform3d();
+    public Pose2d LTargetPose = new Pose2d();
     public boolean RTarget = false;
-    public Transform3d RTargetPose = new Transform3d();
+    public Pose2d RTargetPose = new Pose2d();
     public double TCameraYaw = 0;
   }
 
@@ -51,8 +51,8 @@ public interface VisionIO {
     public default Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {return null;}
     public default Pose2d getCurrentLPose(){return null;}
     public default Pose2d getCurrentRPose(){return null;}
-    public default Transform3d getTargetLPose(){return null;}
-    public default Transform3d getTargetRPose(){return null;}
+    public default Pose2d getTargetLPose(){return null;}
+    public default Pose2d getTargetRPose(){return null;}
     public default Optional<EstimatedRobotPose> getLEstimatedGlobalPoseLast() {return null;}
     public default Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {return null;}
     public default void setMultiTagFallbackStrategy(PoseStrategy poseStrategy){}

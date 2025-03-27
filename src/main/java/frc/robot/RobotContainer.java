@@ -98,21 +98,10 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_wrist, m_intake, m_variables));
 
     m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
-    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision));//is in use
+    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, 5));
+    m_driverController.leftTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, -5));
 
-
-    m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
-
-    m_driverController.leftTrigger().onTrue(
-      new SequentialCommandGroup(
-        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
-        ,new WaitCommand(.2)
-        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
-      )
-    ).onFalse(
-      new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome)).andThen(
-      new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
-    );
+    m_driverController.leftBumper().whileTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
     //operator
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables));
 

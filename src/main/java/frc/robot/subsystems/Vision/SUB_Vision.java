@@ -29,7 +29,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.VisionConstants;
@@ -126,12 +125,12 @@ public class SUB_Vision {
         return io.getCurrentRPose();
     }
 
-    public Transform3d getTargetLPose(){
+    public Pose2d getTargetLPose(){
         return io.getTargetLPose();
         // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), -VisionConstants.kRobotToLCam.getY(), -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
     }
 
-    public Transform3d getTargetRPose(){
+    public Pose2d getTargetRPose(){
         return io.getTargetRPose();
         // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }
