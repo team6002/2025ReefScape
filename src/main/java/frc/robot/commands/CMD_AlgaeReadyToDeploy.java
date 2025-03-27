@@ -10,7 +10,7 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
-public class CMD_ReadyToDeploy extends Command{
+public class CMD_AlgaeReadyToDeploy extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_Wrist m_wrist;
@@ -20,7 +20,7 @@ public class CMD_ReadyToDeploy extends Command{
     private boolean setPivot;
     private boolean setWrist;
 
-    public CMD_ReadyToDeploy(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
+    public CMD_AlgaeReadyToDeploy(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
         m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_wrist = p_wrist;
@@ -32,24 +32,31 @@ public class CMD_ReadyToDeploy extends Command{
     public void initialize(){
         setPivot = false;
         setElevator = false;
-        setWrist = false; 
+        setWrist = false;
+
+        if(m_variables.isRobotState(RobotState.ALGAE_LEVEL_2)){
+            m_pivot.setGoal(PivotConstants.kReadyAlgae);
+        }
+        if(m_variables.isRobotState(RobotState.ALGAE_LEVEL_3)){
+            m_pivot.setGoal(PivotConstants.kReadyAlgael3);
+        }
     }
 
     @Override
     public void execute(){
-        if(!m_pivot.inPosition(PivotConstants.kDeployL4) && !setPivot){
-            m_pivot.setGoal(PivotConstants.kDeployL4);
-            setPivot = true;
-        }
-
-        if(!m_elevator.inPosition(ElevatorConstants.kDeployL2) &! setElevator){
-            m_elevator.setGoal(ElevatorConstants.kDeployL2);
-            setElevator = true;
-        }
-
-        if(!m_wrist.inPosition(WristConstants.kDeployL2) &! setWrist){
-            m_wrist.setGoal(WristConstants.kDeployL2);
+        if(!m_wrist.inPosition(WristConstants.kDeployL3) &! setWrist && m_pivot.inPosition()){
+            m_wrist.setGoal(WristConstants.kDeployL3);
             setWrist = true;
+        }
+
+        if(m_wrist.inPosition(WristConstants.kDeployL3) &! setElevator){
+            m_elevator.setGoal(ElevatorConstants.kDeployL3);
+            setElevator  = true;
+        }
+
+        if(m_wrist.inPosition(WristConstants.kDeployL3) && m_elevator.inPosition(ElevatorConstants.kDeployL3) &! setPivot){
+            m_pivot.setGoal(PivotConstants.kDeployL3);
+            setPivot = true;
         }
     }
 

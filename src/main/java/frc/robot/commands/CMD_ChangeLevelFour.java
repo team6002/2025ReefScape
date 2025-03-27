@@ -1,0 +1,65 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.GlobalVariables;
+import frc.GlobalVariables.RobotState;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.WristConstants;
+import frc.robot.subsystems.Elevator.SUB_Elevator;
+import frc.robot.subsystems.Wrist.SUB_Wrist;
+import frc.robot.subsystems.Pivot.SUB_Pivot;
+
+public class CMD_ChangeLevelFour extends Command{
+    private final SUB_Elevator m_elevator;
+    private final SUB_Wrist m_wrist;
+    private final SUB_Pivot m_pivot;
+    private final GlobalVariables m_variables;
+
+    private boolean setElevator;
+    private boolean setPivot;
+    
+    public CMD_ChangeLevelFour(SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Pivot p_pivot, GlobalVariables p_variables){
+        
+        m_elevator = p_elevator;
+        m_wrist = p_wrist; 
+        m_pivot = p_pivot;
+        m_variables = p_variables;
+        addRequirements(m_elevator, m_wrist, m_pivot);
+    }
+
+    @Override
+    public void initialize(){
+        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+            return;
+        }
+
+        setElevator = false;
+        setPivot = false;
+        GlobalVariables.m_targetCoralLevel = 4;
+        m_wrist.setGoal(WristConstants.kDeployL4);
+    }
+
+    @Override
+    public void execute(){
+        if(!setElevator){
+            m_elevator.setGoal(ElevatorConstants.kDeployL4);
+            setElevator = true;
+        }
+
+        if(!setPivot){
+            m_pivot.setGoal(PivotConstants.kDeployL4);
+            setPivot = true;
+        }
+    }
+
+    @Override
+    public boolean isFinished(){
+        return m_elevator.inPosition() && m_pivot.inPosition() && setElevator && setPivot;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        if(interrupted) return;
+    }
+}

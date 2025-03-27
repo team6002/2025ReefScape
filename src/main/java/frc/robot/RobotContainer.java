@@ -23,6 +23,8 @@ import frc.robot.subsystems.Intake.*;
 import frc.robot.subsystems.Pivot.*;
 import frc.robot.subsystems.Questimator.QuestNavIOMeta;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -82,17 +84,53 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
+    m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
+
+
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
-    m_driverController.y().onFalse(new InstantCommand(()-> m_winch.setReference(WinchConstants.kReadyClimb)));
+    m_driverController.start().onFalse(new CMD_ReadyToClimb(m_pivot, m_elevator, m_wrist, m_intake, m_groundPivot, m_winch));
+    m_driverController.y().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
+    
     
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povRight().onTrue(new CMD_Home(m_elevator, m_intake, m_wrist, m_pivot, m_algae, m_variables));
+    m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_wrist, m_intake, m_variables));
 
+    m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
+    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision));//is in use
+
+
+    m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake, m_driverController));
+
+    m_driverController.leftTrigger().onTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
+        ,new WaitCommand(.2)
+        ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
+      )
+    ).onFalse(
+      new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome)).andThen(
+      new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
+    );
     //operator
-    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_pivot, m_intake, m_variables));
+    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables));
 
-    m_operatorController.povUp().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 4));
-    m_operatorController.povRight().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 3));
-    m_operatorController.povDown().onTrue(new CMD_ChangeLevel(m_elevator, m_wrist, m_variables, 2));
+    m_operatorController.back().onTrue(new SequentialCommandGroup( 
+      new InstantCommand(()->  m_algae.setReference(AlgaeConstants.kReverse))
+      ,new WaitCommand(.33)
+      ,new InstantCommand(()-> m_algae.setReference(0))
+      ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
+    ));
+
+    m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_wrist, m_pivot, m_variables));
+    m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_wrist, m_pivot, m_variables));
+    m_operatorController.povDown().onTrue(new CMD_ChangeLevelTwo(m_elevator, m_wrist, m_pivot, m_variables));
+
+    m_operatorController.a().onTrue(new CMD_ReadyToDeployProcessor(m_pivot, m_elevator, m_wrist, m_variables));
+    m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_wrist, m_variables));
+    m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
+    m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
+    m_operatorController.rightStick().onTrue(new CMD_ReadyToIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
   }
 }

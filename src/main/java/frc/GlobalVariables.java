@@ -19,14 +19,14 @@ public class GlobalVariables extends SubsystemBase{
 
     public enum RobotState{
         HOME
+        ,READY
         ,READY_TO_INTAKE
         ,READY_TO_DEPLOY
         ,DEPLOY
-        ,READY_TO_SCORE
         ,READY_TO_CLIMB
         ,CLIMB
-        ,LEVEL_2
-        ,LEVEL_3
+        ,ALGAE_LEVEL_2
+        ,ALGAE_LEVEL_3
         ,PROCESSOR
         ,BARGE
         ,GROUND

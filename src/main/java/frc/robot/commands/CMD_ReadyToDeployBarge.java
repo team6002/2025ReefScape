@@ -10,57 +10,61 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Wrist.SUB_Wrist;
 
-public class CMD_ReadyToDeploy extends Command{
+public class CMD_ReadyToDeployBarge extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_Wrist m_wrist;
     private final GlobalVariables m_variables;
 
     private boolean setElevator;
-    private boolean setPivot;
     private boolean setWrist;
+    private boolean setPivot;
 
-    public CMD_ReadyToDeploy(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
+
+    public CMD_ReadyToDeployBarge(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
         m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_wrist = p_wrist;
         m_variables = p_variables;
+
         addRequirements(m_pivot, m_elevator, m_wrist);
     }
 
     @Override
     public void initialize(){
-        setPivot = false;
         setElevator = false;
-        setWrist = false; 
+        setPivot = false;
+        setWrist = false;
     }
 
     @Override
     public void execute(){
-        if(!m_pivot.inPosition(PivotConstants.kDeployL4) && !setPivot){
-            m_pivot.setGoal(PivotConstants.kDeployL4);
+        if(!setPivot){
+            m_pivot.setGoal(PivotConstants.kDeployBarge);
             setPivot = true;
         }
 
-        if(!m_elevator.inPosition(ElevatorConstants.kDeployL2) &! setElevator){
-            m_elevator.setGoal(ElevatorConstants.kDeployL2);
+        if(setPivot && m_pivot.inPosition() && !setElevator){
+            m_elevator.setGoal(ElevatorConstants.kDeployBarge);
             setElevator = true;
         }
 
-        if(!m_wrist.inPosition(WristConstants.kDeployL2) &! setWrist){
-            m_wrist.setGoal(WristConstants.kDeployL2);
+        if(setPivot && m_pivot.inPosition() && !setWrist){
+            m_wrist.setGoal(WristConstants.kDeployBarge);
             setWrist = true;
         }
     }
 
     @Override
     public boolean isFinished(){
-        return setPivot && setElevator && setWrist && m_elevator.inPosition() && m_pivot.inPosition() && m_wrist.inPosition();
+        return setElevator && setPivot && setWrist && m_elevator.inPosition() && m_pivot.inPosition() && m_wrist.inPosition();
     }
 
     @Override
     public void end(boolean interrupted){
-        if(interrupted) return;
-        m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
+
+        if(interrupted){return;}
+
+        m_variables.setRobotState(RobotState.BARGE);
     }
 }

@@ -94,7 +94,7 @@ public class WristIOSparkMax implements WristIO{
         var profile = new TrapezoidProfile(m_wristConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() - WristConstants.kWristOffset- GlobalVariables.m_pivotAngle, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() + GlobalVariables.m_pivotAngle, m_setpoint.velocity));
     }
 
     @Override
@@ -107,6 +107,6 @@ public class WristIOSparkMax implements WristIO{
         m_setpoint = new TrapezoidProfile.State(getPosition() - WristConstants.kWristOffset, 0);
         m_goal = m_setpoint;
         m_wristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() - WristConstants.kWristOffset- GlobalVariables.m_pivotAngle, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_wristFeedforward.calculate(getPosition() + GlobalVariables.m_pivotAngle, m_setpoint.velocity));
     }
 }
