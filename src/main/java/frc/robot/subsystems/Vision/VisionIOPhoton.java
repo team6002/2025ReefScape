@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -146,52 +147,59 @@ public class VisionIOPhoton implements VisionIO{
             return RCamera.getLatestResult();
         }else return null;
     }
-    @Override
-    public Pose2d getCurrentLPose(){
-        int tagNum = LCamera.getLatestResult().getBestTarget().getFiducialId();
-        for (PhotonTrackedTarget target : LCamera.getLatestResult().targets){
-            if (Math.abs(target.getYaw()) <= 25){
-                continue;
-            }
-            tagNum = target.getFiducialId();
-        }
-        Pose2d tagLocation = new Pose2d();
-        tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
-        Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
-            new Transform2d(getTargetLPose().getTranslation().toTranslation2d(), getTargetLPose().getRotation().toRotation2d())
-            , tagLocation
-            , new Transform2d(VisionConstants.kRobotToLCam.inverse().getTranslation().toTranslation2d(), VisionConstants.kRobotToLCam.getRotation().toRotation2d().unaryMinus())
-            );
-        return currentPose;
-    }
+
+    // @Override
+    // public Pose2d getCurrentLPose(){
+    //     int tagNum = LCamera.getLatestResult().getBestTarget().getFiducialId();
+    //     for (PhotonTrackedTarget target : LCamera.getLatestResult().targets){
+    //         if (Math.abs(target.getYaw()) <= 25){
+    //             continue;
+    //         }
+    //         tagNum = target.getFiducialId();
+    //     }
+    //     Pose2d tagLocation = new Pose2d();
+    //     tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
+    //     Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
+    //         new Transform2d(getTargetLPose().getTranslation().toTranslation2d(), getTargetLPose().getRotation().toRotation2d())
+    //         , tagLocation
+    //         , new Transform2d(VisionConstants.kRobotToLCam.inverse().getTranslation().toTranslation2d(), VisionConstants.kRobotToLCam.getRotation().toRotation2d().unaryMinus())
+    //         );
+    //     return currentPose;
+    // }
     
-    @Override
-    public Pose2d getCurrentRPose(){
-        int tagNum = RCamera.getLatestResult().getBestTarget().getFiducialId();
-        for (PhotonTrackedTarget target : RCamera.getLatestResult().targets){
-            if (Math.abs(target.getYaw()) <= 25){
-                continue;
-            }
-            tagNum = target.getFiducialId();
-        }
-        Pose2d tagLocation = new Pose2d();
-        tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
-        Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
-            new Transform2d(getTargetRPose().getTranslation().toTranslation2d(), getTargetRPose().getRotation().toRotation2d())
-            , tagLocation
-            , new Transform2d(VisionConstants.kRobotToRCam.inverse().getTranslation().toTranslation2d(), VisionConstants.kRobotToRCam.getRotation().toRotation2d().unaryMinus())
-            );
-        return currentPose;
-    }
+    // @Override
+    // public Pose2d getCurrentRPose(){
+    //     int tagNum = RCamera.getLatestResult().getBestTarget().getFiducialId();
+    //     for (PhotonTrackedTarget target : RCamera.getLatestResult().targets){
+    //         if (Math.abs(target.getYaw()) <= 25){
+    //             continue;
+    //         }
+    //         tagNum = target.getFiducialId();
+    //     }
+    //     Pose2d tagLocation = new Pose2d();
+    //     tagLocation = new Pose2d(VisionConstants.kTagLayout.getTagPose(tagNum).get().getX(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getY(), VisionConstants.kTagLayout.getTagPose(tagNum).get().getRotation().toRotation2d());
+    //     Pose2d currentPose = PhotonUtils.estimateFieldToRobot(
+    //         new Transform2d(getTargetRPose().getTranslation().toTranslation2d(), getTargetRPose().getRotation().toRotation2d())
+    //         , tagLocation
+    //         , new Transform2d(VisionConstants.kRobotToRCam.inverse().getTranslation().toTranslation2d(), VisionConstants.kRobotToRCam.getRotation().toRotation2d().unaryMinus())
+    //         );
+    //     return currentPose;
+    // }
 
     @Override
-    public Transform3d getTargetLPose(){
+    public Pose2d getTargetLPose(){
         try {
             if (LCamera.getLatestResult().hasTargets()){
-                if (LCamera.getLatestResult().getBestTarget().getBestCameraToTarget()== null){
-                    return null;
-                }
-                return LCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                if (LCamera.getLatestResult().hasTargets()){
+                    var rawTranslation = LCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                    var RotatedPose = new Pose3d(rawTranslation.getTranslation().getX(), rawTranslation.getY() , rawTranslation.getZ(), rawTranslation.getRotation()).rotateBy(VisionConstants.kRobotToLCam.getRotation());
+                    var ProcessedPose3d = new Pose3d(RotatedPose.getTranslation().plus(VisionConstants.kRobotToLCam.getTranslation()), RotatedPose.getRotation());
+                    var targetPose2d = ProcessedPose3d;
+                    // .rotateBy(VisionConstants.kRobotToLCam.getRotation());
+                    //  new Pose2d(rawPose.getTranslation().toTranslation2d().minus(VisionConstants.kRobotToLCam.getTranslation().toTranslation2d()), rawPose.getRotation().toRotation2d().plus(VisionConstants.kRobotToLCam.getRotation().toRotation2d()));
+                    return targetPose2d.toPose2d();
+                
+                }else return null;
             }else return null;
         } catch (Exception e){
             return null;
@@ -199,11 +207,16 @@ public class VisionIOPhoton implements VisionIO{
     }
 
     @Override
-    public Transform3d getTargetRPose(){
-        try {
+    public Pose2d getTargetRPose(){
+        try{
             if (RCamera.getLatestResult().hasTargets()){
-                return RCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
-            
+                var rawTranslation = RCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                    var RotatedPose = new Pose3d(rawTranslation.getTranslation().getX(), rawTranslation.getY() , rawTranslation.getZ(), rawTranslation.getRotation()).rotateBy(VisionConstants.kRobotToRCam.getRotation());
+                    var ProcessedPose3d = new Pose3d(RotatedPose.getTranslation().plus(VisionConstants.kRobotToRCam.getTranslation()), RotatedPose.getRotation());
+                    var targetPose2d = ProcessedPose3d;
+                    // .rotateBy(VisionConstants.kRobotToRCam.getRotation());
+                //  new Pose2d(rawPose.getTranslation().toTranslation2d().minus(VisionConstants.kRobotToLCam.getTranslation().toTranslation2d()), rawPose.getRotation().toRotation2d().plus(VisionConstants.kRobotToLCam.getRotation().toRotation2d()));
+                return targetPose2d.toPose2d();
             }else return null;
         } catch (Exception e){
             return null;
@@ -326,14 +339,14 @@ public class VisionIOPhoton implements VisionIO{
         inputs.TCameraYaw = getTcameraYaw();
         // }
         if (LCamera.getLatestResult().hasTargets()){
-            inputs.LTargetPose = getTargetLPose();
-            // .plus(new Transform3d (new Translation3d(VisionConstants.kRobotToLCam.getX(), -VisionConstants.kRobotToLCam.getY(), -VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
+            inputs.LTargetPose = getTargetLPose();//.plus(VisionConstants.kRobotToLCam).inverse();
+            // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToLCam.getX(), -VisionConstants.kRobotToLCam.getY(), VisionConstants.kRobotToLCam.getZ()), VisionConstants.kRobotToLCam.getRotation()));
         }
         inputs.LTarget = LCamera.getLatestResult().hasTargets(); 
           
         if (RCamera.getLatestResult().hasTargets()){
-            inputs.RTargetPose = getTargetRPose();
-            // .plus(new Transform3d (new Translation3d(VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
+            inputs.RTargetPose = getTargetRPose();//.plus(VisionConstants.kRobotToRCam).inverse();
+            // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
         }
         inputs.RTarget = RCamera.getLatestResult().hasTargets();   
         

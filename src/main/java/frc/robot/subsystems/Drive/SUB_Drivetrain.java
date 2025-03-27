@@ -288,8 +288,8 @@ public class SUB_Drivetrain extends SubsystemBase {
         
         m_odometry.update(
           Rotation2d.fromDegrees(getAngle()),
-          // getModulePositions()
-          modulePositions
+          getModulePositions()
+          // modulePositions
         );
     
         m_targetOdometry.update(
@@ -391,21 +391,16 @@ public class SUB_Drivetrain extends SubsystemBase {
         //   }
         // }
 
-        // LvisionEst.ifPresent(
-        //   est -> {
-        //       var estPose = est.estimatedPose.toPose2d();
-        //     if (TargetOdoEnable){
-        //       if (m_vision.getHasLTarget()){   
-        //         addTargetVisionMeasurement(
-        //           m_vision.getTargetLPose(), est.timestampSeconds);
-        //       }
-        //       if (m_vision.getHasRTarget()){
-        //         addTargetVisionMeasurement(
-        //           m_vision.getTargetRPose(), est.timestampSeconds);
-        //         }
-        //       }
-        //   }  
-        // );
+        if (TargetOdoEnable){
+          if (m_vision.getHasLTarget()){   
+            addTargetVisionMeasurement(
+              m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.3);
+          }
+          if (m_vision.getHasRTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.3);
+            }
+          }
         
       // }
 
@@ -669,10 +664,10 @@ public class SUB_Drivetrain extends SubsystemBase {
           }
       }
     
-      public void addTargetVisionMeasurement(Transform3d visionMeasurement, double timestampSeconds) {
+      public void addTargetVisionMeasurement(Pose2d visionMeasurement, double timestampSeconds) {
         try {
           Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
-          m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation().toRotation2d()), timestampSeconds, stdDevs);
+          m_targetOdometry.addVisionMeasurement(new Pose2d(visionMeasurement.getX(), visionMeasurement.getY(), visionMeasurement.getRotation()), timestampSeconds, stdDevs);
         } catch (Exception e){
           System.out.println(e);
         }

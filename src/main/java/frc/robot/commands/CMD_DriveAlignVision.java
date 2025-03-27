@@ -143,7 +143,7 @@ public class CMD_DriveAlignVision extends Command{
     }else{
       turnSpeed = 0;
     }
-      xController.setGoal(0+Units.inchesToMeters(7.25) + VisionConstants.kRobotToLCam.getX());
+      xController.setGoal(0);
       yController.setGoal(0+Units.inchesToMeters(0));
     // if (m_vision.getHasTarget()){
       // if (Math.abs(m_vision.getTargetPose().getRotation().getAngle()) <= 5){  

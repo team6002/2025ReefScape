@@ -498,9 +498,9 @@ public final class Constants {
       public static final double kXTolerance = 0.02;
       public static final double kYTolerance = 0.02;
 
-      public static final double kXAutoClamp = .4;
-      public static final double kYAutoClamp = .8;
-      public static final double kTurnAutoClamp = .4;
+      public static final double kXAutoClamp = .2;//.4;
+      public static final double kYAutoClamp = .2;//.8;
+      public static final double kTurnAutoClamp = .2;//.4;
   
       public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(2, 1.5);
       public static final double driveKp = 1;
