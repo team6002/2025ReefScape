@@ -64,7 +64,7 @@ public class CMD_DriveAutoAlign extends Command {
         
         }
         
-        if (Math.abs((Units.inchesToMeters(yGoal) - m_drivetrain.getTargetOdo().getY())) <= Units.inchesToMeters(.5)){
+        if (Math.abs((Units.inchesToMeters(yGoal) - m_drivetrain.getTargetOdo().getY())) <= Units.inchesToMeters(1)){
           yAdjustment = 0;
         }else{
           var direction = Math.signum(Units.inchesToMeters(yGoal)- m_drivetrain.getTargetOdo().getY() );
@@ -77,7 +77,7 @@ public class CMD_DriveAutoAlign extends Command {
           rotAdjustment = 0;  
         }else{
           var turnDirection = Math.signum(m_drivetrain.getTargetOdo().getRotation().getDegrees());
-          rotAdjustment = -.01 * turnDirection;
+          rotAdjustment = -.005 * turnDirection;
         }
 
         // adjustedAdjustments = new Translation2d(xAdjustment, yAdjustment).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()));
@@ -107,9 +107,10 @@ public class CMD_DriveAutoAlign extends Command {
       rot = 0;
     }
 
-    FieldCentricTranslation = new Translation2d(xSpeed, ySpeed).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()).unaryMinus());
+    FieldCentricTranslation = new Translation2d(xSpeed, ySpeed).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle())).unaryMinus();
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive(xSpeed, ySpeed + yAdjustment, rot + rotAdjustment, false);
+    // m_drivetrain.drive(xSpeed, ySpeed + yAdjustment, rot + rotAdjustment, false);
+    m_drivetrain.drive(FieldCentricTranslation.getX(), FieldCentricTranslation.getY() + yAdjustment, rot + rotAdjustment, false);
   }
 
   // private static double modifyAxis(double value) {
