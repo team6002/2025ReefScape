@@ -433,16 +433,16 @@ public final class Constants {
     public static final double kG = 0.2;
     public static final double kS = 0.0;
     public static final double kConversionFactor = 2*Math.PI;
-    public static final double kOffset = Math.toRadians(-33);
+    public static final double kOffset = Math.toRadians(-180);
     public static final double kMaxVel = Math.toRadians(1440);
     public static final double kMaxAccel = Math.toRadians(1440);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kTolerance = 5;
 
-    public static final double kHome = Math.toRadians(125);
-    public static final double kIntake = Math.toRadians(240);
-    public static final double kDeploy = Math.toRadians(140);
+    public static final double kHome = Math.toRadians(0);
+    public static final double kIntake = Math.toRadians(90);
+    public static final double kDeploy = Math.toRadians(10);
   }
 
   public static final class GroundIntakeConstants{
