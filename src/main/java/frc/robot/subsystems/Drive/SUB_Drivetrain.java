@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Questimator.QuestNavIO;
 import frc.robot.subsystems.Questimator.QuestimatorIOInputsAutoLogged;
+import frc.robot.subsystems.Vision.KalmanFilter;
 import frc.robot.subsystems.Vision.SUB_Vision;
 // import frc.robot.subsystems.SUB_Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -108,6 +109,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       /** Creates a new DriveSubsystem. */
       SUB_Vision m_vision;
       // private Pose2d currentPose;
+      KalmanFilter kFilter = new KalmanFilter();
       private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
   
       private Rotation2d m_cameraRotation;// angle of the robot from cameras
@@ -154,6 +156,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         };
         field = new Field2d();
         fieldEst = new Field2d();
+        kFilter = new KalmanFilter();
         // m_ChassisSpeed = new ChassisSpeeds(0, 0, 0);
         // SmartDashboard.putNumber("SwerveP", m_SwerveP);
         // SmartDashboard.putNumber("SwerveI", m_SwerveI);
@@ -302,11 +305,11 @@ public class SUB_Drivetrain extends SubsystemBase {
            getModulePositions());
     
         m_pureOdometry.update(getOdoRotation(), modulePositions);
-        Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
-        Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
-        Logger.recordOutput("Questimetry", questimetry.getEstimatedPosition());
+        Logger.recordOutput("Drive/Odometry/PureRobotPose", m_pureOdometry.getPoseMeters());
+        Logger.recordOutput("Drive/Odometry/RobotPose",m_odometry.getEstimatedPosition());
+        Logger.recordOutput("Drive/Odometry/Questimetry", questimetry.getEstimatedPosition());
         // new Rotation2d();
-        Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
+        Logger.recordOutput("Drive/Odometry/TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
         // new Rotation2d();
         // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
         // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
@@ -330,7 +333,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
             if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("LCameraPose", estPose);
+              Logger.recordOutput("Drive/Odometry/LCameraPose", estPose);
             }
             // Change our trust in the measurement based on the tags we can see
             
@@ -351,7 +354,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
             if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("RCameraPose", estPose);
+              Logger.recordOutput("Drive/Odometry/RCameraPose", estPose);
             }
             // Logger.recordOutput("RCameraPose", estPose);
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
@@ -362,7 +365,43 @@ public class SUB_Drivetrain extends SubsystemBase {
           
           }  
         );
-       
+        RvisionEst.ifPresent(
+          est -> {
+            // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+            var estPose = est.estimatedPose.toPose2d();
+            // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+            // kFilter.update(estArray);
+            double[] fullMeasurement = {
+              estPose.getX(),estPose.getY(),estPose.getRotation().getRadians(), // Position
+              getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+              Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+            };
+            kFilter.update(fullMeasurement);
+          }  
+        );
+
+        LvisionEst.ifPresent(
+          est -> {
+            // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+            var estPose = est.estimatedPose.toPose2d();
+            // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+            // kFilter.update(estArray);
+            double[] fullMeasurement = {
+              estPose.getX(),estPose.getY(),estPose.getRotation().getRadians(), // Position
+              getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+              Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+            };
+            kFilter.update(fullMeasurement);
+          }  
+        );
+
+        // double [] odoArray = new double[]{m_pureOdometry.getPoseMeters().getX(), m_pureOdometry.getPoseMeters().getY(), m_pureOdometry.getPoseMeters().getRotation().getRadians()}; 
+        // kFilter.update(odoArray);
+
+        
+
+        Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),new Rotation2d().fromRadians(kFilter.getState().get(2)));
+        Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
         // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
         //   try {
         //   var L = LvisionEst.get();
@@ -413,7 +452,8 @@ public class SUB_Drivetrain extends SubsystemBase {
                 modulePositions[moduleIndex].angle);
             lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
           }
-        
+       
+          
       }
     
       public ChassisSpeeds getChasisSpeed() {
@@ -593,7 +633,6 @@ public class SUB_Drivetrain extends SubsystemBase {
        * @return The turn rate of the robot, in degrees per second
        */
       public double getTurnRate() {
-        //TODO
         return gyroInputs.yawVelocity * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
       }
       
@@ -704,6 +743,14 @@ public class SUB_Drivetrain extends SubsystemBase {
         TargetOdoEnable = state;
       }
     
+      public void resetOdometryToVision(){
+        try{
+        resetOdometry(m_vision.getLEstimatedGlobalPose().get().estimatedPose.toPose2d());
+        gyroIO.set(m_vision.getLEstimatedGlobalPose().get().estimatedPose.getRotation().toRotation2d());
+        } catch(Exception e){
+
+        }
+      }
       public void resetOdoToCurrentPosition(){
         try{
         

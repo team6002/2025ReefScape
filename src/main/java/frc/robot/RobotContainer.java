@@ -100,6 +100,7 @@ public class RobotContainer {
       new InstantCommand(()-> m_variables.setRobotState(RobotState.HOME))
       .andThen(new CMD_Score(m_elevator, m_wrist, m_coralIntake, m_pivot, m_algae, m_variables))
     );
+    m_driverController.povDown().onTrue(new InstantCommand(()->m_drivetrain.resetOdometryToVision()));
     
     // m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
     m_driverController.rightBumper().onTrue(new CMD_DriveAlignVision(m_drivetrain, m_vision, m_driverController));
