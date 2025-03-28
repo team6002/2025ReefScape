@@ -64,7 +64,7 @@ public class CMD_DriveAutoAlign extends Command {
         
         }
         
-        if (Math.abs((Units.inchesToMeters(yGoal) - m_drivetrain.getTargetOdo().getY())) <= Units.inchesToMeters(1)){
+        if (Math.abs((Units.inchesToMeters(yGoal) - m_drivetrain.getTargetOdo().getY())) <= Units.inchesToMeters(.5)){
           yAdjustment = 0;
         }else{
           var direction = Math.signum(Units.inchesToMeters(yGoal)- m_drivetrain.getTargetOdo().getY() );
@@ -76,8 +76,8 @@ public class CMD_DriveAutoAlign extends Command {
         if (Math.abs(m_drivetrain.getTargetOdo().getRotation().getDegrees()) <= 3){
           rotAdjustment = 0;  
         }else{
-          var turnDirection = Math.signum(m_drivetrain.getTargetOdo().getRotation().getDegrees());
-          rotAdjustment = -.005 * turnDirection;
+          // var turnDirection = Math.signum(m_drivetrain.getTargetOdo().getRotation().getDegrees());
+          // rotAdjustment = -.005 * turnDirection;
         }
 
         // adjustedAdjustments = new Translation2d(xAdjustment, yAdjustment).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle()));
