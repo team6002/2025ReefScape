@@ -104,8 +104,7 @@ public class RobotContainer {
 
     m_driverController.leftBumper().whileTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
     //operator
-    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_algae, m_vision, m_variables, m_drivetrain, m_driverController));
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_alignBeforeShoot = !GlobalVariables.m_alignBeforeShoot));
+    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_algae, m_variables));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 

@@ -17,7 +17,6 @@ public class GlobalVariables extends SubsystemBase{
     public static boolean m_intakingAlgae = false;
     public static boolean m_groundPivotDeployed = false;
     public static boolean m_intakeFromStation = false;
-    public static boolean m_alignBeforeShoot = true;
     public static boolean m_groundHasCoral = false;
 
     public enum RobotState{

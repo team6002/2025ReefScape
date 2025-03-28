@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.GlobalVariables;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
@@ -12,9 +11,7 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
-import frc.robot.subsystems.Vision.SUB_Vision;
 import frc.robot.subsystems.Algae.SUB_Algae;
-import frc.robot.subsystems.Drive.SUB_Drivetrain;
 import frc.robot.Constants.AlgaeConstants;
 import frc.GlobalVariables.RobotState;
 
@@ -27,14 +24,10 @@ public class CMD_Score extends Command{
     private final SUB_GroundPivot m_groundPivot;
     private final SUB_GroundIntake m_groundIntake;
     private final SUB_Algae m_algae;
-    private final SUB_Vision m_vision;
-    private final CommandXboxController m_driverController;
-    private final SUB_Drivetrain m_drivetrain;
     private final GlobalVariables m_variables;
 
     public CMD_Score(SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, SUB_Pivot p_pivot,
-        SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, SUB_Algae p_algae,
-        SUB_Vision p_vision, GlobalVariables p_variables, SUB_Drivetrain p_drivetrain, CommandXboxController p_driverController){
+        SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, SUB_Algae p_algae, GlobalVariables p_variables){
 
         m_elevator = p_elevator;
         m_flippyWrist = p_flippyWrist;
@@ -43,10 +36,7 @@ public class CMD_Score extends Command{
         m_intake = p_intake;
         m_groundPivot = p_groundPivot;
         m_groundIntake = p_groundIntake;
-        m_vision = p_vision;
         m_variables = p_variables;
-        m_drivetrain = p_drivetrain;
-        m_driverController = p_driverController;
         m_algae = p_algae;
     }
 
@@ -73,11 +63,6 @@ public class CMD_Score extends Command{
             case READY_TO_DEPLOY:
                 if(GlobalVariables.m_groundHasCoral){
                     new CMD_GroundIntake(m_groundPivot, m_groundIntake).schedule();
-                }
-                else if(GlobalVariables.m_alignBeforeShoot) {
-                    new CMD_AlignColor(m_drivetrain, m_vision, m_driverController)
-                    .andThen(new CMD_Deploy(m_intake, m_flippyWrist, m_variables))
-                    .schedule();
                 }else{
                     new CMD_Deploy(m_intake, m_flippyWrist, m_variables).schedule();
                 }
