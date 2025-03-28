@@ -1,18 +1,18 @@
-package frc.robot.subsystems.Wrist;
+package frc.robot.subsystems.SpinnyWrist;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface WristIO {
+public interface SpinnyWristIO {
   @AutoLog
-  public static class WristIOInputs {
-    public double m_wristCurrent;
-    public double m_wristPosition;
-    public double m_wristGoal;
-    public boolean m_wristInPosition;
-    public double m_wristSetpoint;
+  public static class SpinnyWristIOInputs {
+    public double m_spinnyWristCurrent;
+    public double m_spinnyWristPosition;
+    public double m_spinnyWristGoal;
+    public boolean m_spinnyWristInPosition;
+    public double m_spinnyWristSetpoint;
   }
 
-  public default void updateInputs(WristIOInputs inputs) {}
+  public default void updateInputs(SpinnyWristIOInputs inputs) {}
 
   public default void setGoal(double p_goal){}
 

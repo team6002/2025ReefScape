@@ -108,27 +108,53 @@ public final class Configs {
                 }
         }
 
-        public static final class WristConfigs{
-                public static final SparkMaxConfig m_wristConfig = new SparkMaxConfig();
+        public static final class FlippyWristConfigs{
+                public static final SparkMaxConfig m_flippyWristConfig = new SparkMaxConfig();
                 static {
-                        m_wristConfig
+                        m_flippyWristConfig
                                 .idleMode(IdleMode.kBrake)
-                                .inverted(WristConstants.kWristInverted)
+                                .inverted(FlippyWristConstants.kWristInverted)
                                 .smartCurrentLimit(40)
                                 .disableFollowerMode()
                                 .voltageCompensation(12.0);
-                        m_wristConfig.absoluteEncoder
+                        m_flippyWristConfig.absoluteEncoder
                                 .inverted(true)
-                                .positionConversionFactor(WristConstants.kConversionFactor)
-                                .velocityConversionFactor(WristConstants.kConversionFactor/60)
+                                .positionConversionFactor(FlippyWristConstants.kConversionFactor)
+                                .velocityConversionFactor(FlippyWristConstants.kConversionFactor/60)
                                 .averageDepth(2);
-                        m_wristConfig.closedLoop
+                        m_flippyWristConfig.closedLoop
                                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                                .outputRange(WristConstants.kMinOutput, WristConstants.kMaxOutput)
-                                .pidf(WristConstants.kP, WristConstants.kI, WristConstants.kD, WristConstants.kFF)
-                                .positionWrappingInputRange(Math.toRadians(0), WristConstants.kConversionFactor)
+                                .outputRange(FlippyWristConstants.kMinOutput, FlippyWristConstants.kMaxOutput)
+                                .pidf(FlippyWristConstants.kP, FlippyWristConstants.kI, FlippyWristConstants.kD, FlippyWristConstants.kFF)
+                                .positionWrappingInputRange(Math.toRadians(0), FlippyWristConstants.kConversionFactor)
                                 .positionWrappingEnabled(true);
-                        m_wristConfig.limitSwitch
+                        m_flippyWristConfig.limitSwitch
+                                .forwardLimitSwitchEnabled(false)
+                                .reverseLimitSwitchEnabled(false);
+                }
+        }
+
+        public static final class SpinnyWristConfigs{
+                public static final SparkMaxConfig m_spinnyWristConfig = new SparkMaxConfig();
+                static {
+                        m_spinnyWristConfig
+                                .idleMode(IdleMode.kBrake)
+                                .inverted(FlippyWristConstants.kWristInverted)
+                                .smartCurrentLimit(40)
+                                .disableFollowerMode()
+                                .voltageCompensation(12.0);
+                        m_spinnyWristConfig.absoluteEncoder
+                                .inverted(true)
+                                .positionConversionFactor(FlippyWristConstants.kConversionFactor)
+                                .velocityConversionFactor(FlippyWristConstants.kConversionFactor/60)
+                                .averageDepth(2);
+                        m_spinnyWristConfig.closedLoop
+                                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+                                .outputRange(FlippyWristConstants.kMinOutput, FlippyWristConstants.kMaxOutput)
+                                .pidf(FlippyWristConstants.kP, FlippyWristConstants.kI, FlippyWristConstants.kD, FlippyWristConstants.kFF)
+                                .positionWrappingInputRange(Math.toRadians(0), FlippyWristConstants.kConversionFactor)
+                                .positionWrappingEnabled(true);
+                        m_spinnyWristConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)
                                 .reverseLimitSwitchEnabled(false);
                 }

@@ -1,13 +1,13 @@
-package frc.robot.subsystems.Wrist;
+package frc.robot.subsystems.FlippyWrist;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SUB_Wrist extends SubsystemBase{
-    private final WristIO io;
-    private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
-    public SUB_Wrist(WristIO io){
+public class SUB_FlippyWrist extends SubsystemBase{
+    private final FlippyWristIO io;
+    private final FlippyWristIOInputsAutoLogged inputs = new FlippyWristIOInputsAutoLogged();
+    public SUB_FlippyWrist(FlippyWristIO io){
         this.io = io;
     }
 

@@ -13,8 +13,8 @@ import frc.robot.subsystems.Drive.*;
 import frc.robot.subsystems.Vision.*;
 import frc.robot.subsystems.Winch.*;
 import frc.robot.subsystems.Algae.*;
-import frc.robot.subsystems.Wrist.*;
 import frc.robot.subsystems.Elevator.*;
+import frc.robot.subsystems.FlippyWrist.*;
 import frc.robot.subsystems.GroundIntake.GroundIntakeIOSparkMax;
 import frc.robot.subsystems.GroundIntake.SUB_GroundIntake;
 import frc.robot.subsystems.GroundPivot.GroundPivotIOSparkMax;
@@ -22,6 +22,8 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.*;
 import frc.robot.subsystems.Pivot.*;
 import frc.robot.subsystems.Questimator.QuestNavIOMeta;
+import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
+import frc.robot.subsystems.SpinnyWrist.SpinnyWristIOSparkMax;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -52,7 +54,8 @@ public class RobotContainer {
   final SUB_Intake m_intake = new SUB_Intake(new IntakeIOSparkMax());
   final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
   final SUB_Pivot m_pivot = new SUB_Pivot(new PivotIOSparkMax());
-  final SUB_Wrist m_wrist = new SUB_Wrist(new WristIOSparkMax());
+  final SUB_FlippyWrist m_flippyWrist = new SUB_FlippyWrist(new FlippyWristIOSparkMax());
+  final SUB_SpinnyWrist m_spinnyWrist = new SUB_SpinnyWrist(new SpinnyWristIOSparkMax());
   final SUB_Winch m_winch = new SUB_Winch(new WinchIOSparkMax());
   final SUB_Algae m_algae = new SUB_Algae(new AlgaeIOSparkMax());
   final SUB_GroundPivot m_groundPivot = new SUB_GroundPivot(new GroundPivotIOSparkMax());
@@ -87,15 +90,13 @@ public class RobotContainer {
     m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
     m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
 
-
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kHome)));
-    m_driverController.start().onFalse(new CMD_ReadyToClimb(m_pivot, m_elevator, m_wrist, m_intake, m_groundPivot, m_winch));
+    m_driverController.start().onFalse(new CMD_ReadyToClimb(m_pivot, m_elevator, m_flippyWrist, m_intake, m_groundPivot, m_winch));
     m_driverController.y().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
     
-    
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
-    m_driverController.povRight().onTrue(new CMD_Home(m_elevator, m_intake, m_wrist, m_pivot, m_algae, m_variables));
-    m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_wrist, m_intake, m_variables));
+    m_driverController.povRight().onTrue(new CMD_Home(m_elevator, m_intake, m_flippyWrist, m_pivot, m_algae, m_variables));
+    m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
 
     m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
     m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, 5));
@@ -103,7 +104,9 @@ public class RobotContainer {
 
     m_driverController.leftBumper().whileTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
     //operator
-    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_wrist, m_pivot, m_intake, m_algae, m_variables));
+    m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_algae, m_vision, m_variables, m_drivetrain, m_driverController));
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_alignBeforeShoot = !GlobalVariables.m_alignBeforeShoot));
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
       new InstantCommand(()->  m_algae.setReference(AlgaeConstants.kReverse))
@@ -112,14 +115,14 @@ public class RobotContainer {
       ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
     ));
 
-    m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_wrist, m_pivot, m_variables));
-    m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_wrist, m_pivot, m_variables));
-    m_operatorController.povDown().onTrue(new CMD_ChangeLevelTwo(m_elevator, m_wrist, m_pivot, m_variables));
+    m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_flippyWrist, m_pivot, m_variables));
+    m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_flippyWrist, m_pivot, m_variables));
+    m_operatorController.povDown().onTrue(new CMD_ChangeLevelTwo(m_elevator, m_flippyWrist, m_pivot, m_variables));
+    m_operatorController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
 
-    m_operatorController.a().onTrue(new CMD_ReadyToDeployProcessor(m_pivot, m_elevator, m_wrist, m_variables));
-    m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_wrist, m_variables));
-    m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
-    m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
-    m_operatorController.rightStick().onTrue(new CMD_ReadyToIntakeAlgaeGround(m_pivot, m_elevator, m_wrist, m_algae, m_variables));
+    m_operatorController.a().onTrue(new CMD_ReadyToDeployProcessor(m_pivot, m_elevator, m_flippyWrist, m_variables));
+    m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_flippyWrist, m_variables));
+    m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_flippyWrist, m_algae, m_variables));
+    m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_flippyWrist, m_algae, m_variables));
   }
 }

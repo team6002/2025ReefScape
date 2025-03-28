@@ -7,16 +7,16 @@ import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
-import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
+import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
-import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_AlgaeIntakeLevelTwo extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
-    private final SUB_Wrist m_wrist;
+    private final SUB_FlippyWrist m_flippyWrist;
     private final SUB_Algae m_algae;
     private final GlobalVariables m_variables;
 
@@ -28,14 +28,14 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
     private boolean isFinished = false;
 
 
-    public CMD_AlgaeIntakeLevelTwo(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, SUB_Algae p_algae, GlobalVariables p_variables){
+    public CMD_AlgaeIntakeLevelTwo(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Algae p_algae, GlobalVariables p_variables){
         m_pivot = p_pivot;
         m_elevator = p_elevator;
-        m_wrist = p_wrist;
+        m_flippyWrist = p_flippyWrist;
         m_algae = p_algae;
         m_variables = p_variables;
 
-        addRequirements(m_pivot, m_elevator, m_wrist, m_algae);
+        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_algae);
     }
 
     @Override
@@ -55,20 +55,20 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
     public void execute(){
         if(!setWrist){
             setWrist = true;
-            m_wrist.setGoal(WristConstants.kReadyIntakeAlgae);
+            m_flippyWrist.setGoal(FlippyWristConstants.kReadyIntakeAlgae);
         }
 
-        if(setWrist && m_wrist.inPosition() &! setElevator){
+        if(setWrist && m_flippyWrist.inPosition() &! setElevator){
             setElevator = true;
             m_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael2);
         }
 
-        if(setWrist && setElevator && m_wrist.inPosition() && m_elevator.inPosition() &! setPivot){
+        if(setWrist && setElevator && m_flippyWrist.inPosition() && m_elevator.inPosition() &! setPivot){
             setPivot = true;
             m_pivot.setGoal(PivotConstants.kReadyIntakeAlgae);
         }
 
-        if(setWrist && setElevator && setPivot && m_wrist.inPosition() && m_elevator.inPosition() && m_pivot.inPosition()){
+        if(setWrist && setElevator && setPivot && m_flippyWrist.inPosition() && m_elevator.inPosition() && m_pivot.inPosition()){
             m_variables.setRobotState(RobotState.ALGAE_LEVEL_2);
             if(m_algae.getCurrent() > 20){
                 if(m_triggerTimer.get() > .1){

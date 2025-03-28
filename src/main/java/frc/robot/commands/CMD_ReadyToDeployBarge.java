@@ -5,15 +5,15 @@ import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
-import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
+import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
-import frc.robot.subsystems.Wrist.SUB_Wrist;
 
 public class CMD_ReadyToDeployBarge extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
-    private final SUB_Wrist m_wrist;
+    private final SUB_FlippyWrist m_flippyWrist;
     private final GlobalVariables m_variables;
 
     private boolean setElevator;
@@ -21,13 +21,13 @@ public class CMD_ReadyToDeployBarge extends Command{
     private boolean setPivot;
 
 
-    public CMD_ReadyToDeployBarge(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Wrist p_wrist, GlobalVariables p_variables){
+    public CMD_ReadyToDeployBarge(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, GlobalVariables p_variables){
         m_pivot = p_pivot;
         m_elevator = p_elevator;
-        m_wrist = p_wrist;
+        m_flippyWrist = p_flippyWrist;
         m_variables = p_variables;
 
-        addRequirements(m_pivot, m_elevator, m_wrist);
+        addRequirements(m_pivot, m_elevator, m_flippyWrist);
     }
 
     @Override
@@ -50,14 +50,14 @@ public class CMD_ReadyToDeployBarge extends Command{
         }
 
         if(setPivot && m_pivot.inPosition() && !setWrist){
-            m_wrist.setGoal(WristConstants.kDeployBarge);
+            m_flippyWrist.setGoal(FlippyWristConstants.kDeployBarge);
             setWrist = true;
         }
     }
 
     @Override
     public boolean isFinished(){
-        return setElevator && setPivot && setWrist && m_elevator.inPosition() && m_pivot.inPosition() && m_wrist.inPosition();
+        return setElevator && setPivot && setWrist && m_elevator.inPosition() && m_pivot.inPosition() && m_flippyWrist.inPosition();
     }
 
     @Override

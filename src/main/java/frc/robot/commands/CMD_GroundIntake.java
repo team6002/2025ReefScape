@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.GlobalVariables;
 import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.subsystems.GroundIntake.SUB_GroundIntake;
@@ -12,7 +13,6 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 public class CMD_GroundIntake extends Command{
     private final SUB_GroundPivot m_groundPivot;
     private final SUB_GroundIntake m_groundIntake;
-    private boolean m_haveCoral = false;
     public CMD_GroundIntake(SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake){
         m_groundPivot = p_groundPivot;
         m_groundIntake = p_groundIntake;
@@ -26,31 +26,31 @@ public class CMD_GroundIntake extends Command{
             command = new SequentialCommandGroup(
                 new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                 ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff))
-                ,new InstantCommand(()-> m_haveCoral = false)
+                ,new InstantCommand(()-> GlobalVariables.m_groundHasCoral = false)
             );
             command.schedule();
         }else{
-            if(m_haveCoral == false){
+            if(GlobalVariables.m_groundHasCoral == false){
                 command = new SequentialCommandGroup(
                     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
                     ,new CMD_GroundIntakeStow(m_groundIntake)
                     ,new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
-                    ,new InstantCommand(()-> m_haveCoral = true)
+                    ,new InstantCommand(()-> GlobalVariables.m_groundHasCoral = true)
                 );
                 command.addRequirements(m_groundPivot, m_groundIntake);
                 command.schedule();
             }else{
                 command = new SequentialCommandGroup(
-                    new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
-                    ,new WaitCommand(.2)
-                    ,new CMD_GroundPivotInPosition(m_groundPivot).withTimeout(.5)
-                    ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
+                    // new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
+                    // ,new WaitCommand(.2)
+                    // ,new CMD_GroundPivotInPosition(m_groundPivot).withTimeout(.5)
+                    new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
                     ,new WaitCommand(.33)
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff))
                     ,new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
-                    ,new InstantCommand(()-> m_haveCoral = false)
+                    ,new InstantCommand(()-> GlobalVariables.m_groundHasCoral = false)
                 );
                 command.addRequirements(m_groundPivot, m_groundIntake);
                 command.schedule();
