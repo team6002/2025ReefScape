@@ -35,7 +35,7 @@ public class SUB_Intake extends SubsystemBase{
     @Override
     public void periodic(){
       io.updateInputs(inputs);
-      Logger.processInputs("CoralHolder", inputs);
+      Logger.processInputs("Intake", inputs);
 
       SmartDashboard.putNumber("intake speed", getVelocity());
       SmartDashboard.putNumber("intake goal", getReference());

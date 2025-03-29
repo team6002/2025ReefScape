@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.GlobalVariables;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
@@ -48,11 +47,7 @@ public class CMD_ReadyToClimb extends Command{
         setGroundPivot = false;
         setClimb = false;
 
-        if(GlobalVariables.m_haveCoral){
-            m_intake.setVoltage(IntakeConstants.kHolding);
-        }else{
-            m_intake.setVoltage(IntakeConstants.kOff);
-        }
+        m_intake.setVoltage(IntakeConstants.kOff);
         m_groundIntake.setVoltage(GroundIntakeConstants.kReverse);
     }
 

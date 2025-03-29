@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Configs;
 import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.Constants.HardwareConstants;
+import frc.robot.Constants.PivotConstants;
 
 public class GroundPivotIOSparkMax implements GroundPivotIO{
     private final SparkMax m_groundPivotMotor;
@@ -81,6 +82,11 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     @Override
     public boolean inPosition(){
         return Math.abs(getPosition() - getGoal()) < GroundPivotConstants.kTolerance;
+    }
+
+    @Override
+    public boolean inPosition(double p_position){
+        return Math.abs(getPosition() - p_position) < PivotConstants.kTolerance;
     }
 
     @Override

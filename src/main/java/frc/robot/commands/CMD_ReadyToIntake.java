@@ -116,16 +116,13 @@ public class CMD_ReadyToIntake extends Command{
     @Override
     public void end(boolean interrupted){
         m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
+        m_intake.setVoltage(IntakeConstants.kOff);
 
         if(interrupted){
             GlobalVariables.m_haveCoral = false;
-            m_intake.setVoltage(IntakeConstants.kOff);
             return;
-        }else{
-            GlobalVariables.m_haveCoral = true;
-            m_intake.setVoltage(IntakeConstants.kHolding);
         }
 
-        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_variables).schedule();
+        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
     }
 }

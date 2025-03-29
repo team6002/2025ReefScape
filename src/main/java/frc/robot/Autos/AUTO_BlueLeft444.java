@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.*;
-import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
@@ -17,7 +16,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.Vision.SUB_Vision;
 
 public class AUTO_BlueLeft444 extends SequentialCommandGroup{
-    public AUTO_BlueLeft444(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_Algae p_algae, SUB_Vision p_vision){
+    public AUTO_BlueLeft444(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_Vision p_vision){
         addCommands(
             Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped(AutoConstants.BlueLeft1), p_drivetrain)
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped(AutoConstants.BlueLeft1), p_drivetrain)

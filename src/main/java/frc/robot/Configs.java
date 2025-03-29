@@ -139,21 +139,19 @@ public final class Configs {
                 static {
                         m_spinnyWristConfig
                                 .idleMode(IdleMode.kBrake)
-                                .inverted(FlippyWristConstants.kWristInverted)
+                                .inverted(SpinnyWristConstants.kWristInverted)
                                 .smartCurrentLimit(40)
                                 .disableFollowerMode()
                                 .voltageCompensation(12.0);
                         m_spinnyWristConfig.absoluteEncoder
                                 .inverted(true)
-                                .positionConversionFactor(FlippyWristConstants.kConversionFactor)
-                                .velocityConversionFactor(FlippyWristConstants.kConversionFactor/60)
+                                .positionConversionFactor(SpinnyWristConstants.kConversionFactor)
+                                .velocityConversionFactor(SpinnyWristConstants.kConversionFactor/60)
                                 .averageDepth(2);
                         m_spinnyWristConfig.closedLoop
                                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                                .outputRange(FlippyWristConstants.kMinOutput, FlippyWristConstants.kMaxOutput)
-                                .pidf(FlippyWristConstants.kP, FlippyWristConstants.kI, FlippyWristConstants.kD, FlippyWristConstants.kFF)
-                                .positionWrappingInputRange(Math.toRadians(0), FlippyWristConstants.kConversionFactor)
-                                .positionWrappingEnabled(true);
+                                .outputRange(SpinnyWristConstants.kMinOutput, SpinnyWristConstants.kMaxOutput)
+                                .pidf(SpinnyWristConstants.kP, SpinnyWristConstants.kI, SpinnyWristConstants.kD, SpinnyWristConstants.kFF);
                         m_spinnyWristConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)
                                 .reverseLimitSwitchEnabled(false);
@@ -237,36 +235,12 @@ public final class Configs {
                         m_WinchConfig.closedLoop
                                 .pidf(WinchConstants.kP, WinchConstants.kI, WinchConstants.kD, WinchConstants.kFF)
                                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                                .outputRange(AlgaeConstants.kMinOutput, AlgaeConstants.kMaxOutput);
+                                .outputRange(WinchConstants.kMinOutput, WinchConstants.kMaxOutput);
                         m_WinchConfig.absoluteEncoder
                                 .averageDepth(2)
                                 .inverted(false)
                                 .positionConversionFactor(360);
                         m_WinchConfig.limitSwitch
-                                .forwardLimitSwitchEnabled(false)
-                                .reverseLimitSwitchEnabled(false);
-                }
-        }
-
-        public static final class AlgaeConfig{
-                public static final SparkMaxConfig m_AlgaeConfig = new SparkMaxConfig();
-
-                static{
-                        m_AlgaeConfig
-                                .idleMode(IdleMode.kBrake)
-                                .inverted(false)
-                                .disableFollowerMode()
-                                .voltageCompensation(12.0)
-                                .smartCurrentLimit(40);
-                        m_AlgaeConfig.closedLoop
-                                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                                .outputRange(WinchConstants.kMinOutput, WinchConstants.kMaxOutput);
-                        m_AlgaeConfig.encoder
-                                .uvwAverageDepth(2)
-                                .uvwMeasurementPeriod(10)
-                                .positionConversionFactor(360)
-                                .velocityConversionFactor(1);
-                        m_AlgaeConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)
                                 .reverseLimitSwitchEnabled(false);
                 }

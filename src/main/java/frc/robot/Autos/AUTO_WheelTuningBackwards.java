@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Algae.SUB_Algae;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
@@ -12,7 +11,7 @@ import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class AUTO_WheelTuningBackwards extends SequentialCommandGroup{
-    public AUTO_WheelTuningBackwards(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_Algae p_algae){
+    public AUTO_WheelTuningBackwards(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake){
         addCommands(
             Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("WheelTune2"), p_drivetrain)
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("WheelTune2"), p_drivetrain)

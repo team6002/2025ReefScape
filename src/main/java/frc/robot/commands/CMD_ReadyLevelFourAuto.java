@@ -12,8 +12,7 @@ import frc.robot.subsystems.Pivot.SUB_Pivot;
 public class CMD_ReadyLevelFourAuto extends SequentialCommandGroup{
     public CMD_ReadyLevelFourAuto(SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Pivot p_pivot, SUB_Intake p_intake){
         addCommands(
-            new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kHolding))
-            ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
+            new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
             ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kDeployL4))
             ,new WaitCommand(.1)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))

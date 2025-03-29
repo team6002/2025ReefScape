@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GlobalVariables extends SubsystemBase{
     public GlobalVariables(){}
 
-    public static int m_targetCoralLevel = 4;
+    public static int m_targetCoralLevel = 2;
 
     public static double m_pivotAngle = 0;
     public static double m_elevatorExtension = 0;

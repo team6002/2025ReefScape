@@ -55,9 +55,9 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
     // m_autonomousChooser.addOption("AUTO_SideTuning", new AUTO_SideTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_AccelTuning", new AUTO_AccelTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
-    m_autonomousChooser.addOption("AUTO_AccelTuningF", new AUTO_AccelTuningF(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_AccelTuningF", new AUTO_AccelTuningF(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake));
     // m_autonomousChooser.addOption("AUTO_AccelTuningB", new AUTO_AccelTuningB(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
-    m_autonomousChooser.addOption("AUTO_WheelTuningF", new AUTO_WheelTuningForwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake, m_robotContainer.m_algae));
+    m_autonomousChooser.addOption("AUTO_WheelTuningF", new AUTO_WheelTuningForwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake));
     // m_autonomousChooser.addOption("AUTO_WheelTuningB", new AUTO_WheelTuningBackwards(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_WheelTuning", new AUTO_WheelTuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
     // m_autonomousChooser.addOption("AUTO_Tuning", new AUTO_Tuning(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake, m_robotContainer.m_algae));
@@ -79,6 +79,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_drivetrain.questNavReset();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_flippyWrist.reset();
+    m_robotContainer.m_spinnyWrist.reset();
     m_robotContainer.m_elevator.resetEncoder();
     m_robotContainer.m_groundPivot.reset();
   }
@@ -125,6 +126,7 @@ public class Robot extends LoggedRobot {
     m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_flippyWrist.reset();
+    m_robotContainer.m_spinnyWrist.reset();
     m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
     m_robotContainer.m_drivetrain.questNavReset();
@@ -148,6 +150,7 @@ public class Robot extends LoggedRobot {
     m_odometryChooser.getSelected().schedule();
     m_robotContainer.m_pivot.reset();
     m_robotContainer.m_flippyWrist.reset();
+    m_robotContainer.m_spinnyWrist.reset();
     m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
     if (m_autonomousCommand != null) {

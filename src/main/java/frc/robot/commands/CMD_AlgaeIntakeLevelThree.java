@@ -4,20 +4,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
-import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.FlippyWristConstants;
-import frc.robot.subsystems.Algae.SUB_Algae;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
+import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 
 public class CMD_AlgaeIntakeLevelThree extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_FlippyWrist m_flippyWrist;
-    private final SUB_Algae m_algae;
+    private final SUB_Intake m_intake;
     private final GlobalVariables m_variables;
 
     private boolean setElevator;
@@ -28,14 +28,14 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
     private boolean isFinished = false;
 
 
-    public CMD_AlgaeIntakeLevelThree(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Algae p_algae, GlobalVariables p_variables){
+    public CMD_AlgaeIntakeLevelThree(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Intake p_intake, GlobalVariables p_variables){
         m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_flippyWrist = p_flippyWrist;
-        m_algae = p_algae;
+        m_intake = p_intake;
         m_variables = p_variables;
 
-        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_algae);
+        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_intake);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
         m_triggerTimer.start();
         isFinished = false;
 
-        m_algae.setReference(AlgaeConstants.kIntake);
+        m_intake.setVoltage(IntakeConstants.kIntake);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
 
         if(setWrist && setElevator && setPivot && m_flippyWrist.inPosition() && m_elevator.inPosition() && m_pivot.inPosition()){
             m_variables.setRobotState(RobotState.ALGAE_LEVEL_3);
-            if(m_algae.getCurrent() > 20){
+            if(m_intake.getCurrent() > 20){
                 if(m_triggerTimer.get() > .1){
                     isFinished = true;
                     GlobalVariables.m_haveAlgae = true;
@@ -88,8 +88,8 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
 
     @Override
     public void end(boolean interrupted){
-        if(interrupted){m_algae.setReference(AlgaeConstants.kOff); return;}
+        if(interrupted){m_intake.setVoltage(IntakeConstants.kOff); return;}
 
-        m_algae.setReference(AlgaeConstants.kHolding);
+        m_intake.setVoltage(IntakeConstants.kHolding);
     }
 }

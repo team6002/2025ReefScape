@@ -11,8 +11,7 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
-import frc.robot.subsystems.Algae.SUB_Algae;
-import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.GlobalVariables.RobotState;
 
 public class CMD_Score extends Command{
@@ -23,11 +22,10 @@ public class CMD_Score extends Command{
     private final SUB_Intake m_intake;
     private final SUB_GroundPivot m_groundPivot;
     private final SUB_GroundIntake m_groundIntake;
-    private final SUB_Algae m_algae;
     private final GlobalVariables m_variables;
 
     public CMD_Score(SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, SUB_Pivot p_pivot,
-        SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, SUB_Algae p_algae, GlobalVariables p_variables){
+        SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, GlobalVariables p_variables){
 
         m_elevator = p_elevator;
         m_flippyWrist = p_flippyWrist;
@@ -37,7 +35,6 @@ public class CMD_Score extends Command{
         m_groundPivot = p_groundPivot;
         m_groundIntake = p_groundIntake;
         m_variables = p_variables;
-        m_algae = p_algae;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class CMD_Score extends Command{
             case HOME:
             case READY:
                 GlobalVariables.m_haveAlgae = false;
-                m_algae.setReference(AlgaeConstants.kOff);
+                m_intake.setVoltage(IntakeConstants.kOff);
                 new ConditionalCommand(
                     new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
                     ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
@@ -56,7 +53,7 @@ public class CMD_Score extends Command{
                 break;
             //if ready to intake and do not have algae go to deploy, if we do have an algae, go to ready
             case READY_TO_INTAKE:
-                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_variables).schedule();
+                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
                 else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
                 break;
             //if ready to deploy, shoot
@@ -69,7 +66,11 @@ public class CMD_Score extends Command{
                 break;
             //if we just shot, go back to intaking if no algae, and ready if algae
             case DEPLOY:
-                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables).schedule();
+                if(!GlobalVariables.m_haveAlgae) new ConditionalCommand(
+                    new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                    ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                    ,()-> GlobalVariables.m_intakeFromStation
+                ).schedule();
                 else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
                 break;
             //if we just grabbed an algae of the reef, ready to deploy alt sequence
@@ -80,7 +81,7 @@ public class CMD_Score extends Command{
             //if ready to score in barge/proccesor, spit out algae, and set state to ready so the next RB press goes to ready to intake
             case BARGE:
             case PROCESSOR:
-                new InstantCommand(()-> m_algae.setReference(AlgaeConstants.kReverse)).schedule();
+                new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kReverse)).schedule();
                 new InstantCommand(()-> GlobalVariables.m_haveAlgae = false).schedule();
                 new InstantCommand(()-> m_variables.setRobotState(RobotState.READY)).schedule();
                 break;

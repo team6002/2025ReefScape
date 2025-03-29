@@ -42,7 +42,7 @@ public class CMD_Ready extends Command{
 
         m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
 
-        if(GlobalVariables.m_haveCoral){
+        if(GlobalVariables.m_haveAlgae){
             m_intake.setVoltage(IntakeConstants.kHolding);
         }else{
             m_intake.setVoltage(IntakeConstants.kOff);

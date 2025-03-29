@@ -9,10 +9,9 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.GlobalVariables;
 import frc.robot.Configs;
 import frc.robot.Constants.SpinnyWristConstants;
 import frc.robot.Constants.HardwareConstants;
@@ -21,7 +20,7 @@ public class SpinnyWristIOSparkMax implements SpinnyWristIO{
     private final SparkMax m_spinnyWristMotor;
     private final AbsoluteEncoder m_spinnyWristEncoder;
     private final SparkClosedLoopController m_spinnyWristController;
-    private  ArmFeedforward m_spinnyWristFeedforward = new ArmFeedforward(SpinnyWristConstants.kS, SpinnyWristConstants.kG, SpinnyWristConstants.kV);
+    private SimpleMotorFeedforward m_spinnyWristFeedforward = new SimpleMotorFeedforward(SpinnyWristConstants.kS,  SpinnyWristConstants.kV);
     private Constraints m_spinnyWristConstraints = new Constraints(SpinnyWristConstants.kMaxVel, SpinnyWristConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
@@ -94,7 +93,7 @@ public class SpinnyWristIOSparkMax implements SpinnyWristIO{
         var profile = new TrapezoidProfile(m_spinnyWristConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
         m_spinnyWristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_spinnyWristFeedforward.calculate(getPosition() + GlobalVariables.m_pivotAngle, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_spinnyWristFeedforward.calculate(m_setpoint.velocity));
     }
 
     @Override
@@ -107,6 +106,6 @@ public class SpinnyWristIOSparkMax implements SpinnyWristIO{
         m_setpoint = new TrapezoidProfile.State(getPosition() - SpinnyWristConstants.kWristOffset, 0);
         m_goal = m_setpoint;
         m_spinnyWristController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_spinnyWristFeedforward.calculate(getPosition() + GlobalVariables.m_pivotAngle, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_spinnyWristFeedforward.calculate(m_setpoint.velocity));
     }
 }

@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake.SUB_Intake;
 
 public class CMD_IntakeStow extends Command{
@@ -29,12 +28,6 @@ public class CMD_IntakeStow extends Command{
         if(m_intakeTimer.get() > 0.1){
             isFinished = true;
         }
-    }
-
-
-    @Override 
-    public void end(boolean interrupted){
-        m_intake.setVoltage(IntakeConstants.kHolding);
     }
 
     @Override
