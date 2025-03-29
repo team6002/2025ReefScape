@@ -31,7 +31,7 @@ public class CMD_ChangeLevelTwo extends Command{
 
     @Override
     public void initialize(){
-        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY) &! m_variables.isRobotState(RobotState.DEPLOY)){
             return;
         }
 

@@ -55,12 +55,13 @@ public class CMD_Deploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return m_runTime.get() > 3;
+        return m_runTime.get() > .5;
     }
 
     @Override
     public void end(boolean interrupted){
         m_variables.setRobotState(RobotState.DEPLOY);
         GlobalVariables.m_haveCoral = false;
+        m_intake.setConveyorVoltage(0);
     }
 }

@@ -41,27 +41,28 @@ public class CMD_ReadyToDeploy extends Command{
         setFlippyWrist = false; 
         setSpinnyWrist = false;
 
-        GlobalVariables.m_targetCoralLevel = 2;
+        GlobalVariables.m_targetCoralLevel = 3;
+        m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
     }
 
     @Override
     public void execute(){
-        if(!m_pivot.inPosition(PivotConstants.kDeployL2) && !setPivot){
-            m_pivot.setGoal(PivotConstants.kDeployL2);
+        if(!m_pivot.inPosition(PivotConstants.kDeployL3) && !setPivot){
+            m_pivot.setGoal(PivotConstants.kDeployL3);
             setPivot = true;
         }
 
-        if(!m_elevator.inPosition(ElevatorConstants.kDeployL2) &! setElevator){
-            m_elevator.setGoal(ElevatorConstants.kDeployL2);
+        if(!m_elevator.inPosition(ElevatorConstants.kDeployL3) &! setElevator){
+            m_elevator.setGoal(ElevatorConstants.kDeployL3);
             setElevator = true;
         }
 
-        if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL2) &! setFlippyWrist){
-            m_flippyWrist.setGoal(FlippyWristConstants.kDeployL2);
+        if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setFlippyWrist){
+            m_flippyWrist.setGoal(FlippyWristConstants.kDeployL3);
             setFlippyWrist = true;
         }
 
-        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL2) &! setSpinnyWrist){
+        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setSpinnyWrist){
             m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
             setSpinnyWrist = true;
         }
@@ -75,6 +76,5 @@ public class CMD_ReadyToDeploy extends Command{
     @Override
     public void end(boolean interrupted){
         if(interrupted) return;
-        m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
     }
 }

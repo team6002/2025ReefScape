@@ -55,5 +55,6 @@ public class GlobalVariables extends SubsystemBase{
         Logger.recordOutput("GlobalVariables/haveCoral", m_haveCoral);
         Logger.recordOutput("GlobalVariables/targetCoralLevel", m_targetCoralLevel);
         Logger.recordOutput("GlobalVariables/intaking algae", m_intakingAlgae);
+        Logger.recordOutput("GlobalVariables/stationIntake", m_intakeFromStation);
     }
 }

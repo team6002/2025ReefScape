@@ -72,6 +72,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
 
         m_groundIntakeTimer.reset();
         m_groundIntakeTimer.stop();
+        m_variables.setRobotState(RobotState.READY_TO_INTAKE);
     }
 
     @Override
@@ -137,14 +138,13 @@ public class CMD_ReadyToIntakeFromGround extends Command{
         }
 
         if(m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround)){
-            m_variables.setRobotState(RobotState.READY_TO_INTAKE);
-            if(m_intake.getCurrent() > 18){
+            if(m_intake.getCurrent() > 11){
                 m_intakeTimer.start();
             }else{
                 m_intakeTimer.reset();
             }
     
-            if(m_intakeTimer.get() > 0.4){
+            if(m_intakeTimer.get() > 0.1){
                 haveCoral = true;
                 GlobalVariables.m_groundHasCoral = false;
             }
