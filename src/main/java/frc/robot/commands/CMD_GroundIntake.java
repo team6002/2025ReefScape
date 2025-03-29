@@ -35,7 +35,7 @@ public class CMD_GroundIntake extends Command{
                     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
                     ,new CMD_GroundIntakeStow(m_groundIntake)
-                    ,new WaitCommand(.5)
+                    // ,new WaitCommand(.5)
                     ,new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
                     ,new InstantCommand(()-> GlobalVariables.m_groundHasCoral = true)
