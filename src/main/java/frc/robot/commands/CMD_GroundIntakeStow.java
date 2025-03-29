@@ -21,13 +21,13 @@ public class CMD_GroundIntakeStow extends Command{
 
     @Override
     public void execute(){
-        if(m_groundIntake.getCurrent() > 12){
+        if(m_groundIntake.getCurrent() > 14){
             m_groundIntakeTimer.start();
         }else{
             m_groundIntakeTimer.reset();
         }
 
-        if(m_groundIntakeTimer.get() > 0.1){
+        if(m_groundIntakeTimer.get() > 0.2){
             isFinished = true;
         }
     }

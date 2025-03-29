@@ -461,7 +461,7 @@ public final class Constants {
     public static final boolean kInverted = true;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 4;
+    public static final double kIntake = 6;
     public static final double kOff = 0;
     public static final double kReverse = -12;
     public static final double kHolding = 2;
