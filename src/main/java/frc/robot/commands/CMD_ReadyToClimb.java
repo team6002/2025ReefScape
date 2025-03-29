@@ -5,6 +5,7 @@ import frc.GlobalVariables;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
+import frc.robot.subsystems.GroundIntake.SUB_GroundIntake;
 import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
@@ -17,6 +18,7 @@ public class CMD_ReadyToClimb extends Command{
     private final SUB_Intake m_intake;
     private final SUB_GroundPivot m_groundPivot;
     private final SUB_Winch m_winch;
+    private final SUB_GroundIntake m_groundIntake;
 
     private boolean setPivot;
     private boolean setWrist;
@@ -25,7 +27,7 @@ public class CMD_ReadyToClimb extends Command{
     private boolean setClimb;
 
     public CMD_ReadyToClimb(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Intake p_intake, 
-        SUB_GroundPivot p_groundPivot, SUB_Winch p_winch){
+        SUB_GroundPivot p_groundPivot, SUB_Winch p_winch, SUB_GroundIntake p_groundIntake){
             
         m_pivot = p_pivot;
         m_elevator = p_elevator;
@@ -33,8 +35,9 @@ public class CMD_ReadyToClimb extends Command{
         m_intake = p_intake;
         m_groundPivot = p_groundPivot;
         m_winch = p_winch;
+        m_groundIntake = p_groundIntake;
 
-        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_intake, m_groundPivot);
+        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_intake, m_groundPivot, m_groundIntake);
     }
 
     @Override
@@ -50,6 +53,7 @@ public class CMD_ReadyToClimb extends Command{
         }else{
             m_intake.setVoltage(IntakeConstants.kOff);
         }
+        m_groundIntake.setVoltage(GroundIntakeConstants.kReverse);
     }
 
     @Override
@@ -87,5 +91,10 @@ public class CMD_ReadyToClimb extends Command{
         //finish once all parts are in the correct spot
         return setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition() && m_groundPivot.inPosition()
         && m_flippyWrist.inPosition() && m_pivot.inPosition() && setClimb;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        m_groundIntake.setVoltage(GroundIntakeConstants.kOff);
     }
 }

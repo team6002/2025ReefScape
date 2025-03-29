@@ -22,7 +22,7 @@ public class CMD_GroundIntake extends Command{
     public void initialize(){
         SequentialCommandGroup command;
         if(
-            m_groundPivot.getGoal() > Math.toRadians(180)){
+            m_groundPivot.getGoal() >= GroundPivotConstants.kIntake - Math.toRadians(10)){
             command = new SequentialCommandGroup(
                 new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                 ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff))
@@ -35,6 +35,7 @@ public class CMD_GroundIntake extends Command{
                     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
                     ,new CMD_GroundIntakeStow(m_groundIntake)
+                    ,new WaitCommand(.5)
                     ,new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
                     ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kHolding))
                     ,new InstantCommand(()-> GlobalVariables.m_groundHasCoral = true)

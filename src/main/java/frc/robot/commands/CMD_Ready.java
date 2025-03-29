@@ -40,6 +40,8 @@ public class CMD_Ready extends Command{
         setElevator = false;
         setWrist = false;
 
+        m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
+
         if(GlobalVariables.m_haveCoral){
             m_intake.setVoltage(IntakeConstants.kHolding);
         }else{

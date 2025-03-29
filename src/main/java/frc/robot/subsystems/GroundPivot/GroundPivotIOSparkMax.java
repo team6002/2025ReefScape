@@ -20,7 +20,7 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     private final SparkMax m_groundPivotMotor;
     private final AbsoluteEncoder m_groundPivotEncoder;
     private final SparkClosedLoopController m_groundPivotController;
-    private  ArmFeedforward m_groundPivotFeedforward = new ArmFeedforward(GroundPivotConstants.kS, GroundPivotConstants.kG, GroundPivotConstants.kV);
+    private  ArmFeedforward m_groundPivotFeedforward = new ArmFeedforward(GroundPivotConstants.kS, GroundPivotConstants.kG, GroundPivotConstants.kV, GroundPivotConstants.kA);
     private Constraints m_groundPivotFeedConstraints = new Constraints(GroundPivotConstants.kMaxVel, GroundPivotConstants.kMaxAccel);
     private TrapezoidProfile.State m_goal;
     private TrapezoidProfile.State m_setpoint;
@@ -39,7 +39,7 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
         m_groundPivotMotor.configure(Configs.GroundPivotConfig.m_groundPivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //reset reference in init
-        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+        m_setpoint = new TrapezoidProfile.State(getPosition() - GroundPivotConstants.kOffset, 0);
         m_goal = m_setpoint;
     }
 
@@ -53,14 +53,14 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     }
 
     @Override
-    public void setGoal(double p_Goal){
-        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
-        m_goal = new TrapezoidProfile.State(p_Goal, 0);
+    public void setGoal(double p_goal){
+        m_setpoint = new TrapezoidProfile.State(getPosition() - GroundPivotConstants.kOffset, 0);
+        m_goal = new TrapezoidProfile.State(p_goal - GroundPivotConstants.kOffset, 0);
     }
 
     @Override
     public double getPosition(){
-        return m_groundPivotEncoder.getPosition();
+        return m_groundPivotEncoder.getPosition() + GroundPivotConstants.kOffset;
     }
 
     @Override
@@ -70,12 +70,12 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
 
     @Override
     public double getGoal(){
-        return m_goal.position;
+        return m_goal.position + GroundPivotConstants.kOffset;
     }
 
     @Override 
     public double getSetpoint(){
-        return m_setpoint.position;
+        return m_setpoint.position + GroundPivotConstants.kOffset;
     }
 
     @Override
@@ -85,10 +85,16 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
 
     @Override
     public void PID(){
+        double m_lastSetpoint = m_setpoint.position;
+
         var profile = new TrapezoidProfile(m_groundPivotFeedConstraints).calculate(0.02, m_setpoint, m_goal);
         m_setpoint = profile;
+
+        double acceleration = (m_setpoint.position - m_lastSetpoint) / 0.02;
+
         m_groundPivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition(), m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition() + GroundPivotConstants.kOffset - Math.toRadians(90),
+            m_setpoint.velocity, acceleration));
     }
 
     @Override
@@ -98,9 +104,9 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     }
     @Override
     public void reset(){
-        m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+        m_setpoint = new TrapezoidProfile.State(getPosition() - GroundPivotConstants.kOffset, 0);
         m_goal = m_setpoint;
         m_groundPivotController.setReference(m_setpoint.position, ControlType.kPosition, 
-            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition() + GroundPivotConstants.kOffset, m_setpoint.velocity));
+            ClosedLoopSlot.kSlot0, m_groundPivotFeedforward.calculate(getPosition() + GroundPivotConstants.kOffset - Math.toRadians(90), m_setpoint.velocity));
     }
 }

@@ -49,7 +49,7 @@ public class SUB_SpinnyWrist extends SubsystemBase{
     @Override
     public void periodic(){
       io.updateInputs(inputs);
-      Logger.processInputs("Wrist", inputs);
+      Logger.processInputs("SpinnyWrist", inputs);
       io.PID();
     }
 }

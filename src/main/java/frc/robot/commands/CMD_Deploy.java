@@ -23,7 +23,7 @@ public class CMD_Deploy extends Command{
 
     @Override
     public void initialize(){
-        m_intake.setVoltage(IntakeConstants.kReverse);
+        m_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy);
         if(GlobalVariables.m_targetCoralLevel == 4){
             m_flippyWrist.setGoal(FlippyWristConstants.kStowing);
         }

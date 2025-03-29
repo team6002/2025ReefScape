@@ -50,6 +50,7 @@ public class CMD_ReadyToIntake extends Command{
         setWrist = false;
 
         m_intake.setVoltage(IntakeConstants.kIntake);
+        m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
 
         m_intakeTimer.reset();
         m_intakeTimer.stop();

@@ -28,10 +28,13 @@ public class SUB_Intake extends SubsystemBase{
       io.setVoltage(p_voltage);
     }
 
+    public void setConveyorVoltage(double p_voltage){
+      io.setConveyorVoltage(p_voltage);
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);
-      io.PID();
       Logger.processInputs("CoralHolder", inputs);
 
       SmartDashboard.putNumber("intake speed", getVelocity());

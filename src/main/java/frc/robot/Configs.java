@@ -202,9 +202,8 @@ public final class Configs {
                 }
         }   
     
-        public static final class CoralHolderConfig{
+        public static final class IntakeConfig{
                 public static final SparkMaxConfig m_intakeConfig = new SparkMaxConfig();
-
                 static{
                         m_intakeConfig
                                 .disableFollowerMode()

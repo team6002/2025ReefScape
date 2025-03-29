@@ -21,5 +21,5 @@ public interface IntakeIO {
 
   public default void setVoltage(double p_voltage){}
 
-  public default void PID(){}
+  public default void setConveyorVoltage(double p_voltage){}
 }
