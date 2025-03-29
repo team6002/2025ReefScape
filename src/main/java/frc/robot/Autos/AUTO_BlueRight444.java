@@ -26,18 +26,19 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
               p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
-            ,new WaitCommand(.4)
+            // ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
+            // ,new WaitCommand(.2)
+            ,new CMD_PivotInPosition(p_pivot)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.5)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
-              ,new SequentialCommandGroup(
-                new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-              )
-            )
+            // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            // ,new WaitCommand(.5)
+            // ,new ParallelCommandGroup(
+            // ,new SequentialCommandGroup(
+            // ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            // )
+            ,p_drivetrain.FollowPath(AutoConstants.BlueLeft2) 
+            // )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(15)
               ,new CMD_DriveForwards(p_drivetrain, 0)
@@ -47,18 +48,22 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
               p_drivetrain.FollowPath("BlueLeftTrio3")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
-            ,new WaitCommand(.4)
+            // ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
+            // ,new WaitCommand(.2)
+            ,new CMD_PivotInPosition(p_pivot)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new WaitCommand(.5)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath("BlueLeftTrio4")
-              ,new SequentialCommandGroup(
-                new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-              )
-            )
+            // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            // ,new WaitCommand(.5)
+            // ,new ParallelCommandGroup(
+            // ,new SequentialCommandGroup(
+            //   new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            // ,new ParallelCommandGroup(
+            ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            ,p_drivetrain.FollowPath("BlueLeftTrio4")
+              // ,new SequentialCommandGroup(
+              //   new WaitCommand(.3)
+              // )
+            // )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(1.5)
               ,new CMD_DriveForwards(p_drivetrain, 0)
@@ -68,16 +73,18 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
               p_drivetrain.FollowPath("BlueLeftTrio5")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_wrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
-            ,new WaitCommand(.4)
+            // ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
+            // ,new WaitCommand(.2)
+            ,new CMD_PivotInPosition(p_pivot)
             ,new CMD_DeployLevelFour(p_intake, p_wrist)
-            ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath("BlueLeftTrio6")
-              ,new SequentialCommandGroup(
-                new CMD_ReadyIntake(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
-              )
-            )
+            ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            // ,new ParallelCommandGroup(
+            ,new CMD_ReadyToIntakeAuto(p_elevator, p_wrist, p_pivot, p_intake).withTimeout(5)
+            ,p_drivetrain.FollowPath("BlueLeftTrio6")
+              // ,new SequentialCommandGroup(
+              //   new WaitCommand(.3)
+            //   )
+            // )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(10)
               ,new CMD_DriveForwards(p_drivetrain, 0)

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.01,
-        "y": 2.85
+        "x": 3.98,
+        "y": 2.82
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.411092515724507,
-        "y": 3.196445946476195
+        "x": 4.381092515724507,
+        "y": 3.1664459464761947
       },
       "isLocked": false,
       "linkedName": "LeftTrio3"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 3.5,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 240.0,
     "maxAngularAcceleration": 240.0,

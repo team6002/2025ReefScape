@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -14,9 +15,10 @@ public class CMD_ReadyToIntakeAuto extends SequentialCommandGroup{
             // new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kBelowIntake))
             new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
             ,new InstantCommand(()-> p_wrist.setGoal(WristConstants.kIntake))
-            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kIntake))
+            ,new WaitCommand(.2)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
             ,new CMD_ElevatorInPosition(p_elevator)
+            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kIntake))
             ,new CMD_WristInPosition(p_wrist)
             ,new CMD_PivotInPosition(p_pivot)
 

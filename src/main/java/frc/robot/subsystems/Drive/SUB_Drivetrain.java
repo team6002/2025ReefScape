@@ -24,8 +24,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Questimator.QuestNavIO;
 import frc.robot.subsystems.Questimator.QuestimatorIOInputsAutoLogged;
+import frc.robot.subsystems.Vision.KalmanFilter;
 import frc.robot.subsystems.Vision.SUB_Vision;
 // import frc.robot.subsystems.SUB_Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,357 +64,413 @@ public class SUB_Drivetrain extends SubsystemBase {
       private final SwerveDrivePoseEstimator m_targetOdometry;
       private final SwerveDrivePoseEstimator questimetry;
       private final SwerveDriveOdometry m_pureOdometry;
-      private SwerveModulePosition[] lastModulePositions = 
-      new SwerveModulePosition[] {
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition()
-      };
-      // private ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
-    
-      // private boolean onTarget = false;
-      // private boolean onTargetV3 = false;
-      // The gyro sensor
-      // private final AHRS m_gyro = new AHRS(Port.kMXP);
-      
-      private final GyroIO gyroIO;
-      private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-      
-      private final QuestNavIO QuestNavIO;
-      private final QuestimatorIOInputsAutoLogged questimatorInputs = new QuestimatorIOInputsAutoLogged();
-      // Slew rate filter variables for controlling lateral acceleration
-      // private double m_currentRotation = 0.0;
-      // private double m_currentTranslationDir = 0.0;
-      // private double m_currentTranslationMag = 0.0;
-    
-      // private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-      // private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
-      // private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-      
-      private Pose2d m_prevOdo = new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0));
-    
-      private boolean TargetOdoEnable = true;
-      // private Translation2d m_currentTarget = LocationConstants.SpeakerBlue;
-      // Odometry class for tracking robot pose using only encoders
-    
-      // Available paths in teleop.  Will select path based on alliance color.
-      public enum TeleopPath {
-        AMP,
-        SOURCE
-      }
-    
-      Field2d field;
-      Field2d fieldEst;
-      /** Creates a new DriveSubsystem. */
-      SUB_Vision m_vision;
-      // private Pose2d currentPose;
-      private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
-  
-      private Rotation2d m_cameraRotation;// angle of the robot from cameras
-      public SUB_Drivetrain(
-        GyroIO gyroIO,
-        ModuleIO flModuleIO,
-        ModuleIO frModuleIO,
-        ModuleIO blModuleIO,
-        ModuleIO brModuleIO
-        ,SUB_Vision p_vision
-        ,QuestNavIO p_questNavIO
-        ) 
-      {
+      private Pose2d m_kalmanOdometry;    
+            private SwerveModulePosition[] lastModulePositions = 
+            new SwerveModulePosition[] {
+              new SwerveModulePosition(),
+              new SwerveModulePosition(),
+              new SwerveModulePosition(),
+              new SwerveModulePosition()
+            };
+            // private ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds();
+          
+            // private boolean onTarget = false;
+            // private boolean onTargetV3 = false;
+            // The gyro sensor
+            // private final AHRS m_gyro = new AHRS(Port.kMXP);
             
-        this.gyroIO = gyroIO;
-        QuestNavIO = p_questNavIO;
-        QuestNavIO.hardReset();
-        m_frontLeft = new SwerveModule(
-          flModuleIO,
-          0,
-          DriveConstants.kFrontLeftChassisAngularOffset);
-        m_frontRight = new SwerveModule(
-          frModuleIO,
-          1,
-          DriveConstants.kFrontRightChassisAngularOffset);
-        m_rearLeft = new SwerveModule(
-          blModuleIO,
-          2,
-          DriveConstants.kBackLeftChassisAngularOffset);
-        m_rearRight = new SwerveModule(
-          brModuleIO, 
-          3,
-          DriveConstants.kBackRightChassisAngularOffset);
-        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        var visionStdDevs = VecBuilder.fill(1, 1, 1);
-        // var targetStdDevs = VecBuilder.fill(0, 0, 0);
+            private final GyroIO gyroIO;
+            private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
             
-        
-        SwerveModules = new SwerveModule[]{
-          m_frontLeft,
-          m_frontRight,
-          m_rearLeft,
-          m_rearRight
-        };
-        field = new Field2d();
-        fieldEst = new Field2d();
-        // m_ChassisSpeed = new ChassisSpeeds(0, 0, 0);
-        // SmartDashboard.putNumber("SwerveP", m_SwerveP);
-        // SmartDashboard.putNumber("SwerveI", m_SwerveI);
-        // SmartDashboard.putNumber("SwerveD", m_SwerveD);
-        // SmartDashboard.putNumber("SwerveFF", m_SwerveFF);
-        // Configure AutoBuilder last
-        
-        try{
-          config = RobotConfig.fromGUISettings();
-        } catch (Exception e) {
-          // Handle exception as needed
-          e.printStackTrace();
-        }
-    
-        AutoBuilder.configure(
-                this::getOdometry,
-                // this::getPose, // Robot pose supplier
-                // QuestNavIO::getRobotPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds) -> driveAutoBuilder(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                        new PIDConstants(AutoConstants.kPXController, 0.0, AutoConstants.kDXController), // Translation PID constants  
-                        new PIDConstants(AutoConstants.kPThetaController, 0.0, 0.0) // Rotation PID constants
-                ),
-                config, // The robot configuration
-                () -> {
-                  // Boolean supplier that controls when the path will be mirrored for the red alliance
-                  // This will flip the path being followed to the red side of the field.
-                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-    
-                  var alliance = DriverStation.getAlliance();
-                  if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                  }else{
-                    return false;
-                  }
-                },
-                this // Reference to this subsystem to set requirements
-        );
-    
-        m_vision = p_vision;
-        m_odometry =
-          new SwerveDrivePoseEstimator(
-            DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(getAngle()),
-            getModulePositions(),
-            new Pose2d(),
-            stateStdDevs,
-            visionStdDevs);
-    
-        m_targetOdometry =
-          new SwerveDrivePoseEstimator(
-            DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(getAngle()),
-            getModulePositions(),
-            new Pose2d(),
-            stateStdDevs,
-            visionStdDevs);
-        questimetry =
-          new SwerveDrivePoseEstimator(
-            DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(getAngle()),
-            getModulePositions(),
-            new Pose2d(),
-            stateStdDevs,
-            visionStdDevs);
-    
-        m_pureOdometry = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(getAngle()),
-        getModulePositions()
-        );
-        
-        m_vision.updateInputs();
-        
-      }
-      
-      // private double m_SwerveP = m_frontLeft.getSwerveP();
-      // private double m_SwerveI = m_frontLeft.getSwerveI();
-      // private double m_SwerveD = m_frontLeft.getSwerveD();
-      // private double m_SwerveFF = m_frontLeft.getSwerveFF();
-      public void setCurrentOdometry(int odo){
-        currentOdometry = odo;
-        System.out.println(odo);
-      }
-
-      public int getCurrentOdometry(){
-        return currentOdometry;
-      }
-
-      public Pose2d getOdometry(){
-        // Pose2d currentPose;
-        if (currentOdometry == 2){
-          // return QuestNavIO.getRobotPose();
-          return questimetry.getEstimatedPosition();
-        }if (currentOdometry == 1 ) {
-          return m_odometry.getEstimatedPosition();
-        }else{
-          return m_pureOdometry.getPoseMeters();
-        }
-        // return currentPose;
-      }
-
-      @Override
-      public void periodic() {
-        SmartDashboard.putNumber("gyroHeading", getAngle());
-        var RvisionEst = m_vision.getREstimatedGlobalPose();
-        var LvisionEst = m_vision.getLEstimatedGlobalPose();
-        m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
-      
-        // Update the odometry in the periodic block
-        gyroIO.updateInputs(gyroInputs);
-        QuestNavIO.updateInputs(questimatorInputs);
-        Logger.processInputs("Drive/Gyro", gyroInputs);
-        Logger.processInputs("Drive/QuestNav", questimatorInputs);
-    
-        QuestNavIO.cleanUpQuestNavMessages();
-    
-        m_frontLeft.periodic();
-        m_frontRight.periodic();
-        m_rearLeft.periodic();
-        m_rearRight.periodic();
-        if (DriverStation.isDisabled()){
-          Logger.recordOutput("SwerveStates/setpoints", new SwerveModuleState[] {});
-          Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[]{});
-        }
-    
-        SwerveModulePosition[] modulePositions = getModulePositions();
-        SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
-    
-        
-        m_odometry.update(
-          Rotation2d.fromDegrees(getAngle()),
-          getModulePositions()
-          // modulePositions
-        );
-    
-        m_targetOdometry.update(
-          Rotation2d.fromDegrees(-getAngle()),
-          // m_targetOdometry.getEstimatedPosition().getRotation(),
-          getTargetModulePositions()
-        );
-        questimetry.update(
-          QuestNavIO.getRobotPose().getRotation(),
-           getModulePositions());
-    
-        m_pureOdometry.update(getOdoRotation(), modulePositions);
-        Logger.recordOutput("PureRobotPose", m_pureOdometry.getPoseMeters());
-        Logger.recordOutput("RobotPose",m_odometry.getEstimatedPosition());
-        Logger.recordOutput("Questimetry", questimetry.getEstimatedPosition());
-        // new Rotation2d();
-        Logger.recordOutput("TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
-        // new Rotation2d();
-        // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
-        // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
-        m_vision.updateInputs();
-        if (QuestNavIO.connected()){
-          addQuestMeasurement(QuestNavIO.getRobotPose()
-            ,Timer.getFPGATimestamp()-.04
-            // ,QuestNavIO.timestamp()
-          );
-        }
-        
-        LvisionEst.ifPresent(
-          est -> {
-            // var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
-            var estPose = est.estimatedPose.toPose2d();
+            private final QuestNavIO QuestNavIO;
+            private final QuestimatorIOInputsAutoLogged questimatorInputs = new QuestimatorIOInputsAutoLogged();
+            // Slew rate filter variables for controlling lateral acceleration
+            // private double m_currentRotation = 0.0;
+            // private double m_currentTranslationDir = 0.0;
+            // private double m_currentTranslationMag = 0.0;
+          
+            // private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+            // private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+            // private double m_prevTime = WPIUtilJNI.now() * 1e-6;
             
-              // estPose = m_vision.getEstimatedGlobalPose(estPose);
-            // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            // }
-            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("LCameraPose", estPose);
+            private Pose2d m_prevOdo = new Pose2d(new Translation2d(0,0), Rotation2d.fromDegrees(0));
+          
+            private boolean TargetOdoEnable = true;
+            // private Translation2d m_currentTarget = LocationConstants.SpeakerBlue;
+            // Odometry class for tracking robot pose using only encoders
+          
+            // Available paths in teleop.  Will select path based on alliance color.
+            public enum TeleopPath {
+              AMP,
+              SOURCE
             }
-            // Change our trust in the measurement based on the tags we can see
-            
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035, estStdDevs);
-          }
-        );
-    
-        RvisionEst.ifPresent(
-          est -> {
-            // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
-            var estPose = est.estimatedPose.toPose2d();
-            // estPose = m_vision.getREstimatedGlobalPose();
-            // estPose = m_vision.getEstimatedGlobalPose(estPose);
-            // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
-            // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
-            //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            // }
-            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
-              Logger.recordOutput("RCameraPose", estPose);
-            }
-            // Logger.recordOutput("RCameraPose", estPose);
-            // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
-            // Change our trust in the measurement based on the tags we can see
           
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035 , estStdDevs);
-          
-          }  
-        );
-       
-        // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
-        //   try {
-        //   var L = LvisionEst.get();
-        //   var R = RvisionEst.get();
-        //   var Rpose2d = RvisionEst.get().estimatedPose.toPose2d();
-        //   var difPose = LvisionEst.get().estimatedPose.toPose2d().minus(Rpose2d);
-          
-          // if (
-          //   Math.abs(difPose.getX()) < Units.inchesToMeters(3)
-          //   &&
-          //   Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
-          //   ){
-          // System.out.println("GOOD");
-          // var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
-             
-        //     Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
-        //     addVisionMeasurement(
-        //       L.estimatedPose.toPose2d(), L.timestampSeconds, stdDevs);
+            Field2d field;
+            Field2d fieldEst;
+            /** Creates a new DriveSubsystem. */
+            SUB_Vision m_vision;
+            KalmanFilter kFilter = new KalmanFilter();
+            // private Pose2d currentPose;
+            private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
+        
+            private Rotation2d m_cameraRotation;// angle of the robot from cameras
+            public SUB_Drivetrain(
+              GyroIO gyroIO,
+              ModuleIO flModuleIO,
+              ModuleIO frModuleIO,
+              ModuleIO blModuleIO,
+              ModuleIO brModuleIO
+              ,SUB_Vision p_vision
+              ,QuestNavIO p_questNavIO
+              ) 
+            {
+                  
+              this.gyroIO = gyroIO;
+              QuestNavIO = p_questNavIO;
+              QuestNavIO.hardReset();
+              m_frontLeft = new SwerveModule(
+                flModuleIO,
+                0,
+                DriveConstants.kFrontLeftChassisAngularOffset);
+              m_frontRight = new SwerveModule(
+                frModuleIO,
+                1,
+                DriveConstants.kFrontRightChassisAngularOffset);
+              m_rearLeft = new SwerveModule(
+                blModuleIO,
+                2,
+                DriveConstants.kBackLeftChassisAngularOffset);
+              m_rearRight = new SwerveModule(
+                brModuleIO, 
+                3,
+                DriveConstants.kBackRightChassisAngularOffset);
+              var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+              var visionStdDevs = VecBuilder.fill(1, 1, 1);
+              // var targetStdDevs = VecBuilder.fill(0, 0, 0);
+                  
               
-        //     addVisionMeasurement(
-        //       R.estimatedPose.toPose2d(), R.timestampSeconds, stdDevs);
+              SwerveModules = new SwerveModule[]{
+                m_frontLeft,
+                m_frontRight,
+                m_rearLeft,
+                m_rearRight
+              };
+              field = new Field2d();
+              fieldEst = new Field2d();
+              kFilter = new KalmanFilter();
             
-        //     }
-        //   } catch(Exception e){
-
-        //   }
-        // }
-
-        if (TargetOdoEnable){
-          if (m_vision.getHasLTarget()){   
-            addTargetVisionMeasurement(
-              m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.3);
-          }
-          if (m_vision.getHasRTarget()){
-            addTargetVisionMeasurement(
-              m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.3);
+              // m_ChassisSpeed = new ChassisSpeeds(0, 0, 0);
+              // SmartDashboard.putNumber("SwerveP", m_SwerveP);
+              // SmartDashboard.putNumber("SwerveI", m_SwerveI);
+              // SmartDashboard.putNumber("SwerveD", m_SwerveD);
+              // SmartDashboard.putNumber("SwerveFF", m_SwerveFF);
+              // Configure AutoBuilder last
+              
+              try{
+                config = RobotConfig.fromGUISettings();
+              } catch (Exception e) {
+                // Handle exception as needed
+                e.printStackTrace();
+              }
+          
+              AutoBuilder.configure(
+                      this::getOdometry,
+                      // this::getPose, // Robot pose supplier
+                      // QuestNavIO::getRobotPose, // Robot pose supplier
+                      this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                      this::getChasisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                      (speeds) -> driveAutoBuilder(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+                      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                              new PIDConstants(AutoConstants.kPXController, 0.0, AutoConstants.kDXController), // Translation PID constants  
+                              new PIDConstants(AutoConstants.kPThetaController, 0.0, AutoConstants.kDThetaController) // Rotation PID constants
+                      ),
+                      config, // The robot configuration
+                      () -> {
+                        // Boolean supplier that controls when the path will be mirrored for the red alliance
+                        // This will flip the path being followed to the red side of the field.
+                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          
+                        var alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent()) {
+                          return alliance.get() == DriverStation.Alliance.Red;
+                        }else{
+                          return false;
+                        }
+                      },
+                      this // Reference to this subsystem to set requirements
+              );
+          
+              m_vision = p_vision;
+              m_odometry =
+                new SwerveDrivePoseEstimator(
+                  DriveConstants.kDriveKinematics,
+                  Rotation2d.fromDegrees(getAngle()),
+                  getModulePositions(),
+                  new Pose2d(),
+                  stateStdDevs,
+                  visionStdDevs);
+          
+              m_targetOdometry =
+                new SwerveDrivePoseEstimator(
+                  DriveConstants.kDriveKinematics,
+                  Rotation2d.fromDegrees(getAngle()),
+                  getModulePositions(),
+                  new Pose2d(),
+                  stateStdDevs,
+                  visionStdDevs);
+              questimetry =
+                new SwerveDrivePoseEstimator(
+                  DriveConstants.kDriveKinematics,
+                  Rotation2d.fromDegrees(getAngle()),
+                  getModulePositions(),
+                  new Pose2d(),
+                  stateStdDevs,
+                  visionStdDevs);
+          
+              m_kalmanOdometry = new Pose2d(0,0,new Rotation2d());
+              m_pureOdometry = new SwerveDriveOdometry(
+              DriveConstants.kDriveKinematics,
+              Rotation2d.fromDegrees(getAngle()),
+              getModulePositions()
+              );
+              
+              m_vision.updateInputs();
+              
             }
-          }
+            
+            // private double m_SwerveP = m_frontLeft.getSwerveP();
+            // private double m_SwerveI = m_frontLeft.getSwerveI();
+            // private double m_SwerveD = m_frontLeft.getSwerveD();
+            // private double m_SwerveFF = m_frontLeft.getSwerveFF();
+            public void setCurrentOdometry(int odo){
+              currentOdometry = odo;
+              System.out.println(odo);
+            }
+      
+            public int getCurrentOdometry(){
+              return currentOdometry;
+            }
+      
+            public Pose2d getOdometry(){
+              // Pose2d currentPose;
+              if (currentOdometry == 2){
+                // return QuestNavIO.getRobotPose();
+                return questimetry.getEstimatedPosition();
+              }if (currentOdometry == 1 ) {
+                return m_odometry.getEstimatedPosition();
+              }else{
+                return m_pureOdometry.getPoseMeters();
+              }
+              // return currentPose;
+            }
+      
+            @Override
+            public void periodic() {
+              SmartDashboard.putNumber("gyroHeading", getAngle());
+              var RvisionEst = m_vision.getREstimatedGlobalPose();
+              var LvisionEst = m_vision.getLEstimatedGlobalPose();
+              m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
+            
+              // Update the odometry in the periodic block
+              gyroIO.updateInputs(gyroInputs);
+              QuestNavIO.updateInputs(questimatorInputs);
+              Logger.processInputs("Drive/Gyro", gyroInputs);
+              Logger.processInputs("Drive/QuestNav", questimatorInputs);
+          
+              QuestNavIO.cleanUpQuestNavMessages();
+          
+              m_frontLeft.periodic();
+              m_frontRight.periodic();
+              m_rearLeft.periodic();
+              m_rearRight.periodic();
+              if (DriverStation.isDisabled()){
+                Logger.recordOutput("SwerveStates/setpoints", new SwerveModuleState[] {});
+                Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[]{});
+              }
+          
+              SwerveModulePosition[] modulePositions = getModulePositions();
+              SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
+          
+              
+              m_odometry.update(
+                Rotation2d.fromDegrees(getAngle()),
+                getModulePositions()
+                // modulePositions
+              );
+          
+              m_targetOdometry.update(
+                Rotation2d.fromDegrees(-getAngle()),
+                // m_targetOdometry.getEstimatedPosition().getRotation(),
+                getTargetModulePositions()
+              );
+              questimetry.update(
+                QuestNavIO.getRobotPose().getRotation(),
+                 getModulePositions());
+          
+              m_pureOdometry.update(getOdoRotation(), modulePositions);
+              Logger.recordOutput("Drive/Odometry/PureRobotPose", m_pureOdometry.getPoseMeters());
+              Logger.recordOutput("Drive/Odometry/RobotPose",m_odometry.getEstimatedPosition());
+              Logger.recordOutput("Drive/Odometry/Questimetry", questimetry.getEstimatedPosition());
+              Logger.recordOutput("Drive/Odometry/TargetOdometry",m_targetOdometry.getEstimatedPosition().rotateBy(Rotation2d.fromDegrees(180)));
+              // new Rotation2d();
+              // SmartDashboard.putBoolean("HasTarget", m_vision.getHasLTarget() || m_vision.getHasRTarget());    
+              // SmartDashboard.putNumber("TargetYaw", getTargetOdo().getRotation().rotateBy(Rotation2d.fromDegrees(180)).getDegrees());
+              m_vision.updateInputs();
+              if (QuestNavIO.connected()){
+                addQuestMeasurement(QuestNavIO.getRobotPose()
+                  ,Timer.getFPGATimestamp()-.04
+                  // ,QuestNavIO.timestamp()
+                );
+              }
+              
+              LvisionEst.ifPresent(
+                est -> {
+                  // var estPose = m_vision.getLPose(m_odometry.getEstimatedPosition()).toPose2d();
+                  var estPose = est.estimatedPose.toPose2d();
+                  
+                    // estPose = m_vision.getEstimatedGlobalPose(estPose);
+                  // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
+                  var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+                  // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+                  //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                  // }
+                  if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+                    Logger.recordOutput("Drive/Odometry/LCameraPose", estPose);
+                  }
+                  // Change our trust in the measurement based on the tags we can see
+                  
+                    // addVisionMeasurement(
+                    //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035, estStdDevs);
+                }
+              );
+          
+              RvisionEst.ifPresent(
+                est -> {
+                  // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+                  var estPose = est.estimatedPose.toPose2d();
+                  // estPose = m_vision.getREstimatedGlobalPose();
+                  // estPose = m_vision.getEstimatedGlobalPose(estPose);
+                  // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
+                  var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+                  // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
+                  //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                  // }
+                  if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+                    Logger.recordOutput("Drive/Odometry/RCameraPose", estPose);
+                  }
+                  // Logger.recordOutput("RCameraPose", estPose);
+                  // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
+                  // Change our trust in the measurement based on the tags we can see
+                
+                    // addVisionMeasurement(
+                    //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035 , estStdDevs);
+                
+                }  
+              );
+             
+              // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
+              //   try {
+              //   var L = LvisionEst.get();
+              //   var R = RvisionEst.get();
+              //   var Rpose2d = RvisionEst.get().estimatedPose.toPose2d();
+              //   var difPose = LvisionEst.get().estimatedPose.toPose2d().minus(Rpose2d);
+                
+                // if (
+                //   Math.abs(difPose.getX()) < Units.inchesToMeters(3)
+                //   &&
+                //   Math.abs(difPose.getY()) < Units.inchesToMeters(3) 
+                //   ){
+                // System.out.println("GOOD");
+                // var estStdDevs = m_vision.getREstimationStdDevs(L.estimatedPose.toPose2d());
+                   
+              //     Matrix<N3, N1> stdDevs = VecBuilder.fill(0.25, 0.25, 0.25);
+              //     addVisionMeasurement(
+              //       L.estimatedPose.toPose2d(), L.timestampSeconds, stdDevs);
+                    
+              //     addVisionMeasurement(
+              //       R.estimatedPose.toPose2d(), R.timestampSeconds, stdDevs);
+                  
+              //     }
+              //   } catch(Exception e){
+      
+              //   }
+              // }
+      
+              if (TargetOdoEnable){
+                if (m_vision.getHasLTarget()){   
+                  addTargetVisionMeasurement(
+                    m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.3);
+                }
+                if (m_vision.getHasRTarget()){
+                  addTargetVisionMeasurement(
+                    m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.3);
+                  }
+                }
+              
+            // }
+      
+              
+              for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++){
+                moduleDeltas[moduleIndex] =
+                  new SwerveModulePosition(
+                    modulePositions[moduleIndex].distanceMeters
+                      - lastModulePositions[moduleIndex].distanceMeters,
+                      modulePositions[moduleIndex].angle);
+                  lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
+                }
+                RvisionEst.ifPresent(
+                  est -> {
+                    // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+                    var estPose = est.estimatedPose.toPose2d();
+                    // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+                    // kFilter.update(estArray);
+                    double[] fullMeasurement = {
+                      estPose.getX(),estPose.getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
+                      getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+                      Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+                    };
+                    kFilter.update(fullMeasurement);
+                  }  
+                );
         
-      // }
+                LvisionEst.ifPresent(
+                  est -> {
+                    // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+                    var estPose = est.estimatedPose.toPose2d();
+                    // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+                    // kFilter.update(estArray);
+                    double[] fullMeasurement = {
+                      estPose.getX(),estPose.getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
+                      getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+                      Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+                    };
+                    kFilter.update(fullMeasurement);
+                  }  
+                );
 
-        
-        for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++){
-          moduleDeltas[moduleIndex] =
-            new SwerveModulePosition(
-              modulePositions[moduleIndex].distanceMeters
-                - lastModulePositions[moduleIndex].distanceMeters,
-                modulePositions[moduleIndex].angle);
-            lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
+          if (!m_vision.getHasLTarget() || !m_vision.getHasRTarget()){
+            double[] fullMeasurement = {
+              m_odometry.getEstimatedPosition().getX(),m_odometry.getEstimatedPosition().getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
+              getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+              Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+            };
+            kFilter.update(fullMeasurement);
+          
           }
+          // 
+          // double[] fullMeasurement = {
+          //   0,0,0, getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+          //   Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+          // };
+          // kFilter.update();
         
+          // m_kalmanOdometry = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),new Rotation2d().fromRadians(kFilter.getState().get(2)));
+          Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),new Rotation2d().fromRadians(kFilter.getState().get(2)));
+          Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
+ 
+          // if (m_vision.getHasLTarget() || m_vision.getHasRTarget()){
+          addVisionMeasurement(KalFilterOdo, Timer.getFPGATimestamp(), VisionConstants.kSingleTagStdDevs);
+          // }
       }
     
       public ChassisSpeeds getChasisSpeed() {
