@@ -101,18 +101,6 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kAutoP = 0.05;//.115;//0.004;
-    public static final double kAutoI = 0.0;
-    public static final double kAutoD = 0.01;
-    public static final double kAutoFF = 0.0;
-
-    // public static final double kAutoA = .3;//.42;//0.48019;
-    // public static final double kAutoS = .5;//.004;
-    // public static final double kAutoV = 2.388;//2.22;//2.1016;
-    public static final double kAutoA = .4;//.35;//.42;//0.48019;
-    public static final double kAutoS = .001;//.004;
-    public static final double kAutoV = 2.82;//2.37;//2.22;//2.1016;
-    
     public static final double kDrivingP = 0.0;//0.004;
     public static final double kDrivingI = 0.0;
     public static final double kDrivingD = 0.0;
@@ -195,11 +183,21 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;//1;
-    public static final double kDXController = 0.01;//0.01;
-    public static final double kPYController = 0;
-    public static final double kPThetaController = 3;//2;
+    public static final double kAutoP = 0.2;//.115;//0.004;
+    public static final double kAutoI = 0.0;
+    public static final double kAutoD = 0.2;
+    public static final double kAutoFF = 0.0;
 
+    public static final double kAutoA = .44;//.35;//.42;//0.48019;
+    public static final double kAutoS = .001;//.004;
+    public static final double kAutoV = 2.55;//2.37;//2.22;//2.1016;
+    
+    public static final double kPXController = 4;//1;
+    public static final double kDXController = 0.04;//0.01;
+    public static final double kPYController = 0;
+    public static final double kPThetaController = 6;//2;
+    public static final double kDThetaController = .5;
+    
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -235,7 +233,7 @@ public final class Constants {
     public static final boolean kInverted = false;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
-    public static final double kIntake = 5;//6;
+    public static final double kIntake = 6;//6;
     public static final double kOff = 0;
     public static final double kReverse = -5;//-2500
     public static final double kReverseLVl2 = -3;//-2500
@@ -243,9 +241,9 @@ public final class Constants {
     public static final double kReverseSlow = -4;
     public static final double kHolding = .5;
 
-    public static final double kConveyorDeploy = -3;
+    public static final double kConveyorDeploy = -6;
     public static final double kConveyorOff = 0;
-    public static final double kConveyorReverse = 3;
+    public static final double kConveyorReverse = 6;
   }
 
   public static final class PivotConstants{
@@ -289,6 +287,7 @@ public final class Constants {
     public static final double kDeployL2Exception = Math.toRadians(84);//82.75
     public static final double kDeployL3Exception = Math.toRadians(88);//87
     public static final double kDeployL4Exception = Math.toRadians(88);//86
+    public static final double kAutoDeploy = Math.toRadians(90);//68
     public static final double kDeployBarge = Math.toRadians(90);
     public static final double kChangeLevelFour = Math.toRadians(80);
   }
@@ -325,6 +324,8 @@ public final class Constants {
     public static final double kDeployL2 = 7.5;
     public static final double kDeployL3 = 18;//28
     public static final double kDeployL4 = 65;//68
+    public static final double kDeployL4Auto = 68;//68
+    public static final double kAutoDown = 30;//68
     public static final double kDeployL2Exception = 0;
     public static final double kDeployL3Exception = 22;//19
     public static final double kDeployL4Exception = 67.5;//68
@@ -368,6 +369,7 @@ public final class Constants {
     public static final double kDeployL2 = Math.toRadians(65);//43
     public static final double kDeployL3 = Math.toRadians(42);//31
     public static final double kDeployL4 = Math.toRadians(60);//43
+    public static final double kAutoDeploy = Math.toRadians(90);//43
     public static final double kDeployL2Exception = Math.toRadians(36);//30
     public static final double kDeployL3Exception = Math.toRadians(25);//22.5
     public static final double kDeployL4Exception = Math.toRadians(42);//43

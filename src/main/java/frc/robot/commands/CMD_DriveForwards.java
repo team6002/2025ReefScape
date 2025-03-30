@@ -34,7 +34,7 @@ public class CMD_DriveForwards extends Command {
   public void execute() {
 
     // System.out.println(m_drivetrain.autoAlignTurn(m_drivetrain.calculateTargetAngle()));
-    m_drivetrain.drive( .3, y, 0,false);
+    m_drivetrain.drive( .2, y, 0,false);
   }
 
   // private static double modifyAxis(double value) {

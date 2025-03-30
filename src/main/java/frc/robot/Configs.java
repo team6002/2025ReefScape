@@ -31,7 +31,7 @@ public final class Configs {
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
                     .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD,ClosedLoopSlot.kSlot0)
-                    .pid(ModuleConstants.kAutoP, ModuleConstants.kAutoI, ModuleConstants.kAutoD,ClosedLoopSlot.kSlot1)
+                    .pid(AutoConstants.kAutoP, AutoConstants.kAutoI, AutoConstants.kAutoD,ClosedLoopSlot.kSlot1)
                     .velocityFF(drivingVelocityFeedForward)
                     .outputRange(-1, 1);
             drivingConfig.limitSwitch

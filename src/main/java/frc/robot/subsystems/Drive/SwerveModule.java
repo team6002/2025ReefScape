@@ -13,6 +13,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import org.littletonrobotics.junction.Logger;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
@@ -47,7 +48,7 @@ public class SwerveModule {
     // m_moduleChannel = p_moduleChannel;
 
     m_drivingFeedForward = new SimpleMotorFeedforward(ModuleConstants.kDrivingS, ModuleConstants.kDrivingV, ModuleConstants.kDrivingA);
-    m_autoFeedForward = new SimpleMotorFeedforward(ModuleConstants.kAutoS, ModuleConstants.kAutoV, ModuleConstants.kAutoA);
+    m_autoFeedForward = new SimpleMotorFeedforward(AutoConstants.kAutoS, AutoConstants.kAutoV, AutoConstants.kAutoA);
     
   }
 

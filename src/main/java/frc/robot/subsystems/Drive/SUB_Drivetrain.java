@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Questimator.QuestNavIO;
 import frc.robot.subsystems.Questimator.QuestimatorIOInputsAutoLogged;
 import frc.robot.subsystems.Vision.KalmanFilter;
@@ -336,8 +337,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             }
             // Change our trust in the measurement based on the tags we can see
             
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035, estStdDevs);
+              // addVisionMeasurement(
+              //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035, estStdDevs);
           }
         );
     
@@ -359,8 +360,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
           
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035 , estStdDevs);
+              // addVisionMeasurement(
+              //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .035 , estStdDevs);
           
           }  
         );
@@ -372,7 +373,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
             // kFilter.update(estArray);
             double[] fullMeasurement = {
-              estPose.getX(),estPose.getY(),estPose.getRotation().getRadians(), // Position
+              estPose.getX(),estPose.getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
               getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
               Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
             };
@@ -387,7 +388,7 @@ public class SUB_Drivetrain extends SubsystemBase {
             // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
             // kFilter.update(estArray);
             double[] fullMeasurement = {
-              estPose.getX(),estPose.getY(),estPose.getRotation().getRadians(), // Position
+              estPose.getX(),estPose.getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
               getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
               Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
             };
@@ -395,9 +396,21 @@ public class SUB_Drivetrain extends SubsystemBase {
           }  
         );
 
+        
+        if (!m_vision.getHasLTarget() || !m_vision.getHasRTarget()){
+          double[] fullMeasurement = {
+            m_odometry.getEstimatedPosition().getX(),m_odometry.getEstimatedPosition().getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
+            getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+            Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+          };
+          kFilter.update(fullMeasurement);
+        
+        }
+
         Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),new Rotation2d().fromRadians(kFilter.getState().get(2)));
         Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
         
+        addVisionMeasurement(KalFilterOdo, Timer.getFPGATimestamp(), VisionConstants.kSingleTagStdDevs);
         // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
         //   try {
         //   var L = LvisionEst.get();

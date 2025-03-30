@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.GlobalVariables;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.*;
@@ -13,17 +14,18 @@ import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
+import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 import frc.robot.subsystems.Vision.SUB_Vision;
 
 public class AUTO_BlueLeft444 extends SequentialCommandGroup{
-    public AUTO_BlueLeft444(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_Vision p_vision){
+    public AUTO_BlueLeft444(SUB_Drivetrain p_drivetrain, SUB_Pivot p_pivot, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_Vision p_vision, GlobalVariables p_variables){
         addCommands(
             Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped(AutoConstants.BlueLeft1), p_drivetrain)
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped(AutoConstants.BlueLeft1), p_drivetrain)
             // ,new InstantCommand(()-> p_drivetrain.setStartingAngle(),p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped(AutoConstants.BlueLeft1)
-              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_pivot, p_intake)
+              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
             ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
@@ -32,10 +34,7 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
             ,new WaitCommand(.5)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped(AutoConstants.BlueLeft2)
-              ,new SequentialCommandGroup(
-                new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-              )
+              ,new CMD_ReadyToIntake(p_pivot, p_elevator, p_flippyWrist, p_spinnyWrist, p_intake, p_variables)
             )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(15)
@@ -44,7 +43,7 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped("BlueLeftTrio3"), p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio3")
-              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_pivot, p_intake)
+              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
             ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
@@ -53,10 +52,7 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
             ,new WaitCommand(.5)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio4")
-              ,new SequentialCommandGroup(
-                new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-              )
+              ,new CMD_ReadyToIntake(p_pivot, p_elevator, p_flippyWrist, p_spinnyWrist, p_intake, p_variables)
             )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(1.5)
@@ -65,17 +61,14 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPositionFlipped("BlueLeftTrio5"), p_drivetrain)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio5")
-              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_pivot, p_intake)
+              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
             ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
             ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPathFlipped("BlueLeftTrio6")
-              ,new SequentialCommandGroup(
-                new CMD_ReadyIntake(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-                ,new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_pivot, p_intake).withTimeout(5)
-              )
+              ,new CMD_ReadyToIntake(p_pivot, p_elevator, p_flippyWrist, p_spinnyWrist, p_intake, p_variables)
             )
             ,new ParallelCommandGroup(
               new CMD_IntakeStow(p_intake).withTimeout(10)

@@ -10,9 +10,9 @@ import frc.robot.subsystems.Intake.SUB_Intake;
 public class CMD_DeployLevelFour extends SequentialCommandGroup{
     public CMD_DeployLevelFour(SUB_Intake p_intake, SUB_FlippyWrist p_flippyWrist){
         addCommands(
-            new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kStowing))
-            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kReverseLvl4))
-            ,new CMD_WristInPosition(p_flippyWrist)
+            // new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kStowing))
+            new InstantCommand(()-> p_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy))
+            // ,new CMD_WristInPosition(p_flippyWrist)
         );
     }
 }
