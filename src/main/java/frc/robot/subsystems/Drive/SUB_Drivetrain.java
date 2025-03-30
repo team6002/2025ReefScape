@@ -407,7 +407,8 @@ public class SUB_Drivetrain extends SubsystemBase {
         
         }
 
-        Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),new Rotation2d().fromRadians(kFilter.getState().get(2)));
+        new Rotation2d();
+        Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),Rotation2d.fromRadians(kFilter.getState().get(2)));
         Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
         
         addVisionMeasurement(KalFilterOdo, Timer.getFPGATimestamp(), VisionConstants.kSingleTagStdDevs);

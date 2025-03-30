@@ -28,9 +28,9 @@ public class CMD_Home extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kHome))
             ,new InstantCommand(()-> p_spinnyWrist.setGoal(FlippyWristConstants.kHome))
             ,new CMD_WristInPosition(p_flippyWrist)
+            ,new CMD_ElevatorReset(p_elevator)
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kHome))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new CMD_ElevatorReset(p_elevator)
             ,new InstantCommand(()-> p_variables.setRobotState(RobotState.HOME))
         );
     }

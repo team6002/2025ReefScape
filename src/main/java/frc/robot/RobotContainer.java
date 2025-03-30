@@ -39,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   Pose2d currentPose;
   // The robot's subsystems
-  // final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_drivetrain = new SUB_Drivetrain(
     new GyroIONavX()
@@ -57,7 +56,6 @@ public class RobotContainer {
   final SUB_FlippyWrist m_flippyWrist = new SUB_FlippyWrist(new FlippyWristIOSparkMax());
   final SUB_SpinnyWrist m_spinnyWrist = new SUB_SpinnyWrist(new SpinnyWristIOSparkMax());
   final SUB_Winch m_winch = new SUB_Winch(new WinchIOSparkMax());
-  // final SUB_Algae m_algae = new SUB_Algae(new AlgaeIOSparkMax());
   final SUB_GroundPivot m_groundPivot = new SUB_GroundPivot(new GroundPivotIOSparkMax());
   final SUB_GroundIntake m_groundIntake = new SUB_GroundIntake(new GroundIntakeIOSparkMax());
   // The driver's controller
@@ -72,9 +70,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    // m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
-    m_drivetrain.setDefaultCommand(new CMD_Drive
-    (m_drivetrain, m_driverController));
+    m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
+    m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_operatorController, m_intake, m_variables));
   }
 
   /**
@@ -104,18 +101,16 @@ public class RobotContainer {
 
     m_driverController.leftBumper().whileTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
 
-    // m_driverController.a().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
-    // m_driverController.b().onTrue(new CMD_Deploy(m_intake, m_flippyWrist, m_variables));
-
     //operator
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
     m_operatorController.leftBumper().onTrue(new ConditionalCommand(
       new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
       ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
       ,()-> GlobalVariables.m_intakeFromStation
     ));
+    m_operatorController.start().onTrue(new InstantCommand(()-> GlobalVariables.m_placeFront = !GlobalVariables.m_placeFront));
+    m_operatorController.rightTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
-    m_operatorController.leftTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
-    m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
       new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kReverse))
@@ -123,8 +118,6 @@ public class RobotContainer {
       ,new InstantCommand(()-> m_intake.setVoltage(0))
       ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
     ));
-
-    m_operatorController.start().onTrue(new CMD_Deploy(m_intake, m_flippyWrist, m_variables));
 
     m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_flippyWrist, m_pivot, m_variables));
     m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_flippyWrist, m_pivot, m_variables));

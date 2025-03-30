@@ -13,11 +13,10 @@ public class GlobalVariables extends SubsystemBase{
     public static double m_elevatorExtension = 0;
     public static boolean m_haveAlgae = false;
     public static boolean m_haveCoral = false;
-    public static boolean m_coralException = false;
-    public static boolean m_intakingAlgae = false;
     public static boolean m_groundPivotDeployed = false;
     public static boolean m_intakeFromStation = false;
     public static boolean m_groundHasCoral = false;
+    public static boolean m_placeFront = false;
 
     public enum RobotState{
         HOME
@@ -53,8 +52,9 @@ public class GlobalVariables extends SubsystemBase{
         Logger.recordOutput("GlobalVariables/robotState", getRobotState());
         Logger.recordOutput("GlobalVariables/haveAlgae", m_haveAlgae);
         Logger.recordOutput("GlobalVariables/haveCoral", m_haveCoral);
+        Logger.recordOutput("GlobalVariables/groundHasCoral", m_groundHasCoral);
         Logger.recordOutput("GlobalVariables/targetCoralLevel", m_targetCoralLevel);
-        Logger.recordOutput("GlobalVariables/intaking algae", m_intakingAlgae);
         Logger.recordOutput("GlobalVariables/stationIntake", m_intakeFromStation);
+        Logger.recordOutput("GlobalVariables/placeFront", m_placeFront);
     }
 }

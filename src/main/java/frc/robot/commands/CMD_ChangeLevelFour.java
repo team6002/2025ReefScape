@@ -30,26 +30,41 @@ public class CMD_ChangeLevelFour extends Command{
 
     @Override
     public void initialize(){
+        GlobalVariables.m_targetCoralLevel = 4;
+
         if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY) &! m_variables.isRobotState(RobotState.DEPLOY)){
             return;
         }
 
         setElevator = false;
         setPivot = false;
-        GlobalVariables.m_targetCoralLevel = 4;
-        m_flippyWrist.setGoal(FlippyWristConstants.kDeployL4);
+        if(GlobalVariables.m_placeFront) m_flippyWrist.setGoal(FlippyWristConstants.kDeployFrontL4);
+        else m_flippyWrist.setGoal(FlippyWristConstants.kDeployFrontL4);
     }
+       
 
     @Override
     public void execute(){
-        if(!setElevator){
-            m_elevator.setGoal(ElevatorConstants.kDeployL4);
-            setElevator = true;
-        }
-
-        if(!setPivot){
-            m_pivot.setGoal(PivotConstants.kDeployL4);
-            setPivot = true;
+        if(GlobalVariables.m_placeFront){
+            if(!setElevator){
+                m_elevator.setGoal(ElevatorConstants.kDeployFrontL4);
+                setElevator = true;
+            }
+    
+            if(!setPivot && m_elevator.inPosition(ElevatorConstants.kDeployFrontL4)){
+                m_pivot.setGoal(PivotConstants.kDeployFrontL4);
+                setPivot = true;
+            }
+        }else{
+            if(!setElevator){
+                m_elevator.setGoal(ElevatorConstants.kDeployL4);
+                setElevator = true;
+            }
+    
+            if(!setPivot){
+                m_pivot.setGoal(PivotConstants.kDeployL4);
+                setPivot = true;
+            }
         }
     }
 

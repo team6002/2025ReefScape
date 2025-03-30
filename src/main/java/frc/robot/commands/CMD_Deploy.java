@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.Intake.SUB_Intake;
 
@@ -28,11 +26,6 @@ public class CMD_Deploy extends Command{
 
     @Override
     public void initialize(){
-        // m_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy);
-        // m_intake.setVoltage(IntakeConstants.kOff);
-        // if(GlobalVariables.m_targetCoralLevel == 4){
-        //     m_flippyWrist.setGoal(FlippyWristConstants.kStowing);
-        // }
         m_timer.reset();
         m_timer.start();
 

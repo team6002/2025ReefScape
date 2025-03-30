@@ -9,7 +9,6 @@ import frc.GlobalVariables;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.FlippyWristConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;

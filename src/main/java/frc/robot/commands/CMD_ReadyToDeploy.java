@@ -47,24 +47,46 @@ public class CMD_ReadyToDeploy extends Command{
 
     @Override
     public void execute(){
-        if(!m_pivot.inPosition(PivotConstants.kDeployL3) && !setPivot){
-            m_pivot.setGoal(PivotConstants.kDeployL3);
-            setPivot = true;
-        }
+        if(GlobalVariables.m_placeFront){
+            if(!m_pivot.inPosition(PivotConstants.kDeployFrontL3) && !setPivot){
+                m_pivot.setGoal(PivotConstants.kDeployFrontL3);
+                setPivot = true;
+            }
+    
+            if(!m_elevator.inPosition(ElevatorConstants.kDeployFrontL3) &! setElevator){
+                m_elevator.setGoal(ElevatorConstants.kDeployFrontL3);
+                setElevator = true;
+            }
+    
+            if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployFrontL3) &! setFlippyWrist){
+                m_flippyWrist.setGoal(FlippyWristConstants.kDeployFrontL3);
+                setFlippyWrist = true;
+            }
+    
+            if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployFrontL3) &! setSpinnyWrist){
+                m_spinnyWrist.setGoal(SpinnyWristConstants.kDeployFront);
+                setSpinnyWrist = true;
+            }
+        }else{
+            if(!m_pivot.inPosition(PivotConstants.kDeployL3) && !setPivot){
+                m_pivot.setGoal(PivotConstants.kDeployL3);
+                setPivot = true;
+            }
 
-        if(!m_elevator.inPosition(ElevatorConstants.kDeployL3) &! setElevator){
-            m_elevator.setGoal(ElevatorConstants.kDeployL3);
-            setElevator = true;
-        }
+            if(!m_elevator.inPosition(ElevatorConstants.kDeployL3) &! setElevator){
+                m_elevator.setGoal(ElevatorConstants.kDeployL3);
+                setElevator = true;
+            }
 
-        if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setFlippyWrist){
-            m_flippyWrist.setGoal(FlippyWristConstants.kDeployL3);
-            setFlippyWrist = true;
-        }
+            if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setFlippyWrist){
+                m_flippyWrist.setGoal(FlippyWristConstants.kDeployL3);
+                setFlippyWrist = true;
+            }
 
-        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setSpinnyWrist){
-            m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
-            setSpinnyWrist = true;
+            if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setSpinnyWrist){
+                m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
+                setSpinnyWrist = true;
+            }
         }
     }
 
