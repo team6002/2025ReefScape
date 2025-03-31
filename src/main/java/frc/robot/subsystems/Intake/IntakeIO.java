@@ -21,5 +21,10 @@ public interface IntakeIO {
 
   public default void setVoltage(double p_voltage){}
 
+  public default void setReference(double p_speed){}
+
   public default void setConveyorVoltage(double p_voltage){}
+  
+  public default void setCurrentLimit(int p_limit){}
+    
 }

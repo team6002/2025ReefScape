@@ -39,8 +39,10 @@ public class CMD_Deploy extends Command{
             m_timer.reset();
             if(outake){
                 m_intake.setConveyorVoltage(-10);
+                m_intake.setVoltage(0);
             }else{
                 m_intake.setConveyorVoltage(-2);
+                m_intake.setVoltage(0);
             }
             outake = !outake;
         }

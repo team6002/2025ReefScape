@@ -35,4 +35,9 @@ public class WinchIOSparkMax implements WinchIO{
     public void setReference(double p_reference){
         m_winchController.setReference(p_reference, ControlType.kPosition);
     }
+
+    @Override
+    public void setVoltage(double p_reference){
+        m_winchController.setReference(p_reference, ControlType.kVoltage);
+    }
 }

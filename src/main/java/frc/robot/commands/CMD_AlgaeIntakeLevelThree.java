@@ -25,6 +25,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
     private boolean setPivot;
 
     private final Timer m_triggerTimer = new Timer();
+    private final Timer m_SUCTimer = new Timer();
     private boolean isFinished = false;
 
 
@@ -46,9 +47,13 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
 
         m_triggerTimer.reset();
         m_triggerTimer.start();
+        m_SUCTimer.reset();
+        m_SUCTimer.stop();
         isFinished = false;
 
-        m_intake.setVoltage(IntakeConstants.kIntake);
+        // m_intake.setReference(IntakeConstants.kAlgaeIntake);
+        m_intake.setVoltage(12);
+        m_intake.setCurrentLimit(40);
     }
 
     @Override
@@ -58,7 +63,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
             m_flippyWrist.setGoal(FlippyWristConstants.kReadyAlgael3);
         }
 
-        if(setWrist && m_flippyWrist.inPosition() &! setElevator){
+        if(setWrist &! setElevator){
             setElevator = true;
             m_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael3);
         }
@@ -72,12 +77,19 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
             m_variables.setRobotState(RobotState.ALGAE_LEVEL_3);
             if(m_intake.getCurrent() > 20){
                 if(m_triggerTimer.get() > .1){
-                    isFinished = true;
+                    // isFinished = true;
                     GlobalVariables.m_haveAlgae = true;
+                    m_SUCTimer.start();
                 }
             }else{
                 m_triggerTimer.reset();
             }   
+        }
+        if (m_SUCTimer.get() >= .4){
+            // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
+            // if (m_flippyWrist.inPosition()){
+                isFinished = true;
+            // }
         }
     }
 
@@ -88,8 +100,10 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
 
     @Override
     public void end(boolean interrupted){
+        m_intake.setCurrentLimit(30);
         if(interrupted){m_intake.setVoltage(IntakeConstants.kOff); return;}
-
-        m_intake.setVoltage(IntakeConstants.kHolding);
+        m_flippyWrist.setGoal(FlippyWristConstants.kAlgaeHolding);
+        m_elevator.setGoal(ElevatorConstants.kIntakedAlgael3);
+        m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
     }
 }

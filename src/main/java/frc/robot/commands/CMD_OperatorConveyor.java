@@ -21,20 +21,20 @@ public class CMD_OperatorConveyor extends Command{
 
     @Override
     public void execute(){
-        if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
+        // if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY)){
             //if ready to deploy and left Y is greater than deadzone, set voltage based on input, otherwise turn off
-            if(m_operatorController.getLeftY() > .1){
+            if(Math.abs(m_operatorController.getLeftY()) > .1){
                 m_intake.setConveyorVoltage(-m_operatorController.getLeftY() * 3);
             }else{
                 m_intake.setConveyorVoltage(0);
             }
-            //same as ready to deploy except keep conveyor on if controller is less than deadzone
-        }else if(m_variables.isRobotState(RobotState.DEPLOY)){
-            if(m_operatorController.getLeftY() > .1){
-                m_intake.setConveyorVoltage(-m_operatorController.getLeftY() * 3);
-            }else{
-                m_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy);
-            }
-        }
+        //     //same as ready to deploy except keep conveyor on if controller is less than deadzone
+        // }else if(m_variables.isRobotState(RobotState.DEPLOY)){
+        //     if(m_operatorController.getLeftY() > .1){
+        //         m_intake.setConveyorVoltage(-m_operatorController.getLeftY() * 3);
+        //     }else{
+        //         m_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy);
+        //     }
+        // }
     }
 }

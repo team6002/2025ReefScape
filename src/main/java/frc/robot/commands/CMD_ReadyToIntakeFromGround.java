@@ -144,7 +144,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
                 m_intakeTimer.reset();
             }
     
-            if(m_intakeTimer.get() > 0.1){
+            if(m_intakeTimer.get() > 0.125){
                 haveCoral = true;
                 GlobalVariables.m_groundHasCoral = false;
             }

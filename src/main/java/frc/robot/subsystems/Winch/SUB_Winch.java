@@ -15,6 +15,10 @@ public class SUB_Winch extends SubsystemBase{
         io.setReference(p_reference);
     }
 
+    public void setVoltage(double p_reference){
+        io.setReference(p_reference);
+    }
+
     @Override
     public void periodic(){
         io.updateInputs(inputs);

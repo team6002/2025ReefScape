@@ -213,7 +213,7 @@ public final class Configs {
                                 .quadratureAverageDepth(2)
                                 .quadratureMeasurementPeriod(10);
                         m_intakeConfig.closedLoop
-                                .pidf(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kFF)
+                                .pidf(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kFF, ClosedLoopSlot.kSlot0)
                                 .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput)
                                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                         m_intakeConfig.limitSwitch

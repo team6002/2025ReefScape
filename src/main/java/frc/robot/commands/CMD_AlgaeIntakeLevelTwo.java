@@ -25,6 +25,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
     private boolean setPivot;
 
     private final Timer m_triggerTimer = new Timer();
+    private final Timer m_SUCTimer = new Timer();
     private boolean isFinished = false;
 
 
@@ -46,9 +47,11 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
 
         m_triggerTimer.reset();
         m_triggerTimer.start();
+        m_SUCTimer.reset();
+        m_SUCTimer.stop();
         isFinished = false;
 
-        m_intake.setVoltage(IntakeConstants.kIntake);
+        m_intake.setVoltage(IntakeConstants.kAlgaeIntake);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
             m_flippyWrist.setGoal(FlippyWristConstants.kReadyIntakeAlgae);
         }
 
-        if(setWrist && m_flippyWrist.inPosition() &! setElevator){
+        if(setWrist && !setElevator){
             setElevator = true;
             m_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael2);
         }
@@ -72,12 +75,16 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
             m_variables.setRobotState(RobotState.ALGAE_LEVEL_2);
             if(m_intake.getCurrent() > 20){
                 if(m_triggerTimer.get() > .1){
-                    isFinished = true;
+                    // isFinished = true;
                     GlobalVariables.m_haveAlgae = true;
+                    m_SUCTimer.start();
                 }
             }else{
                 m_triggerTimer.reset();
             }   
+        }
+        if (m_SUCTimer.get() >= .5){
+            isFinished = true;
         }
     }
 

@@ -2,6 +2,8 @@ package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.revrobotics.spark.SparkBase.ControlType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +22,10 @@ public class SUB_Intake extends SubsystemBase{
       return inputs.m_intakeVelocity;
     }
 
+    public void setCurrentLimit(int p_limit){
+      io.setCurrentLimit(p_limit);
+    }
+    
     public double getCurrent(){
       return inputs.m_intakeCurrent;
     }
@@ -30,6 +36,10 @@ public class SUB_Intake extends SubsystemBase{
 
     public void setConveyorVoltage(double p_voltage){
       io.setConveyorVoltage(p_voltage);
+    }
+
+    public void setReference(double p_speed){
+      io.setReference(p_speed);
     }
 
     @Override

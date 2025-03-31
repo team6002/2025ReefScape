@@ -39,7 +39,7 @@ public class CMD_ChangeLevelThree extends Command{
         setElevator = false;
         setPivot = false;
         if(GlobalVariables.m_placeFront) m_flippyWrist.setGoal(FlippyWristConstants.kDeployFrontL3);
-        else m_flippyWrist.setGoal(FlippyWristConstants.kDeployFrontL3);
+        else m_flippyWrist.setGoal(FlippyWristConstants.kDeployL3);
     }
        
 

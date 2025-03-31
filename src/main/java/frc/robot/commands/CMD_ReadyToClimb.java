@@ -59,7 +59,7 @@ public class CMD_ReadyToClimb extends Command{
         }
 
         if(setPivot && m_pivot.inPosition() &! setGroundPivot){
-            m_groundPivot.setGoal(GroundPivotConstants.kHome);
+            m_groundPivot.setGoal(GroundPivotConstants.kClimb);
             setGroundPivot = true;
         }
 
