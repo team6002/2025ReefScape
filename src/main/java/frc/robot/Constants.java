@@ -242,7 +242,7 @@ public final class Constants {
     public static final double kReverseLVl2 = -3;
     public static final double kReverseLvl4 = -7;
     public static final double kReverseSlow = -4;
-    public static final double kHolding = 2;
+    public static final double kHolding = .5;
     public static final double kAlgaeHolding = 2;
 
     public static final double kConveyorDeploy = -6;
@@ -275,7 +275,8 @@ public final class Constants {
     public static final double kReady = Math.toRadians(64);
     public static final double kClimb = Math.toRadians(95);
     public static final double kReadyAlgae = Math.toRadians(51);
-    public static final double kReadyIntakeAlgae = Math.toRadians(90);
+    public static final double kAlgaeLvl2Hold = Math.toRadians(80);
+    public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyAlgael3 = Math.toRadians(90);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(90);
     public static final double kReadyToScore = Math.toRadians(82);
@@ -324,7 +325,8 @@ public final class Constants {
     public static final double kIntake = 0.0;
     public static final double kIntakeGround = 0;
     public static final double kIntakeException = 14.5;
-    public static final double kReadyIntakeAlgael2 = 4;
+    public static final double kReadyIntakeAlgael2Up = 13;
+    public static final double kReadyIntakeAlgael2Down = 13;
     public static final double kReadyIntakeAlgaeEject = 3;
     public static final double kReadyIntakeAlgael3 = 23;
     public static final double kIntakedAlgael3 = 10;
@@ -377,7 +379,7 @@ public final class Constants {
     public static final double kIntake = Math.toRadians(-45);
     public static final double kIntakeGround = Math.toRadians(-120);
     public static final double kIntakeException = Math.toRadians(-111);
-    public static final double kReadyIntakeAlgae = Math.toRadians(80);
+    public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);
     public static final double kAlgaeProcessor = Math.toRadians(-13);
     public static final double kAlgaeCoral = Math.toRadians(-90);

@@ -71,7 +71,7 @@ public class RobotContainer {
 
     // Configure default commands
     m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
-    // m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_operatorController, m_intake, m_variables));
+    m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_operatorController, m_intake, m_variables));
   }
 
   /**

@@ -38,6 +38,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
     private boolean setElevator;
     private boolean setGroundPivot;
     private boolean setSpinnyWrist;
+    private int IntakeCounter;
 
     public CMD_ReadyToIntakeFromGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
         SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, GlobalVariables p_variables){
@@ -73,6 +74,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
         m_groundIntakeTimer.reset();
         m_groundIntakeTimer.stop();
         m_variables.setRobotState(RobotState.READY_TO_INTAKE);
+        IntakeCounter = 0;
     }
 
     @Override
@@ -124,7 +126,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             m_groundIntakeTimer.reset();
         }
 
-        if(m_groundIntakeTimer.get() > 0.1 &! setGroundPivot){
+        if(m_groundIntakeTimer.get() > 0.1 &! setGroundPivot ){
             GlobalVariables.m_groundHasCoral = true;
             m_groundPivot.setGoal(GroundPivotConstants.kHome);
             setGroundPivot = true;
@@ -143,12 +145,13 @@ public class CMD_ReadyToIntakeFromGround extends Command{
 
         if(m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround) && GlobalVariables.m_groundHasCoral){
             if(m_intake.getCurrent() > IntakeConstants.kTriggerThreshold){
+                IntakeCounter = IntakeCounter + 1;
                 m_intakeTimer.start();
             }else{
                 m_intakeTimer.reset();
             }
     
-            if(m_intakeTimer.get() > 0.3){
+            if(m_intakeTimer.get() > 0.3 || IntakeCounter > 20){
                 haveCoral = true;
                 GlobalVariables.m_groundHasCoral = false;
                 m_intake.setVoltage(IntakeConstants.kHolding);

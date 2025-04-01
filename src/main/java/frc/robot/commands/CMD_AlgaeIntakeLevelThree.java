@@ -85,7 +85,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
                 m_triggerTimer.reset();
             }   
         }
-        if (m_SUCTimer.get() >= .1){
+        if (m_SUCTimer.get() >= .3){
             // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
             // if (m_flippyWrist.inPosition()){
                 isFinished = true;
