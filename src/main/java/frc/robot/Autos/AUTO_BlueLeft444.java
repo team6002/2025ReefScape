@@ -27,7 +27,6 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
               p_drivetrain.FollowPathFlipped(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
             ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
@@ -45,7 +44,6 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
               p_drivetrain.FollowPathFlipped("BlueLeftTrio3")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
             ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
@@ -63,7 +61,6 @@ public class AUTO_BlueLeft444 extends SequentialCommandGroup{
               p_drivetrain.FollowPathFlipped("BlueLeftTrio5")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
-            ,new CMD_AlignColorAuto(p_drivetrain, p_vision).withTimeout(1)
             ,new WaitCommand(.4)
             ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
             ,new ParallelCommandGroup(

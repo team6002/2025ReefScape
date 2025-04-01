@@ -51,7 +51,8 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
         m_SUCTimer.stop();
         isFinished = false;
 
-        m_intake.setVoltage(IntakeConstants.kAlgaeIntake);
+        m_intake.setCurrentLimit(40);
+        m_intake.setReference(IntakeConstants.kAlgaeIntake);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
                 m_triggerTimer.reset();
             }   
         }
-        if (m_SUCTimer.get() >= .5){
+        if (m_SUCTimer.get() >= .1){
             isFinished = true;
         }
     }

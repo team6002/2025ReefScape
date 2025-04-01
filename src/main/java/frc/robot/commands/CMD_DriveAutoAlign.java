@@ -79,10 +79,6 @@ public class CMD_DriveAutoAlign extends Command {
 
     rot = MathUtil.applyDeadband(-m_controller.getRightX(), deadzone);
 
-    if (m_vision.getTcameraYaw() !=Double.MAX_VALUE && Math.abs(m_vision.getTcameraYaw()) <= 3.5){
-      rot = 0;
-    }
-
     FieldCentricTranslation = new Translation2d(xSpeed, ySpeed).rotateBy(Rotation2d.fromDegrees(m_drivetrain.getAngle())).unaryMinus();
 
     m_drivetrain.drive(FieldCentricTranslation.getX(), FieldCentricTranslation.getY() + yAdjustment, rot + rotAdjustment, false);

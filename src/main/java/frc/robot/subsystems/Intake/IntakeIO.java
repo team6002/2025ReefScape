@@ -8,12 +8,16 @@ public interface IntakeIO {
     public double m_intakeCurrent;
     public double m_intakeVelocity;
     public double m_intakeReference;
+    public double m_conveyorCurrent;
+    public double m_conveyorVoltage;
   }
 
   /** Updates the set of loggable inputs. */
   public default void updateInputs(IntakeIOInputs inputs) {}
 
   public default double getCurrent(){return 0;}
+
+  public default double getVoltage(){return 0;}
 
   public default double getReference(){return 0;}
 
@@ -26,5 +30,8 @@ public interface IntakeIO {
   public default void setConveyorVoltage(double p_voltage){}
   
   public default void setCurrentLimit(int p_limit){}
-    
+
+  public default double getConveyorVoltage(){return 0;}
+  
+  public default double getConveyorCurrent(){return 0;}
 }

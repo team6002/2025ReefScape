@@ -5,7 +5,6 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -14,7 +13,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Configs;
-import frc.robot.Configs.IntakeConfig;
 import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -27,6 +25,9 @@ public class IntakeIOSparkMax implements IntakeIO{
 
     private double m_intakeReference;
     final SimpleMotorFeedforward m_intakeFeedforward;
+
+    private double m_intakeVoltage;
+    private double m_conveyorVoltage;
 
     public IntakeIOSparkMax(){
         //initialize motor
@@ -42,7 +43,7 @@ public class IntakeIOSparkMax implements IntakeIO{
 
         //apply config
         m_intakeMotor.configure(Configs.IntakeConfig.m_intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_conveyorMotor.configure(Configs.IntakeConfig.m_intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_conveyorMotor.configure(Configs.IntakeConfig.m_conveyorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         m_intakeFeedforward = new SimpleMotorFeedforward(IntakeConstants.kS, 
         IntakeConstants.kV, IntakeConstants.kA);
@@ -56,6 +57,8 @@ public class IntakeIOSparkMax implements IntakeIO{
         inputs.m_intakeReference = getReference();
         inputs.m_intakeCurrent = getCurrent();
         inputs.m_intakeVelocity = getVelocity();
+        inputs.m_conveyorCurrent = getConveyorCurrent();
+        inputs.m_conveyorVoltage = getConveyorVoltage();
     }
 
     @Override
@@ -70,8 +73,23 @@ public class IntakeIOSparkMax implements IntakeIO{
     }
 
     @Override
+    public double getVoltage(){
+        return m_intakeVoltage;
+    }
+
+    @Override
+    public double getConveyorVoltage(){
+        return m_conveyorVoltage;
+    }
+
+    @Override
     public double getCurrent(){
         return m_intakeMotor.getOutputCurrent();
+    }
+
+    @Override
+    public double getConveyorCurrent(){
+        return m_conveyorMotor.getOutputCurrent();
     }
 
     @Override
@@ -81,6 +99,7 @@ public class IntakeIOSparkMax implements IntakeIO{
 
     @Override
     public void setVoltage(double p_voltage){
+        m_intakeVoltage = p_voltage;
         m_intakeController.setReference(p_voltage, ControlType.kVoltage);
     }
 
@@ -91,6 +110,7 @@ public class IntakeIOSparkMax implements IntakeIO{
 
     @Override
     public void setConveyorVoltage(double p_voltage){
+        m_conveyorVoltage = p_voltage;
         m_conveyorController.setReference(p_voltage, ControlType.kVoltage);
     }
 }

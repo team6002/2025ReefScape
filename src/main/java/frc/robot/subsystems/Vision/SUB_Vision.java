@@ -46,10 +46,6 @@ public class SUB_Vision {
         this.io = io;
     }
 
-    public double getTcameraYaw(){
-        return io.getTcameraYaw();
-    }
-
     public boolean getHasLTarget(){
         return inputs.LTarget;
     }

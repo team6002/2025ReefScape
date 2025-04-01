@@ -41,6 +41,7 @@ public class CMD_Ready extends Command{
         setWrist = false;
 
         m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
+        m_variables.setRobotState(RobotState.READY);
 
         if(GlobalVariables.m_haveAlgae){
             m_intake.setVoltage(IntakeConstants.kHolding);
@@ -93,7 +94,5 @@ public class CMD_Ready extends Command{
     @Override
     public void end(boolean interrupted){
         if (interrupted) return;
-
-        m_variables.setRobotState(RobotState.READY);
     }
 }

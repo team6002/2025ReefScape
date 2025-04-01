@@ -42,7 +42,6 @@ public interface VisionIO {
   }
 
     public default void updateInputs(VisionIOInputs inputs) {}
-    public default double getTcameraYaw(){return 0.0;}
     public default void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets){}
     public default Optional<EstimatedRobotPose> getLEstimatedGlobalPose() {return null;}
     public default Optional<EstimatedRobotPose> getREstimatedGlobalPose() {return null;}

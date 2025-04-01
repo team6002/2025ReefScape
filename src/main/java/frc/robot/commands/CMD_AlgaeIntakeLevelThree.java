@@ -52,8 +52,8 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
         isFinished = false;
 
         // m_intake.setReference(IntakeConstants.kAlgaeIntake);
-        m_intake.setVoltage(12);
-        m_intake.setCurrentLimit(40);
+        m_intake.setVoltage(8);
+        m_intake.setCurrentLimit(30);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
             m_pivot.setGoal(PivotConstants.kReadyIntakeAlgael3);
         }
 
-        if(setWrist && setElevator && setPivot && m_flippyWrist.inPosition() && m_elevator.inPosition() && m_pivot.inPosition()){
+        if(setWrist && setElevator && setPivot && m_elevator.inPosition() && m_pivot.inPosition()){
             m_variables.setRobotState(RobotState.ALGAE_LEVEL_3);
             if(m_intake.getCurrent() > 20){
                 if(m_triggerTimer.get() > .1){
@@ -85,7 +85,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
                 m_triggerTimer.reset();
             }   
         }
-        if (m_SUCTimer.get() >= .4){
+        if (m_SUCTimer.get() >= .1){
             // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
             // if (m_flippyWrist.inPosition()){
                 isFinished = true;

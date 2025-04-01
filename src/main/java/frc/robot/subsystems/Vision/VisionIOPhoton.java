@@ -41,7 +41,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionIOPhoton implements VisionIO{  
     private final PhotonCamera LCamera = new PhotonCamera(VisionConstants.kLeftCameraName);
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
-    private final PhotonCamera TCamera = new PhotonCamera(VisionConstants.kTopCameraName);
     private final PhotonPoseEstimator LphotonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
     private final PhotonPoseEstimator LphotonEstimatorLast = 
@@ -56,19 +55,6 @@ public class VisionIOPhoton implements VisionIO{
     public void setCameraPipeline(int LPipeline, int RPipeline){
         LCamera.setPipelineIndex(LPipeline);
         RCamera.setPipelineIndex(RPipeline);
-    }
-
-    public void setTCameraPipeline(int TPipeline){
-        TCamera.setPipelineIndex(TPipeline);
-    }
-
-    @Override
-    public double getTcameraYaw(){
-        try {
-            return TCamera.getLatestResult().getBestTarget().getYaw();    
-        } catch (Exception e) {
-            return Double.MAX_VALUE;
-        }
     }
 
     @Override
@@ -334,7 +320,6 @@ public class VisionIOPhoton implements VisionIO{
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.CameraPose = getEstimatedGlobalPose();
         // if (getTcameraYaw == Double.MAX_VALUE){
-        inputs.TCameraYaw = getTcameraYaw();
         // }
         if (LCamera.getLatestResult().hasTargets()){
             inputs.LTargetPose = getTargetLPose();//.plus(VisionConstants.kRobotToLCam).inverse();

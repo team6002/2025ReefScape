@@ -58,7 +58,7 @@ public class CMD_ReadyToIntake extends Command{
 
     @Override
     public void execute(){
-        if(m_pivot.getPosition() <= PivotConstants.kIntake){
+        if(m_pivot.getGoal() <= PivotConstants.kIntake){
             if(!setPivot){
                 m_pivot.setGoal(PivotConstants.kIntake);
                 setPivot = true;
@@ -86,7 +86,7 @@ public class CMD_ReadyToIntake extends Command{
                 setWrist = true;
             }
 
-            if(setElevator && m_elevator.inPosition(ElevatorConstants.kIntake) && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) &! setPivot){
+            if(setElevator && m_elevator.inPosition(ElevatorConstants.kIntake) && m_elevator.inPosition() && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) &! setPivot){
                 m_pivot.setGoal(PivotConstants.kIntake);
                 setPivot = true;
             }
@@ -95,7 +95,7 @@ public class CMD_ReadyToIntake extends Command{
 
         if(m_elevator.inPosition(ElevatorConstants.kIntake) && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) && m_pivot.inPosition(PivotConstants.kIntake)){
             m_variables.setRobotState(RobotState.READY_TO_INTAKE);
-            if(m_intake.getCurrent() > 18){
+            if(m_intake.getCurrent() > IntakeConstants.kTriggerThreshold){
                 m_intakeTimer.start();
             }else{
                 m_intakeTimer.reset();
@@ -123,6 +123,6 @@ public class CMD_ReadyToIntake extends Command{
             return;
         }
 
-        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
+        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
     }
 }

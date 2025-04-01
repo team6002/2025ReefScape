@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
@@ -53,11 +54,15 @@ public class CMD_Score extends Command{
                 break;
             //if ready to intake and do not have algae go to deploy, if we do have an algae, go to ready
             case READY_TO_INTAKE:
-                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
+                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
                 else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
                 break;
             //if ready to deploy, shoot
             case READY_TO_DEPLOY:
+                if(GlobalVariables.m_targetCoralLevel == 1){
+                    new CMD_ScoreLevelOne(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables).schedule();
+                    return;
+                }
                 if(GlobalVariables.m_groundHasCoral){
                     new CMD_GroundIntake(m_groundPivot, m_groundIntake).schedule();
                 }else{
@@ -82,8 +87,8 @@ public class CMD_Score extends Command{
             case BARGE:
             case PROCESSOR:
                 new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kReverse)).schedule();
-                new InstantCommand(()-> GlobalVariables.m_haveAlgae = false).schedule();
                 new InstantCommand(()-> m_variables.setRobotState(RobotState.READY)).schedule();
+                new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
                 break;
             default:
                 break;

@@ -71,7 +71,7 @@ public class RobotContainer {
 
     // Configure default commands
     m_drivetrain.setDefaultCommand(new CMD_Drive(m_drivetrain, m_driverController));
-    m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_operatorController, m_intake, m_variables));
+    // m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_operatorController, m_intake, m_variables));
   }
 
   /**
@@ -110,7 +110,7 @@ public class RobotContainer {
       ,()-> GlobalVariables.m_intakeFromStation
     ));
     m_operatorController.start().onTrue(new InstantCommand(()-> GlobalVariables.m_placeFront = !GlobalVariables.m_placeFront));
-    m_operatorController.rightTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
+    m_operatorController.rightTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_variables));
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
@@ -120,25 +120,15 @@ public class RobotContainer {
       ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
     ));
 
-    m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_flippyWrist, m_pivot, m_variables));
-    m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_flippyWrist, m_pivot, m_variables));
+    m_operatorController.povUp().onTrue(new CMD_ChangeLevelFour(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_variables));
+    m_operatorController.povRight().onTrue(new CMD_ChangeLevelThree(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_variables));
     m_operatorController.povDown().onTrue(new CMD_ChangeLevelTwo(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_variables));
     m_operatorController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
 
     m_operatorController.a().onTrue(new CMD_ReadyToDeployProcessor(m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_variables));
-    m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_flippyWrist, m_variables));
+    m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
     m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
     m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
-
-    // m_operatorController.leftStick().onTrue(new SequentialCommandGroup(
-    //   new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kDeploy))
-    //   ,new CMD_GroundPivotInPosition(m_groundPivot)
-    //   ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
-    // )).onFalse(new SequentialCommandGroup(
-    //   new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
-    //   ,new CMD_GroundPivotInPosition(m_groundPivot)
-    //   ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kOff)))
-    // );
 
     m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_intake.setConveyorVoltage(2))).onFalse(new InstantCommand(()-> m_intake.setConveyorVoltage(0)));
   }

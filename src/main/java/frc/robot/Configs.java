@@ -75,7 +75,7 @@ public final class Configs {
                                 .inverted(ElevatorConstants.kLeftInverted)
                                 .follow(HardwareConstants.kRightElevatorCanId, true)
                                 .voltageCompensation(12.0)
-                                .smartCurrentLimit(80);
+                                .smartCurrentLimit(60);
                         m_leftElevatorConfig.closedLoop
                                 .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -93,7 +93,7 @@ public final class Configs {
                                 .inverted(ElevatorConstants.kRightInverted)
                                 .disableFollowerMode()
                                 .voltageCompensation(12.0)
-                                .smartCurrentLimit(80);
+                                .smartCurrentLimit(60);
                         m_rightElevatorConfig.closedLoop
                                 .pidf(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD, ElevatorConstants.kFF)
                                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -202,6 +202,7 @@ public final class Configs {
     
         public static final class IntakeConfig{
                 public static final SparkMaxConfig m_intakeConfig = new SparkMaxConfig();
+                public static final SparkMaxConfig m_conveyorConfig = new SparkMaxConfig();
                 static{
                         m_intakeConfig
                                 .disableFollowerMode()
@@ -217,6 +218,23 @@ public final class Configs {
                                 .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput)
                                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
                         m_intakeConfig.limitSwitch
+                                .forwardLimitSwitchEnabled(false)
+                                .reverseLimitSwitchEnabled(false);
+
+                        m_conveyorConfig
+                                .disableFollowerMode()
+                                .idleMode(IdleMode.kBrake)
+                                .inverted(IntakeConstants.kConveyorInverted)
+                                .smartCurrentLimit(40)
+                                .voltageCompensation(12.0);
+                        m_conveyorConfig.encoder
+                                .quadratureAverageDepth(2)
+                                .quadratureMeasurementPeriod(10);
+                        m_conveyorConfig.closedLoop
+                                .pidf(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, IntakeConstants.kFF, ClosedLoopSlot.kSlot0)
+                                .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput)
+                                .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+                        m_conveyorConfig.limitSwitch
                                 .forwardLimitSwitchEnabled(false)
                                 .reverseLimitSwitchEnabled(false);
                 }
