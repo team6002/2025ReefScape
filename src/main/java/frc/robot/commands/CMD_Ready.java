@@ -58,12 +58,12 @@ public class CMD_Ready extends Command{
                 setPivot = true;
             }
 
-            if(m_pivot.inPosition(PivotConstants.kReady) &! setElevator){
+            if(m_pivot.inPosition(PivotConstants.kReady) && !setElevator){
                 m_elevator.setGoal(ElevatorConstants.kReady);
                 setElevator = true;
             }
 
-            if(m_pivot.inPosition(PivotConstants.kReady) && m_elevator.inPosition(ElevatorConstants.kReady) &! setWrist){
+            if(m_pivot.inPosition(PivotConstants.kReady) && m_elevator.inPosition(ElevatorConstants.kReady) && !setWrist){
                 m_flippyWrist.setGoal(FlippyWristConstants.kReady);
                 setWrist = true;
             }
@@ -78,7 +78,7 @@ public class CMD_Ready extends Command{
                 setWrist = true;
             }
 
-            if(m_elevator.inPosition(ElevatorConstants.kReady) && m_flippyWrist.inPosition(FlippyWristConstants.kReady) &! setPivot){
+            if(m_elevator.inPosition(ElevatorConstants.kReady) && m_flippyWrist.inPosition(FlippyWristConstants.kReady) && !setPivot){
                 m_pivot.setGoal(PivotConstants.kReady);
                 setPivot = true;
             }

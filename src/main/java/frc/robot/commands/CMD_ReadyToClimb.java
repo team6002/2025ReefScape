@@ -58,23 +58,23 @@ public class CMD_ReadyToClimb extends Command{
             setPivot = true;
         }
 
-        if(setPivot && m_pivot.inPosition() &! setGroundPivot){
+        if(setPivot && m_pivot.inPosition() && !setGroundPivot){
             m_groundPivot.setGoal(GroundPivotConstants.kClimb);
             setGroundPivot = true;
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() &! setElevator){
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setElevator){
             m_elevator.setGoal(ElevatorConstants.kHome);
             setElevator = true;
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() &! setWrist){
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setWrist){
             m_flippyWrist.setGoal(FlippyWristConstants.kClimb);
             setWrist = true;
         }
 
         if(setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition() && m_groundPivot.inPosition()
-            && m_flippyWrist.inPosition() && m_pivot.inPosition() &! setClimb){
+            && m_flippyWrist.inPosition() && m_pivot.inPosition() && !setClimb){
             
             m_winch.setReference(WinchConstants.kReadyClimb);
             setClimb = true;

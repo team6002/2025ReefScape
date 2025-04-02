@@ -208,7 +208,7 @@ public final class Configs {
                                 .disableFollowerMode()
                                 .idleMode(IdleMode.kBrake)
                                 .inverted(IntakeConstants.kInverted)
-                                .smartCurrentLimit(40)
+                                .smartCurrentLimit(30)
                                 .voltageCompensation(12.0);
                         m_intakeConfig.encoder
                                 .quadratureAverageDepth(2)

@@ -36,10 +36,12 @@ public class CMD_ChangeLevelTwo extends Command{
     public void initialize(){
         GlobalVariables.m_targetCoralLevel = 2;
 
-        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY) &! m_variables.isRobotState(RobotState.DEPLOY)){
+        if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY) || m_variables.isRobotState(RobotState.DEPLOY)){}
+        else{
+            this.cancel();
             return;
-        }
-
+        };
+        
         setElevator = false;
         setPivot = false;
         if(GlobalVariables.m_placeFront) {
@@ -56,12 +58,12 @@ public class CMD_ChangeLevelTwo extends Command{
     @Override
     public void execute(){
         if(GlobalVariables.m_placeFront){
-            if(!setElevator){
+            if(!setElevator && setPivot && m_pivot.inPosition()){
                 m_elevator.setGoal(ElevatorConstants.kDeployFrontL2);
                 setElevator = true;
             }
     
-            if(!setPivot && m_elevator.inPosition(ElevatorConstants.kDeployFrontL2)){
+            if(!setPivot){
                 m_pivot.setGoal(PivotConstants.kDeployFrontL2);
                 setPivot = true;
             }

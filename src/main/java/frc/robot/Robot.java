@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Autos.*;
+import frc.robot.commands.CMD_OperatorConveyor;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -154,6 +155,8 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
     m_robotContainer.m_intake.setVoltage(0);
+    m_robotContainer.m_intake.setDefaultCommand(new CMD_OperatorConveyor(m_robotContainer.m_operatorController, m_robotContainer.m_intake, m_robotContainer.m_variables));
+  
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

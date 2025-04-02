@@ -36,10 +36,12 @@ public class CMD_ChangeLevelThree extends Command{
     public void initialize(){
         GlobalVariables.m_targetCoralLevel = 3;
 
-        if(!m_variables.isRobotState(RobotState.READY_TO_DEPLOY) &! m_variables.isRobotState(RobotState.DEPLOY)){
+        if(m_variables.isRobotState(RobotState.READY_TO_DEPLOY) || m_variables.isRobotState(RobotState.DEPLOY)){}
+        else{
+            this.cancel();
             return;
-        }
-
+        };
+        
         setElevator = false;
         setPivot = false;
         if(GlobalVariables.m_placeFront) {

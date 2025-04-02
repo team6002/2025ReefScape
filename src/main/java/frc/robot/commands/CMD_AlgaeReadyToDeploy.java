@@ -44,17 +44,17 @@ public class CMD_AlgaeReadyToDeploy extends Command{
 
     @Override
     public void execute(){
-        if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setWrist && m_pivot.inPosition()){
+        if(!m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) && !setWrist && m_pivot.inPosition()){
             m_flippyWrist.setGoal(FlippyWristConstants.kDeployL3);
             setWrist = true;
         }
 
-        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) &! setElevator){
+        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) && !setElevator){
             m_elevator.setGoal(ElevatorConstants.kDeployL3);
             setElevator  = true;
         }
 
-        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) && m_elevator.inPosition(ElevatorConstants.kDeployL3) &! setPivot){
+        if(m_flippyWrist.inPosition(FlippyWristConstants.kDeployL3) && m_elevator.inPosition(ElevatorConstants.kDeployL3) && !setPivot){
             m_pivot.setGoal(PivotConstants.kDeployL3);
             setPivot = true;
         }

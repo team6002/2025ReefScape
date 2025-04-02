@@ -58,7 +58,7 @@ public class CMD_ReadyToDeployProcessor extends Command{
             setGroundPivot = true;
             m_groundpivot.setGoal(GroundPivotConstants.kProcessor);
         }
-        if(setWrist && setElevator && m_flippyWrist.inPosition() && m_elevator.inPosition() &! setPivot){
+        if(setWrist && setElevator && m_flippyWrist.inPosition() && m_elevator.inPosition() && !setPivot){
             setPivot = true;
             m_pivot.setGoal(PivotConstants.kAlgaeProcessor);
         }

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
-import frc.robot.Configs.ElevatorConfig;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.FlippyWristConstants;
@@ -75,7 +74,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
             m_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael2Down);
         }
 
-        if(setWrist && setElevator2 && m_flippyWrist.inPosition() && m_elevator.inPosition() &! setPivot){
+        if(setWrist && setElevator2 && m_flippyWrist.inPosition() && m_elevator.inPosition() && !setPivot){
             setPivot = true;
             m_pivot.setGoal(PivotConstants.kReadyIntakeAlgae);
         }
@@ -92,7 +91,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
                 m_triggerTimer.reset();
             }   
         }
-        if (m_SUCTimer.get() >= .3){
+        if (m_SUCTimer.get() >= .5){
             isFinished = true;
         }
     }
@@ -104,6 +103,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
 
     @Override
     public void end(boolean interrupted){
+        m_intake.setCurrentLimit(30);
         if(interrupted){m_intake.setVoltage(IntakeConstants.kOff); return;}
         m_pivot.setGoal(PivotConstants.kAlgaeLvl2Hold);
         m_intake.setVoltage(IntakeConstants.kAlgaeHolding);

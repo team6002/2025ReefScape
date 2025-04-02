@@ -54,7 +54,7 @@ public class CMD_Score extends Command{
                 break;
             //if ready to intake and do not have algae go to deploy, if we do have an algae, go to ready
             case READY_TO_INTAKE:
-                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
+                if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables).schedule();
                 else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
                 break;
             //if ready to deploy, shoot
@@ -85,9 +85,13 @@ public class CMD_Score extends Command{
                 break;
             //if ready to score in barge/proccesor, spit out algae, and set state to ready so the next RB press goes to ready to intake
             case BARGE:
+                m_intake.setVoltage(IntakeConstants.kReverse);
+                m_variables.setRobotState(RobotState.READY);
+                new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
+                break;
             case PROCESSOR:
-                new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kReverse)).schedule();
-                new InstantCommand(()-> m_variables.setRobotState(RobotState.READY)).schedule();
+                m_intake.setVoltage(-12);
+                m_variables.setRobotState(RobotState.READY);
                 new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
                 break;
             default:

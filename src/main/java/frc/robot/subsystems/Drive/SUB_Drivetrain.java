@@ -109,6 +109,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       /** Creates a new DriveSubsystem. */
       SUB_Vision m_vision;
       KalmanFilter kFilter = new KalmanFilter();
+      KalmanFilter kTargetFilter = new KalmanFilter();
       // private Pose2d currentPose;
       private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
   
@@ -158,6 +159,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         fieldEst = new Field2d();
       
         kFilter = new KalmanFilter();
+        kTargetFilter = new KalmanFilter();
         // m_ChassisSpeed = new ChassisSpeeds(0, 0, 0);
         // SmartDashboard.putNumber("SwerveP", m_SwerveP);
         // SmartDashboard.putNumber("SwerveI", m_SwerveI);
@@ -407,7 +409,6 @@ public class SUB_Drivetrain extends SubsystemBase {
         
         }
 
-        new Rotation2d();
         Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),Rotation2d.fromRadians(kFilter.getState().get(2)));
         Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
         
@@ -448,9 +449,56 @@ public class SUB_Drivetrain extends SubsystemBase {
           if (m_vision.getHasRTarget()){
             addTargetVisionMeasurement(
               m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.3);
-            }
           }
+        }
+      //   try {
+      //   RvisionEst.ifPresent(
+      //     est -> {
+      //       // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+      //       var estPose = m_vision.getTargetRPose();
+      //       // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+      //       // kFilter.update(estArray);
+      //       double[] fullMeasurement = {
+      //         estPose.getX(),estPose.getY(), estPose.getRotation().getRadians(), // Position
+      //         getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+      //         Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+      //       };
+      //       kFilter.update(fullMeasurement);
+      //     }  
+      //   );
+
+      //   LvisionEst.ifPresent(
+      //     est -> {
+      //       // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+      //       var estPose = m_vision.getTargetLPose();
+      //       // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+      //       // kFilter.update(estArray);
+      //       double[] fullMeasurement = {
+      //         estPose.getX(),estPose.getY(), estPose.getRotation().getRadians(), // Position
+      //         getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+      //         Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+      //       };
+      //       kTargetFilter.update(fullMeasurement);
+      //     }  
+      //   );
+
         
+      //   if (!m_vision.getHasLTarget() || !m_vision.getHasRTarget()){
+      //     double[] fullMeasurement = {
+      //       m_targetOdometry.getEstimatedPosition().getX(),m_targetOdometry.getEstimatedPosition().getY(), m_targetOdometry.getEstimatedPosition().getRotation().getRadians(), // Position
+      //       getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+      //       Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+      //     };
+
+      //     kTargetFilter.update(fullMeasurement);
+        
+      //   }
+
+      //   Pose2d TargetKalFilterOdo = new Pose2d(kTargetFilter.getState().get(0),kTargetFilter.getState().get(1),Rotation2d.fromRadians(kTargetFilter.getState().get(2)));
+      //   Logger.recordOutput("Drive/Odometry/TargetKalFilterOdo", TargetKalFilterOdo);
+        
+      //   addTargetVisionMeasurement(TargetKalFilterOdo, Timer.getFPGATimestamp());
+      // } catch (Exception e) {
       // }
 
         

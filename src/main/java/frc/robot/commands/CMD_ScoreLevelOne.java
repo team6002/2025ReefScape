@@ -77,13 +77,13 @@ public class CMD_ScoreLevelOne extends Command{
             setWrist = true;
         }
 
-        if(setWrist && m_flippyWrist.inPosition() &! setPivot){
+        if(setWrist && m_flippyWrist.inPosition() && !setPivot){
             m_pivot.setGoal(Math.toRadians(PivotConstants.kIntakeGround));
             setPivot = true;
         }
 
         if(setElevator && setGroundPivot && setWrist && setPivot && m_pivot.inPosition() && m_elevator.inPosition() 
-            && m_groundPivot.inPosition() && m_flippyWrist.inPosition() && m_spinnyWrist.inPosition() &! setFlippyWrist){
+            && m_groundPivot.inPosition() && m_flippyWrist.inPosition() && m_spinnyWrist.inPosition() && !setFlippyWrist){
                 m_flippyWrist.setGoal(FlippyWristConstants.kDeployL1);
                 setFlippyWrist = true;
         }

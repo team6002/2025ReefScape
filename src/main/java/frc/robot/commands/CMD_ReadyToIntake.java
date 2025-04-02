@@ -24,11 +24,14 @@ public class CMD_ReadyToIntake extends Command{
     private final GlobalVariables m_variables;
 
     private final Timer m_intakeTimer = new Timer();
+    private final Timer m_SUCTimer = new Timer();
 
     private boolean haveCoral;
     private boolean setPivot;
     private boolean setWrist;
     private boolean setElevator;
+
+    private int IntakeCounter;
 
     public CMD_ReadyToIntake(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
         SUB_Intake p_intake, GlobalVariables p_variables){
@@ -54,6 +57,14 @@ public class CMD_ReadyToIntake extends Command{
 
         m_intakeTimer.reset();
         m_intakeTimer.stop();
+
+        m_SUCTimer.reset();
+        m_SUCTimer.stop();
+
+        IntakeCounter = 0;
+        m_intake.setCurrentLimit(30);
+
+        m_variables.setRobotState(RobotState.READY_TO_INTAKE);
     }
 
     @Override
@@ -64,12 +75,12 @@ public class CMD_ReadyToIntake extends Command{
                 setPivot = true;
             }
 
-            if(m_pivot.inPosition(PivotConstants.kIntake) &! setElevator){
+            if(m_pivot.inPosition(PivotConstants.kIntake) && !setElevator){
                 m_elevator.setGoal(ElevatorConstants.kIntake);
                 setElevator = true;
             }
 
-            if(m_pivot.inPosition(PivotConstants.kIntake) && m_elevator.inPosition(ElevatorConstants.kIntake) &! setWrist){
+            if(m_pivot.inPosition(PivotConstants.kIntake) && m_elevator.inPosition(ElevatorConstants.kIntake) && !setWrist){
                 m_flippyWrist.setGoal(FlippyWristConstants.kIntake);
                 m_spinnyWrist.setGoal(SpinnyWristConstants.kIntake);
                 setWrist = true;
@@ -86,7 +97,7 @@ public class CMD_ReadyToIntake extends Command{
                 setWrist = true;
             }
 
-            if(setElevator && m_elevator.inPosition(ElevatorConstants.kIntake) && m_elevator.inPosition() && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) &! setPivot){
+            if(setElevator && m_elevator.inPosition(ElevatorConstants.kIntake) && m_elevator.inPosition() && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) && !setPivot){
                 m_pivot.setGoal(PivotConstants.kIntake);
                 setPivot = true;
             }
@@ -94,16 +105,22 @@ public class CMD_ReadyToIntake extends Command{
 
 
         if(m_elevator.inPosition(ElevatorConstants.kIntake) && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) && m_pivot.inPosition(PivotConstants.kIntake)){
-            m_variables.setRobotState(RobotState.READY_TO_INTAKE);
             if(m_intake.getCurrent() > IntakeConstants.kTriggerThreshold){
+                IntakeCounter = IntakeCounter + 1;
                 m_intakeTimer.start();
             }else{
                 m_intakeTimer.reset();
             }
-    
-            if(m_intakeTimer.get() > 0.1){
-                haveCoral = true;
+
+            if(m_intakeTimer.get() > 0.3 || IntakeCounter > 20){
+                m_SUCTimer.start();
+                // m_intake.setCurrentLimit(20);
             }
+        }
+
+        if (m_SUCTimer.get() >= .4){
+            haveCoral = true;
+            m_intake.setCurrentLimit(30);
         }
     }
 
@@ -115,14 +132,17 @@ public class CMD_ReadyToIntake extends Command{
 
     @Override
     public void end(boolean interrupted){
+        m_intake.setCurrentLimit(30);
         m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
         m_intake.setVoltage(IntakeConstants.kOff);
 
         if(interrupted){
             GlobalVariables.m_haveCoral = false;
             return;
+        }else{
+            GlobalVariables.m_haveCoral = true;
         }
 
-        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_variables).schedule();
+        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, null, m_variables).schedule();
     }
 }

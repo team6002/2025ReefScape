@@ -14,11 +14,11 @@ import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 public class CMD_ReadyLevelFourAuto extends SequentialCommandGroup{
     public CMD_ReadyLevelFourAuto(SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, SUB_Pivot p_pivot, SUB_Intake p_intake){
         addCommands(
-            new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kReady))
-            ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kDeployL4))
+            new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kDeployL4))
             ,new WaitCommand(.1)
+            ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kDeployL4))
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
-            ,new CMD_WristInPosition(p_flippyWrist)
+            // ,new CMD_WristInPosition(p_flippyWrist)
             ,new CMD_PivotInPosition(p_pivot)
             ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kDeployL4Auto))
             ,new InstantCommand(()-> p_spinnyWrist.setGoal(Constants.SpinnyWristConstants.kHome))

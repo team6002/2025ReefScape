@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
+import frc.robot.Configs.IntakeConfig;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.FlippyWristConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
@@ -29,6 +31,7 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), p_drivetrain)
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), p_drivetrain)
             // ,new InstantCommand(()-> p_drivetrain.setStartingAngle(),p_drivetrain)
+            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kHolding))
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
@@ -37,12 +40,9 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             ,new CMD_PivotInPosition(p_pivot)
             ,new ParallelCommandGroup(
               new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-              ,new SequentialCommandGroup(
-                new InstantCommand(()-> p_intake.setVoltage(.75))
-                ,new WaitCommand(.1)
-                ,new InstantCommand(()->p_intake.setVoltage(0))
-              )
-              ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
+              // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
+              // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
+              // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
             )
             ,new WaitCommand(.4)
             ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
@@ -67,14 +67,9 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             ,new WaitCommand(.5)
             ,new ParallelCommandGroup(
               new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-              ,new SequentialCommandGroup(
-                new InstantCommand(()-> p_intake.setVoltage(.75))
-                ,new WaitCommand(.1)
-                ,new InstantCommand(()->p_intake.setVoltage(0))
-              )  
-              ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))
-              ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
-              ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
+              // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))
+              // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
+              // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
             )
             ,new WaitCommand(.4)
             ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
@@ -97,12 +92,9 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
             ,new ParallelCommandGroup(
               new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-              ,new SequentialCommandGroup(
-                new InstantCommand(()-> p_intake.setVoltage(.75))
-                ,new WaitCommand(.1)
-                ,new InstantCommand(()->p_intake.setVoltage(0))
-              )  
-              ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
+              // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
+              // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
+              // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
             )
             ,new WaitCommand(.4)
             ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
