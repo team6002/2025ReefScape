@@ -11,12 +11,14 @@ import frc.robot.Constants.SpinnyWristConstants;
 import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
+import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 
 public class CMD_ReadyToIntake extends Command{
     private final SUB_Pivot m_pivot;
+    private final SUB_GroundPivot m_groundPivot;
     private final SUB_Elevator m_elevator;
     private final SUB_FlippyWrist m_flippyWrist;
     private final SUB_SpinnyWrist m_spinnyWrist;
@@ -33,16 +35,17 @@ public class CMD_ReadyToIntake extends Command{
 
     private int IntakeCounter;
 
-    public CMD_ReadyToIntake(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
+    public CMD_ReadyToIntake(SUB_Pivot p_pivot, SUB_GroundPivot p_groundPivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
         SUB_Intake p_intake, GlobalVariables p_variables){
             
         m_pivot = p_pivot;
         m_elevator = p_elevator;
         m_flippyWrist = p_flippyWrist;
         m_spinnyWrist = p_spinnyWrist;
-        m_intake = p_intake;
         m_variables = p_variables;
-        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake);
+        m_intake = p_intake;
+        m_groundPivot = p_groundPivot;
+        addRequirements(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist);
     }
 
     @Override
@@ -62,7 +65,7 @@ public class CMD_ReadyToIntake extends Command{
         m_SUCTimer.stop();
 
         IntakeCounter = 0;
-        m_intake.setCurrentLimit(30);
+        m_intake.setCurrentLimit(20);
 
         m_variables.setRobotState(RobotState.READY_TO_INTAKE);
     }
@@ -118,9 +121,9 @@ public class CMD_ReadyToIntake extends Command{
             }
         }
 
-        if (m_SUCTimer.get() >= .4){
+        if (m_SUCTimer.get() >=.2){
             haveCoral = true;
-            m_intake.setCurrentLimit(30);
+            // m_intake.setCurrentLimit(30);
         }
     }
 
@@ -132,7 +135,7 @@ public class CMD_ReadyToIntake extends Command{
 
     @Override
     public void end(boolean interrupted){
-        m_intake.setCurrentLimit(30);
+        m_intake.setCurrentLimit(20);
         m_spinnyWrist.setGoal(SpinnyWristConstants.kHome);
         m_intake.setVoltage(IntakeConstants.kOff);
 
@@ -143,6 +146,6 @@ public class CMD_ReadyToIntake extends Command{
             GlobalVariables.m_haveCoral = true;
         }
 
-        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, null, m_variables).schedule();
+        new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables).schedule();
     }
 }

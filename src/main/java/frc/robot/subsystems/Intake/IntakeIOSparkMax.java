@@ -88,6 +88,11 @@ public class IntakeIOSparkMax implements IntakeIO{
     }
 
     @Override
+    public double getPosition(){
+        return m_intakeEncoder.getPosition();
+    }
+
+    @Override
     public double getConveyorCurrent(){
         return m_conveyorMotor.getOutputCurrent();
     }

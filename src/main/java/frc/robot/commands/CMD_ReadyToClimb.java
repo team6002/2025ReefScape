@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -25,6 +26,8 @@ public class CMD_ReadyToClimb extends Command{
     private boolean setGroundPivot;
     private boolean setClimb;
 
+    private Timer groundPivotTimer = new Timer();
+
     public CMD_ReadyToClimb(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_Intake p_intake, 
         SUB_GroundPivot p_groundPivot, SUB_Winch p_winch, SUB_GroundIntake p_groundIntake){
             
@@ -49,6 +52,9 @@ public class CMD_ReadyToClimb extends Command{
 
         m_intake.setVoltage(IntakeConstants.kOff);
         m_groundIntake.setVoltage(GroundIntakeConstants.kReverse);
+        
+        groundPivotTimer.reset();
+        groundPivotTimer.stop();
     }
 
     @Override
@@ -61,19 +67,20 @@ public class CMD_ReadyToClimb extends Command{
         if(setPivot && m_pivot.inPosition() && !setGroundPivot){
             m_groundPivot.setGoal(GroundPivotConstants.kClimb);
             setGroundPivot = true;
+            groundPivotTimer.start();
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setElevator){
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setElevator || groundPivotTimer.get() > 2){
             m_elevator.setGoal(ElevatorConstants.kHome);
             setElevator = true;
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setWrist){
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setWrist || groundPivotTimer.get() > 2){
             m_flippyWrist.setGoal(FlippyWristConstants.kClimb);
             setWrist = true;
         }
 
-        if(setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition() && m_groundPivot.inPosition()
+        if(setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition()
             && m_flippyWrist.inPosition() && m_pivot.inPosition() && !setClimb){
             
             m_winch.setReference(WinchConstants.kReadyClimb);
@@ -84,7 +91,7 @@ public class CMD_ReadyToClimb extends Command{
     @Override
     public boolean isFinished(){
         //finish once all parts are in the correct spot
-        return setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition() && m_groundPivot.inPosition()
+        return setElevator && setPivot && setWrist && setGroundPivot && m_elevator.inPosition()
         && m_flippyWrist.inPosition() && m_pivot.inPosition() && setClimb;
     }
 

@@ -54,8 +54,9 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
         isFinished = false;
 
         m_intake.setCurrentLimit(40);
-        m_intake.setReference(IntakeConstants.kAlgaeIntake);
+        m_intake.setVoltage(IntakeConstants.kAlgaeIntake);;
     }
+
 
     @Override
     public void execute(){
@@ -74,7 +75,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
             m_elevator.setGoal(ElevatorConstants.kReadyIntakeAlgael2Down);
         }
 
-        if(setWrist && setElevator2 && m_flippyWrist.inPosition() && m_elevator.inPosition() && !setPivot){
+        if(setWrist && setElevator2 && m_elevator.inPosition() && !setPivot){
             setPivot = true;
             m_pivot.setGoal(PivotConstants.kReadyIntakeAlgae);
         }
@@ -91,7 +92,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
                 m_triggerTimer.reset();
             }   
         }
-        if (m_SUCTimer.get() >= .5){
+        if (m_SUCTimer.get() >= .1){
             isFinished = true;
         }
     }

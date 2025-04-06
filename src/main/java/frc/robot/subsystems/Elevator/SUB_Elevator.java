@@ -20,6 +20,10 @@ public class SUB_Elevator extends SubsystemBase{
       return inputs.m_rightElevatorCurrent;
     }
 
+    public void setConstraints(double velocity, double acceleration){
+      io.setConstraints(velocity, acceleration);
+    }
+
     public double getGoal(){
      return inputs.m_elevatorGoal;
     }

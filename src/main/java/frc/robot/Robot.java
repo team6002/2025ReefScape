@@ -70,6 +70,7 @@ public class Robot extends LoggedRobot {
     m_autonomousChooser.addOption("AUTO_BlueLeft444", new AUTO_BlueLeft444(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_spinnyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake,  m_robotContainer.m_vision, m_robotContainer.m_variables));
     // m_autonomousChooser.addOption("AUTO_BlueRight244", new AUTO_BlueRight244(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_coralIntake));
     m_autonomousChooser.addOption("AUTO_BlueRight444", new AUTO_BlueRight444(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_spinnyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake, m_robotContainer.m_vision, m_robotContainer.m_variables));
+    m_autonomousChooser.addOption("Middle", new AUTO_Middle(m_robotContainer.m_drivetrain, m_robotContainer.m_pivot, m_robotContainer.m_flippyWrist, m_robotContainer.m_elevator, m_robotContainer.m_intake, m_robotContainer.m_spinnyWrist));
     SmartDashboard.putData(m_autonomousChooser);
 
     m_odometryChooser.setDefaultOption("PureOdometry", new InstantCommand(() -> m_robotContainer.m_drivetrain.setCurrentOdometry(0)));
@@ -130,7 +131,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.m_spinnyWrist.reset();
     m_robotContainer.m_groundPivot.reset();
     m_robotContainer.m_elevator.resetTrapezoid();
-    m_robotContainer.m_drivetrain.questNavReset();
+    // m_robotContainer.m_drivetrain.questNavReset();
 
     m_autonomousCommand = m_autonomousChooser.getSelected();
     if (m_autonomousCommand != null) {

@@ -56,7 +56,7 @@ public class CMD_AlgaeIntakeGround extends Command{
             m_SUCTimer.reset();
             m_SUCTimer.stop();
             
-            m_intake.setReference(IntakeConstants.kAlgaeIntake);
+            m_intake.setVoltage(IntakeConstants.kAlgaeIntake);
             m_intake.setCurrentLimit(40);
             isFinished = false;
         }
@@ -95,7 +95,7 @@ public class CMD_AlgaeIntakeGround extends Command{
                     m_triggerTimer.reset();
                 }   
             }
-            if (m_SUCTimer.get() >= .5){
+            if (m_SUCTimer.get() >= .1){
                 m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
                 // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
                 // if (m_flippyWrist.inPosition()){

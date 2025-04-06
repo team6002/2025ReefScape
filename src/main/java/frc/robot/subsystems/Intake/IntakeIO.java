@@ -6,6 +6,7 @@ public interface IntakeIO {
   @AutoLog
   public static class IntakeIOInputs {
     public double m_intakeCurrent;
+    public double m_intakePosition;
     public double m_intakeVelocity;
     public double m_intakeReference;
     public double m_conveyorCurrent;
@@ -22,6 +23,8 @@ public interface IntakeIO {
   public default double getReference(){return 0;}
 
   public default double getVelocity(){return 0;}
+
+  public default double getPosition(){return 0;}
 
   public default void setVoltage(double p_voltage){}
 

@@ -379,7 +379,10 @@ public class SUB_Drivetrain extends SubsystemBase {
               getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
               Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
             };
-            kFilter.update(fullMeasurement);
+            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
+              kFilter.update(fullMeasurement);
+            }
           }  
         );
 
@@ -394,7 +397,10 @@ public class SUB_Drivetrain extends SubsystemBase {
               getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
               Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
             };
-            kFilter.update(fullMeasurement);
+            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){  
+              kFilter.update(fullMeasurement);
+            }
           }  
         );
 

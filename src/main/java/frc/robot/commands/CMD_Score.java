@@ -12,6 +12,7 @@ import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.GlobalVariables.RobotState;
 
@@ -47,7 +48,7 @@ public class CMD_Score extends Command{
                 GlobalVariables.m_haveAlgae = false;
                 m_intake.setVoltage(IntakeConstants.kOff);
                 new ConditionalCommand(
-                    new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                    new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
                     ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
                     ,()-> GlobalVariables.m_intakeFromStation
                 ).schedule();
@@ -67,12 +68,16 @@ public class CMD_Score extends Command{
                     new CMD_GroundIntake(m_groundPivot, m_groundIntake).schedule();
                 }else{
                     new CMD_Deploy(m_intake, m_flippyWrist, m_variables).schedule();
+                    new ConditionalCommand(
+                    new InstantCommand(() -> m_elevator.setGoal(ElevatorConstants.kDeployL4 + 2))
+                    , new InstantCommand()
+                    , ()-> GlobalVariables.m_targetCoralLevel == 4);
                 }
                 break;
             //if we just shot, go back to intaking if no algae, and ready if algae
             case DEPLOY:
                 if(!GlobalVariables.m_haveAlgae) new ConditionalCommand(
-                    new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                    new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
                     ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
                     ,()-> GlobalVariables.m_intakeFromStation
                 ).schedule();

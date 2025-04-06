@@ -109,7 +109,7 @@ public class CMD_IntakeArmGround extends Command{
 
     @Override
     public void end(boolean interrupted){
-    m_intake.setCurrentLimit(30);
+    // m_intake.setCurrentLimit(30);
     m_intake.setVoltage(IntakeConstants.kHolding);
         if(interrupted){m_intake.setVoltage(IntakeConstants.kHolding); return;}
         new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();

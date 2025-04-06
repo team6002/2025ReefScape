@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
@@ -30,6 +31,8 @@ public class CMD_ReadyToDeploy extends Command{
     private boolean setFlippyWrist;
     private boolean setSpinnyWrist;
     private boolean setGroundPivot;
+    private boolean regriper = false;
+    private Timer regripTimer = new Timer();
 
     public CMD_ReadyToDeploy(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_Intake p_intake, SUB_FlippyWrist p_flippyWrist, 
         SUB_SpinnyWrist p_spinnyWrist, SUB_GroundPivot p_groundPivot, GlobalVariables p_variables){
@@ -49,8 +52,9 @@ public class CMD_ReadyToDeploy extends Command{
         setElevator = false;
         setFlippyWrist = false; 
         setSpinnyWrist = false;
-
-        m_intake.setVoltage(IntakeConstants.kHolding);
+        regriper = false;
+    
+        m_intake.setVoltage(IntakeConstants.kOff);
 
         if(GlobalVariables.m_targetCoralLevel >= 3){
             GlobalVariables.m_targetCoralLevel = 3;
@@ -59,10 +63,18 @@ public class CMD_ReadyToDeploy extends Command{
         }
 
         m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
+        
+        regripTimer.reset();
+        regripTimer.start();;
     }
 
     @Override
     public void execute(){
+        
+        
+        if (!regriper && regripTimer.get() > .1){
+            m_intake.setVoltage(IntakeConstants.kHolding);
+        }
         //if level 3/4 are selected go to level 3 automatically(can change level manually later)
         if(GlobalVariables.m_targetCoralLevel >= 3){
             if(GlobalVariables.m_placeFront){

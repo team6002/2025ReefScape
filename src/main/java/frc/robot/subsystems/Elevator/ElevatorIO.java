@@ -27,6 +27,8 @@ public interface ElevatorIO {
   public default double getCurrent(){return 0;}
 
   public default double getSetpoint(){return 0;}
+  
+  public default void setConstraints(double velocity, double acceleration){}
 
   public default boolean inPosition(){return false;}
 

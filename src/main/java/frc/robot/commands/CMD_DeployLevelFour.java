@@ -10,6 +10,7 @@ public class CMD_DeployLevelFour extends SequentialCommandGroup{
     public CMD_DeployLevelFour(SUB_Intake p_intake, SUB_FlippyWrist p_flippyWrist){
         addCommands(
             new InstantCommand(()-> p_intake.setConveyorVoltage(IntakeConstants.kConveyorDeploy))
+            // new InstantCommand(()-> p_intake.setVoltage(0))
         );
     }
 }

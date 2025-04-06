@@ -180,20 +180,20 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kAutoP = 0.2;
+    public static final double kAutoP = 0.1;//0.2;
     public static final double kAutoI = 0.0;
-    public static final double kAutoD = 0.2;
+    public static final double kAutoD = 0.1;//0.2;
     public static final double kAutoFF = 0.0;
 
-    public static final double kAutoA = .44;
+    public static final double kAutoA = .46;
     public static final double kAutoS = .001;
-    public static final double kAutoV = 2.55;
+    public static final double kAutoV = 2.57;
     
-    public static final double kPXController = 4;
-    public static final double kDXController = 0.04;
+    public static final double kPXController = 4;//4;
+    public static final double kDXController = 0.04;//0.04;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 6;
-    public static final double kDThetaController = .5;
+    public static final double kPThetaController = 6;//6;
+    public static final double kDThetaController = .5;//.5;
     
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -228,15 +228,16 @@ public final class Constants {
     public static final double kV = 0.00298;
     public static final double kS = 0.004;
     public static final double kA = 0.00;
-    public static final boolean kInverted = true;
+    public static final boolean kInverted = false
+    ;
     public static final boolean kConveyorInverted = false;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
 
-    public static final double kTriggerThreshold = 5;
+    public static final double kTriggerThreshold = 10;
 
-    public static final double kIntake = 6;
-    public static final double kAlgaeIntake = 3000;
+    public static final double kIntake = 9;
+    public static final double kAlgaeIntake = 8;
     public static final double kOff = 0;
     public static final double kReverse = -5;
     public static final double kProcessor = -10;
@@ -282,17 +283,18 @@ public final class Constants {
     public static final double kReadyAlgael3 = Math.toRadians(90);
     public static final double kReadyIntakeAlgael3 = Math.toRadians(90);
     public static final double kReadyToScore = Math.toRadians(82);
-    public static final double kAlgaeProcessor = Math.toRadians(20);
+    public static final double kAlgaeProcessor = Math.toRadians(18);
     public static final double kAlgaeGround = Math.toRadians(20);
     public static final double kAlgaeCoral = Math.toRadians(65);
-    public static final double kIntake = Math.toRadians(65);
-    public static final double kIntakeGround = Math.toRadians(63);
+    public static final double kIntake = Math.toRadians(62);
+    public static final double kIntakeGround = Math.toRadians(66);
     public static final double kBelowIntake = Math.toRadians(50);
     public static final double kIntakeException = Math.toRadians(58);
     public static final double kDeployL1 = Math.toRadians(64);
     public static final double kDeployL2 = Math.toRadians(86);
-    public static final double kDeployL3 = Math.toRadians(86);
-    public static final double kDeployL4 = Math.toRadians(86);
+    public static final double kDeployL3 = Math.toRadians(90);
+    public static final double kDeployL4 = Math.toRadians(87);
+    public static final double kDeployL4Auto = Math.toRadians(88);
     public static final double kDeployFrontL2 = Math.toRadians(43);
     public static final double kDeployFrontL3 = Math.toRadians(60);
     public static final double kDeployFrontL4 = Math.toRadians(75);
@@ -303,20 +305,26 @@ public final class Constants {
     public static final double kDeployBarge = Math.toRadians(90);
     public static final double kChangeLevelFour = Math.toRadians(80);
     public static final double kChangeLevelTwo = Math.toRadians(75);
+    public static final double kResetElevator = Math.toRadians(90);
   }
 
   public static final class ElevatorConstants{
-    public static final double kP = 0.2;//.15
+    public static final double kP = 0.4;//.15
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
     public static final double kS = 0.25;
     public static final double kV = 0.045;
     public static final double kG = 0.35;
-    public static final double kMaxVel = 300;
-    public static final double kMaxAccel = 300;
-    public static final double kMaxVelDown = 300;
-    public static final double kMaxAccelDown = 300;
+    public static final double kA = 0.4;
+    public static final double kSlowVel = 300;
+    public static final double kSlowAccel = 300;
+    public static final double kAutoVel = 200;
+    public static final double kAutoAccel = 200;
+    public static final double kMaxVel = 500;
+    public static final double kMaxAccel = 500;
+    public static final double kMaxVelDown = 500;
+    public static final double kMaxAccelDown = 500;
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final boolean kLeftInverted = true;
@@ -339,17 +347,17 @@ public final class Constants {
     public static final double kAlgaeCoral = 14.5;
     public static final double kDeployL1 = 10;
     public static final double kDeployL2 = 7.5;
-    public static final double kDeployL3 = 18;
-    public static final double kDeployL4 = 68;
+    public static final double kDeployL3 = 14;
+    public static final double kDeployL4 = 67;
     public static final double kDeployFrontL2 = 3;
-    public static final double kDeployFrontL3 = 20;
+    public static final double kDeployFrontL3 = 18;
     public static final double kDeployFrontL4 = 67;
-    public static final double kDeployL4Auto = 68;
-    public static final double kAutoDown = 30;
+    public static final double kDeployL4Auto = 75;
+    public static final double kAutoDown = 77;
     public static final double kDeployL2Exception = 0;
     public static final double kDeployL3Exception = 22;
     public static final double kDeployL4Exception = 67.5;
-    public static final double kDeployBarge = 75;
+    public static final double kDeployBarge = 78;
   }
 
   public static final class FlippyWristConstants{
@@ -386,14 +394,15 @@ public final class Constants {
     public static final double kIntakeException = Math.toRadians(-111);
     public static final double kReadyIntakeAlgae = Math.toRadians(100);
     public static final double kReadyToScore = Math.toRadians(0);
-    public static final double kAlgaeProcessor = Math.toRadians(-13);
+    public static final double kAlgaeProcessor = Math.toRadians(-40);
     public static final double kAlgaeGround = Math.toRadians(-60);
     public static final double kAlgaeCoral = Math.toRadians(-90);
     public static final double kAlgaeHolding = Math.toRadians(0);
     public static final double kDeployL1 = Math.toRadians(-116);
     public static final double kDeployL2 = Math.toRadians(65);
-    public static final double kDeployL3 = Math.toRadians(40);
-    public static final double kDeployL4 = Math.toRadians(61);
+    public static final double kDeployL3 = Math.toRadians(27);
+    public static final double kDeployL4 = Math.toRadians(70);
+    public static final double kDeployL4Auto = Math.toRadians(80);
     public static final double kDeployFrontL2 = Math.toRadians(0);
     public static final double kDeployFrontL3 = Math.toRadians(-5);
     public static final double kDeployFrontL4 = Math.toRadians(-50);
@@ -425,7 +434,7 @@ public final class Constants {
     public static final double kTolerance = Math.toRadians(2);
     
     public static final double kIntake = Math.toRadians(-90);
-    public static final double kHome = Math.toRadians(-5);
+    public static final double kHome = Math.toRadians(-4);//counterclockwise
     public static final double kDeployFront = Math.toRadians(-180);
   }
 
@@ -439,8 +448,8 @@ public final class Constants {
     public static final double kFF = 0.0;
 
     public static final double kHome = 33;
-    public static final double kReadyClimb = 180.0;
-    public static final double kClimb = 105.0;
+    public static final double kReadyClimb = 170.0;
+    public static final double kClimb = 95.0;
   }
 
   public static final class GroundPivotConstants{
@@ -455,8 +464,8 @@ public final class Constants {
     public static final double kA = 0.03;
     public static final double kConversionFactor = 2*Math.PI;
     public static final double kOffset = Math.toRadians(-180);
-    public static final double kMaxVel = Math.toRadians(720);
-    public static final double kMaxAccel = Math.toRadians(720);
+    public static final double kMaxVel = Math.toRadians(1440);
+    public static final double kMaxAccel = Math.toRadians(1440);
     public static final double kMinOutput = -1;
     public static final double kMaxOutput = 1;
     public static final double kTolerance = Math.toRadians(3);
@@ -466,7 +475,7 @@ public final class Constants {
     public static final double kClimb = Math.toRadians(-90);
     public static final double kProcessor = Math.toRadians(-90);
     public static final double kAlgaeGround = Math.toRadians(-90);
-    public static final double kIntake = Math.toRadians(110);
+    public static final double kIntake = Math.toRadians(109);
     public static final double kDeploy = Math.toRadians(10);
   }
 
@@ -501,6 +510,31 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     
+      public static final List<AprilTag> kTagPoses = new ArrayList<>(){{
+        new AprilTag(1, kTagLayout.getTagPose(1).get());//tag 1
+        new AprilTag(2, kTagLayout.getTagPose(2).get());//tag 2
+        // new AprilTag(3, kTagLayout.getTagPose(3).get());//tag 3
+        // new AprilTag(4, kTagLayout.getTagPose(4).get());//tag 4
+        // new AprilTag(5, kTagLayout.getTagPose(5).get());//tag 5
+        new AprilTag(6, kTagLayout.getTagPose(6).get());//tag 6
+        new AprilTag(7, kTagLayout.getTagPose(7).get());//tag 7
+        new AprilTag(8, kTagLayout.getTagPose(8).get());//tag 8
+        new AprilTag(9, kTagLayout.getTagPose(9).get());//tag 9
+        new AprilTag(10, kTagLayout.getTagPose(10).get());//tag 10
+        new AprilTag(11, kTagLayout.getTagPose(11).get());//tag 11
+        new AprilTag(12, kTagLayout.getTagPose(12).get());//tag 12
+        new AprilTag(13, kTagLayout.getTagPose(13).get());//tag 13
+        // new AprilTag(14, kTagLayout.getTagPose(14).get());//tag 14
+        // new AprilTag(15, kTagLayout.getTagPose(15).get());//tag 15
+        // new AprilTag(16, kTagLayout.getTagPose(16).get());//tag 16
+        new AprilTag(17, kTagLayout.getTagPose(17).get());//tag 17
+        new AprilTag(18, kTagLayout.getTagPose(18).get());//tag 18
+        new AprilTag(19, kTagLayout.getTagPose(19).get());//tag 19
+        new AprilTag(20, kTagLayout.getTagPose(20).get());//tag 20
+        new AprilTag(21, kTagLayout.getTagPose(21).get());//tag 21
+        new AprilTag(22, kTagLayout.getTagPose(22).get());//tag 22
+      }};
+  
     public static final List<AprilTag> kInvertedTagPoses = new ArrayList<>(){{
       new AprilTag(1, kTagLayout.getTagPose(13).get());//tag 1
       new AprilTag(2, kTagLayout.getTagPose(12).get());//tag 2
@@ -527,6 +561,7 @@ public final class Constants {
     }};
 
     public static final AprilTagFieldLayout kInvertedTagLayout = new AprilTagFieldLayout(kInvertedTagPoses, kTagLayout.getFieldLength(), kTagLayout.getFieldWidth());
+    public static final AprilTagFieldLayout kNormalTagLayout = new AprilTagFieldLayout(kTagPoses, kTagLayout.getFieldLength(), kTagLayout.getFieldWidth());
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)

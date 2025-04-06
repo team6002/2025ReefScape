@@ -50,9 +50,9 @@ public class RobotContainer {
     ,new QuestNavIOMeta()
   );
   final GlobalVariables m_variables = new GlobalVariables();
-  final SUB_Intake m_intake = new SUB_Intake(new IntakeIOSparkMax());
   final SUB_Elevator m_elevator = new SUB_Elevator(new ElevatorIOSparkMax());
   final SUB_Pivot m_pivot = new SUB_Pivot(new PivotIOSparkMax());
+  final SUB_Intake m_intake = new SUB_Intake(new IntakeIOSparkMax());
   final SUB_FlippyWrist m_flippyWrist = new SUB_FlippyWrist(new FlippyWristIOSparkMax());
   final SUB_SpinnyWrist m_spinnyWrist = new SUB_SpinnyWrist(new SpinnyWristIOSparkMax());
   final SUB_Winch m_winch = new SUB_Winch(new WinchIOSparkMax());
@@ -93,9 +93,9 @@ public class RobotContainer {
 
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povRight().onTrue(new CMD_Home(m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_pivot, m_groundPivot, m_groundIntake, m_variables));
-    m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
+    m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
 
-    // m_driverController.rightBumper().onTrue(new CMD_AlignColor(m_drivetrain, m_vision, m_driverController));
+    m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
     m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, 5));
     m_driverController.leftTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, -5));
 
@@ -104,7 +104,7 @@ public class RobotContainer {
     //operator
     m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
     m_operatorController.leftBumper().onTrue(new ConditionalCommand(
-      new CMD_ReadyToIntake(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+      new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
       ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
       ,()-> GlobalVariables.m_intakeFromStation
     ));
@@ -132,7 +132,9 @@ public class RobotContainer {
     m_operatorController.rightStick().onTrue(new CMD_AlgaeIntakeGround(m_intake, m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_variables));
     // m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_intake.setConveyorVoltage(2))).onFalse(new InstantCommand(()-> m_intake.setConveyorVoltage(0)));
     m_operatorController.leftStick().onTrue(new SequentialCommandGroup(
-      new InstantCommand(()-> m_intake.setVoltage(4))
+      new InstantCommand(()-> m_intake.setVoltage(-3))
+      ,new WaitCommand(.6)
+      ,new InstantCommand(()-> m_intake.setVoltage(4))
       , new WaitCommand(.3)
       ,new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kHolding)) 
     ));

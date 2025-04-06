@@ -39,6 +39,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
     private boolean setElevator;
     private boolean setGroundPivot;
     private boolean setSpinnyWrist;
+    private double prevIntakePosition;
     private int IntakeCounter;
 
     public CMD_ReadyToIntakeFromGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
@@ -79,7 +80,8 @@ public class CMD_ReadyToIntakeFromGround extends Command{
         m_groundIntakeTimer.stop();
         m_variables.setRobotState(RobotState.READY_TO_INTAKE);
         IntakeCounter = 0;
-        m_intake.setCurrentLimit(30);
+        m_intake.setCurrentLimit(20);
+        prevIntakePosition = m_intake.getPosition();
     }
 
     @Override
@@ -125,7 +127,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             }
         }
 
-        if(m_groundIntake.getCurrent() > 15){
+        if(m_groundIntake.getCurrent() > 20){
             m_groundIntakeTimer.start();
         }else{
             m_groundIntakeTimer.reset();
@@ -140,7 +142,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             }
         }
 
-        if(setGroundPivot && m_groundPivot.inPosition(GroundPivotConstants.kTransfer)){
+        if(setGroundPivot && m_groundPivot.inPosition(GroundPivotConstants.kTransfer) && m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround)){
             if(GlobalVariables.m_targetCoralLevel == 1){
                 this.end(false);
                 return;
@@ -156,19 +158,23 @@ public class CMD_ReadyToIntakeFromGround extends Command{
                 m_intakeTimer.reset();
             }
 
-            if(m_intakeTimer.get() > 0.3 || IntakeCounter > 20){
+            if(m_intakeTimer.get() > 0.1){
                 m_SUCTimer.start();
                 GlobalVariables.m_groundHasCoral = false;
                 // m_intake.setCurrentLimit(5);
                 // m_intake.setCurrentLimit(30);
                 m_groundIntake.setVoltage(0);
+                // if (Math.abs(m_intake.getPosition() - prevIntakePosition) <= 0){
+                //     haveCoral = true;
+                // }
             }            
         }
 
-        if (m_SUCTimer.get() >= .4){
+        if (m_SUCTimer.get() >= .2){
             // m_intake.setCurrentLimit(30);
             haveCoral = true;
         }
+        prevIntakePosition = m_intake.getPosition();
     }
 
     @Override

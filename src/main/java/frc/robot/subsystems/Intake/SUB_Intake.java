@@ -28,6 +28,10 @@ public class SUB_Intake extends SubsystemBase{
       return inputs.m_intakeCurrent;
     }
 
+    public double getPosition(){
+      return inputs.m_intakePosition;
+    }
+
     public void setVoltage(double p_voltage){
       io.setVoltage(p_voltage);
     }
