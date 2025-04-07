@@ -2,6 +2,7 @@ package frc.robot.subsystems.GroundIntake;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -15,6 +16,8 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
     private final SparkMax m_groundIntakeMotor;
     private final RelativeEncoder m_groundIntakeEncoder;
     private final SparkClosedLoopController m_groundIntakeController;
+    private final SparkLimitSwitch m_leftLimit;
+    private final SparkLimitSwitch m_rightLimit;
 
     private double m_groundIntakeReference;
 
@@ -31,6 +34,8 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
         //apply config
         m_groundIntakeMotor.configure(Configs.GroundIntake.m_groundIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        m_leftLimit = m_groundIntakeMotor.getForwardLimitSwitch();
+        m_rightLimit = m_groundIntakeMotor.getReverseLimitSwitch();
         //reset target speed in init
         m_groundIntakeReference = 0;
     }
@@ -40,6 +45,8 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
         inputs.m_groundIntakeReference = getReference();
         inputs.m_groundIntakeCurrent = getCurrent();
         inputs.m_groundIntakeVelocity = getVelocity();
+        inputs.m_leftPressed = hasLeftCoral();
+        inputs.m_rightPressed = hasRightCoral();
     }
 
     @Override
@@ -60,6 +67,16 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
     @Override
     public void setVoltage(double p_voltage){
         m_groundIntakeReference = p_voltage;
+    }
+
+    @Override
+    public boolean hasLeftCoral(){
+        return m_leftLimit.isPressed();
+    }
+
+    @Override
+    public boolean hasRightCoral(){
+        return m_rightLimit.isPressed();
     }
 
     @Override

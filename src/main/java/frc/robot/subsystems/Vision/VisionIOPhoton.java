@@ -41,6 +41,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionIOPhoton implements VisionIO{  
     private final PhotonCamera LCamera = new PhotonCamera(VisionConstants.kLeftCameraName);
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
+    private final PhotonCamera MCamera = new PhotonCamera("MidCam");
     private final PhotonPoseEstimator LphotonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
     private final PhotonPoseEstimator LphotonEstimatorLast = 
@@ -49,7 +50,9 @@ public class VisionIOPhoton implements VisionIO{
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToRCam);
     private final PhotonPoseEstimator RphotonEstimatorLast = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.CLOSEST_TO_LAST_POSE, VisionConstants.kRobotToRCam);
-
+    private final PhotonPoseEstimator MphotonEstimator = 
+        new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToMCam);
+    
     TimeInterpolatableBuffer<Rotation2d> rotationBuffer = TimeInterpolatableBuffer.createBuffer(1.5);
 
     public void setCameraPipeline(int LPipeline, int RPipeline){
@@ -99,6 +102,17 @@ public class VisionIOPhoton implements VisionIO{
         return visionEst;
     }
     
+    @Override 
+    public Optional<EstimatedRobotPose> getMEstimatedGlobalPose() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+
+        for (var change : MCamera.getAllUnreadResults()) {
+            visionEst = MphotonEstimator.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets());
+        }
+        return visionEst;
+    }
+
     public Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
@@ -207,6 +221,22 @@ public class VisionIOPhoton implements VisionIO{
         }
     }
 
+    @Override
+    public Pose2d getTargetMPose(){
+        try{
+            if (RCamera.getLatestResult().hasTargets()){
+                var rawTranslation = MCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                    var RotatedPose = new Pose3d(rawTranslation.getTranslation().getX(), rawTranslation.getY() , rawTranslation.getZ(), rawTranslation.getRotation()).rotateBy(VisionConstants.kRobotToMCam.getRotation());
+                    var ProcessedPose3d = new Pose3d(RotatedPose.getTranslation().plus(VisionConstants.kRobotToMCam.getTranslation()), RotatedPose.getRotation());
+                    var targetPose2d = ProcessedPose3d;
+                    // .rotateBy(VisionConstants.kRobotToRCam.getRotation());
+                //  new Pose2d(rawPose.getTranslation().toTranslation2d().minus(VisionConstants.kRobotToLCam.getTranslation().toTranslation2d()), rawPose.getRotation().toRotation2d().plus(VisionConstants.kRobotToLCam.getRotation().toRotation2d()));
+                return targetPose2d.toPose2d();
+            }else return null;
+        } catch (Exception e){
+            return null;
+        }
+    }
     @Override// need to figure out how to get it to actually work with 2
     public Matrix<N3, N1> getLEstimationStdDevs(Pose2d estimatedPose) {
         var estStdDevs = VisionConstants.kSingleTagStdDevs;
@@ -333,6 +363,10 @@ public class VisionIOPhoton implements VisionIO{
         }
         inputs.RTarget = RCamera.getLatestResult().hasTargets();   
         
+        if (MCamera.getLatestResult().hasTargets()){
+            inputs.RTargetPose = getTargetMPose();//.plus(VisionConstants.kRobotToRCam).inverse();
+            // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
+        }
     }
 
     public PhotonPipelineResult getLCamResult(){

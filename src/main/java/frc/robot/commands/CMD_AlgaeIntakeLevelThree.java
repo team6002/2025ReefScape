@@ -74,22 +74,9 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
         }
 
         if(setWrist && setElevator && setPivot && m_elevator.inPosition() && m_pivot.inPosition()){
-            m_variables.setRobotState(RobotState.ALGAE_LEVEL_3);
-            if(m_intake.getCurrent() > 20){
-                if(m_triggerTimer.get() > .1){
-                    // isFinished = true;
-                    GlobalVariables.m_haveAlgae = true;
-                    m_SUCTimer.start();
-                }
-            }else{
-                m_triggerTimer.reset();
-            }   
-        }
-        if (m_SUCTimer.get() >= .1){
-            // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
-            // if (m_flippyWrist.inPosition()){
+            if (m_intake.hasCoral()){
                 isFinished = true;
-            // }
+            }
         }
     }
 

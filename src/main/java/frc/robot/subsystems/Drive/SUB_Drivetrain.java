@@ -268,6 +268,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("gyroHeading", getAngle());
         var RvisionEst = m_vision.getREstimatedGlobalPose();
         var LvisionEst = m_vision.getLEstimatedGlobalPose();
+        var MvisionEst = m_vision.getMEstimatedGlobalPose();
         m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
       
         // Update the odometry in the periodic block
@@ -404,8 +405,26 @@ public class SUB_Drivetrain extends SubsystemBase {
           }  
         );
 
-        
-        if (!m_vision.getHasLTarget() || !m_vision.getHasRTarget()){
+        MvisionEst.ifPresent(
+          est -> {
+            // var estPose = m_vision.getRPose(m_odometry.getEstimatedPosition()).toPose2d();
+            var estPose = est.estimatedPose.toPose2d();
+            // double[] estArray = new double[]{estPose.getX(),estPose.getY(),estPose.getRotation().getRadians()};
+            // kFilter.update(estArray);
+            double[] fullMeasurement = {
+              estPose.getX(),estPose.getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
+              getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
+              Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
+            };
+            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+            if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){  
+              kFilter.update(fullMeasurement);
+            }
+          }  
+        );
+
+
+        if (!m_vision.getHasLTarget() || !m_vision.getHasRTarget() || !m_vision.getHasMTarget()){
           double[] fullMeasurement = {
             m_odometry.getEstimatedPosition().getX(),m_odometry.getEstimatedPosition().getY(),m_odometry.getEstimatedPosition().getRotation().getRadians(), // Position
             getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
@@ -447,7 +466,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         //   }
         // }
 
-        if (TargetOdoEnable){
+        // if (TargetOdoEnable){
           if (m_vision.getHasLTarget()){   
             addTargetVisionMeasurement(
               m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.3);
@@ -456,7 +475,11 @@ public class SUB_Drivetrain extends SubsystemBase {
             addTargetVisionMeasurement(
               m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.3);
           }
-        }
+          if (m_vision.getHasMTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetMPose(), Timer.getFPGATimestamp()-.3);
+          }
+        // }
       //   try {
       //   RvisionEst.ifPresent(
       //     est -> {
@@ -469,7 +492,7 @@ public class SUB_Drivetrain extends SubsystemBase {
       //         getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
       //         Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
       //       };
-      //       kFilter.update(fullMeasurement);
+      //       kTargetFilter.update(fullMeasurement);
       //     }  
       //   );
 
@@ -482,7 +505,6 @@ public class SUB_Drivetrain extends SubsystemBase {
       //       double[] fullMeasurement = {
       //         estPose.getX(),estPose.getY(), estPose.getRotation().getRadians(), // Position
       //         getChasisSpeed().vxMetersPerSecond, getChasisSpeed().vyMetersPerSecond,                            // Velocity (from encoders)
-      //         Math.toRadians(getTurnRate())                                                         // Angular velocity (from IMU)
       //       };
       //       kTargetFilter.update(fullMeasurement);
       //     }  

@@ -90,7 +90,7 @@ public class CMD_Score extends Command{
                 break;
             //if ready to score in barge/proccesor, spit out algae, and set state to ready so the next RB press goes to ready to intake
             case BARGE:
-                m_intake.setVoltage(IntakeConstants.kReverse);
+                m_intake.setVoltage(-12);
                 m_variables.setRobotState(RobotState.READY);
                 new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
                 break;

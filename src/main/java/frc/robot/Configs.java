@@ -3,7 +3,12 @@ package frc.robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import java.lang.ProcessBuilder.Redirect.Type;
+
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.LimitSwitchConfigAccessor;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.Constants.*;
@@ -114,7 +119,7 @@ public final class Configs {
                         m_flippyWristConfig
                                 .idleMode(IdleMode.kBrake)
                                 .inverted(FlippyWristConstants.kWristInverted)
-                                .smartCurrentLimit(40)
+                                .smartCurrentLimit(41)
                                 .disableFollowerMode()
                                 .voltageCompensation(12.0);
                         m_flippyWristConfig.absoluteEncoder
@@ -290,14 +295,23 @@ public final class Configs {
 
         public static final class GroundIntake{
                 public static final SparkMaxConfig m_groundIntakeConfig = new SparkMaxConfig();
+                public static final LimitSwitchConfig m_groundLimtSwitchConfig = new LimitSwitchConfig();
+                
 
                 static{
+
+                        m_groundLimtSwitchConfig.setSparkMaxDataPortConfig()
+                        .reverseLimitSwitchType(com.revrobotics.spark.config.LimitSwitchConfig.Type.kNormallyOpen)
+                        .forwardLimitSwitchType(com.revrobotics.spark.config.LimitSwitchConfig.Type.kNormallyOpen);
+                        
                         m_groundIntakeConfig
                                 .disableFollowerMode()
                                 .idleMode(IdleMode.kBrake)
                                 .inverted(GroundIntakeConstants.kInverted)
                                 .smartCurrentLimit(40)
-                                .voltageCompensation(12.0);
+                                .voltageCompensation(12.0)
+                                .limitSwitch.apply(m_groundLimtSwitchConfig);
+                                
                         m_groundIntakeConfig.encoder
                                 .quadratureAverageDepth(2)
                                 .quadratureMeasurementPeriod(10);

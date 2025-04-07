@@ -6,6 +6,7 @@ import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.SpinnyWristConstants;
 import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -14,6 +15,7 @@ import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
+import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 
 public class CMD_AlgaeIntakeGround extends Command{
     private final SUB_GroundPivot m_groundpivot;
@@ -21,6 +23,7 @@ public class CMD_AlgaeIntakeGround extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_FlippyWrist m_flippyWrist;
+    private final SUB_SpinnyWrist m_spinnyWrist;
     private final GlobalVariables m_variables;
 
     private boolean setElevator;
@@ -33,13 +36,14 @@ public class CMD_AlgaeIntakeGround extends Command{
     private boolean isFinished = false;
         
     
-        public CMD_AlgaeIntakeGround(SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, GlobalVariables p_variables){
+        public CMD_AlgaeIntakeGround(SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, GlobalVariables p_variables){
             m_groundpivot = p_groundPivot;
             m_intake = p_intake;
             m_pivot = p_pivot;
             m_elevator = p_elevator;
             m_flippyWrist = p_flippyWrist;
             m_variables = p_variables;
+            m_spinnyWrist = p_spinnyWrist;
     
             addRequirements(m_pivot, m_elevator, m_flippyWrist, m_groundpivot, m_intake);
         }
@@ -66,6 +70,7 @@ public class CMD_AlgaeIntakeGround extends Command{
             if(!setWrist){
                 setWrist = true;
                 m_flippyWrist.setGoal(FlippyWristConstants.kAlgaeGround);
+                m_spinnyWrist.setGoal(SpinnyWristConstants.kIntake);
             }
     
             if(!setElevator){
@@ -85,21 +90,9 @@ public class CMD_AlgaeIntakeGround extends Command{
             
             if(setWrist && setElevator && setPivot && m_elevator.inPosition() && m_pivot.inPosition()){
                 m_variables.setRobotState(RobotState.ALGAE_LEVEL_2);
-                if(m_intake.getCurrent() > 20){
-                    if(m_triggerTimer.get() > .1){
-                        // isFinished = true;
-                        GlobalVariables.m_haveAlgae = true;
-                        m_SUCTimer.start();
-                    }
-                }else{
-                    m_triggerTimer.reset();
-                }   
-            }
-            if (m_SUCTimer.get() >= .1){
-                m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
-                // m_flippyWrist.setConstraints(FlippyWristConstants.kAlgaeVel, FlippyWristConstants.kAlgaeAccel);
-                // if (m_flippyWrist.inPosition()){
-            // }
+                if (m_intake.hasCoral()){
+                    isFinished = true;
+                }
             }
     }
 

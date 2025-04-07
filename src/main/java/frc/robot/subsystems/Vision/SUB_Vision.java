@@ -54,6 +54,9 @@ public class SUB_Vision {
         return inputs.RTarget;
     }
 
+    public boolean getHasMTarget(){
+        return inputs.RTarget;
+    }
     // public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
     //     return io.getREstimationStdDevs(estimatedPose);
     // }
@@ -84,6 +87,17 @@ public class SUB_Vision {
         }
     }
 
+    public Matrix<N3, N1> getMEstimationStdDevs(Pose2d estimatedPose) {
+        try{
+        // if (estimatedPose.equals(estimatedPose)){
+        //     return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        // }
+        return io.getMEstimationStdDevs(estimatedPose);
+        } catch (Exception e){
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        }
+    }
+
     public void updateInputs(){
         io.updateInputs(inputs);
         Logger.processInputs("Vision", inputs);
@@ -99,6 +113,10 @@ public class SUB_Vision {
 
     public Optional<EstimatedRobotPose> getREstimatedGlobalPose() {
         return io.getREstimatedGlobalPose();
+    }
+
+    public Optional<EstimatedRobotPose> getMEstimatedGlobalPose() {
+        return io.getMEstimatedGlobalPose();
     }
 
     public Optional<EstimatedRobotPose> getREstimatedGlobalPoseLast() {
@@ -127,6 +145,11 @@ public class SUB_Vision {
     }
 
     public Pose2d getTargetRPose(){
+        return io.getTargetRPose();
+        // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
+    }
+
+    public Pose2d getTargetMPose(){
         return io.getTargetRPose();
         // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }

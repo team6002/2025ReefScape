@@ -81,20 +81,11 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
         }
 
         if(setWrist && setElevator2 && setPivot && m_elevator.inPosition() && m_pivot.inPosition()){
-            m_variables.setRobotState(RobotState.ALGAE_LEVEL_2);
-            if(m_intake.getCurrent() > 20){
-                if(m_triggerTimer.get() > .1){
-                    // isFinished = true;
-                    GlobalVariables.m_haveAlgae = true;
-                    m_SUCTimer.start();
-                }
-            }else{
-                m_triggerTimer.reset();
-            }   
+            if (m_intake.hasCoral()){
+                isFinished = true;
+            }  
         }
-        if (m_SUCTimer.get() >= .1){
-            isFinished = true;
-        }
+        
     }
 
     @Override

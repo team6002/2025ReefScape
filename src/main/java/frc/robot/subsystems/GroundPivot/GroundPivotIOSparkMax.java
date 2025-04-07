@@ -89,6 +89,7 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
         return Math.abs(getPosition() - p_position) < PivotConstants.kTolerance;
     }
 
+
     @Override
     public void PID(){
         double m_lastSetpoint = m_setpoint.position;

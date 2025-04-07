@@ -39,8 +39,8 @@ public class CMD_ReadyToIntakeFromGround extends Command{
     private boolean setElevator;
     private boolean setGroundPivot;
     private boolean setSpinnyWrist;
+    private boolean transfered;
     private double prevIntakePosition;
-    private int IntakeCounter;
 
     public CMD_ReadyToIntakeFromGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
         SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, GlobalVariables p_variables){
@@ -79,13 +79,20 @@ public class CMD_ReadyToIntakeFromGround extends Command{
         m_groundIntakeTimer.reset();
         m_groundIntakeTimer.stop();
         m_variables.setRobotState(RobotState.READY_TO_INTAKE);
-        IntakeCounter = 0;
         m_intake.setCurrentLimit(20);
         prevIntakePosition = m_intake.getPosition();
     }
 
     @Override
     public void execute(){
+        // if (m_groundIntake.hasCorral()){
+        //     GlobalVariables.m_groundHasCoral = true;
+        // }
+        // if (m_intake.hasCoral()){
+        //     this.end(false);
+        //     return;
+        // }
+    
         if(m_pivot.getPosition() <= PivotConstants.kIntakeGround){
             if(!setPivot){
                 m_pivot.setGoal(PivotConstants.kIntakeGround);
@@ -127,13 +134,8 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             }
         }
 
-        if(m_groundIntake.getCurrent() > 20){
-            m_groundIntakeTimer.start();
-        }else{
-            m_groundIntakeTimer.reset();
-        }
 
-        if(m_groundIntakeTimer.get() > 0.1 && !setGroundPivot ){
+        if(m_groundIntake.hasCorral() && !setGroundPivot ){
             GlobalVariables.m_groundHasCoral = true;
             m_groundPivot.setGoal(GroundPivotConstants.kTransfer);
             setGroundPivot = true;
@@ -148,33 +150,26 @@ public class CMD_ReadyToIntakeFromGround extends Command{
                 return;
             }
             m_groundIntake.setVoltage(GroundIntakeConstants.kReverse);
+            GlobalVariables.m_groundHasCoral = false;
+            // m_intakeTimer.start();
         }
 
-        if(m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround) && GlobalVariables.m_groundHasCoral){
-            if(m_intake.getCurrent() > IntakeConstants.kTriggerThreshold){
-                IntakeCounter = IntakeCounter + 1;
+        if(m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround)){
+            if (m_intake.hasCoral()){
                 m_intakeTimer.start();
             }else{
                 m_intakeTimer.reset();
             }
+            prevIntakePosition = m_intake.getPosition();
 
-            if(m_intakeTimer.get() > 0.1){
-                m_SUCTimer.start();
-                GlobalVariables.m_groundHasCoral = false;
-                // m_intake.setCurrentLimit(5);
-                // m_intake.setCurrentLimit(30);
-                m_groundIntake.setVoltage(0);
-                // if (Math.abs(m_intake.getPosition() - prevIntakePosition) <= 0){
-                //     haveCoral = true;
-                // }
-            }            
+            if (m_intakeTimer.get() >= .3){
+                haveCoral = true;
+                // GlobalVariables.m_groundHasCoral = false;
+                // setGroundPivot = false;
+                // m_intakeTimer.restart();;
+                // m_intakeTimer.stop();
+            }
         }
-
-        if (m_SUCTimer.get() >= .2){
-            // m_intake.setCurrentLimit(30);
-            haveCoral = true;
-        }
-        prevIntakePosition = m_intake.getPosition();
     }
 
     @Override

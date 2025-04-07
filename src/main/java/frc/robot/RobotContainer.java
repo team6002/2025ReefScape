@@ -96,20 +96,20 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
 
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
-    m_driverController.rightTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, 5));
-    m_driverController.leftTrigger().whileTrue(new CMD_DriveAutoAlign(m_drivetrain, m_driverController, m_vision, -5));
+    m_driverController.rightTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, 8, 0));
+    m_driverController.leftTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, 8, 0));
 
-    m_driverController.leftBumper().whileTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
+    m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
 
     //operator
-    m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
+    // m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
     m_operatorController.leftBumper().onTrue(new ConditionalCommand(
       new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
       ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
       ,()-> GlobalVariables.m_intakeFromStation
     ));
     m_operatorController.start().onTrue(new InstantCommand(()-> GlobalVariables.m_placeFront = !GlobalVariables.m_placeFront));
-    m_operatorController.leftTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables));
+    // m_operatorController.leftTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables));
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
@@ -129,7 +129,7 @@ public class RobotContainer {
     m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
     m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
 
-    m_operatorController.rightStick().onTrue(new CMD_AlgaeIntakeGround(m_intake, m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_variables));
+    m_operatorController.rightStick().onTrue(new CMD_AlgaeIntakeGround(m_intake, m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
     // m_operatorController.rightStick().onTrue(new InstantCommand(()-> m_intake.setConveyorVoltage(2))).onFalse(new InstantCommand(()-> m_intake.setConveyorVoltage(0)));
     m_operatorController.leftStick().onTrue(new SequentialCommandGroup(
       new InstantCommand(()-> m_intake.setVoltage(-3))

@@ -52,6 +52,10 @@ public class SUB_Intake extends SubsystemBase{
       io.setReference(p_speed);
     }
 
+    public boolean hasCoral(){
+      return io.hasCoral();
+    }
+
     @Override
     public void periodic(){
       io.updateInputs(inputs);

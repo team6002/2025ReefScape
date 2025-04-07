@@ -68,6 +68,11 @@ public class CMD_ReadyToIntake extends Command{
         m_intake.setCurrentLimit(20);
 
         m_variables.setRobotState(RobotState.READY_TO_INTAKE);
+
+        if (m_intake.hasCoral()){
+            this.end(false);
+            return;
+        }
     }
 
     @Override
@@ -108,22 +113,9 @@ public class CMD_ReadyToIntake extends Command{
 
 
         if(m_elevator.inPosition(ElevatorConstants.kIntake) && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) && m_pivot.inPosition(PivotConstants.kIntake)){
-            if(m_intake.getCurrent() > IntakeConstants.kTriggerThreshold){
-                IntakeCounter = IntakeCounter + 1;
-                m_intakeTimer.start();
-            }else{
-                m_intakeTimer.reset();
+            if (m_intake.hasCoral()){
+                haveCoral = true;
             }
-
-            if(m_intakeTimer.get() > 0.3 || IntakeCounter > 20){
-                m_SUCTimer.start();
-                // m_intake.setCurrentLimit(20);
-            }
-        }
-
-        if (m_SUCTimer.get() >=.2){
-            haveCoral = true;
-            // m_intake.setCurrentLimit(30);
         }
     }
 

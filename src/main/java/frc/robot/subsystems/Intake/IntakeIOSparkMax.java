@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -28,6 +29,8 @@ public class IntakeIOSparkMax implements IntakeIO{
 
     private double m_intakeVoltage;
     private double m_conveyorVoltage;
+    private final DigitalInput m_intakeSensor;
+
 
     public IntakeIOSparkMax(){
         //initialize motor
@@ -48,6 +51,7 @@ public class IntakeIOSparkMax implements IntakeIO{
         m_intakeFeedforward = new SimpleMotorFeedforward(IntakeConstants.kS, 
         IntakeConstants.kV, IntakeConstants.kA);
     
+        m_intakeSensor = new DigitalInput(0);
         //reset target speed in init
         m_intakeReference = 0;
     }
@@ -59,6 +63,7 @@ public class IntakeIOSparkMax implements IntakeIO{
         inputs.m_intakeVelocity = getVelocity();
         inputs.m_conveyorCurrent = getConveyorCurrent();
         inputs.m_conveyorVoltage = getConveyorVoltage();
+        inputs.m_coralDetected = hasCoral();
     }
 
     @Override
@@ -117,5 +122,10 @@ public class IntakeIOSparkMax implements IntakeIO{
     public void setConveyorVoltage(double p_voltage){
         m_conveyorVoltage = p_voltage;
         m_conveyorController.setReference(p_voltage, ControlType.kVoltage);
+    }
+
+    @Override
+    public boolean hasCoral(){
+        return !m_intakeSensor.get();
     }
 }

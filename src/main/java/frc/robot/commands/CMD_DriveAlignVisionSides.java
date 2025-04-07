@@ -18,7 +18,7 @@ import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
-public class CMD_DriveAlignVision extends Command{
+public class CMD_DriveAlignVisionSides extends Command{
   private SUB_Drivetrain m_drivetrain;
   private SUB_Vision m_vision;
 
@@ -29,14 +29,18 @@ public class CMD_DriveAlignVision extends Command{
   private boolean end;
 
   private double xSpeed, ySpeed, turnSpeed;
+  private double xGoal, yGoal, turnGoal;
   private Pose2d goalPose;
+  private boolean turnComplete;
 
   private CommandXboxController m_driverController;
 //This only uses Odometry to align itself
-  public CMD_DriveAlignVision(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController) {
+  public CMD_DriveAlignVisionSides(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController
+  , double x, double y, double rot) {
     m_drivetrain = p_drivetrain;
     m_vision = p_vision;
     m_driverController = p_driverController;
+
 
     xController = new ProfiledPIDController(
       Constants.AutoAlignConstants.driveKp,
@@ -61,12 +65,17 @@ public class CMD_DriveAlignVision extends Command{
       System.out.println("NOTHING SEEN DAWG");
       return;
     }
-}
+
+    xGoal = x;
+    yGoal = y;
+    turnGoal = rot;
+  }
 
   @Override
   public void initialize() {
     System.out.println("Started Autoalign");
-    goalPose = new Pose2d(Units.inchesToMeters(11.5),0, new Rotation2d(0));
+    
+    goalPose = new Pose2d(Units.inchesToMeters(11.5 + xGoal), Units.inchesToMeters(yGoal), new Rotation2d(0 + turnGoal));
     end = false;
 
     /* Set the goals as an offset of the robot's current odometry */
@@ -82,6 +91,7 @@ public class CMD_DriveAlignVision extends Command{
     turnController.reset();
 
     turnController.enableContinuousInput(-180, 180);
+    turnComplete = false;
   }
 
   @Override
@@ -97,26 +107,40 @@ public class CMD_DriveAlignVision extends Command{
     }
     
     
-    if (m_vision.getHasMTarget()){
-      
-      MathUtil.clamp(turnController.calculate(m_drivetrain.getTargetOdo().getRotation().getDegrees()),-AutoAlignConstants.kTurnAutoClamp,AutoAlignConstants.kTurnAutoClamp);
-    // goalPose = new Pose2d(0,0, new Rotation2d(0));
-    
-    }else{
+    // if (m_vision.getHasMTarget()){
+    if (!turnComplete){
+      turnSpeed = 
+       MathUtil.clamp(turnController.calculate(m_drivetrain.getTargetOdo().getRotation().getDegrees()),-AutoAlignConstants.kTurnAutoClamp,AutoAlignConstants.kTurnAutoClamp);
+    }
+
+    // }else{
+    //   turnSpeed = 0;
+    // }""
+    // System.out.println(turnController.getSetpoint());
+    if (turnController.atSetpoint()|| turnComplete){
+      System.out.println("Done Turning");
+      turnComplete = true;
       turnSpeed = 0;
-    }
-    // xController.setGoal(0);
-    // yController.setGoal(0+Units.inchesToMeters(0)); 
-    xSpeed = MathUtil.clamp( xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
-    ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
-    if (xController.atGoal()) {
-      xSpeed = 0.0;
+      xSpeed = MathUtil.clamp(xController.calculate(m_drivetrain.getTargetOdo().getX()), -AutoAlignConstants.kXAutoClamp, AutoAlignConstants.kXAutoClamp);
+      // ySpeed = MathUtil.clamp(yController.calculate(m_drivetrain.getTargetOdo().getY()), -AutoAlignConstants.kYAutoClamp, AutoAlignConstants.kYAutoClamp);  
+       
+        if (xController.atGoal()) {
+          xSpeed = 0.0;
+        }
+  
+        if (yController.atGoal()) {
+          ySpeed = 0.0;
+        }
+
+  
+      
+    }else{
+      xSpeed = 0;
+      ySpeed = 0;
     }
 
-    if (yController.atGoal()) {
-      ySpeed = 0.0;
-    }
-
+    
+    
     Logger.recordOutput("AutoAlignXSpeed", xSpeed);
     Logger.recordOutput("AutoAlignySpeed", ySpeed);
     Logger.recordOutput("AutoAlignTurnSpeed", turnSpeed);
@@ -129,7 +153,7 @@ public class CMD_DriveAlignVision extends Command{
       return;
     }         
 
-    m_drivetrain.drive(xSpeed, ySpeed, -turnSpeed, false);
+    m_drivetrain.drive(xSpeed, ySpeed, turnSpeed, false);
   }
 
   @Override

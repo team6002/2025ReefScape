@@ -28,6 +28,10 @@ public class SUB_GroundIntake extends SubsystemBase{
       io.setVoltage(p_voltage);
     }
 
+    public boolean hasCorral(){
+      return io.hasLeftCoral() && io.hasRightCoral();
+    }
+    
     @Override
     public void periodic(){
       io.updateInputs(inputs);

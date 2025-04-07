@@ -11,6 +11,7 @@ public interface IntakeIO {
     public double m_intakeReference;
     public double m_conveyorCurrent;
     public double m_conveyorVoltage;
+    public boolean m_coralDetected;
   }
 
   /** Updates the set of loggable inputs. */
@@ -37,4 +38,6 @@ public interface IntakeIO {
   public default double getConveyorVoltage(){return 0;}
   
   public default double getConveyorCurrent(){return 0;}
+
+  public default boolean hasCoral(){return false;}
 }
