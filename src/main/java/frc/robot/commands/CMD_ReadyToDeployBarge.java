@@ -57,7 +57,7 @@ public class CMD_ReadyToDeployBarge extends Command{
 
         if(setPivot && m_pivot.inPosition() && !setWrist){
             m_flippyWrist.setGoal(FlippyWristConstants.kDeployBarge);
-            m_spinnyWrist.setGoal(SpinnyWristConstants.kDeployFront);
+            m_spinnyWrist.setGoal(SpinnyWristConstants.kIntake);
             setWrist = true;
         }
     }

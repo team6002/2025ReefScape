@@ -55,7 +55,7 @@ public class SUB_Vision {
     }
 
     public boolean getHasMTarget(){
-        return inputs.RTarget;
+        return inputs.MTarget;
     }
     // public Matrix<N3, N1> getREstimationStdDevs(Pose2d estimatedPose) {
     //     return io.getREstimationStdDevs(estimatedPose);
@@ -150,7 +150,7 @@ public class SUB_Vision {
     }
 
     public Pose2d getTargetMPose(){
-        return io.getTargetRPose();
+        return io.getTargetMPose();
         // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), -VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
     }
 

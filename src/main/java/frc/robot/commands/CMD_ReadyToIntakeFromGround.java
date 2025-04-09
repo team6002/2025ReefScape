@@ -118,9 +118,16 @@ public class CMD_ReadyToIntakeFromGround extends Command{
                 setElevator = true;
             }
 
-            if(!setWrist){
-                m_flippyWrist.setGoal(FlippyWristConstants.kIntakeGround);
-                setWrist = true;
+            if (!(m_elevator.getPosition() > ElevatorConstants.kDeployL4)){
+                if(!setWrist){
+                    m_flippyWrist.setGoal(FlippyWristConstants.kIntakeGround);
+                    setWrist = true;
+                }
+            }else{
+                if (!setElevator){
+                    m_elevator.setGoal(ElevatorConstants.kIntakeGround);
+                    setElevator = true;
+                }
             }
 
             if(!setSpinnyWrist){

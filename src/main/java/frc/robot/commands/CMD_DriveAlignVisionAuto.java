@@ -18,7 +18,7 @@ import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
 //This primarly uses vision to align itself
 import frc.robot.subsystems.Vision.SUB_Vision;
-public class CMD_DriveAlignVisionSides extends Command{
+public class CMD_DriveAlignVisionAuto extends Command{
   private SUB_Drivetrain m_drivetrain;
   private SUB_Vision m_vision;
 
@@ -32,14 +32,12 @@ public class CMD_DriveAlignVisionSides extends Command{
   private double xGoal, yGoal, turnGoal;
   private boolean turnComplete;
 
-  private CommandXboxController m_driverController;
 //This only uses Odometry to align itself
-  public CMD_DriveAlignVisionSides(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision, CommandXboxController p_driverController
+  public CMD_DriveAlignVisionAuto(SUB_Drivetrain p_drivetrain, SUB_Vision p_vision
   , double x, double y, double rot) {
     m_drivetrain = p_drivetrain;
     m_vision = p_vision;
-    m_driverController = p_driverController;
-
+  
     xGoal = x;
     yGoal = y;
     turnGoal = rot;
@@ -79,7 +77,7 @@ public class CMD_DriveAlignVisionSides extends Command{
 
     /* Set the goals as an offset of the robot's current odometry */
     
-    xController.setGoal(Units.inchesToMeters(12 + xGoal));
+    xController.setGoal(Units.inchesToMeters(11 + xGoal));
     yController.setGoal(Units.inchesToMeters(yGoal));
     turnController.setSetpoint(0);
 
@@ -100,11 +98,6 @@ public class CMD_DriveAlignVisionSides extends Command{
       return;
     }
     var targOdo = m_drivetrain.getTargetOdo();
-    if (Math.abs(m_driverController.getLeftY()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getLeftX()) > AutoAlignConstants.kAbortThreshold || Math.abs(m_driverController.getRightX()) > AutoAlignConstants.kAbortThreshold) {
-      end = true;
-      System.out.println("Aborted by driver");
-      return;
-    }
     
     
     // if (m_vision.getHasMTarget()){
@@ -129,8 +122,8 @@ public class CMD_DriveAlignVisionSides extends Command{
     
     if (Math.abs(turnController.getError()) < 5){
     }else{
-      xSpeed = 0;
-      ySpeed = 0;
+      xSpeed = MathUtil.clamp(xController.calculate(targOdo.rotateBy(Rotation2d.k180deg).getX()), -AutoAlignConstants.kFinishAutoClamp, AutoAlignConstants.kFinishAutoClamp);
+      ySpeed = MathUtil.clamp(yController.calculate(targOdo.rotateBy(Rotation2d.k180deg).getY()), -AutoAlignConstants.kFinishAutoClamp, AutoAlignConstants.kFinishAutoClamp);  
     } 
 
     if (xController.atGoal()) {

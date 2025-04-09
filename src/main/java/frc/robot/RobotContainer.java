@@ -39,7 +39,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   Pose2d currentPose;
   // The robot's subsystems
-  final SUB_Vision m_vision = new SUB_Vision(new VisionIOPhoton());
+  final SUB_Vision m_vision = new 
+  SUB_Vision(new VisionIOPhoton());
   final SUB_Drivetrain m_drivetrain = new SUB_Drivetrain(
     new GyroIONavX()
     ,new ModuleIOSparkFlex(0)
@@ -96,8 +97,8 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
 
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
-    m_driverController.rightTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, 8, 0));
-    m_driverController.leftTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, 8, 0));
+    m_driverController.rightTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0,6.5, 0));
+    m_driverController.leftTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, -6.5, 0));
 
     m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
 

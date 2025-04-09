@@ -2,6 +2,8 @@ package frc.robot.subsystems.Vision;
 
 import org.ejml.simple.SimpleMatrix;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 public class KalmanFilter {
     private final int stateSize = 6;  // [x, y, theta, vx, vy, omega]
     private final int measurementSize = 3; // [x, y, theta]
@@ -41,6 +43,14 @@ public class KalmanFilter {
         for (int i = 0; i < measurementSize; i++) {
             H.set(i, i, 1);
         }
+    }
+    public void reset(Pose2d resetPosition) {
+        SimpleMatrix resetMatrix = new SimpleMatrix(stateSize, 1);
+        resetMatrix.set(0, resetPosition.getX()); // x
+        resetMatrix.set(1, resetPosition.getY()); // y
+        resetMatrix.set(2, resetPosition.getRotation().getRadians()); // theta
+
+        X = resetMatrix;
     }
 
     public void update(double[] measurement) {

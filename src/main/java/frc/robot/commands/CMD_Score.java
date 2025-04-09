@@ -13,6 +13,7 @@ import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.FlippyWristConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.GlobalVariables.RobotState;
 
@@ -93,6 +94,7 @@ public class CMD_Score extends Command{
                 m_intake.setVoltage(-12);
                 m_variables.setRobotState(RobotState.READY);
                 new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
+                m_flippyWrist.setGoal(FlippyWristConstants.kIntakeGround);
                 break;
             case PROCESSOR:
                 m_intake.setVoltage(-12);

@@ -130,7 +130,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     inputs.turnPosition =
         Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
     inputs.VisualAbsolutePosition = 
-      new Pose2d(m_index,0, inputs.turnAbsolutePosition);
+      new Pose2d(
+        m_index,0, inputs.turnAbsolutePosition);
     inputs.turnVelocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity())
             / TURN_GEAR_RATIO;

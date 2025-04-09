@@ -180,20 +180,20 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kAutoP = 0.1;//0.2;
+    public static final double kAutoP = 0.0;//0.2;
     public static final double kAutoI = 0.0;
     public static final double kAutoD = 0.1;//0.2;
     public static final double kAutoFF = 0.0;
 
     public static final double kAutoA = .46;
     public static final double kAutoS = .001;
-    public static final double kAutoV = 2.57;
+    public static final double kAutoV = 2.57 * 1.015;//2.57;
     
-    public static final double kPXController = 4;//4;
-    public static final double kDXController = 0.04;//0.04;
+    public static final double kPXController = 0;//2;//4;
+    public static final double kDXController = 0;//0.04;//0.04;
     public static final double kPYController = 0;
-    public static final double kPThetaController = 6;//6;
-    public static final double kDThetaController = .5;//.5;
+    public static final double kPThetaController = 0;//3;//6;
+    public static final double kDThetaController = 0;//.25;//.5;
     
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -241,16 +241,16 @@ public final class Constants {
     public static final double kOff = 0;
     public static final double kReverse = -3;
     public static final double kProcessor = -10;
-    public static final double kReverseLVl2 = -3;
-    public static final double kReverseLvl4 = -7;
+    public static final double kReverseLVl2 = -2;
+    public static final double kReverseLvl4 = -2;
     public static final double kReverseSlow = -4;
     public static final double kHolding = .5;
     public static final double kAlgaeHolding = 2;
     
 
-    public static final double kConveyorDeploy = -6;
+    public static final double kConveyorDeploy = -2;
     public static final double kConveyorOff = 0;
-    public static final double kConveyorReverse = 6;
+    public static final double kConveyorReverse = 2;
   }
 
   public static final class PivotConstants{
@@ -352,7 +352,7 @@ public final class Constants {
     public static final double kDeployFrontL2 = 3;
     public static final double kDeployFrontL3 = 18;
     public static final double kDeployFrontL4 = 67;
-    public static final double kDeployL4Auto = 75;
+    public static final double kDeployL4Auto = 61;
     public static final double kAutoDown = 77;
     public static final double kDeployL2Exception = 0;
     public static final double kDeployL3Exception = 22;
@@ -402,7 +402,7 @@ public final class Constants {
     public static final double kDeployL2 = Math.toRadians(65);
     public static final double kDeployL3 = Math.toRadians(27);
     public static final double kDeployL4 = Math.toRadians(40);
-    public static final double kDeployL4Auto = Math.toRadians(80);
+    public static final double kDeployL4Auto = Math.toRadians(40);
     public static final double kDeployFrontL2 = Math.toRadians(0);
     public static final double kDeployFrontL3 = Math.toRadians(-5);
     public static final double kDeployFrontL4 = Math.toRadians(-50);
@@ -410,8 +410,8 @@ public final class Constants {
     public static final double kDeployL2Exception = Math.toRadians(36);
     public static final double kDeployL3Exception = Math.toRadians(25);
     public static final double kDeployL4Exception = Math.toRadians(42);
-    public static final double kDeployBarge = Math.toRadians(-36);
-    public static final double kReadyDeployBarge = Math.toRadians(-36);
+    public static final double kDeployBarge = Math.toRadians(36);
+    public static final double kReadyDeployBarge = Math.toRadians(36);
     public static final double kAlgaeYeet = Math.toRadians(-0);    
   }
 
@@ -434,7 +434,7 @@ public final class Constants {
     public static final double kTolerance = Math.toRadians(2);
     
     public static final double kIntake = Math.toRadians(-90);
-    public static final double kHome = Math.toRadians(-4);//counterclockwise
+    public static final double kHome = Math.toRadians(0);//counterclockwise
     public static final double kDeployFront = Math.toRadians(-180);
   }
 
@@ -503,12 +503,12 @@ public final class Constants {
     public static final String kRightCameraName = "RightCamera";
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToLCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(45)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(-10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(30)));
     public static final Transform3d kRobotToRCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(-5), Math.toRadians(-45)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-30)));
 
     public static final Transform3d kRobotToMCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(10.5), Units.inchesToMeters(7), Units.inchesToMeters(0)), new Rotation3d(0, Math.toRadians(25), Math.toRadians(0)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(10.5), Units.inchesToMeters(0), Units.inchesToMeters(7)), new Rotation3d(Math.toRadians(0), Math.toRadians(9), Math.toRadians(0)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -575,25 +575,27 @@ public final class Constants {
 
   public static final class AutoAlignConstants{
       /* X and Y drive constraints. Output ranges [-1, 1] */
-      public static final double kXTolerance = 0.02;
-      public static final double kYTolerance = 0.02;
+      public static final double kXTolerance = Units.inchesToMeters(.25);
+      public static final double kYTolerance = Units.inchesToMeters(.25);
 
-      public static final double kXAutoClamp = .2;
-      public static final double kYAutoClamp = .2;
-      public static final double kTurnAutoClamp = .2;
+      public static final double kXAutoClamp = .3;
+      public static final double kYAutoClamp = .6;
+      public static final double kTurnAutoClamp = .3;
+      
+      public static final double kFinishAutoClamp = .05;
   
       public static final TrapezoidProfile.Constraints driveConstraints = new TrapezoidProfile.Constraints(2, 1.5);
-      public static final double driveKp = 1.25;
+      public static final double driveKp = 2;
       public static final double driveKi = 0.;
       public static final double driveKd = 0.0125;
   
       /* Turn constraints. Output ranges [-1, 1] */
-      public static final double kTurnTolerance = 2;
+      public static final double kTurnTolerance = 1;
       public static final double kTurnToleranceColor = 3;
       public static final TrapezoidProfile.Constraints turnConstraints = new TrapezoidProfile.Constraints(1, .75);
-      public static final double turnKp = 0.0001;
+      public static final double turnKp = 0.0075;
       public static final double turnKi = 0.;
-      public static final double turnKd = 0.0001;
+      public static final double turnKd = 0.0000;
   
       /* Absolute joystick threshold for driver abort */
       public static final double kAbortThreshold = 0.2;

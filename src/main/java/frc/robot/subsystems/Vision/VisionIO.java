@@ -40,6 +40,7 @@ public interface VisionIO {
     public Pose2d RTargetPose = new Pose2d();
     public double TCameraYaw = 0;
     public boolean MTarget = false;
+    public Pose2d MTargetPose = new Pose2d();
   }
 
     public default void updateInputs(VisionIOInputs inputs) {}

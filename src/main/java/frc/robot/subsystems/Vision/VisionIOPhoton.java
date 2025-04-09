@@ -41,7 +41,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionIOPhoton implements VisionIO{  
     private final PhotonCamera LCamera = new PhotonCamera(VisionConstants.kLeftCameraName);
     private final PhotonCamera RCamera = new PhotonCamera(VisionConstants.kRightCameraName);
-    private final PhotonCamera MCamera = new PhotonCamera("MidCam");
+    private final PhotonCamera MCamera = new PhotonCamera("MidCamera");
     private final PhotonPoseEstimator LphotonEstimator = 
         new PhotonPoseEstimator(VisionConstants.kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.kRobotToLCam);
     private final PhotonPoseEstimator LphotonEstimatorLast = 
@@ -224,7 +224,7 @@ public class VisionIOPhoton implements VisionIO{
     @Override
     public Pose2d getTargetMPose(){
         try{
-            if (RCamera.getLatestResult().hasTargets()){
+            if (MCamera.getLatestResult().hasTargets()){
                 var rawTranslation = MCamera.getLatestResult().getBestTarget().getBestCameraToTarget();
                     var RotatedPose = new Pose3d(rawTranslation.getTranslation().getX(), rawTranslation.getY() , rawTranslation.getZ(), rawTranslation.getRotation()).rotateBy(VisionConstants.kRobotToMCam.getRotation());
                     var ProcessedPose3d = new Pose3d(RotatedPose.getTranslation().plus(VisionConstants.kRobotToMCam.getTranslation()), RotatedPose.getRotation());
@@ -364,9 +364,11 @@ public class VisionIOPhoton implements VisionIO{
         inputs.RTarget = RCamera.getLatestResult().hasTargets();   
         
         if (MCamera.getLatestResult().hasTargets()){
-            inputs.RTargetPose = getTargetMPose();//.plus(VisionConstants.kRobotToRCam).inverse();
+            inputs.MTargetPose = getTargetMPose();//.plus(VisionConstants.kRobotToRCam).inverse();
             // .plus(new Transform3d (new Translation3d(-VisionConstants.kRobotToRCam.getX(), -VisionConstants.kRobotToRCam.getY(), VisionConstants.kRobotToRCam.getZ()), VisionConstants.kRobotToRCam.getRotation()));
         }
+
+        inputs.MTarget = MCamera.getLatestResult().hasTargets();   
     }
 
     public PhotonPipelineResult getLCamResult(){
