@@ -28,6 +28,10 @@ public class SUB_GroundIntake extends SubsystemBase{
       io.setVoltage(p_voltage);
     }
 
+    public void setReference(double p_velocity){
+      io.setReference(p_velocity);
+    }
+
     public boolean hasCorral(){
       return io.hasLeftCoral() && io.hasRightCoral();
     }

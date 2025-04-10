@@ -67,7 +67,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
 
         m_intake.setVoltage(IntakeConstants.kIntake);
         m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
-        m_groundIntake.setVoltage(GroundIntakeConstants.kIntake);
+        m_groundIntake.setReference(GroundIntakeConstants.kIntake);
         m_groundPivot.setGoal(GroundPivotConstants.kIntake);
 
         m_intakeTimer.reset();
@@ -151,7 +151,10 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             }
         }
 
-        if(setGroundPivot && m_groundPivot.inPosition(GroundPivotConstants.kTransfer) && m_elevator.inPosition(ElevatorConstants.kIntakeGround) && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround)){
+
+        if(setGroundPivot && m_groundPivot.inPosition(GroundPivotConstants.kTransfer) && m_elevator.inPosition(ElevatorConstants.kIntakeGround)
+         && m_flippyWrist.inPosition(FlippyWristConstants.kIntakeGround) && m_pivot.inPosition(PivotConstants.kIntakeGround)
+         && (m_groundPivot.getVelocity() <= 0) ){
             if(GlobalVariables.m_targetCoralLevel == 1){
                 this.end(false);
                 return;

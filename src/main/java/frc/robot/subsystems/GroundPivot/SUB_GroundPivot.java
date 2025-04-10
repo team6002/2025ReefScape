@@ -3,6 +3,7 @@ package frc.robot.subsystems.GroundPivot;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.GroundPivotConstants;
 
 public class SUB_GroundPivot extends SubsystemBase{
     private final GroundPivotIO io;
@@ -21,6 +22,10 @@ public class SUB_GroundPivot extends SubsystemBase{
 
     public double getPosition(){
       return io.getPosition();
+    }
+
+    public double getVelocity(){
+        return io.getVelocity();
     }
 
     public double getCurrent(){

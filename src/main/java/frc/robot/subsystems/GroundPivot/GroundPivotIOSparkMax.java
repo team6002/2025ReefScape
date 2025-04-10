@@ -65,6 +65,11 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     }
 
     @Override
+    public double getVelocity(){
+        return m_groundPivotEncoder.getVelocity();
+    }
+
+    @Override
     public double getCurrent(){
         return m_groundPivotMotor.getOutputCurrent();
     }

@@ -20,6 +20,7 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
     private final SparkLimitSwitch m_rightLimit;
 
     private double m_groundIntakeReference;
+    private ControlType m_groundIntakeType;
 
     public GroundIntakeIOSparkMax(){
         //initialize motor
@@ -38,6 +39,7 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
         m_rightLimit = m_groundIntakeMotor.getReverseLimitSwitch();
         //reset target speed in init
         m_groundIntakeReference = 0;
+        m_groundIntakeType = ControlType.kVoltage;
     }
 
     @Override
@@ -67,7 +69,15 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
     @Override
     public void setVoltage(double p_voltage){
         m_groundIntakeReference = p_voltage;
+        m_groundIntakeType = ControlType.kVoltage;
     }
+
+    @Override
+    public void setReference(double p_velocity){
+        m_groundIntakeReference = p_velocity;
+        m_groundIntakeType = ControlType.kVelocity;
+    }
+
 
     @Override
     public boolean hasLeftCoral(){
@@ -81,6 +91,6 @@ public class GroundIntakeIOSparkMax implements GroundIntakeIO{
 
     @Override
     public void PID(){
-        m_groundIntakeController.setReference(m_groundIntakeReference, ControlType.kVoltage);
+        m_groundIntakeController.setReference(m_groundIntakeReference, m_groundIntakeType);
     }
 }

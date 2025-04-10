@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.List;
 import java.util.Optional;
 
+import org.ejml.simple.SimpleMatrix;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -110,6 +111,11 @@ public class SUB_Drivetrain extends SubsystemBase {
       SUB_Vision m_vision;
       KalmanFilter kFilter = new KalmanFilter();
       KalmanFilter kTargetFilter = new KalmanFilter();
+
+      SimpleMatrix LCameraArray = new SimpleMatrix(1, 1);
+      SimpleMatrix RCameraArray = new SimpleMatrix(1, 1);
+      SimpleMatrix MCameraArray = new SimpleMatrix(1, 1);
+      
       // private Pose2d currentPose;
       private int currentOdometry = 2; // 0 is just wheels, 1 is wheels and pv and 2 is questNav
   
@@ -269,6 +275,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         var RvisionEst = m_vision.getREstimatedGlobalPose();
         var LvisionEst = m_vision.getLEstimatedGlobalPose();
         var MvisionEst = m_vision.getMEstimatedGlobalPose();
+        
         // m_vision.setRobotRotation(m_odometry.getEstimatedPosition().getRotation());
       
         // Update the odometry in the periodic block
@@ -332,16 +339,20 @@ public class SUB_Drivetrain extends SubsystemBase {
               // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
             var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+            if (getChasisSpeed().vxMetersPerSecond > 3 ||  getChasisSpeed().vyMetersPerSecond > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            }
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
             if (estStdDevs != VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE)){
               Logger.recordOutput("Drive/Odometry/LCameraPose", estPose);
+            
             }
             // Change our trust in the measurement based on the tags we can see
             
-              // addVisionMeasurement(
-              //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .06, estStdDevs);
+              addVisionMeasurement(
+                est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           }
         );
     
@@ -353,6 +364,9 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
             var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+            if (getChasisSpeed().vxMetersPerSecond > 3 ||  getChasisSpeed().vyMetersPerSecond > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            }
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
@@ -363,8 +377,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
           
-              // addVisionMeasurement(
-              //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .06 , estStdDevs);
+              addVisionMeasurement(
+                est.estimatedPose.toPose2d(), est.timestampSeconds , estStdDevs);
           
           }  
         );
@@ -377,6 +391,9 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
             var estStdDevs = m_vision.getMEstimationStdDevs(estPose);
+            if (getChasisSpeed().vxMetersPerSecond > 3.25 ||  getChasisSpeed().vyMetersPerSecond > 3.25 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            }
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
@@ -387,8 +404,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
           
-              // addVisionMeasurement(
-              //   est.estimatedPose.toPose2d(), Timer.getFPGATimestamp() - .06 , estStdDevs);
+              addVisionMeasurement(
+                est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           
           }  
         );
@@ -461,7 +478,7 @@ public class SUB_Drivetrain extends SubsystemBase {
         Pose2d KalFilterOdo = new Pose2d(kFilter.getState().get(0),kFilter.getState().get(1),Rotation2d.fromRadians(kFilter.getState().get(2)));
         Logger.recordOutput("Drive/Odometry/KalFilterOdo", KalFilterOdo);
         
-        addVisionMeasurement(KalFilterOdo, Timer.getFPGATimestamp() - .03, VisionConstants.kSingleTagStdDevs);
+        // addVisionMeasurement(KalFilterOdo, Timer.getFPGATimestamp() - .03, VisionConstants.kSingleTagStdDevs);
         // if (LvisionEst.isPresent() && RvisionEst.isPresent()){
         //   try {
         //   var L = LvisionEst.get();
@@ -491,21 +508,21 @@ public class SUB_Drivetrain extends SubsystemBase {
         // }
 
         // if (TargetOdoEnable){
-          // if (m_vision.getHasLTarget()){   
-          //   addTargetVisionMeasurement(
-          //     m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.2);
-          //   Logger.recordOutput("Drive/Odometry/LTargetPose", m_vision.getHasLTarget());
-          // }
-          // if (m_vision.getHasRTarget()){
-          //   addTargetVisionMeasurement(
-          //     m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.2);
-          //     Logger.recordOutput("Drive/Odometry/RTargetPose", m_vision.getHasRTarget());
-          // }
-          // if (m_vision.getHasMTarget()){
+          if (m_vision.getHasLTarget()){   
+            addTargetVisionMeasurement(
+              m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.2);
+            Logger.recordOutput("Drive/Odometry/LTargetPose", m_vision.getHasLTarget());
+          }
+          if (m_vision.getHasRTarget()){
+            addTargetVisionMeasurement(
+              m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.2);
+              Logger.recordOutput("Drive/Odometry/RTargetPose", m_vision.getHasRTarget());
+          }
+          if (m_vision.getHasMTarget()){
             addTargetVisionMeasurement(
               m_vision.getTargetMPose(), Timer.getFPGATimestamp()-.2);
               Logger.recordOutput("Drive/Odometry/MTargetPose", m_vision.getHasMTarget());
-          // }
+          }
         // }
       //   try {
       //   RvisionEst.ifPresent(

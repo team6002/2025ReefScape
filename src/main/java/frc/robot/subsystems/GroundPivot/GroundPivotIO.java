@@ -10,6 +10,7 @@ public interface GroundPivotIO {
     public double m_groundPivotGoal;
     public boolean m_groundPivotInPosition;
     public double m_groundPivotSetpoint;
+    public double m_groundPivotVelocity;
   }
 
   public default void updateInputs(GroundPivotIOInputs inputs) {}
@@ -23,6 +24,8 @@ public interface GroundPivotIO {
   public default double getGoal(){return 0;}
 
   public default double getPosition(){return 0;}
+
+  public default double getVelocity(){return 0;}
 
   public default double getCurrent(){return 0;}
 

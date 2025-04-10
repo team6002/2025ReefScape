@@ -42,15 +42,15 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
                 new CMD_PivotInPosition(p_pivot)
                 ,new CMD_WristInPosition(p_flippyWrist)
             )
-            // ,new ParallelCommandGroup(
-            //   new CMD_DeployLevelFour(p_intake, p_flippyWrist)
+            ,new ParallelCommandGroup(
+              new CMD_DeployLevelFour(p_intake, p_flippyWrist)
               // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
               // ,new InstantCommand(()-> p_elevator.setConstraints(ElevatorConstants.kSlowVel, ElevatorConstants.kSlowAccel))
               // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
               // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
-            // )
-            // ,new WaitCommand(.2)
-            // ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
+            )
+            ,new WaitCommand(.2)
+            ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
             // // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
             // ,new CMD_ElevatorInPosition(p_elevator)
             // ,new ParallelCommandGroup(

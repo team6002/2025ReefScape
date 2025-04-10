@@ -33,8 +33,8 @@ public class CMD_Deploy extends Command{
         m_runTime.reset();
         m_runTime.start();
 
-        m_intake.setVoltage(IntakeConstants.kHolding);
-
+        m_intake.setVoltage(IntakeConstants.kOff);
+    
         m_variables.setRobotState(RobotState.DEPLOY);
     }
 

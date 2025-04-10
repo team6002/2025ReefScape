@@ -23,6 +23,8 @@ public interface GroundIntakeIO {
 
   public default void setVoltage(double p_voltage){}
 
+  public default void setReference(double p_velocity){}
+
   public default boolean hasLeftCoral(){return false;}
 
   public default boolean hasRightCoral(){return false;}
