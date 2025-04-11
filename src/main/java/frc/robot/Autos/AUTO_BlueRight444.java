@@ -31,11 +31,12 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), p_drivetrain)
             ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition(AutoConstants.BlueLeft1), p_drivetrain)
             // ,new InstantCommand(()-> p_drivetrain.setStartingAngle(),p_drivetrain)
-            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kHolding))
+            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kSuck))
             ,new ParallelCommandGroup(
               p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
+            ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kHolding))
             // ,new CMD_DriveAlignVisionAuto(p_drivetrain, p_vision, 0, -6, 0)
             ,new WaitCommand(.2)
             ,new ParallelCommandGroup(
@@ -43,7 +44,8 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
                 ,new CMD_WristInPosition(p_flippyWrist)
             )
             ,new ParallelCommandGroup(
-              new CMD_DeployLevelFour(p_intake, p_flippyWrist)
+              // new CMD_DeployLevelFour(p_intake, p_flippyWrist)
+              new CMD_Deploy(p_intake, p_flippyWrist, p_variables)
               // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
               // ,new InstantCommand(()-> p_elevator.setConstraints(ElevatorConstants.kSlowVel, ElevatorConstants.kSlowAccel))
               // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))

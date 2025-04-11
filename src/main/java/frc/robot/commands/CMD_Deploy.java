@@ -33,7 +33,7 @@ public class CMD_Deploy extends Command{
         m_runTime.reset();
         m_runTime.start();
 
-        m_intake.setVoltage(IntakeConstants.kOff);
+        m_intake.setVoltage(IntakeConstants.kHolding);
     
         m_variables.setRobotState(RobotState.DEPLOY);
     }
@@ -56,7 +56,7 @@ public class CMD_Deploy extends Command{
 
     @Override
     public boolean isFinished(){
-        return m_runTime.get() > .5;
+        return !m_intake.hasCoral();
     }
 
     @Override

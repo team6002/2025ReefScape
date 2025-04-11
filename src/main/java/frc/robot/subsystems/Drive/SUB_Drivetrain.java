@@ -339,9 +339,13 @@ public class SUB_Drivetrain extends SubsystemBase {
               // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
             var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-            if (getChasisSpeed().vxMetersPerSecond > 3 ||  getChasisSpeed().vyMetersPerSecond > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+            // var estStdDevs = VisionConstants.kSingleTagStdDevs;
+            double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
+            if (totalSpeed > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
               estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             }
+            // estStdDevs.times(totalSpeed*totalSpeed/4);
+            // estStdDevs.times((getChasisSpeed().omegaRadiansPerSecond / Math.PI/2));
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
@@ -364,9 +368,13 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
             var estStdDevs = m_vision.getREstimationStdDevs(estPose);
-            if (getChasisSpeed().vxMetersPerSecond > 3 ||  getChasisSpeed().vyMetersPerSecond > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+            // var estStdDevs = VisionConstants.kSingleTagStdDevs;
+            double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
+            if (totalSpeed > 3.5 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
               estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             }
+            // estStdDevs.times(totalSpeed*totalSpeed/4);
+            // estStdDevs.times((getChasisSpeed().omegaRadiansPerSecond / Math.PI/2));
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
@@ -391,9 +399,13 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
             var estStdDevs = m_vision.getMEstimationStdDevs(estPose);
-            if (getChasisSpeed().vxMetersPerSecond > 3.25 ||  getChasisSpeed().vyMetersPerSecond > 3.25 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
+            // var estStdDevs = VisionConstants.kSingleTagStdDevs;
+            double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
+            if (totalSpeed >= 3.5 || getChasisSpeed().omegaRadiansPerSecond > Math.PI){
               estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             }
+            // estStdDevs.times(totalSpeed*totalSpeed/4);
+            // estStdDevs.times((getChasisSpeed().omegaRadiansPerSecond / Math.PI/2));
             // if (checkClosity(getPose(), est.estimatedPose.toPose2d())){
             //   estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
             // }
