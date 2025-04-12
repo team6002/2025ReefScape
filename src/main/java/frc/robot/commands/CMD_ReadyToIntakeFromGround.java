@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.GlobalVariables;
 import frc.GlobalVariables.RobotState;
+import frc.robot.Configs.GroundIntake;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PivotConstants;
@@ -146,6 +147,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
             GlobalVariables.m_groundHasCoral = true;
             m_groundPivot.setGoal(GroundPivotConstants.kTransfer);
             setGroundPivot = true;
+            m_groundIntake.setVoltage(GroundIntakeConstants.kHolding);
             if(GlobalVariables.m_targetCoralLevel == 1){
                 return;
             }

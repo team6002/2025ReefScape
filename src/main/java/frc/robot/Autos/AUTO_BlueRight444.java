@@ -33,9 +33,10 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             // ,new InstantCommand(()-> p_drivetrain.setStartingAngle(),p_drivetrain)
             ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kSuck))
             ,new ParallelCommandGroup(
-              p_drivetrain.FollowPath(AutoConstants.BlueLeft1)
+              p_drivetrain.FollowPath("BlueLeft1")
               ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
             )
+            // , p_drivetrain.FollowPath("Left2")
             ,new InstantCommand(()-> p_intake.setVoltage(IntakeConstants.kHolding))
             // ,new CMD_DriveAlignVisionAuto(p_drivetrain, p_vision, 0, -6, 0)
             ,new WaitCommand(.2)

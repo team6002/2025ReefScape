@@ -249,7 +249,7 @@ public final class Constants {
     public static final double kAlgaeHolding = 2;
     
 
-    public static final double kConveyorDeploy = -6;
+    public static final double kConveyorDeploy = -5;
     public static final double kConveyorOff = 0;
     public static final double kConveyorReverse = 2;
   }
@@ -349,11 +349,11 @@ public final class Constants {
     public static final double kDeployL1 = 10;
     public static final double kDeployL2 = 7.5;
     public static final double kDeployL3 = 12;
-    public static final double kDeployL4 = 61;
+    public static final double kDeployL4 = 60;
     public static final double kDeployFrontL2 = 3;
     public static final double kDeployFrontL3 = 18;
     public static final double kDeployFrontL4 = 67;
-    public static final double kDeployL4Auto = 61;
+    public static final double kDeployL4Auto = 63;
     public static final double kAutoDown = 77;
     public static final double kDeployL2Exception = 0;
     public static final double kDeployL3Exception = 22;
@@ -403,7 +403,7 @@ public final class Constants {
     public static final double kDeployL2 = Math.toRadians(65);
     public static final double kDeployL3 = Math.toRadians(27);
     public static final double kDeployL4 = Math.toRadians(40);
-    public static final double kDeployL4Auto = Math.toRadians(40);
+    public static final double kDeployL4Auto = Math.toRadians(50);
     public static final double kDeployFrontL2 = Math.toRadians(0);
     public static final double kDeployFrontL3 = Math.toRadians(-5);
     public static final double kDeployFrontL4 = Math.toRadians(-50);
@@ -455,14 +455,14 @@ public final class Constants {
 
   public static final class GroundPivotConstants{
     public static final boolean kInverted = false;
-    public static final double kP = 0.7;//0.3;//.5
+    public static final double kP = 0.2;//0.3;//.5
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFF = 0.0;
-    public static final double kV = 3.4;//.8
+    public static final double kV = 1.1;//.8
     public static final double kG = 0.15;
     public static final double kS = 0.0;
-    public static final double kA = 1;//0.03;
+    public static final double kA = .14;//0.03;
     public static final double kConversionFactor = 2*Math.PI;
     public static final double kOffset = Math.toRadians(-180);
     public static final double kMaxVel = Math.toRadians(1000);
@@ -471,13 +471,12 @@ public final class Constants {
     public static final double kMaxOutput = 1;
     public static final double kTolerance = Math.toRadians(3);
 
-    public static final double kHome = Math.toRadians(-14);
-    public static final double kTransfer = Math.toRadians(-22);
+    public static final double kHome = Math.toRadians(-10);
+    public static final double kTransfer = Math.toRadians(-18);
     public static final double kClimb = Math.toRadians(-85);
     public static final double kProcessor = Math.toRadians(-85);
-    public static final double kAlgaeGround = Math.toRadians(-85
-    );
-    public static final double kIntake = Math.toRadians(110);
+    public static final double kAlgaeGround = Math.toRadians(-85);
+    public static final double kIntake = Math.toRadians(112);
     public static final double kDeploy = Math.toRadians(10);
   }
 
@@ -509,7 +508,7 @@ public final class Constants {
             new Transform3d(new Translation3d(Units.inchesToMeters(12.5), Units.inchesToMeters(10.75), Units.inchesToMeters(9)), new Rotation3d(0, Math.toRadians(5), Math.toRadians(-30)));
 
     public static final Transform3d kRobotToMCam =
-            new Transform3d(new Translation3d(Units.inchesToMeters(10.5), Units.inchesToMeters(0), Units.inchesToMeters(7)), new Rotation3d(Math.toRadians(0), Math.toRadians(9), Math.toRadians(0)));
+            new Transform3d(new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(0), Units.inchesToMeters(7)), new Rotation3d(Math.toRadians(0), Math.toRadians(-30), Math.toRadians(0)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout =
@@ -570,7 +569,7 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, Double.MAX_VALUE);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.5, .5, Double.MAX_VALUE);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 
