@@ -339,7 +339,6 @@ public class VisionIOPhoton implements VisionIO{
         var estStdDevs = VisionConstants.kSingleTagStdDevs;
         List<PhotonTrackedTarget> targets = new ArrayList<>();
         targets = getLatestRResult().getTargets();
-        int totalTags = -1; // a tag counter that counts all of the tags
         int numTags = 0; // tag counter that counts all tags that are within the filter;
         double avgDist = 0;
         for (var tgt : targets) {
@@ -350,16 +349,10 @@ public class VisionIOPhoton implements VisionIO{
             // if(tgt.getFiducialId() != 4 || tgt.getFiducialId() != 7) continue;
             avgDist +=
                 tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+                // System.out.println(avgDist);
         }
         if (numTags == 0) return estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        // estStdDevs;
-        avgDist /= numTags;
-        // Decrease std devs if multiple targets are visible
-        if (numTags > 1) estStdDevs = VisionConstants.kMultiTagStdDevs;
-        // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 3)
-            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        if (avgDist > 3)
+        if (avgDist > 10)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1);
 
@@ -369,9 +362,8 @@ public class VisionIOPhoton implements VisionIO{
     }
 
     public boolean angFilter(List<PhotonTrackedTarget> targets, int TagNum){// tag num is the index number for the target Table
-        return (new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() > 60
-             || new Rotation2d(Math.toRadians(180)).plus(targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -60
-        );
+        return (targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() > 45
+             || (targets.get(TagNum).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees() < -45;
         // return true;
     }
 
@@ -491,6 +483,25 @@ public class VisionIOPhoton implements VisionIO{
         };
     }
 
+
+        @Override
+        public boolean matchMidTag(int cameraNumber){
+            // int CameraTag;
+            // try {
+                
+            // if (cameraNumber == 0 ){
+            //     CameraTag = LCamera.getLatestResult().getBestTarget().objDetectId;
+            // }else if (cameraNumber ==  1){
+            //     CameraTag = RCamera.getLatestResult().getBestTarget().objDetectId;
+            // }else{
+            //     CameraTag = 1;
+            // }
+            // return (CameraTag == MCamera.getLatestResult().getBestTarget().objDetectId);
+            // } catch (Exception e) {
+            //   System.out.println("MatchMidTag is ded");
+            // }
+            return false;
+        }
     // @Override
     // public double getLLatency(){
     //     return LCamera.

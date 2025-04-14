@@ -15,26 +15,27 @@ public class CMD_IntakeStow extends Command{
 
     @Override
     public void initialize(){
-        isFinished = false;
+        // isFinished = false;
+        m_intakeTimer.reset();
+        m_intakeTimer.stop();
     }
 
     @Override
     public void execute(){
-        if(m_intake.getCurrent() > 18){
-            m_intakeTimer.start();
-        }else{
-            m_intakeTimer.reset();
-        }
 
-        if(m_intakeTimer.get() > 0.2){
-            m_intake.setVoltage(IntakeConstants.kHolding);
-            isFinished = true;
+            // isFinished = true;
+        if (m_intake.hasCoral()){
+            m_intakeTimer.start();
         }
     }
 
     @Override
-    public boolean isFinished(){
+    public void end(boolean interrupted){
+        m_intake.setVoltage(IntakeConstants.kHolding);
+    }
 
-        return isFinished;
+    @Override
+    public boolean isFinished(){
+        return m_intake.hasCoral();
     }
 }

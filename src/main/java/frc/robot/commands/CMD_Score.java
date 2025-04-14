@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.GlobalVariables;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
@@ -46,61 +47,85 @@ public class CMD_Score extends Command{
             //if home or ready, go to ready to intake
             case HOME:
             case READY:
-                GlobalVariables.m_haveAlgae = false;
+                // GlobalVariables.m_haveAlgae = false;
                 m_intake.setVoltage(IntakeConstants.kOff);
-                new ConditionalCommand(
-                    new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
-                    ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
-                    ,()-> GlobalVariables.m_intakeFromStation
-                ).schedule();
+                if (GlobalVariables.m_haveAlgae){
+                    new CMD_IntakeHalf(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables);
+                }else{
+                    if (GlobalVariables.m_coralMode){
+                        new ConditionalCommand(
+                            new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                            // ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                            ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                            ,()-> GlobalVariables.m_intakeFromStation
+                        ).schedule();    }
+                    else{
+                        new ConditionalCommand(
+                            new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                            // ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                            ,new CMD_IntakeHalf(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                            ,()-> GlobalVariables.m_intakeFromStation
+                        ).schedule();    
+                    }
+                }
                 break;
             //if ready to intake and do not have algae go to deploy, if we do have an algae, go to ready
             case READY_TO_INTAKE:
                 if(!GlobalVariables.m_haveAlgae) new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables).schedule();
                 else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
                 break;
+            //if holding corral check where it is and then transfer appropriatly to ready to deploy
+            case HOLDING:
+                if (!m_intake.hasCoral() && m_groundIntake.hasCorral()){
+                    new CMD_TransferFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables).schedule();
+                }else if (m_intake.hasCoral() && m_groundIntake.hasCorral()){
+                }else  { 
+                    new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables);
+                }
+            break;
             //if ready to deploy, shoot
             case READY_TO_DEPLOY:
                 if(GlobalVariables.m_targetCoralLevel == 1){
                     new CMD_ScoreLevelOne(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables).schedule();
                     return;
                 }
-                if(GlobalVariables.m_groundHasCoral){
-                    new CMD_GroundIntake(m_groundPivot, m_groundIntake).schedule();
-                }else{
                     new CMD_Deploy(m_intake, m_flippyWrist, m_variables).schedule();
                     new ConditionalCommand(
                     new InstantCommand(() -> m_elevator.setGoal(ElevatorConstants.kDeployL4 + 2))
                     , new InstantCommand()
                     , ()-> GlobalVariables.m_targetCoralLevel == 4);
-                }
                 break;
             //if we just shot, go back to intaking if no algae, and ready if algae
             case DEPLOY:
-                if(!GlobalVariables.m_haveAlgae) new ConditionalCommand(
-                    new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
-                    ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
-                    ,()-> GlobalVariables.m_intakeFromStation
-                ).schedule();
-                else new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
+                if(!GlobalVariables.m_haveAlgae){
+                    m_variables.setRobotState(RobotState.READY);
+                    new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables).schedule();
+                    // new ConditionalCommand(
+                    //     new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
+                    //     ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+                    //     ,()-> GlobalVariables.m_intakeFromStation
+                    // ).schedule();
+                }else{
+                    new CMD_Ready(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables).schedule();
+                }
                 break;
             //if we just grabbed an algae of the reef, ready to deploy alt sequence
             case ALGAE_LEVEL_2:
             case ALGAE_LEVEL_3:
-                new CMD_AlgaeReadyToDeploy(m_pivot, m_elevator, m_flippyWrist, m_variables).schedule();
+                new CMD_IntakeHalf(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables);
                 break;
             //if ready to score in barge/proccesor, spit out algae, and set state to ready so the next RB press goes to ready to intake
             case BARGE:
-                m_intake.setVoltage(-12);
-                m_variables.setRobotState(RobotState.READY);
-                new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
-                m_flippyWrist.setGoal(FlippyWristConstants.kIntakeGround);
-                break;
+                new CMD_AlgaeDeploy(m_intake, m_flippyWrist).schedule();    
+            break;
+
             case PROCESSOR:
-                m_intake.setVoltage(-12);
-                m_variables.setRobotState(RobotState.READY);
-                new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)).schedule();
-                break;
+            new SequentialCommandGroup(
+                new InstantCommand(()->m_intake.setVoltage(-12))
+                // m_variables.setRobotState(RobotState.READY);
+                ,new WaitCommand(1).andThen(new InstantCommand(()-> GlobalVariables.m_haveAlgae = false))    
+            ).schedule();
+            break;
             default:
                 break;
         }

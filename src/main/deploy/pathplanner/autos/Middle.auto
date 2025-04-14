@@ -7,7 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle"
+            "pathName": "Middle1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle6"
           }
         }
       ]

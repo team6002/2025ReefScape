@@ -2,19 +2,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.Constants.WinchConstants;
 import frc.robot.subsystems.Drive.SUB_Drivetrain;
+import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
 import frc.robot.subsystems.Winch.SUB_Winch;
 
 public class CMD_AutoClimb extends Command{
     private final SUB_Drivetrain m_drivetrain;
     private final SUB_Winch m_winch;
     private final CommandXboxController m_driverController;
+    private final SUB_GroundPivot m_groundPivot;
     private boolean isFinshed;
-    public CMD_AutoClimb(SUB_Drivetrain p_drivetrain, SUB_Winch p_winch, CommandXboxController p_driverController){
+    public CMD_AutoClimb(SUB_Drivetrain p_drivetrain, SUB_Winch p_winch, CommandXboxController p_driverController, SUB_GroundPivot p_groundPivot){
         m_drivetrain = p_drivetrain;
         m_winch = p_winch;
         m_driverController = p_driverController;
+        m_groundPivot = p_groundPivot;
         addRequirements(m_drivetrain);
         isFinshed = false;
     }
@@ -22,6 +26,7 @@ public class CMD_AutoClimb extends Command{
     @Override
     public void initialize(){
         isFinshed = false;
+        m_groundPivot.setCurrentLimit(10);
     }
 
     @Override
@@ -33,6 +38,12 @@ public class CMD_AutoClimb extends Command{
             m_winch.setReference(WinchConstants.kClimb);
             isFinshed = true;
         }
+    }
+
+
+    @Override
+    public void end(boolean interrupted){
+        m_groundPivot.setGoal(GroundPivotConstants.kClimbUp);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class CMD_DriveAlignVisionSides extends Command{
 
     /* Set the goals as an offset of the robot's current odometry */
     
-    xController.setGoal(Units.inchesToMeters(12 + xGoal));
+    xController.setGoal(Units.inchesToMeters(14 + xGoal));
     yController.setGoal(Units.inchesToMeters(yGoal));
     turnController.setSetpoint(0);
 

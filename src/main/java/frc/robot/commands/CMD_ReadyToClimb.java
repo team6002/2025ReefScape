@@ -70,12 +70,12 @@ public class CMD_ReadyToClimb extends Command{
             groundPivotTimer.start();
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setElevator || groundPivotTimer.get() > 2){
-            m_elevator.setGoal(ElevatorConstants.kHome);
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setElevator || (groundPivotTimer.get() > 2 && !setWrist)){
+            m_elevator.setGoal(ElevatorConstants.kClimb);
             setElevator = true;
         }
 
-        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setWrist || groundPivotTimer.get() > 2){
+        if(setGroundPivot && setPivot && m_pivot.inPosition() && m_groundPivot.inPosition() && !setWrist || (groundPivotTimer.get() > 2 && !setWrist)){
             m_flippyWrist.setGoal(FlippyWristConstants.kClimb);
             setWrist = true;
         }
@@ -97,6 +97,6 @@ public class CMD_ReadyToClimb extends Command{
 
     @Override
     public void end(boolean interrupted){
-        m_groundIntake.setVoltage(GroundIntakeConstants.kOff);
+        m_groundIntake.setVoltage(GroundIntakeConstants.kClimb);
     }
 }

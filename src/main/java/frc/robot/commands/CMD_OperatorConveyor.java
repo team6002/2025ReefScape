@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.GlobalVariables;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake.SUB_Intake;
 
 public class CMD_OperatorConveyor extends Command{
@@ -36,6 +37,14 @@ public class CMD_OperatorConveyor extends Command{
         if(!GlobalVariables.m_haveAlgae){
             if(Math.abs(m_operatorController.getRightX()) > .1){
                 m_intake.setConveyorVoltage(0);
+            }
+        }
+
+        if (GlobalVariables.m_haveAlgae){
+            if (m_intake.getVelocity() < 0){
+                m_intake.setVoltage(IntakeConstants.kAlgaeIntake);
+            }else{
+                m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
             }
         }
     }

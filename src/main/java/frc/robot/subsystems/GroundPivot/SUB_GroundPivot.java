@@ -39,6 +39,10 @@ public class SUB_GroundPivot extends SubsystemBase{
     public void setConstraints(double velocity, double acceleration){
       io.setConstraints(velocity, acceleration);
     }
+
+    public void setCurrentLimit(int currentLimit){
+      io.setCurrentLimit(currentLimit);
+    }
     public double getSetpoint(){
       return io.getSetpoint();
     }

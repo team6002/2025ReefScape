@@ -46,7 +46,7 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             )
             ,new ParallelCommandGroup(
               // new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-              new CMD_Deploy(p_intake, p_flippyWrist, p_variables)
+              new CMD_Deploy(p_intake, p_flippyWrist, p_variables).withTimeout(.4)
               // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
               // ,new InstantCommand(()-> p_elevator.setConstraints(ElevatorConstants.kSlowVel, ElevatorConstants.kSlowAccel))
               // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
@@ -54,83 +54,78 @@ public class AUTO_BlueRight444 extends SequentialCommandGroup{
             )
             ,new WaitCommand(.2)
             ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
-            // // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
+            // ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kReady))
             // ,new CMD_ElevatorInPosition(p_elevator)
+            ,new ParallelCommandGroup(
+              new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+              ,p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
+            )
             // ,new ParallelCommandGroup(
-            //   new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
-            //   ,p_drivetrain.FollowPath(AutoConstants.BlueLeft2)
+            ,new CMD_IntakeStow(p_intake).withTimeout(15)
+              // ,new CMD_DriveForwards(p_drivetrain, 0)
             // )
-            // // ,new ParallelCommandGroup(
-            // ,new CMD_IntakeStow(p_intake).withTimeout(15)
-            //   // ,new CMD_DriveForwards(p_drivetrain, 0)
-            // // )
-            // // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio3"), p_drivetrain)
-            // ,new ParallelCommandGroup(
-            //   p_drivetrain.FollowPath("BlueLeftTrio3")
-            //   ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
-            // )
-            // ,new WaitCommand(.2)
-            // ,new ParallelCommandGroup(
-            //     new CMD_PivotInPosition(p_pivot)
-            //     ,new CMD_WristInPosition(p_flippyWrist)
-            // )
-            // // ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-            // // ,new WaitCommand(.5)
-            // ,new ParallelCommandGroup(
-            //   new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-            //   ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))
-            //   // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
-            //   // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
-            // )
-            // ,new WaitCommand(.2)
-            // ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
-            // ,new CMD_ElevatorInPosition(p_elevator)
-            // ,new ParallelCommandGroup(
-            //   new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
-            //   ,p_drivetrain.FollowPath("BlueLeftTrio4")
-            // )
-            // // ,new ParallelCommandGroup(
-            // ,new CMD_IntakeStow(p_intake).withTimeout(15)
-            // //   ,new CMD_DriveForwards(p_drivetrain, 0)
-            // // )
-            // // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio5"), p_drivetrain)
-            // ,new ParallelCommandGroup(
-            //   p_drivetrain.FollowPath("BlueLeftTrio5")
-            //   ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
-            // )
-            // // ,new WaitCommand(.4)
-            // ,new WaitCommand(.2)
-            // ,new ParallelCommandGroup(
-            //     new CMD_PivotInPosition(p_pivot)
-            //     ,new CMD_WristInPosition(p_flippyWrist)
-            // )
+            // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio3"), p_drivetrain)
+            ,new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                new InstantCommand(()->p_intake.setVoltage(IntakeConstants.kIntake))
+                ,new WaitCommand(.2)
+                ,new InstantCommand(()->p_intake.setVoltage(0))
+              )
+              ,p_drivetrain.FollowPath("BlueLeftTrio3")
+              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+            )
+            ,new WaitCommand(.2)
+            ,new ParallelCommandGroup(
+                new CMD_PivotInPosition(p_pivot)
+                ,new CMD_WristInPosition(p_flippyWrist)
+            )
+            ,new CMD_Deploy(p_intake, p_flippyWrist, p_variables).withTimeout(.4)
             // ,new CMD_DeployLevelFour(p_intake, p_flippyWrist)
+            // ,new WaitCommand(.5)
+            ,new CMD_ElevatorInPosition(p_elevator)
+            ,new ParallelCommandGroup(
+              new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+              ,p_drivetrain.FollowPath("BlueLeftTrio4")
+            )
             // ,new ParallelCommandGroup(
-            //   new CMD_DeployLevelFour(p_intake, p_flippyWrist)
-            //   ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kAutoDown))  
-            //   // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kAutoDeploy))
-            //   // ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kAutoDeploy))
+            ,new CMD_IntakeStow(p_intake).withTimeout(15)
+            //   ,new CMD_DriveForwards(p_drivetrain, 0)
             // )
-            // ,new WaitCommand(.2)
-            // ,new InstantCommand(()-> p_intake.setConveyorVoltage(0))
-            // ,new ParallelCommandGroup(
-            //   p_drivetrain.FollowPath("BlueLeftTrio6")
+            // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio5"), p_drivetrain)
+            ,new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                new InstantCommand(()->p_intake.setVoltage(IntakeConstants.kIntake))
+                ,new WaitCommand(.2)
+                ,new InstantCommand(()->p_intake.setVoltage(0))
+              )
+              ,p_drivetrain.FollowPath("BlueLeftTrio5")
+              ,new CMD_ReadyLevelFourAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+            )
+            // ,new WaitCommand(.4)
+            ,new WaitCommand(.2)
+            ,new ParallelCommandGroup(
+                new CMD_PivotInPosition(p_pivot)
+                ,new CMD_WristInPosition(p_flippyWrist)
+            )
+            ,new CMD_Deploy(p_intake, p_flippyWrist, p_variables).withTimeout(.4)
+            ,new ParallelCommandGroup(
+              p_drivetrain.FollowPath("BlueLeftTrio6")
               
-            //   ,new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+              ,new CMD_ReadyToIntakeAuto(p_elevator, p_flippyWrist, p_spinnyWrist, p_pivot, p_intake)
+            )
+            // ,new ParallelCommandGroup(
+            //   new CMD_IntakeStow(p_intake).withTimeout(10)
+            //   ,new CMD_DriveForwards(p_drivetrain, 0)
             // )
-            // // ,new ParallelCommandGroup(
-            // //   new CMD_IntakeStow(p_intake).withTimeout(10)
-            // //   ,new CMD_DriveForwards(p_drivetrain, 0)
-            // // )
-            // // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio7"), p_drivetrain)
-            // // ,new ParallelCommandGroup(
-            // //   p_drivetrain.FollowPath("BlueLeftTrio7")
-            // //   // ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_flippyWrist, p_pivot)
-            // // )
-            // // // ,new CMD_DeployLevelTwo(p_intake, p_flippyWrist)
+            // ,Commands.runOnce(()-> p_drivetrain.resetOdoToStartPosition("BlueLeftTrio7"), p_drivetrain)
+            // ,new ParallelCommandGroup(
+            //   p_drivetrain.FollowPath("BlueLeftTrio7")
+            //   // ,new CMD_ReadyToDeployLevelTwo(p_elevator, p_flippyWrist, p_pivot)
+            // )
+            // // ,new CMD_DeployLevelTwo(p_intake, p_flippyWrist)
 
-            // // // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
-            // // /////// ,new CMD_Ready(p_elevator, p_flippyWrist, p_pivot, p_intake)
+            // // ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kIntake))
+            // /////// ,new CMD_Ready(p_elevator, p_flippyWrist, p_pivot, p_intake)
         );
     }
 }

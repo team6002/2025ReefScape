@@ -9,6 +9,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SpinnyWristConstants;
 import frc.robot.Constants.FlippyWristConstants;
+import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.subsystems.Elevator.SUB_Elevator;
 import frc.robot.subsystems.FlippyWrist.SUB_FlippyWrist;
 import frc.robot.subsystems.GroundPivot.SUB_GroundPivot;
@@ -114,7 +115,11 @@ public class CMD_ReadyToIntake extends Command{
 
         if(m_elevator.inPosition(ElevatorConstants.kIntake) && m_flippyWrist.inPosition(FlippyWristConstants.kIntake) && m_pivot.inPosition(PivotConstants.kIntake)){
             if (m_intake.hasCoral()){
-                haveCoral = true;
+                m_SUCTimer.start();
+                
+                if ( m_SUCTimer.advanceIfElapsed(.2)){
+                    haveCoral = true;
+                }
             }
         }
     }
@@ -132,6 +137,7 @@ public class CMD_ReadyToIntake extends Command{
         m_intake.setVoltage(IntakeConstants.kOff);
 
         if(interrupted){
+            m_groundPivot.setGoal(GroundPivotConstants.kTransfer);
             GlobalVariables.m_haveCoral = false;
             return;
         }else{

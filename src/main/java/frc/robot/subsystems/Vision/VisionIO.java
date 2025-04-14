@@ -69,7 +69,7 @@ public interface VisionIO {
     public default PhotonPipelineResult getRCamResult(){return null;}
     public default double getLLatency(){return 0;}
     public default double getRLatency(){return 0;}
-    
+    public default boolean matchMidTag(int camera){return false;}
     
   
 }

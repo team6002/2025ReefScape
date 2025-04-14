@@ -185,6 +185,10 @@ public class SUB_Vision {
         }
         return selectedPose;
     }
+
+    public boolean matchMidTag(int camera){
+        return matchMidTag(camera);
+    }
     // public double getLLatency(){
     //     // return
     // }

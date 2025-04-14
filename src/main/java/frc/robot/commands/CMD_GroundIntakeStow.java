@@ -21,15 +21,16 @@ public class CMD_GroundIntakeStow extends Command{
 
     @Override
     public void execute(){
-        if(m_groundIntake.getCurrent() > 14){
-            m_groundIntakeTimer.start();
-        }else{
-            m_groundIntakeTimer.reset();
-        }
+        // if(m_groundIntake.getCurrent() > 14){
+        //     m_groundIntakeTimer.start();
+        // }else{
+        //     m_groundIntakeTimer.reset();
+        // }
 
-        if(m_groundIntakeTimer.get() > 0.2){
-            isFinished = true;
-        }
+        // if(m_groundIntakeTimer.get() > 0.2){
+        //     isFinished = true;
+        // }
+        
     }
 
 
@@ -41,6 +42,6 @@ public class CMD_GroundIntakeStow extends Command{
     @Override
     public boolean isFinished(){
 
-        return isFinished;
+        return m_groundIntake.hasCorral();
     }
 }

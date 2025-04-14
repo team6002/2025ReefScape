@@ -54,6 +54,7 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
         // m_intake.setReference(IntakeConstants.kAlgaeIntake);
         m_intake.setVoltage(IntakeConstants.kAlgaeIntake);
         m_intake.setCurrentLimit(40);
+        m_variables.setRobotState(RobotState.READY);
     }
 
     @Override
@@ -92,5 +93,6 @@ public class CMD_AlgaeIntakeLevelThree extends Command{
         m_flippyWrist.setGoal(FlippyWristConstants.kAlgaeHolding);
         m_elevator.setGoal(ElevatorConstants.kIntakedAlgael3);
         m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
+        GlobalVariables.m_haveAlgae = true;
     }
 }

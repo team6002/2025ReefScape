@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Configs;
+import frc.robot.Configs.GroundPivotConfig;
 import frc.robot.Constants.GroundPivotConstants;
 import frc.robot.Constants.HardwareConstants;
 import frc.robot.Constants.PivotConstants;
@@ -113,6 +114,13 @@ public class GroundPivotIOSparkMax implements GroundPivotIO{
     public void setConstraints(double velocity, double acceleration){
         m_groundPivotFeedConstraints = new Constraints(velocity, acceleration);
 
+    }
+
+    @Override
+    public void setCurrentLimit(int currentLimit){
+        var config = Configs.GroundPivotConfig.m_groundPivotConfig;
+        config.smartCurrentLimit(currentLimit);
+        m_groundPivotMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
     @Override
     public void reset(){

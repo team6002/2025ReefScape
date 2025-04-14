@@ -55,6 +55,7 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
 
         m_intake.setCurrentLimit(40);
         m_intake.setVoltage(IntakeConstants.kAlgaeIntake);;
+        m_variables.setRobotState(RobotState.READY);
     }
 
 
@@ -99,5 +100,6 @@ public class CMD_AlgaeIntakeLevelTwo extends Command{
         if(interrupted){m_intake.setVoltage(IntakeConstants.kOff); return;}
         m_pivot.setGoal(PivotConstants.kAlgaeLvl2Hold);
         m_intake.setVoltage(IntakeConstants.kAlgaeHolding);
+        GlobalVariables.m_haveAlgae = true;
     }
 }

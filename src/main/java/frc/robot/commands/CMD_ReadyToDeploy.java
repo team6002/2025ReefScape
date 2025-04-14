@@ -122,7 +122,7 @@ public class CMD_ReadyToDeploy extends Command{
         }else{
             if(GlobalVariables.m_placeFront){
                 if(!setGroundPivot){
-                    m_groundPivot.setGoal(GroundPivotConstants.kClimb);
+                    m_groundPivot.setGoal(GroundPivotConstants.kStart);
                     m_pivot.setGoal(PivotConstants.kChangeLevelTwo);
                     setGroundPivot = true;
                 }

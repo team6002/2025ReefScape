@@ -84,38 +84,40 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driverController.x().onTrue(new CMD_DriveDigital(m_drivetrain, false, 0));
-    m_driverController.b().onTrue(new CMD_DriveDigital(m_drivetrain, true, 0));
+    m_driverController.x().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 2, 0, 0));
+    m_driverController.b().onTrue(new CMD_TransferFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables));
 
     m_driverController.a().onTrue(new InstantCommand(()-> m_winch.setReference(WinchConstants.kClimb)));
     m_driverController.start().onFalse(new CMD_ReadyToClimb(m_pivot, m_elevator, m_flippyWrist, m_intake, m_groundPivot, m_winch, m_groundIntake));
-    m_driverController.y().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController));
-    m_driverController.back().onTrue(new InstantCommand(()->m_winch.setReference(WinchConstants.kHome)));
+    m_driverController.y().onTrue(new CMD_AutoClimb(m_drivetrain, m_winch, m_driverController, m_groundPivot));
+    m_driverController.back().
+    onTrue(new InstantCommand(()->m_winch.setReference(WinchConstants.kHome)));
 
     m_driverController.povUp().onTrue(new InstantCommand(()-> m_drivetrain.zeroHeading()));
     m_driverController.povRight().onTrue(new CMD_Home(m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_pivot, m_groundPivot, m_groundIntake, m_variables));
     m_driverController.povLeft().onTrue(new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables));
-
+    m_driverController.povDown().onTrue(new InstantCommand(()-> GlobalVariables.m_coralMode = !GlobalVariables.m_coralMode));
+  
     m_driverController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
-    m_driverController.rightTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0,6.5, 0));
-    m_driverController.leftTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, -6.5, 0));
+    m_driverController.rightTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0,6, 0));
+    m_driverController.leftTrigger().onTrue(new CMD_DriveAlignVisionSides(m_drivetrain, m_vision, m_driverController, 0, -6, 0));
 
     m_driverController.leftBumper().onTrue(new CMD_GroundIntake(m_groundPivot, m_groundIntake));
 
     //operator
-    // m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(()-> GlobalVariables.m_intakeFromStation = !GlobalVariables.m_intakeFromStation));
     m_operatorController.leftBumper().onTrue(new ConditionalCommand(
       new CMD_ReadyToIntake(m_pivot, m_groundPivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_variables)         
-      ,new CMD_ReadyToIntakeFromGround(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
+      ,new CMD_IntakeHalf(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_intake, m_groundPivot, m_groundIntake, m_variables)
       ,()-> GlobalVariables.m_intakeFromStation
     ));
     m_operatorController.start().onTrue(new InstantCommand(()-> GlobalVariables.m_placeFront = !GlobalVariables.m_placeFront));
-    // m_operatorController.leftTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables));
+    m_operatorController.leftTrigger().onTrue(new CMD_ReadyToDeploy(m_pivot, m_elevator, m_intake, m_flippyWrist, m_spinnyWrist, m_groundPivot, m_variables));
     m_operatorController.rightBumper().onTrue(new CMD_Score(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_intake, m_groundPivot, m_groundIntake, m_variables));
 
     m_operatorController.back().onTrue(new SequentialCommandGroup( 
-      new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kReverse))
-      ,new WaitCommand(.33)
+      new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kAlgaeDeploy))
+      ,new WaitCommand(.5)
       ,new InstantCommand(()-> m_intake.setVoltage(0))
       ,new InstantCommand(()-> GlobalVariables.m_haveAlgae = false)
     ));
@@ -125,7 +127,12 @@ public class RobotContainer {
     m_operatorController.povDown().onTrue(new CMD_ChangeLevelTwo(m_elevator, m_flippyWrist, m_spinnyWrist, m_pivot, m_variables));
     m_operatorController.povLeft().onTrue(new InstantCommand(()-> GlobalVariables.m_targetCoralLevel = 1));
 
-    m_operatorController.a().onTrue(new CMD_ReadyToDeployProcessor(m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_variables));
+    m_operatorController.a().onTrue(
+      new ConditionalCommand(
+        new InstantCommand()  
+        ,new CMD_ReadyToDeployProcessor(m_groundPivot, m_pivot, m_elevator, m_flippyWrist, m_variables)
+        ,()-> GlobalVariables.m_groundHasCoral)
+      );
     m_operatorController.b().onTrue(new CMD_ReadyToDeployBarge(m_pivot, m_elevator, m_flippyWrist, m_spinnyWrist, m_variables));
     m_operatorController.x().onTrue(new CMD_AlgaeIntakeLevelTwo(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
     m_operatorController.y().onTrue(new CMD_AlgaeIntakeLevelThree(m_pivot, m_elevator, m_flippyWrist, m_intake, m_variables));
@@ -138,6 +145,7 @@ public class RobotContainer {
       ,new InstantCommand(()-> m_intake.setVoltage(4))
       , new WaitCommand(.3)
       ,new InstantCommand(()->  m_intake.setVoltage(IntakeConstants.kHolding)) 
+      ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kReverse))
     ));
   }
 }

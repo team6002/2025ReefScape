@@ -338,8 +338,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             
               // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("LCurrentPose", m_vision.getCurrentLPose());
-            var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
-            // var estStdDevs = VisionConstants.kSingleTagStdDevs;
+            // var estStdDevs = m_vision.getLEstimationStdDevs(estPose);
+            var estStdDevs = VisionConstants.kSingleTagStdDevs;
             double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
             if (totalSpeed > 3 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
               estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -354,9 +354,14 @@ public class SUB_Drivetrain extends SubsystemBase {
             
             }
             // Change our trust in the measurement based on the tags we can see
-            
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+            // if( m_vision.matchMidTag(0)){
+              addTargetVisionMeasurement(
+                m_vision.getTargetLPose(), est.timestampSeconds);
+            // }
+            Logger.recordOutput("Drive/Odometry/LTargetPose", m_vision.getHasLTarget());
+         
+            addVisionMeasurement(
+              est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           }
         );
     
@@ -367,8 +372,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getREstimatedGlobalPose();
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-            var estStdDevs = m_vision.getREstimationStdDevs(estPose);
-            // var estStdDevs = VisionConstants.kSingleTagStdDevs;
+            // var estStdDevs = m_vision.getREstimationStdDevs(estPose);
+            var estStdDevs = VisionConstants.kSingleTagStdDevs;
             double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
             if (totalSpeed > 3.5 || getChasisSpeed().omegaRadiansPerSecond > Math.PI/2){
               estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -384,9 +389,13 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("RCameraPose", estPose);
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
-          
-              addVisionMeasurement(
-                est.estimatedPose.toPose2d(), est.timestampSeconds , estStdDevs);
+            // if( m_vision.matchMidTag(1)){
+              addTargetVisionMeasurement(
+                m_vision.getTargetRPose(), est.timestampSeconds);
+            // }
+            Logger.recordOutput("Drive/Odometry/RTargetPose", m_vision.getHasRTarget());
+            addVisionMeasurement(
+              est.estimatedPose.toPose2d(), est.timestampSeconds , estStdDevs);
           
           }  
         );
@@ -398,7 +407,8 @@ public class SUB_Drivetrain extends SubsystemBase {
             // estPose = m_vision.getREstimatedGlobalPose();
             // estPose = m_vision.getEstimatedGlobalPose(estPose);
             // Logger.recordOutput("RCurrentPose", m_vision.getCurrentRPose());
-            var estStdDevs = m_vision.getMEstimationStdDevs(estPose);
+            // var estStdDevs = m_vision.getMEstimationStdDevs(estPose);
+            var estStdDevs = VisionConstants.kSingleTagStdDevs;
             // var estStdDevs = VisionConstants.kSingleTagStdDevs;
             double totalSpeed = getChasisSpeed().vxMetersPerSecond + getChasisSpeed().vyMetersPerSecond;
             if (totalSpeed >= 3.5 || getChasisSpeed().omegaRadiansPerSecond > Math.PI){
@@ -416,6 +426,10 @@ public class SUB_Drivetrain extends SubsystemBase {
             // Logger.recordOutput("REstimatePose", m_vision.getREstimatedGlobalPose());
             // Change our trust in the measurement based on the tags we can see
           
+          addTargetVisionMeasurement(
+            m_vision.getTargetMPose(), est.timestampSeconds);
+            Logger.recordOutput("Drive/Odometry/MTargetPose", m_vision.getHasMTarget());
+        
               addVisionMeasurement(
                 est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           
@@ -520,21 +534,12 @@ public class SUB_Drivetrain extends SubsystemBase {
         // }
 
         // if (TargetOdoEnable){
-          if (m_vision.getHasLTarget()){   
-            addTargetVisionMeasurement(
-              m_vision.getTargetLPose(), Timer.getFPGATimestamp()-.2);
-            Logger.recordOutput("Drive/Odometry/LTargetPose", m_vision.getHasLTarget());
-          }
-          if (m_vision.getHasRTarget()){
-            addTargetVisionMeasurement(
-              m_vision.getTargetRPose(), Timer.getFPGATimestamp()-.2);
-              Logger.recordOutput("Drive/Odometry/RTargetPose", m_vision.getHasRTarget());
-          }
-          if (m_vision.getHasMTarget()){
-            addTargetVisionMeasurement(
-              m_vision.getTargetMPose(), Timer.getFPGATimestamp()-.2);
-              Logger.recordOutput("Drive/Odometry/MTargetPose", m_vision.getHasMTarget());
-          }
+          // if (m_vision.getHasLTarget()){   
+          // }
+          // if (m_vision.getHasRTarget()){
+          // }
+          // if (m_vision.getHasMTarget()){
+          // }
         // }
       //   try {
       //   RvisionEst.ifPresent(

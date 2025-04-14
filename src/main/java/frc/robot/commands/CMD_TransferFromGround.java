@@ -20,7 +20,7 @@ import frc.robot.subsystems.Intake.SUB_Intake;
 import frc.robot.subsystems.Pivot.SUB_Pivot;
 import frc.robot.subsystems.SpinnyWrist.SUB_SpinnyWrist;
 
-public class CMD_ReadyToIntakeFromGround extends Command{
+public class CMD_TransferFromGround extends Command{
     private final SUB_Pivot m_pivot;
     private final SUB_Elevator m_elevator;
     private final SUB_FlippyWrist m_flippyWrist;
@@ -43,7 +43,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
     private boolean transfered;
     private double prevIntakePosition;
 
-    public CMD_ReadyToIntakeFromGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
+    public CMD_TransferFromGround(SUB_Pivot p_pivot, SUB_Elevator p_elevator, SUB_FlippyWrist p_flippyWrist, SUB_SpinnyWrist p_spinnyWrist, 
         SUB_Intake p_intake, SUB_GroundPivot p_groundPivot, SUB_GroundIntake p_groundIntake, GlobalVariables p_variables){
             
         m_pivot = p_pivot;
@@ -68,8 +68,8 @@ public class CMD_ReadyToIntakeFromGround extends Command{
 
         m_intake.setVoltage(IntakeConstants.kIntake);
         m_intake.setConveyorVoltage(IntakeConstants.kConveyorOff);
-        m_groundIntake.setReference(GroundIntakeConstants.kIntake);
-        m_groundPivot.setGoal(GroundPivotConstants.kIntake);
+        m_groundIntake.setReference(GroundIntakeConstants.kHolding);
+        m_groundPivot.setGoal(GroundPivotConstants.kTransfer);
 
         m_intakeTimer.reset();
         m_intakeTimer.stop();
@@ -79,7 +79,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
 
         m_groundIntakeTimer.reset();
         m_groundIntakeTimer.stop();
-        m_variables.setRobotState(RobotState.READY_TO_INTAKE);
+        // m_variables.setRobotState(RobotState.READY_TO_DEPLOY);
         m_intake.setCurrentLimit(20);
         prevIntakePosition = m_intake.getPosition();
     }
@@ -143,7 +143,7 @@ public class CMD_ReadyToIntakeFromGround extends Command{
         }
 
 
-        if(m_groundIntake.hasCorral() && !setGroundPivot ){
+        if(!setGroundPivot ){
             GlobalVariables.m_groundHasCoral = true;
             m_groundPivot.setGoal(GroundPivotConstants.kTransfer);
             setGroundPivot = true;

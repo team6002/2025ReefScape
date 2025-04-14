@@ -17,11 +17,13 @@ public class GlobalVariables extends SubsystemBase{
     public static boolean m_intakeFromStation = false;
     public static boolean m_groundHasCoral = false;
     public static boolean m_placeFront = false;
+    public static boolean m_coralMode = false;
 
     public enum RobotState{
         HOME
         ,READY
         ,READY_TO_INTAKE
+        ,HOLDING
         ,READY_TO_DEPLOY
         ,DEPLOY
         ,READY_TO_CLIMB
@@ -56,5 +58,6 @@ public class GlobalVariables extends SubsystemBase{
         Logger.recordOutput("GlobalVariables/targetCoralLevel", m_targetCoralLevel);
         Logger.recordOutput("GlobalVariables/stationIntake", m_intakeFromStation);
         Logger.recordOutput("GlobalVariables/placeFront", m_placeFront);
+        Logger.recordOutput("GlobalVariables/coralMode", m_coralMode);
     }
 }

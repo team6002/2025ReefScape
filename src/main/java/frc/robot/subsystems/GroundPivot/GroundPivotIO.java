@@ -21,6 +21,8 @@ public interface GroundPivotIO {
 
   public default void setConstraints(double velocity, double acceleration){};
 
+  public default void setCurrentLimit(int CurrentLimit){};
+
   public default double getGoal(){return 0;}
 
   public default double getPosition(){return 0;}

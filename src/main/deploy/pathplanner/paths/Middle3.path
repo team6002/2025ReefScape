@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 0.84
+        "x": 5.94,
+        "y": 3.97
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5539587281687535,
-        "y": 0.9845712184488482
+        "x": 6.521147260273973,
+        "y": 4.33302654109589
       },
       "isLocked": false,
-      "linkedName": "BlueLeftPickup"
+      "linkedName": "Middle2"
     },
     {
       "anchor": {
-        "x": 3.7,
-        "y": 2.99
+        "x": 8.07,
+        "y": 5.43
       },
       "prevControl": {
-        "x": 3.2996250000000003,
-        "y": 2.449738869863014
+        "x": 7.111815068493151,
+        "y": 4.678617294520548
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftTrio5"
+      "linkedName": "Middle3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6203389830508479,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.23389830508474585,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 240.0,
         "maxAngularAcceleration": 240.0,
         "nominalVoltage": 12.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 240.0,
     "maxAngularAcceleration": 240.0,
     "nominalVoltage": 12.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "BlueLeft",
+  "folder": "Middle",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

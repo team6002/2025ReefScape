@@ -16,7 +16,8 @@ public class CMD_ReadyToIntakeAuto extends SequentialCommandGroup{
         addCommands(
             // new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kBelowIntake))
             new ParallelCommandGroup(
-                new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
+                new InstantCommand(()->p_intake.setConveyorVoltage(0))
+                ,new InstantCommand(()-> p_elevator.setGoal(ElevatorConstants.kIntake))
                 ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kIntake))        
                 ,new SequentialCommandGroup(        
                 new InstantCommand(()-> p_elevator.setConstraints(ElevatorConstants.kSlowVel, ElevatorConstants.kSlowAccel))

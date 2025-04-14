@@ -25,7 +25,7 @@ public class CMD_Home extends SequentialCommandGroup{
             ,new InstantCommand(()-> p_groundIntake.setVoltage(GroundIntakeConstants.kOff))
             ,new InstantCommand(()-> p_pivot.setGoal(PivotConstants.kResetElevator))
             ,new CMD_PivotInPosition(p_pivot)
-            ,new InstantCommand(()-> p_groundPivot.setGoal(GroundPivotConstants.kClimb))
+            ,new InstantCommand(()-> p_groundPivot.setGoal(GroundPivotConstants.kStart))
             ,new WaitCommand(.5)
             ,new InstantCommand(()-> p_flippyWrist.setGoal(FlippyWristConstants.kHome))
             ,new InstantCommand(()-> p_spinnyWrist.setGoal(FlippyWristConstants.kHome))

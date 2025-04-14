@@ -33,7 +33,7 @@ public class CMD_GroundIntake extends Command{
             if(GlobalVariables.m_groundHasCoral == false){
                 command = new SequentialCommandGroup(
                     new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kIntake))
-                    ,new InstantCommand(()-> m_groundIntake.setVoltage(GroundIntakeConstants.kIntake))
+                    ,new InstantCommand(()-> m_groundIntake.setReference(GroundIntakeConstants.kIntake))
                     ,new CMD_GroundIntakeStow(m_groundIntake)
                     // ,new WaitCommand(.5)
                     ,new InstantCommand(()-> m_groundPivot.setGoal(GroundPivotConstants.kHome))
